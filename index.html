@@ -1146,14 +1146,14 @@
                     status: 'active'  // Default status
                 };
                 
-                // Handle different line types
-                if (lineGroup.type === 'popup' || lineId.includes('popup')) {
-                    const popupLine = transformPopupLine(lineGroup);
-                    productionLines.push(popupLine);
-                } else {
-                    const regularLine = transformRegularLine(lineGroup);
-                    productionLines.push(regularLine);
-                }
+// Handle different line types  
+if (lineGroup.type === 'popup' || lineId.includes('popup')) {
+    const popupLine = transformPopUpLine(lineGroup);  // FIXED - Now matches function definition with capital 'U'
+    productionLines.push(popupLine);
+} else {
+    const regularLine = transformRegularLine(lineGroup);
+    productionLines.push(regularLine);
+}
             }
             
             Logger.info(`Transformed ${productionLines.length} production lines`);
