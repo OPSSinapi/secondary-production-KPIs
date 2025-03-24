@@ -1207,18 +1207,18 @@ function transformProductionLines(lineGroups) {
     
     // Fixed positions map for specific lines - corrected placement
     const fixedPositions = {
-        // First row, first and second column
-        'apelele-scd': { row: 1, col: 1 },
-        'levo-line': { row: 1, col: 2 },
-        
-        // Second row, first and second column
-        'luthando-sum': { row: 2, col: 1 },
-        'popup-line': { row: 2, col: 2 },
-        
-        // First row, third and fourth column
-        'nosi-scalpel': { row: 1, col: 3 },
-        'mvokwe-3rd': { row: 1, col: 4 },
-    };
+    // First row, first and second column
+    'apelele-scd': { row: 1, col: 1 },
+    'levo-line': { row: 1, col: 2 },
+    
+    // Second row, first and second column
+    'luthando-sum': { row: 2, col: 1 },
+    'mvokwe-popup': { row: 2, col: 2 }, // Changed from 'popup-line' to 'mvokwe-popup'
+    
+    // First row, third and fourth column
+    'nosi-scalpel': { row: 1, col: 3 },
+    'mvokwe-3rd': { row: 1, col: 4 },
+};
     
     // Handle special case for Scalpel and 3rd Line products
     const scalpelBaseProducts = [];
