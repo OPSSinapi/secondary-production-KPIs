@@ -682,49 +682,61 @@
         
         // Main configuration object for the dashboard
         const CONFIG = {
-            // URL to fetch operational data from
-            dataUrl: 'OpsData.json',
-            
-            // Refresh interval in milliseconds (5 minutes)
-            refreshInterval: 5 * 60 * 1000,
-            
-            // Default period for data display
-            defaultPeriod: 'daily',
-            
-            // Default date range (last 5 production dates)
-            defaultDateRange: {
-                days: 5
-            },
-            
-            // Debug mode to show the debug log
-            debugMode: true,
-            
-            // Production lines that need special handling for Base Products
-            specialLinesBaseProducts: {
-                'nosi-scalpel': true,
-                'mvokwe-3rd line': true
-            },
-            
-            // Thresholds for KPI color coding
-            thresholds: {
-                scheduleAttainment: {
-                    good: 95,      // >= 95% = green
-                    warning: 85    // >= 85% = yellow, < 85% = red
-                },
-                labourCostPerUnit: {
-                    good: 300,     // <= 300 = green
-                    warning: 400   // <= 400 = yellow, > 400 = red
-                },
-                scrapPercentage: {
-                    good: 5,       // <= 5% = green
-                    warning: 15    // <= 15% = yellow, > 15% = red
-                },
-                downtimeHours: {
-                    good: 3,       // <= 3 hours = green
-                    warning: 6     // <= 6 hours = yellow, > 6 hours = red
-                }
-            }
-        };
+    // URL to fetch operational data from
+    dataUrl: 'OpsData.json',
+    
+    // Refresh interval in milliseconds (5 minutes)
+    refreshInterval: 5 * 60 * 1000,
+    
+    // Default period for data display
+    defaultPeriod: 'daily',
+    
+    // Default date range (last 5 production dates)
+    defaultDateRange: {
+        days: 5
+    },
+    
+    // Debug mode to show the debug log
+    debugMode: true,
+    
+    // Production lines that need special handling for Base Products
+    specialLinesBaseProducts: {
+        'nosi-scalpel': true,
+        'mvokwe-3rd line': true
+    },
+    
+    // Variant timeline colors - THIS WAS MISSING
+    timelineColors: {
+        'default': 'var(--timeline-blue)',
+        'XL': 'var(--timeline-orange)',
+        'S10': 'var(--timeline-red)',
+        'S20': 'var(--timeline-blue)',
+        'Plus': 'var(--timeline-purple)',
+        'Regular': 'var(--timeline-blue)',
+        'Deluxe': 'var(--timeline-purple)',
+        'Standard': 'var(--timeline-blue)'
+    },
+    
+    // Thresholds for KPI color coding
+    thresholds: {
+        scheduleAttainment: {
+            good: 95,      // >= 95% = green
+            warning: 85    // >= 85% = yellow, < 85% = red
+        },
+        labourCostPerUnit: {
+            good: 300,     // <= 300 = green
+            warning: 400   // <= 400 = yellow, > 400 = red
+        },
+        scrapPercentage: {
+            good: 5,       // <= 5% = green
+            warning: 15    // <= 15% = yellow, > 15% = red
+        },
+        downtimeHours: {
+            good: 3,       // <= 3 hours = green
+            warning: 6     // <= 6 hours = yellow, > 6 hours = red
+        }
+    }
+};
 
         /**
          * ======================================
