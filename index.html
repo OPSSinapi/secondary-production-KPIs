@@ -432,6 +432,14 @@
             font-size: 18px;
             font-weight: bold;
             text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 5px;
+        }
+
+        .metric-trend {
+            font-size: 12px;
         }
 
         .value-good {
@@ -558,6 +566,15 @@
             grid-row: span 2;
         }
 
+        /* Base product line cards in same column */
+        .base-product-first {
+            grid-column-start: var(--column-start);
+        }
+
+        .base-product-same-column {
+            grid-column-start: var(--column-start);
+        }
+
         @media (max-width: 1279px) {
             .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -668,6 +685,12 @@
             // Debug mode to show the debug log
             debugMode: true,
             
+            // Production lines that need special handling for Base Products
+            specialLinesBaseProducts: {
+                'nosi-scalpel': true,
+                'mvokwe-3rd': true,
+                'mvokwe-3rd-line': true
+            },
             
             // Variant timeline colors
             timelineColors: {
@@ -941,8 +964,8 @@
         function transformOpsData(opsData, filteredData) {
             Logger.info(`Transforming operational data, lastUpdated: ${opsData.lastUpdated}`);
             
-            // Group data by production line
-            const lineGroups = groupDataByProductionLine(filteredData);
+            // Group data by production line and base product for special cases
+            const lineGroups = groupDataByProductionLineAndBaseProduct(filteredData);
             
             // Calculate plant-wide metrics
             const plantWideMetrics = calculatePlantWideMetrics(filteredData);
@@ -970,11 +993,11 @@
         }
         
         /**
-         * Groups filtered data by production line
+         * Groups filtered data by production line and base product for special cases
          * @param {Array} filteredData - The filtered production data records
-         * @returns {Object} Data grouped by production line ID
+         * @returns {Object} Data grouped by production line ID and base product
          */
-        function groupDataByProductionLine(filteredData) {
+        function groupDataByProductionLineAndBaseProduct(filteredData) {
             if (!filteredData || filteredData.length === 0) {
                 Logger.warn('No filtered data available to group');
                 return {};
@@ -990,17 +1013,26 @@
                     return;
                 }
                 
-                if (!lineGroups[lineId]) {
-                    lineGroups[lineId] = {
+                // For special lines, also include the base product in the key
+                let groupKey = lineId;
+                
+                // Check if this is a special line that needs base product separation
+                if (CONFIG.specialLinesBaseProducts[lineId] && record['Base Product']) {
+                    groupKey = `${lineId}-${record['Base Product']}`;
+                }
+                
+                if (!lineGroups[groupKey]) {
+                    lineGroups[groupKey] = {
                         id: lineId,
                         name: record['Production Line Name'],
                         color: record['Production Line Color'],
                         type: record['Production Line Type'],
+                        baseProduct: record['Base Product'] || null,
                         records: []
                     };
                 }
                 
-                lineGroups[lineId].records.push(record);
+                lineGroups[groupKey].records.push(record);
             });
             
             Logger.info(`Grouped data into ${Object.keys(lineGroups).length} production lines`);
@@ -1020,14 +1052,16 @@
             
             // Initialize metrics
             let totalScheduleAttainment = 0;
-            let totalLabourCost = 0;
+            let totalStaffCost = 0;
+            let totalUnits = 0;
             let totalScrapPercentage = 0;
             let totalDowntime = 0;
             let recordCount = 0;
             
             // Previous period metrics for trend calculation
             let prevTotalScheduleAttainment = 0;
-            let prevTotalLabourCost = 0;
+            let prevTotalStaffCost = 0;
+            let prevTotalUnits = 0;
             let prevTotalScrapPercentage = 0;
             let prevTotalDowntime = 0;
             let prevRecordCount = 0;
@@ -1043,7 +1077,8 @@
             sortedRecords.forEach((record, index) => {
                 // Skip records with missing data
                 if (record['Schedule Attainment'] === undefined || 
-                    record['Cost Per Unit'] === undefined || 
+                    record['Staff Cost'] === undefined ||
+                    record['Actual Devices Produced'] === undefined ||
                     record['Scrap Cost as % of Production Value'] === undefined) {
                     return;
                 }
@@ -1051,7 +1086,8 @@
                 // For the first half of records (previous period)
                 if (index < midPoint) {
                     prevTotalScheduleAttainment += record['Schedule Attainment'] || 0;
-                    prevTotalLabourCost += record['Cost Per Unit'] || 0;
+                    prevTotalStaffCost += record['Staff Cost'] || 0;
+                    prevTotalUnits += record['Actual Devices Produced'] || 0;
                     prevTotalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
                     prevTotalDowntime += record['Downtime Duration (min)'] || 0;
                     prevRecordCount++;
@@ -1059,7 +1095,8 @@
                 // For the second half of records (current period)
                 else {
                     totalScheduleAttainment += record['Schedule Attainment'] || 0;
-                    totalLabourCost += record['Cost Per Unit'] || 0;
+                    totalStaffCost += record['Staff Cost'] || 0;
+                    totalUnits += record['Actual Devices Produced'] || 0;
                     totalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
                     totalDowntime += record['Downtime Duration (min)'] || 0;
                     recordCount++;
@@ -1068,14 +1105,14 @@
             
             // Calculate current averages
             const avgScheduleAttainment = recordCount > 0 ? totalScheduleAttainment / recordCount : 0;
-            const avgLabourCost = recordCount > 0 ? totalLabourCost / recordCount : 0;
+            const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / totalUnits) : 0;
             const avgScrapPercentage = recordCount > 0 ? totalScrapPercentage / recordCount : 0;
             // Convert downtime from minutes to hours
             const downtimeHours = recordCount > 0 ? (totalDowntime / 60) : 0;
             
             // Calculate previous period averages
             const prevAvgScheduleAttainment = prevRecordCount > 0 ? prevTotalScheduleAttainment / prevRecordCount : 0;
-            const prevAvgLabourCost = prevRecordCount > 0 ? prevTotalLabourCost / prevRecordCount : 0;
+            const prevAvgLabourCost = (prevTotalUnits > 0) ? (prevTotalStaffCost / prevTotalUnits) : 0;
             const prevAvgScrapPercentage = prevRecordCount > 0 ? prevTotalScrapPercentage / prevRecordCount : 0;
             
             // Calculate trends (percentage change)
@@ -1125,7 +1162,7 @@
         
         /**
          * Transforms grouped production lines data
-         * @param {Object} lineGroups - Data grouped by production line ID
+         * @param {Object} lineGroups - Data grouped by production line ID and base product
          * @returns {Array} Transformed production lines data
          */
         function transformProductionLines(lineGroups) {
@@ -1136,24 +1173,47 @@
             
             const productionLines = [];
             
-            for (const lineId in lineGroups) {
-                const lineGroup = lineGroups[lineId];
-                const line = {
-                    id: lineId,
-                    name: lineGroup.name,
-                    color: lineGroup.color,
-                    type: lineGroup.type,
-                    status: 'active'  // Default status
-                };
+            // Track line IDs to group base product lines in the same column
+            const lineBaseProductMap = {};
+            let columnCount = 0;
+            
+            // First pass: Process line groups and identify base product groups
+            for (const groupKey in lineGroups) {
+                const lineGroup = lineGroups[groupKey];
                 
-// Handle different line types  
-if (lineGroup.type === 'popup' || lineId.includes('popup')) {
-    const popupLine = transformPopUpLine(lineGroup);  // FIXED - Now matches function definition with capital 'U'
-    productionLines.push(popupLine);
-} else {
-    const regularLine = transformRegularLine(lineGroup);
-    productionLines.push(regularLine);
-}
+                // Track lines with multiple base products to group them in the same column
+                if (lineGroup.baseProduct) {
+                    if (!lineBaseProductMap[lineGroup.id]) {
+                        lineBaseProductMap[lineGroup.id] = {
+                            columnStart: ++columnCount % 4 || 4, // 1-4 columns
+                            count: 0
+                        };
+                    }
+                    lineBaseProductMap[lineGroup.id].count++;
+                }
+            }
+            
+            // Second pass: Transform line groups into production lines
+            for (const groupKey in lineGroups) {
+                const lineGroup = lineGroups[groupKey];
+                
+                // Set properties for handling multiple base products in same column
+                if (lineGroup.baseProduct && lineBaseProductMap[lineGroup.id].count > 1) {
+                    lineGroup.isBaseProductGroup = true;
+                    lineGroup.columnStart = lineBaseProductMap[lineGroup.id].columnStart;
+                    lineGroup.displayName = `${lineGroup.name}: ${lineGroup.baseProduct}`;
+                } else {
+                    lineGroup.displayName = lineGroup.name;
+                }
+                
+                // Handle different line types
+                if (lineGroup.type === 'popup' || lineGroup.id.includes('popup')) {
+                    const popupLine = transformPopUpLine(lineGroup);
+                    productionLines.push(popupLine);
+                } else {
+                    const regularLine = transformRegularLine(lineGroup);
+                    productionLines.push(regularLine);
+                }
             }
             
             Logger.info(`Transformed ${productionLines.length} production lines`);
@@ -1165,126 +1225,150 @@ if (lineGroup.type === 'popup' || lineId.includes('popup')) {
          * @param {Object} lineGroup - Grouped data for a production line
          * @returns {Object} Transformed regular production line
          */
-function transformRegularLine(lineGroup) {
-    Logger.info(`Transforming regular line: ${lineGroup.id}`);
-    
-    // Group records by variants
-    const variantGroups = {};
-    
-    lineGroup.records.forEach(record => {
-        const variantName = record.Variant;
-        
-        if (!variantName) {
-            Logger.warn(`Record missing Variant: ${JSON.stringify(record)}`);
-            return;
-        }
-        
-        if (!variantGroups[variantName]) {
-            variantGroups[variantName] = {
-                name: variantName,
-                status: record['Variant Status'] || 'active',
-                isCurrentVariant: record['Is Current Variant'] === true,
-                records: []
+        function transformRegularLine(lineGroup) {
+            Logger.info(`Transforming regular line: ${lineGroup.id}`);
+            
+            // Group records by variants
+            const variantGroups = {};
+            
+            lineGroup.records.forEach(record => {
+                const variantName = record.Variant;
+                
+                if (!variantName) {
+                    Logger.warn(`Record missing Variant: ${JSON.stringify(record)}`);
+                    return;
+                }
+                
+                if (!variantGroups[variantName]) {
+                    variantGroups[variantName] = {
+                        name: variantName,
+                        status: record['Variant Status'] || 'active',
+                        isCurrentVariant: record['Is Current Variant'] === true,
+                        records: []
+                    };
+                }
+                
+                variantGroups[variantName].records.push(record);
+            });
+            
+            // Transform variants
+            const variants = [];
+            for (const variantName in variantGroups) {
+                const variantGroup = variantGroups[variantName];
+                const variant = transformVariant(variantGroup);
+                variants.push(variant);
+            }
+            
+            // Make sure we have a current variant
+            if (variants.length > 0 && !variants.some(v => v.isCurrentVariant)) {
+                // Sort by date (most recent first)
+                variants.sort((a, b) => {
+                    const aDate = new Date(a.latestDate || 0);
+                    const bDate = new Date(b.latestDate || 0);
+                    return bDate - aDate;
+                });
+                
+                // Mark the most recent variant as current
+                variants[0].isCurrentVariant = true;
+                variants[0].status = 'active';
+                Logger.info(`Set variant "${variants[0].name}" as current for ${lineGroup.id}`);
+            }
+            
+            // Calculate trends for all metrics
+            const trends = calculateTrends(lineGroup.records);
+            
+            // Use the display name that may include base product
+            const displayName = lineGroup.displayName;
+            
+            // Check if this is the line that should be double height
+            const isDoubleHeight = lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line';
+            
+            // Create timeline segments for multiple variants
+            const timelineSegments = createTimelineSegments(variants);
+            
+            // Set CSS properties for base product grouping
+            let cssClass = '';
+            let customStyle = '';
+            
+            if (lineGroup.isBaseProductGroup) {
+                cssClass = lineBaseProductMap[lineGroup.id] && lineBaseProductMap[lineGroup.id].firstCard ? 
+                    'base-product-first' : 'base-product-same-column';
+                
+                customStyle = `--column-start: ${lineGroup.columnStart};`;
+                
+                // Mark as first card if not already marked
+                if (lineBaseProductMap[lineGroup.id] && !lineBaseProductMap[lineGroup.id].firstCard) {
+                    lineBaseProductMap[lineGroup.id].firstCard = true;
+                }
+            }
+            
+            Logger.info(`Using line name from data: "${displayName}"`);
+            
+            return {
+                name: displayName,
+                color: getHeaderColorClass(lineGroup.color),
+                isDoubleHeight: isDoubleHeight,
+                variants: variants,
+                timelineSegments: timelineSegments,
+                trends: trends,
+                cssClass: cssClass,
+                customStyle: customStyle,
+                baseProduct: lineGroup.baseProduct
             };
         }
-        
-        variantGroups[variantName].records.push(record);
-    });
-    
-    // Transform variants
-    const variants = [];
-    for (const variantName in variantGroups) {
-        const variantGroup = variantGroups[variantName];
-        const variant = transformVariant(variantGroup);
-        variants.push(variant);
-    }
-    
-    // Make sure we have a current variant
-    if (variants.length > 0 && !variants.some(v => v.isCurrentVariant)) {
-        // Sort by date (most recent first)
-        variants.sort((a, b) => {
-            const aDate = new Date(a.latestDate || 0);
-            const bDate = new Date(b.latestDate || 0);
-            return bDate - aDate;
-        });
-        
-        // Mark the most recent variant as current
-        variants[0].isCurrentVariant = true;
-        variants[0].status = 'active';
-        Logger.info(`Set variant "${variants[0].name}" as current for ${lineGroup.id}`);
-    }
-    
-    // Use the line name directly from the data
-    const displayName = lineGroup.name;
-    
-    // Check if this is the line that should be double height
-    // You can also make this dynamic based on data if needed
-    const isDoubleHeight = lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line';
-    
-    Logger.info(`Using line name from data: "${displayName}"`);
-    
-    return {
-        name: displayName,
-        color: getHeaderColorClass(lineGroup.color),
-        isDoubleHeight: isDoubleHeight,
-        variants: variants
-    };
-}
-
         
         /**
          * Transforms a popup production line
          * @param {Object} lineGroup - Grouped data for a popup line
          * @returns {Object} Transformed popup production line
          */
-function transformPopUpLine(lineGroup) {
-    Logger.info(`Transforming popup line: ${lineGroup.id}`);
-    
-    // Get the most recent record for status
-    const sortedRecords = [...lineGroup.records].sort((a, b) => {
-        const dateA = new Date(a.Date);
-        const dateB = new Date(b.Date);
-        return dateB - dateA; // Sort descending (most recent first)
-    });
-    
-    const latestRecord = sortedRecords.length > 0 ? sortedRecords[0] : null;
-    
-    // Use data from the latest record, or fallback
-    const status = latestRecord && latestRecord['Variant Status'] ? 
-        capitalizeFirstLetter(latestRecord['Variant Status']) : 'Standby';
-    const statusText = status.toLowerCase() === 'active' ? 'Active Operation' : 'Intermittent Operation';
-    
-    // Create recent runs from records
-    const recentRuns = lineGroup.records.map(record => {
-        // Format the date
-        let formattedDate;
-        try {
-            const date = new Date(record.Date);
-            formattedDate = `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()}`;
-        } catch (error) {
-            Logger.warn(`Error formatting date "${record.Date}": ${error.message}`);
-            formattedDate = record.Date;
+        function transformPopUpLine(lineGroup) {
+            Logger.info(`Transforming popup line: ${lineGroup.id}`);
+            
+            // Get the most recent record for status
+            const sortedRecords = [...lineGroup.records].sort((a, b) => {
+                const dateA = new Date(a.Date);
+                const dateB = new Date(b.Date);
+                return dateB - dateA; // Sort descending (most recent first)
+            });
+            
+            const latestRecord = sortedRecords.length > 0 ? sortedRecords[0] : null;
+            
+            // Use data from the latest record, or fallback
+            const status = latestRecord && latestRecord['Variant Status'] ? 
+                capitalizeFirstLetter(latestRecord['Variant Status']) : 'Standby';
+            const statusText = status.toLowerCase() === 'active' ? 'Active Operation' : 'Intermittent Operation';
+            
+            // Create recent runs from records
+            const recentRuns = lineGroup.records.map(record => {
+                // Format the date
+                let formattedDate;
+                try {
+                    const date = new Date(record.Date);
+                    formattedDate = `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()}`;
+                } catch (error) {
+                    Logger.warn(`Error formatting date "${record.Date}": ${error.message}`);
+                    formattedDate = record.Date;
+                }
+                
+                return {
+                    date: formattedDate,
+                    variant: record.Variant,
+                    attainment: record['Schedule Attainment'] || 0,
+                    scrapPercentage: record['Scrap Cost as % of Production Value'] || 0
+                };
+            });
+            
+            return {
+                // Use the line name directly from the data instead of hardcoding
+                name: lineGroup.displayName,
+                color: getHeaderColorClass(lineGroup.color),
+                isPopUpLine: true,
+                status: status,
+                statusText: statusText,
+                recentRuns: recentRuns
+            };
         }
-        
-        return {
-            date: formattedDate,
-            variant: record.Variant,
-            attainment: record['Schedule Attainment'] || 0,
-            scrapPercentage: record['Scrap Cost as % of Production Value'] || 0
-        };
-    });
-    
-    return {
-        // Use the line name directly from the data instead of hardcoding
-        name: lineGroup.name,
-        color: getHeaderColorClass(lineGroup.color),
-        isPopUpLine: true,
-        status: status,
-        statusText: statusText,
-        recentRuns: recentRuns
-    };
-}
-
         
         /**
          * Transforms a variant group
@@ -1296,6 +1380,9 @@ function transformPopUpLine(lineGroup) {
             
             // Calculate metrics
             const metrics = calculateVariantMetrics(variantGroup.records);
+            
+            // Calculate trends 
+            const trends = calculateVariantTrends(variantGroup.records);
             
             // Get latest date for this variant
             const latestDate = variantGroup.records.reduce((latest, record) => {
@@ -1332,6 +1419,7 @@ function transformPopUpLine(lineGroup) {
                     scrapPercentage: metrics.scrapPercentage,
                     downtimeHours: metrics.downtimeHours
                 },
+                trends: trends,
                 formattedMetrics: {
                     scheduleAttainment: formatNumericValue(metrics.scheduleAttainment, 'scheduleAttainment'),
                     labourCostPerUnit: formatNumericValue(metrics.labourCostPerUnit, 'labourCostPerUnit'),
@@ -1358,18 +1446,21 @@ function transformPopUpLine(lineGroup) {
             }
             
             let totalScheduleAttainment = 0;
-            let totalLabourCost = 0;
+            let totalStaffCost = 0;
+            let totalUnits = 0;
             let totalScrapPercentage = 0;
             let totalDowntimeMinutes = 0;
             let validRecords = 0;
             
             records.forEach(record => {
                 if (record['Schedule Attainment'] !== undefined && 
-                    record['Cost Per Unit'] !== undefined && 
+                    record['Staff Cost'] !== undefined && 
+                    record['Actual Devices Produced'] !== undefined &&
                     record['Scrap Cost as % of Production Value'] !== undefined) {
                     
                     totalScheduleAttainment += record['Schedule Attainment'] || 0;
-                    totalLabourCost += record['Cost Per Unit'] || 0;
+                    totalStaffCost += record['Staff Cost'] || 0;
+                    totalUnits += record['Actual Devices Produced'] || 0;
                     totalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
                     totalDowntimeMinutes += record['Downtime Duration (min)'] || 0;
                     validRecords++;
@@ -1378,7 +1469,7 @@ function transformPopUpLine(lineGroup) {
             
             // Calculate averages
             const avgScheduleAttainment = validRecords > 0 ? totalScheduleAttainment / validRecords : 0;
-            const avgLabourCost = validRecords > 0 ? totalLabourCost / validRecords : 0;
+            const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / totalUnits) : 0;
             const avgScrapPercentage = validRecords > 0 ? totalScrapPercentage / validRecords : 0;
             // Convert downtime from minutes to hours
             const downtimeHours = validRecords > 0 ? (totalDowntimeMinutes / 60) : 0;
@@ -1391,6 +1482,114 @@ function transformPopUpLine(lineGroup) {
                 scrapPercentage: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
                 downtimeHours: Math.round(downtimeHours * 10) / 10  // Round to 1 decimal place
             };
+        }
+        
+        /**
+         * Calculates trend metrics for a variant
+         * @param {Array} records - Production records for a variant
+         * @returns {Object} Calculated trend metrics
+         */
+        function calculateVariantTrends(records) {
+            if (!records || records.length < 2) {
+                Logger.warn('Not enough records available to calculate variant trends');
+                return {
+                    scheduleAttainment: { value: 0, direction: 'up' },
+                    labourCostPerUnit: { value: 0, direction: 'up' },
+                    scrapPercentage: { value: 0, direction: 'up' },
+                    downtimeHours: { value: 0, direction: 'up' }
+                };
+            }
+            
+            // Sort records by date
+            const sortedRecords = [...records].sort((a, b) => 
+                new Date(a.Date) - new Date(b.Date)
+            );
+            
+            // Divide records into first half and second half for trend calculation
+            const midPoint = Math.floor(sortedRecords.length / 2);
+            const firstHalf = sortedRecords.slice(0, midPoint);
+            const secondHalf = sortedRecords.slice(midPoint);
+            
+            // Calculate metrics for each half
+            const firstHalfMetrics = calculateVariantMetrics(firstHalf);
+            const secondHalfMetrics = calculateVariantMetrics(secondHalf);
+            
+            // Calculate trends
+            const scheduleAttainmentTrend = firstHalfMetrics.scheduleAttainment > 0 ?
+                ((secondHalfMetrics.scheduleAttainment - firstHalfMetrics.scheduleAttainment) / firstHalfMetrics.scheduleAttainment) * 100 : 0;
+                
+            const labourCostTrend = firstHalfMetrics.labourCostPerUnit > 0 ?
+                ((secondHalfMetrics.labourCostPerUnit - firstHalfMetrics.labourCostPerUnit) / firstHalfMetrics.labourCostPerUnit) * 100 : 0;
+                
+            const scrapPercentageTrend = firstHalfMetrics.scrapPercentage > 0 ?
+                ((secondHalfMetrics.scrapPercentage - firstHalfMetrics.scrapPercentage) / firstHalfMetrics.scrapPercentage) * 100 : 0;
+                
+            const downtimeHoursTrend = firstHalfMetrics.downtimeHours > 0 ?
+                ((secondHalfMetrics.downtimeHours - firstHalfMetrics.downtimeHours) / firstHalfMetrics.downtimeHours) * 100 : 0;
+            
+            return {
+                scheduleAttainment: {
+                    value: Math.round(Math.abs(scheduleAttainmentTrend) * 10) / 10,
+                    direction: scheduleAttainmentTrend >= 0 ? 'up' : 'down'
+                },
+                labourCostPerUnit: {
+                    value: Math.round(Math.abs(labourCostTrend) * 10) / 10,
+                    direction: labourCostTrend >= 0 ? 'up' : 'down'
+                },
+                scrapPercentage: {
+                    value: Math.round(Math.abs(scrapPercentageTrend) * 10) / 10,
+                    direction: scrapPercentageTrend >= 0 ? 'up' : 'down'
+                },
+                downtimeHours: {
+                    value: Math.round(Math.abs(downtimeHoursTrend) * 10) / 10,
+                    direction: downtimeHoursTrend >= 0 ? 'up' : 'down'
+                }
+            };
+        }
+        
+        /**
+         * Calculates trend metrics for all data
+         * @param {Array} records - All production records
+         * @returns {Object} Calculated trend metrics
+         */
+        function calculateTrends(records) {
+            return calculateVariantTrends(records);
+        }
+        
+        /**
+         * Creates timeline segments from multiple variants
+         * @param {Array} variants - Array of variants
+         * @returns {Array} Timeline segments for visualization
+         */
+        function createTimelineSegments(variants) {
+            if (!variants || variants.length === 0) {
+                return [];
+            }
+            
+            // For a single variant, use the default timeline
+            if (variants.length === 1) {
+                return null;
+            }
+            
+            // Sort variants by date (oldest first)
+            const sortedVariants = [...variants].sort((a, b) => {
+                const aDate = new Date(a.latestDate || 0);
+                const bDate = new Date(b.latestDate || 0);
+                return aDate - bDate;
+            });
+            
+            // Create segments
+            const segmentWidth = 100 / sortedVariants.length;
+            
+            return sortedVariants.map((variant, index) => {
+                return {
+                    variant: variant.name,
+                    displayText: extractVariantShortName(variant.name),
+                    width: `${segmentWidth}%`,
+                    position: `${index * segmentWidth}%`,
+                    color: getVariantColor(variant.name)
+                };
+            });
         }
         
         /**
@@ -1641,7 +1840,7 @@ function transformPopUpLine(lineGroup) {
             if (!line.variants || !Array.isArray(line.variants) || line.variants.length === 0) {
                 Logger.warn(`No variants available for line: ${line.name}`);
                 return `
-                    <div class="line-card">
+                    <div class="line-card ${line.cssClass}" style="${line.customStyle || ''}">
                         <div class="line-card-header ${line.color || 'blue-header'}">
                             ${line.name || 'Unknown Line'}
                         </div>
@@ -1682,26 +1881,46 @@ function transformPopUpLine(lineGroup) {
                     <div class="variant-history">
                         <div class="history-label">Recent Variants:</div>
                         <div class="timeline-container">
-                            ${renderTimeline(currentVariant.timeline)}
+                            ${line.timelineSegments ? renderTimelineSegments(line.timelineSegments) : renderTimeline(currentVariant.timeline)}
                         </div>
                     </div>
                     
                     <div class="metrics-grid">
                         <div class="metric-card">
                             <div class="metric-title">Schedule Attainment</div>
-                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">${currentVariant.metrics.scheduleAttainment}%</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">
+                                ${currentVariant.metrics.scheduleAttainment}%
+                                <div class="metric-trend ${currentVariant.trends.scheduleAttainment.direction === 'up' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.scheduleAttainment.value}%
+                                </div>
+                            </div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-title">Labour Cost/Unit</div>
-                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">R${currentVariant.metrics.labourCostPerUnit}</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">
+                                R${currentVariant.metrics.labourCostPerUnit}
+                                <div class="metric-trend ${currentVariant.trends.labourCostPerUnit.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.labourCostPerUnit.value}%
+                                </div>
+                            </div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-title">% Scrap</div>
-                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.scrapPercentage, 'scrapPercentage')}">${currentVariant.metrics.scrapPercentage}%</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.scrapPercentage, 'scrapPercentage')}">
+                                ${currentVariant.metrics.scrapPercentage}%
+                                <div class="metric-trend ${currentVariant.trends.scrapPercentage.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.scrapPercentage.value}%
+                                </div>
+                            </div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-title">Downtime</div>
-                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.downtimeHours, 'downtimeHours')}">${currentVariant.metrics.downtimeHours} hrs</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.downtimeHours, 'downtimeHours')}">
+                                ${currentVariant.metrics.downtimeHours} hrs
+                                <div class="metric-trend ${currentVariant.trends.downtimeHours.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.downtimeHours.value}%
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1731,26 +1950,46 @@ function transformPopUpLine(lineGroup) {
                     <div class="metrics-grid">
                         <div class="metric-card">
                             <div class="metric-title">Schedule Attainment</div>
-                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">${previousVariant.metrics.scheduleAttainment}%</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">
+                                ${previousVariant.metrics.scheduleAttainment}%
+                                <div class="metric-trend ${previousVariant.trends.scheduleAttainment.direction === 'up' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.scheduleAttainment.value}%
+                                </div>
+                            </div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-title">Labour Cost/Unit</div>
-                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">R${previousVariant.metrics.labourCostPerUnit}</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">
+                                R${previousVariant.metrics.labourCostPerUnit}
+                                <div class="metric-trend ${previousVariant.trends.labourCostPerUnit.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.labourCostPerUnit.value}%
+                                </div>
+                            </div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-title">% Scrap</div>
-                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.scrapPercentage, 'scrapPercentage')}">${previousVariant.metrics.scrapPercentage}%</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.scrapPercentage, 'scrapPercentage')}">
+                                ${previousVariant.metrics.scrapPercentage}%
+                                <div class="metric-trend ${previousVariant.trends.scrapPercentage.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.scrapPercentage.value}%
+                                </div>
+                            </div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-title">Downtime</div>
-                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.downtimeHours, 'downtimeHours')}">${previousVariant.metrics.downtimeHours} hrs</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.downtimeHours, 'downtimeHours')}">
+                                ${previousVariant.metrics.downtimeHours} hrs
+                                <div class="metric-trend ${previousVariant.trends.downtimeHours.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.downtimeHours.value}%
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
             }
             
             return `
-                <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''}">
+                <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
                     <div class="line-card-header ${line.color}">
                         ${line.name}
                     </div>
@@ -1900,32 +2139,32 @@ function transformPopUpLine(lineGroup) {
          * ======================================
          */
 
-/**
- * Gets a header color class from a line color
- * @param {string} lineColor - The line color from data
- * @returns {string} Header CSS class
- */
-function getHeaderColorClass(lineColor) {
-    // If the color is already a header class, use it directly
-    if (lineColor && lineColor.includes('header')) {
-        return lineColor;
-    }
-    
-    // Map common colors to header classes for CSS compatibility
-    switch(lineColor && lineColor.toLowerCase()) {
-        case 'blue': return 'blue-header';
-        case 'orange': return 'orange-header';
-        case 'purple': return 'purple-header';
-        case 'black': return 'blue-header';
-        case 'yellow': return 'orange-header';
-        case 'grey': 
-        case 'gray': 
-            return 'blue-header';
-        case 'green': return 'orange-header';
-        case 'pink': return 'purple-header';
-        default: return 'blue-header'; // Default fallback
-    }
-}
+        /**
+         * Gets a header color class from a line color
+         * @param {string} lineColor - The line color from data
+         * @returns {string} Header CSS class
+         */
+        function getHeaderColorClass(lineColor) {
+            // If the color is already a header class, use it directly
+            if (lineColor && lineColor.includes('header')) {
+                return lineColor;
+            }
+            
+            // Map common colors to header classes for CSS compatibility
+            switch(lineColor && lineColor.toLowerCase()) {
+                case 'blue': return 'blue-header';
+                case 'orange': return 'orange-header';
+                case 'purple': return 'purple-header';
+                case 'black': return 'blue-header';
+                case 'yellow': return 'orange-header';
+                case 'grey': 
+                case 'gray': 
+                    return 'blue-header';
+                case 'green': return 'orange-header';
+                case 'pink': return 'purple-header';
+                default: return 'blue-header'; // Default fallback
+            }
+        }
         
         /**
          * Determines CSS class for a value based on its type and thresholds
@@ -2203,3 +2442,5 @@ function getHeaderColorClass(lineColor) {
     </script>
 </body>
 </html>
+
+                    
