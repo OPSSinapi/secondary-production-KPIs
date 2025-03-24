@@ -1133,14 +1133,14 @@ function calculatePlantWideMetrics(filteredData) {
     
     // Calculate current averages
     const avgScheduleAttainment = recordCount > 0 ? totalScheduleAttainment / recordCount : 0;
-    const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / totalUnits) : 0;
+    const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / recordCount) : 0;
     const avgScrapPercentage = recordCount > 0 ? totalScrapPercentage / recordCount : 0;
     // Convert downtime from minutes to hours
     const downtimeHours = totalDowntime / 60;
     
     // Calculate previous period averages
     const prevAvgScheduleAttainment = prevRecordCount > 0 ? prevTotalScheduleAttainment / prevRecordCount : 0;
-    const prevAvgLabourCost = (prevTotalUnits > 0) ? (prevTotalStaffCost / prevTotalUnits) : 0;
+    const prevAvgLabourCost = (prevTotalUnits > 0) ? (prevTotalStaffCost / prevRecordCount) : 0;
     const prevAvgScrapPercentage = prevRecordCount > 0 ? prevTotalScrapPercentage / prevRecordCount : 0;
     
     // Calculate trends (percentage change)
@@ -1552,7 +1552,7 @@ function calculateVariantMetrics(records) {
     const avgScheduleAttainment = validRecords > 0 ? totalScheduleAttainment / validRecords : 0;
     
     // Ensure labour cost is calculated correctly - only divide if we have units produced
-    const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / totalUnits) : 0;
+    const avgLabourCost = (totalUnits > 0) ? (totalStaffCost/validRecords) : 0;
     
     const avgScrapPercentage = validRecords > 0 ? totalScrapPercentage / validRecords : 0;
     // Convert downtime from minutes to hours
