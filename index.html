@@ -1204,21 +1204,24 @@ function transformProductionLines(lineGroups) {
         return [];
     }
     
-    const productionLines = [];
+    // Create a fixed order array to ensure cards appear in the correct order
+    const fixedOrderLines = [
+        // ROW 1
+        { id: 'apelele-scd', row: 1, col: 1, found: false },         // SCD in row 1, col 1
+        { id: 'siyabonga-levo', row: 1, col: 2, found: false },      // LEVO in row 1, col 2
+        { id: 'nosi-scalpel-assembly', row: 1, col: 3, found: false },// Scalpel Assembly in row 1, col 3
+        { id: 'mvokwe-3rd-line-ubt', row: 1, col: 4, found: false }, // 3rd Line UBT in row 1, col 4
+        
+        // ROW 2
+        { id: 'luthando-sum', row: 2, col: 1, found: false },        // SUM in row 2, col 1
+        { id: 'mvokwe-popup', row: 2, col: 2, found: false },        // PopUp in row 2, col 2
+        { id: 'nosi-scalpel-packaging', row: 2, col: 3, found: false },// Scalpel Packaging in row 2, col 3
+        { id: 'mvokwe-3rd-line-scd', row: 2, col: 4, found: false }  // 3rd Line SCD in row 2, col 4
+    ];
     
-    // Fixed position mapping - this is the key to correct placement
-    const fixedPositions = {
-        'apelele-scd': { row: 1, column: 1 },
-        'siyabonga-levo': { row: 1, column: 2 },
-        'luthando-sum': { row: 2, column: 1 },
-        'mvokwe-popup': { row: 2, column: 2 },
-        'nosi-scalpel-assembly': { row: 1, column: 3 },
-        'nosi-scalpel-packaging': { row: 2, column: 3 },
-        'mvokwe-3rd-line-ubt': { row: 1, column: 4 },
-        'mvokwe-3rd-line-scd': { row: 2, column: 4 }
-    };
+    // Process all line groups first
+    const processedLines = [];
     
-    // Process each line group with fixed positioning
     for (const groupKey in lineGroups) {
         const lineGroup = lineGroups[groupKey];
         
@@ -1229,46 +1232,61 @@ function transformProductionLines(lineGroups) {
             lineGroup.displayName = lineGroup.name;
         }
         
-        // Create a unique ID for positioning
-        let positionKey = lineGroup.id;
+        // Create a special ID for fixed positioning
+        let specialId = lineGroup.id;
         
-        // For Scalpel and 3rd Line, append product type for unique positioning
+        // Special handling for Scalpel and 3rd Line
         if (lineGroup.id === 'nosi-scalpel') {
             if (lineGroup.displayName.toLowerCase().includes('packaging')) {
-                positionKey = 'nosi-scalpel-packaging';
+                specialId = 'nosi-scalpel-packaging';
             } else {
-                positionKey = 'nosi-scalpel-assembly';
+                specialId = 'nosi-scalpel-assembly';
             }
         } else if (lineGroup.id === 'mvokwe-3rd line') {
             if (lineGroup.baseProduct === 'UBT') {
-                positionKey = 'mvokwe-3rd-line-ubt';
+                specialId = 'mvokwe-3rd-line-ubt';
             } else {
-                positionKey = 'mvokwe-3rd-line-scd';
+                specialId = 'mvokwe-3rd-line-scd';
             }
         }
         
-        // Apply fixed position if available, otherwise use default
-        const position = fixedPositions[positionKey] || 
-                         fixedPositions[lineGroup.id] || 
-                         { row: 1, column: 1 };
+        // Find the fixed position for this line
+        const fixedPosition = fixedOrderLines.find(item => item.id === specialId || item.id === lineGroup.id);
         
-        // Apply position directly using style instead of class
-        lineGroup.style = `grid-row: ${position.row}; grid-column: ${position.column};`;
-        Logger.info(`Assigned fixed position row:${position.row}, col:${position.column} to ${lineGroup.displayName}`);
+        if (fixedPosition) {
+            // Mark as found and set the position
+            fixedPosition.found = true;
+            fixedPosition.lineGroup = lineGroup;
+            
+            // Store the position for the actual element
+            lineGroup.row = fixedPosition.row;
+            lineGroup.col = fixedPosition.col;
+            lineGroup.gridPosition = `grid-row: ${fixedPosition.row}; grid-column: ${fixedPosition.col};`;
+            
+            Logger.info(`Assigned fixed position row:${fixedPosition.row}, col:${fixedPosition.col} to ${lineGroup.displayName}`);
+        } else {
+            Logger.warn(`No fixed position found for line: ${lineGroup.displayName}`);
+        }
         
-        // Handle different line types
+        // Process the line based on its type
         if (lineGroup.type && lineGroup.type.toLowerCase() === 'popup' || 
             lineGroup.id.toLowerCase().includes('popup')) {
-            const popupLine = transformPopUpLine(lineGroup);
-            productionLines.push(popupLine);
+            processedLines.push(transformPopUpLine(lineGroup));
         } else {
-            const regularLine = transformRegularLine(lineGroup);
-            productionLines.push(regularLine);
+            processedLines.push(transformRegularLine(lineGroup));
         }
     }
     
-    Logger.info(`Transformed ${productionLines.length} production lines`);
-    return productionLines;
+    // Now sort the processed lines by row and column to ensure proper order
+    processedLines.sort((a, b) => {
+        if (a.row === b.row) {
+            return a.col - b.col;
+        }
+        return a.row - b.row;
+    });
+    
+    Logger.info(`Transformed and sorted ${processedLines.length} production lines`);
+    return processedLines;
 }
         
         /**
@@ -2054,7 +2072,8 @@ function calculateVariantTrends(records) {
             }
             
             return `
-        <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''}" style="${line.style || ''}">
+        <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''}" 
+             style="${line.gridPosition || ''} width: 100%; height: 100%;">
             <div class="line-card-header ${line.color}">
                 ${line.name}
             </div>
