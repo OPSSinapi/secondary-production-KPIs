@@ -287,6 +287,7 @@
             overflow: hidden;
             width: 100%;
             height: 100%;
+            position: relative;
         }
 
         .line-card-header {
@@ -297,6 +298,29 @@
             height: 35px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .enlarge-icon {
+            cursor: pointer;
+            margin-left: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .enlarge-icon:hover {
+            opacity: 1;
         }
 
         .blue-header {
@@ -596,6 +620,192 @@
         .debug-log-entry.info {
             color: var(--text-dark);
         }
+        
+        /* 
+        ======================================
+        MODAL / DETAIL VIEW
+        ======================================
+        */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+        
+        .modal-close {
+            font-size: 24px;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* 
+        ======================================
+        DATE NAVIGATION
+        ======================================
+        */
+        .date-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .date-range-display {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .date-nav-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .date-nav-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .date-nav-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* 
+        ======================================
+        DETAILED CHARTS
+        ======================================
+        */
+        .detail-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .detail-metric-card {
+            background-color: #f5f7fa;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .detail-metric-header {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+        
+        .detail-metric-footer {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .toggle-btn {
+            background-color: #e8e8e8;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .toggle-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        
+        .top-items-list {
+            background-color: white;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        
+        .top-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .top-item:last-child {
+            border-bottom: none;
+        }
+        
+        .top-item-label {
+            font-weight: bold;
+        }
+        
+        .top-item-value {
+            color: var(--text-light);
+        }
 
         /* 
         ======================================
@@ -624,6 +834,10 @@
             .card-double-height {
                 grid-column: span 1;
             }
+            
+            .detail-metrics {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 767px) {
@@ -651,6 +865,19 @@
             
             .dashboard-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                max-height: 95vh;
+            }
+            
+            .modal-title {
+                font-size: 18px;
+            }
+            
+            .chart-container {
+                height: 200px;
             }
         }
     </style>
@@ -698,6 +925,72 @@
     <!-- Debug Log (hidden by default) -->
     <div class="debug-log" id="debugLog" style="display: none;">
         <div class="debug-log-entry info">Debug log initialized.</div>
+    </div>
+    
+    <!-- Detail View Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Line Details</div>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Date Navigation -->
+                <div class="date-nav">
+                    <div class="date-range-display" id="modalDateRange">March 18-25, 2025</div>
+                    <div class="date-nav-controls">
+                        <button class="date-nav-btn" id="prevWeekBtn"><i class="fas fa-chevron-left"></i> Previous Week</button>
+                        <button class="date-nav-btn" id="nextWeekBtn">Next Week <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Detail Metrics -->
+                <div class="detail-metrics">
+                    <!-- Schedule Attainment -->
+                    <div class="detail-metric-card">
+                        <div class="detail-metric-header">Schedule Attainment</div>
+                        <div class="chart-container" id="scheduleAttainmentChart"></div>
+                    </div>
+                    
+                    <!-- Labour Cost per Unit -->
+                    <div class="detail-metric-card">
+                        <div class="detail-metric-header">Labour Cost per Unit</div>
+                        <div class="chart-container" id="labourCostChart"></div>
+                    </div>
+                    
+                    <!-- Scrap Percentage -->
+                    <div class="detail-metric-card">
+                        <div class="detail-metric-header">Scrap Percentage</div>
+                        <div class="chart-container" id="scrapPercentageChart"></div>
+                        <div class="detail-metric-footer">
+                            <div class="toggle-container">
+                                <button class="toggle-btn active" id="scrapQtyBtn">By Quantity</button>
+                                <button class="toggle-btn" id="scrapCostBtn">By Cost</button>
+                            </div>
+                            <div class="top-items-list" id="topScrapList">
+                                <!-- Top scrap items will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Downtime -->
+                    <div class="detail-metric-card">
+                        <div class="detail-metric-header">Downtime</div>
+                        <div class="chart-container" id="downtimeChart"></div>
+                        <div class="detail-metric-footer">
+                            <div class="toggle-container">
+                                <button class="toggle-btn active" id="downtimeReasonBtn">By Reason</button>
+                                <button class="toggle-btn" id="downtimeMachineBtn">By Machine</button>
+                                <button class="toggle-btn" id="downtimeDurationBtn">By Duration</button>
+                            </div>
+                            <div class="top-items-list" id="topDowntimeList">
+                                <!-- Top downtime items will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -2179,9 +2472,14 @@
             }
             
             return `
-                <div class="line-card">
+                <div class="line-card" data-line-id="${line.id}">
                     <div class="line-card-header ${line.color}">
-                        ${displayName}
+                        <div class="card-title">${displayName}</div>
+                        <div class="card-actions">
+                            <div class="enlarge-icon" onclick="showDetailView('${line.id}')">
+                                <i class="fas fa-expand-alt"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="line-card-content">
                         <div class="variant-combined">
@@ -2627,12 +2925,315 @@
             // Add event listener for document click (to close dropdown)
             document.addEventListener('click', handleDocumentClick);
             
+            // Detail view event listeners
+            document.getElementById('modalClose').addEventListener('click', hideDetailView);
+            document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
+            document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
+            document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
+            document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
+            document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
+            document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
+            document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
+            
             // Initialize the dashboard
             initializeDashboard();
             
             // Set up auto-refresh interval
             setInterval(initializeDashboard, CONFIG.refreshInterval);
         });
+        
+        // Make showDetailView available in the global scope
+        window.showDetailView = showDetailView;
+        
+        /**
+         * ======================================
+         * DETAIL VIEW FUNCTIONS
+         * ======================================
+         */
+        
+        // Track current detail view state
+        const detailViewState = {
+            lineId: null,
+            dateRange: {
+                start: null,
+                end: null
+            },
+            scrapView: 'qty',   // 'qty' or 'cost'
+            downtimeView: 'reason'  // 'reason', 'machine', or 'duration'
+        };
+        
+        /**
+         * Shows the detail view for a specific line
+         * @param {string} lineId - The ID of the line to show details for
+         */
+        function showDetailView(lineId) {
+            Logger.info(`Showing detail view for line: ${lineId}`);
+            
+            // Store the current line ID
+            detailViewState.lineId = lineId;
+            
+            // Set the date range to the current week if not already set
+            if (!detailViewState.dateRange.start || !detailViewState.dateRange.end) {
+                const currentDate = new Date();
+                
+                // Set to the beginning of the current week (Monday)
+                const startDate = new Date(currentDate);
+                const day = startDate.getDay();
+                const diff = startDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+                startDate.setDate(diff);
+                startDate.setHours(0, 0, 0, 0);
+                
+                // Set to the end of the current week (Sunday)
+                const endDate = new Date(startDate);
+                endDate.setDate(endDate.getDate() + 6);
+                endDate.setHours(23, 59, 59, 999);
+                
+                detailViewState.dateRange.start = startDate.toISOString();
+                detailViewState.dateRange.end = endDate.toISOString();
+            }
+            
+            // Update modal title
+            const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
+            if (lineElement) {
+                const headerElement = lineElement.querySelector('.card-title');
+                if (headerElement) {
+                    document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+                }
+            }
+            
+            // Update date range display
+            updateModalDateRange();
+            
+            // Load and render the charts
+            loadDetailViewData();
+            
+            // Show the modal
+            document.getElementById('detailModal').classList.add('show');
+        }
+        
+        /**
+         * Hides the detail view
+         */
+        function hideDetailView() {
+            Logger.info('Hiding detail view');
+            document.getElementById('detailModal').classList.remove('show');
+        }
+        
+        /**
+         * Updates the date range display in the modal
+         */
+        function updateModalDateRange() {
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Format dates
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            const startFormatted = start.toLocaleDateString('en-US', options);
+            const endFormatted = end.toLocaleDateString('en-US', options);
+            
+            // Update the display
+            document.getElementById('modalDateRange').textContent = `${startFormatted} - ${endFormatted}`;
+        }
+        
+        /**
+         * Navigates to the previous week
+         */
+        function navigateToPreviousWeek() {
+            Logger.info('Navigating to previous week');
+            
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Move both dates back by 7 days
+            start.setDate(start.getDate() - 7);
+            end.setDate(end.getDate() - 7);
+            
+            // Update the state
+            detailViewState.dateRange.start = start.toISOString();
+            detailViewState.dateRange.end = end.toISOString();
+            
+            // Update display and reload data
+            updateModalDateRange();
+            loadDetailViewData();
+        }
+        
+        /**
+         * Navigates to the next week
+         */
+        function navigateToNextWeek() {
+            Logger.info('Navigating to next week');
+            
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Move both dates forward by 7 days
+            start.setDate(start.getDate() + 7);
+            end.setDate(end.getDate() + 7);
+            
+            // Update the state
+            detailViewState.dateRange.start = start.toISOString();
+            detailViewState.dateRange.end = end.toISOString();
+            
+            // Update display and reload data
+            updateModalDateRange();
+            loadDetailViewData();
+        }
+        
+        /**
+         * Toggles the scrap view between quantity and cost
+         * @param {string} view - The view to switch to ('qty' or 'cost')
+         */
+        function toggleScrapView(view) {
+            Logger.info(`Toggling scrap view to: ${view}`);
+            
+            // Update the state
+            detailViewState.scrapView = view;
+            
+            // Update button active states
+            document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
+            document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
+            
+            // Update the display
+            updateTopScrapList();
+        }
+        
+        /**
+         * Toggles the downtime view
+         * @param {string} view - The view to switch to ('reason', 'machine', or 'duration')
+         */
+        function toggleDowntimeView(view) {
+            Logger.info(`Toggling downtime view to: ${view}`);
+            
+            // Update the state
+            detailViewState.downtimeView = view;
+            
+            // Update button active states
+            document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
+            document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
+            document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
+            
+            // Update the display
+            updateTopDowntimeList();
+        }
+        
+        /**
+         * Loads data for the detail view
+         */
+        function loadDetailViewData() {
+            Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
+            
+            // In a real implementation, this would fetch filtered data for the specific line
+            // For this example, we'll work with the existing data
+            
+            // Render placeholder charts
+            renderPlaceholderCharts();
+            
+            // Update lists
+            updateTopScrapList();
+            updateTopDowntimeList();
+        }
+        
+        /**
+         * Renders placeholder charts for the detail view
+         */
+        function renderPlaceholderCharts() {
+            // This is where we would integrate with a charting library
+            // For this example, we'll just show placeholder texts
+            
+            document.getElementById('scheduleAttainmentChart').innerHTML = 
+                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Schedule Attainment Chart (Bar Graph)</div>';
+                
+            document.getElementById('labourCostChart').innerHTML = 
+                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Labour Cost Chart (Line Graph)</div>';
+                
+            document.getElementById('scrapPercentageChart').innerHTML = 
+                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Scrap Percentage Chart (Line Graph)</div>';
+                
+            document.getElementById('downtimeChart').innerHTML = 
+                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Downtime Chart (Line Graph)</div>';
+        }
+        
+        /**
+         * Updates the top scrap list based on the current view
+         */
+        function updateTopScrapList() {
+            const listElement = document.getElementById('topScrapList');
+            
+            // Simple placeholder data
+            const listItems = detailViewState.scrapView === 'qty' ?
+                [
+                    { label: 'Broken hook', value: '278 units' },
+                    { label: 'Leaking', value: '187 units' },
+                    { label: 'Damaged assembly', value: '93 units' }
+                ] :
+                [
+                    { label: 'Pressure mark', value: 'R 423.64' },
+                    { label: 'Acetone mark on lid', value: 'R 367.23' },
+                    { label: 'Device failing on V-test', value: 'R 208.33' }
+                ];
+            
+            // Generate HTML
+            let html = '';
+            listItems.forEach((item, index) => {
+                html += `
+                    <div class="top-item">
+                        <div class="top-item-label">${index + 1}. ${item.label}</div>
+                        <div class="top-item-value">${item.value}</div>
+                    </div>
+                `;
+            });
+            
+            listElement.innerHTML = html;
+        }
+        
+        /**
+         * Updates the top downtime list based on the current view
+         */
+        function updateTopDowntimeList() {
+            const listElement = document.getElementById('topDowntimeList');
+            
+            // Simple placeholder data
+            let listItems;
+            
+            switch (detailViewState.downtimeView) {
+                case 'reason':
+                    listItems = [
+                        { label: 'Machine calibration', value: '240 min' },
+                        { label: 'Material changeover', value: '120 min' },
+                        { label: 'Power outage', value: '60 min' }
+                    ];
+                    break;
+                case 'machine':
+                    listItems = [
+                        { label: 'Welder station', value: '180 min' },
+                        { label: 'Testing unit', value: '150 min' },
+                        { label: 'Assembly line', value: '90 min' }
+                    ];
+                    break;
+                case 'duration':
+                    listItems = [
+                        { label: 'Machine calibration - Welder', value: 'R 857.20' },
+                        { label: 'Material changeover - Assembly', value: 'R 456.50' },
+                        { label: 'Power outage - All stations', value: 'R 320.75' }
+                    ];
+                    break;
+                default:
+                    listItems = [];
+            }
+            
+            // Generate HTML
+            let html = '';
+            listItems.forEach((item, index) => {
+                html += `
+                    <div class="top-item">
+                        <div class="top-item-label">${index + 1}. ${item.label}</div>
+                        <div class="top-item-value">${item.value}</div>
+                    </div>
+                `;
+            });
+            
+            listElement.innerHTML = html;
+        }
     </script>
 </body>
 </html>
