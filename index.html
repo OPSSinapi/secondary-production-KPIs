@@ -1205,20 +1205,21 @@ function transformProductionLines(lineGroups) {
     
     const productionLines = [];
     
-    // Fixed positions map for specific lines - corrected placement
+    // Fixed positions map for specific lines - fixed to match actual IDs in the data
     const fixedPositions = {
-    // First row, first and second column
-    'apelele-scd': { row: 1, col: 1 },
-    'levo-line': { row: 1, col: 2 },
-    
-    // Second row, first and second column
-    'luthando-sum': { row: 2, col: 1 },
-    'mvokwe-popup': { row: 2, col: 2 }, // Changed from 'popup-line' to 'mvokwe-popup'
-    
-    // First row, third and fourth column
-    'nosi-scalpel': { row: 1, col: 3 },
-    'mvokwe-3rd': { row: 1, col: 4 },
-};
+        // First row, first and second column
+        'apelele-scd': { row: 1, col: 1 },
+        'siyabonga-levo': { row: 1, col: 2 },
+        
+        // Second row, first and second column
+        'luthando-sum': { row: 2, col: 1 },
+        'mvokwe-popup': { row: 2, col: 2 },
+        
+        // First row, third and fourth column
+        'nosi-scalpel': { row: 1, col: 3 },
+        'mvokwe-3rd': { row: 1, col: 4 },
+        'mvokwe-3rd line': { row: 1, col: 4 } // Added with space to match ID in log
+    };
     
     // Handle special case for Scalpel and 3rd Line products
     const scalpelBaseProducts = [];
@@ -1230,7 +1231,7 @@ function transformProductionLines(lineGroups) {
         
         if (lineGroup.id === 'nosi-scalpel' && lineGroup.baseProduct) {
             scalpelBaseProducts.push(lineGroup);
-        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line') && lineGroup.baseProduct) {
+        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') && lineGroup.baseProduct) {
             thirdLineBaseProducts.push(lineGroup);
         }
     }
@@ -1238,6 +1239,9 @@ function transformProductionLines(lineGroups) {
     // Sort base products to ensure consistent placement
     scalpelBaseProducts.sort((a, b) => a.baseProduct.localeCompare(b.baseProduct));
     thirdLineBaseProducts.sort((a, b) => a.baseProduct.localeCompare(b.baseProduct));
+    
+    // Separate Scalpel Assembly from Packaging
+    let scalpelCount = 0;
     
     // Second pass: Transform line groups into production lines
     for (const groupKey in lineGroups) {
@@ -1257,10 +1261,11 @@ function transformProductionLines(lineGroups) {
             // Standard fixed positions
             cssClass = `grid-row-${fixedPositions[lineGroup.id].row} grid-col-${fixedPositions[lineGroup.id].col}`;
         } else if (lineGroup.id === 'nosi-scalpel' && lineGroup.baseProduct) {
-            // Scalpel Products always in third column (first or second row)
-            const idx = scalpelBaseProducts.indexOf(lineGroup);
-            cssClass = `grid-col-3 grid-row-${(idx % 2) + 1}`;
-        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line') && lineGroup.baseProduct) {
+            // Alternating between row 1 and 2 for different Scalpel products
+            const rowIndex = (scalpelCount % 2) + 1;
+            cssClass = `grid-row-${rowIndex} grid-col-3`;
+            scalpelCount++;
+        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') && lineGroup.baseProduct) {
             // Only show the last 2 base products if there are more than 2
             if (thirdLineBaseProducts.length <= 2 || 
                 thirdLineBaseProducts.indexOf(lineGroup) >= thirdLineBaseProducts.length - 2) {
@@ -1279,8 +1284,8 @@ function transformProductionLines(lineGroups) {
         Logger.info(`Assigned CSS class "${cssClass}" to line: ${lineGroup.displayName}`);
         
         // Handle different line types
-        if (lineGroup.type.toLowerCase() === 'popup' || 
-    lineGroup.id.toLowerCase().includes('popup')) {
+        if (lineGroup.type && lineGroup.type.toLowerCase() === 'popup' || 
+            lineGroup.id.toLowerCase().includes('popup')) {
             const popupLine = transformPopUpLine(lineGroup);
             productionLines.push(popupLine);
         } else {
