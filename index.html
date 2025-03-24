@@ -88,6 +88,7 @@
             display: flex;
             align-items: center;
             height: 30px;
+            cursor: pointer;
         }
 
         .period-btn, .refresh-btn {
@@ -103,6 +104,68 @@
         }
 
         .period-btn:hover, .refresh-btn:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        /* Date picker dropdown */
+        .date-picker-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 25px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 15px;
+            z-index: 101;
+            display: none;
+        }
+
+        .date-picker-dropdown.show {
+            display: block;
+        }
+
+        .date-picker-dropdown label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .date-picker-dropdown input {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .date-picker-dropdown button {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .date-picker-dropdown button:hover {
+            background-color: #2980b9;
+        }
+
+        .date-range-btn {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 5px 10px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .date-range-btn:hover {
             background-color: rgba(255,255,255,0.3);
         }
 
@@ -540,10 +603,20 @@
         <h1>Assembly Plant Performance Dashboard</h1>
         <div class="date-controls">
             <div class="date-filter" id="dateRangeDisplay">Loading...</div>
+            <button class="date-range-btn" id="dateRangeButton">Select Dates</button>
             <button class="period-btn" id="periodToggle">Daily</button>
             <button class="refresh-btn" id="refreshButton">Refresh</button>
         </div>
     </header>
+
+    <!-- Date Range Picker Dropdown -->
+    <div class="date-picker-dropdown" id="datePickerDropdown">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate">
+        <button id="applyDateRange">Apply</button>
+    </div>
 
     <!-- KPI Summary Section -->
     <div class="kpi-summary">
@@ -578,14 +651,19 @@
         
         // Main configuration object for the dashboard
         const CONFIG = {
-            // URL to fetch KPI data from
-            kpiDataUrl: 'KPI.json',
+            // URL to fetch operational data from
+            dataUrl: 'OpsData.json',
             
             // Refresh interval in milliseconds (5 minutes)
             refreshInterval: 5 * 60 * 1000,
             
             // Default period for data display
             defaultPeriod: 'daily',
+            
+            // Default date range (last 5 production dates)
+            defaultDateRange: {
+                days: 5
+            },
             
             // Debug mode to show the debug log
             debugMode: true,
@@ -595,9 +673,9 @@
                 'blue': 'blue-header',
                 'orange': 'orange-header',
                 'purple': 'purple-header',
-                'black': 'blue-header', // Added mapping for SCD line
-                'yellow': 'orange-header', // Added mapping for SUM line
-                'grey': 'blue-header', // Added mapping for LEVO line
+                'black': 'blue-header',
+                'yellow': 'orange-header',
+                'grey': 'blue-header',
                 'green': 'orange-header',
                 'pink': 'purple-header'
             },
@@ -634,6 +712,50 @@
                 }
             }
         };
+
+        /**
+         * ======================================
+         * DATE UTILITIES
+         * ======================================
+         */
+        
+        // Store current date range
+        let currentDateRange = {
+            start: null,
+            end: null
+        };
+
+        /**
+         * Gets the default date range (last 5 production dates)
+         * @returns {Object} Object with start and end dates
+         */
+        function getDefaultDateRange() {
+            const now = new Date();
+            const end = new Date(now);
+            const start = new Date(now);
+            start.setDate(start.getDate() - CONFIG.defaultDateRange.days);
+            
+            return {
+                start: start.toISOString().split('T')[0],
+                end: end.toISOString().split('T')[0]
+            };
+        }
+
+        /**
+         * Sets the date inputs to the current date range values
+         */
+        function setDateInputs() {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            
+            if (currentDateRange.start) {
+                startDateInput.value = currentDateRange.start.split('T')[0];
+            }
+            
+            if (currentDateRange.end) {
+                endDateInput.value = currentDateRange.end.split('T')[0];
+            }
+        }
 
         /**
          * ======================================
@@ -728,29 +850,29 @@
          */
         
         /**
-         * Fetches KPI data from the specified URL
-         * @returns {Promise<Object>} The parsed KPI data
+         * Fetches operational data from the specified URL
+         * @returns {Promise<Object>} The parsed operational data
          */
-        async function fetchKpiData() {
-            Logger.info(`Fetching KPI data from: ${CONFIG.kpiDataUrl}`);
+        async function fetchOpsData() {
+            Logger.info(`Fetching operational data from: ${CONFIG.dataUrl}`);
             
             try {
-                const response = await fetch(CONFIG.kpiDataUrl);
+                const response = await fetch(CONFIG.dataUrl);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 
                 const data = await response.json();
-                Logger.info('KPI data fetched successfully');
+                Logger.info('Operational data fetched successfully');
                 
                 return data;
             } catch (error) {
-                Logger.error('Error fetching KPI data', error);
-                throw error; // No fallback - propagate the error
+                Logger.error('Error fetching operational data', error);
+                throw error;
             }
         }
-
+        
         /**
          * ======================================
          * DATA TRANSFORMATION
@@ -758,127 +880,356 @@
          */
         
         /**
-         * Transforms KPI data from the JSON format to the format expected by the UI
-         * @param {Object} kpiData - The raw KPI data from the JSON file
+         * Filters operational data based on selected date range
+         * @param {Object} opsData - The raw operational data
+         * @param {string} startDate - Start date in ISO format
+         * @param {string} endDate - End date in ISO format
+         * @returns {Array} Filtered production data records
+         */
+        function filterDataByDateRange(opsData, startDate, endDate) {
+            Logger.info(`Filtering data from ${startDate} to ${endDate}`);
+            
+            if (!opsData || !opsData.productionData || !Array.isArray(opsData.productionData)) {
+                Logger.warn('No production data available to filter');
+                return [];
+            }
+            
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999); // Include the entire end day
+            
+            return opsData.productionData.filter(record => {
+                const recordDate = new Date(record.Date);
+                return recordDate >= start && recordDate <= end;
+            });
+        }
+        
+        /**
+         * Gets the last N production dates from the data
+         * @param {Object} opsData - The raw operational data
+         * @param {number} n - Number of dates to get
+         * @returns {Object} Object with start and end dates
+         */
+        function getLastNProductionDates(opsData, n) {
+            if (!opsData || !opsData.productionData || !Array.isArray(opsData.productionData)) {
+                Logger.warn('No production data available to get dates');
+                return getDefaultDateRange();
+            }
+            
+            // Sort dates in descending order
+            const sortedDates = [...opsData.productionData]
+                .map(record => record.Date)
+                .sort((a, b) => new Date(b) - new Date(a));
+            
+            // Remove duplicates
+            const uniqueDates = [...new Set(sortedDates)];
+            
+            if (uniqueDates.length === 0) {
+                Logger.warn('No dates found in production data');
+                return getDefaultDateRange();
+            }
+            
+            // Get the latest N dates
+            const latestDates = uniqueDates.slice(0, n);
+            
+            const end = latestDates[0];
+            const start = latestDates[latestDates.length - 1];
+            
+            Logger.info(`Got last ${n} production dates: ${start} to ${end}`);
+            
+            return {
+                start,
+                end
+            };
+        }
+
+        /**
+         * Transforms operational data to the format expected by the dashboard
+         * @param {Object} opsData - The raw operational data
+         * @param {Array} filteredData - The filtered production data records
          * @returns {Object} Transformed data ready for UI rendering
          */
-        function transformKpiData(kpiData) {
-            // Access the nested productionData property
-            const productionData = kpiData.productionData || kpiData;
-            Logger.info(`Transforming KPI data, lastUpdated: ${productionData.lastUpdated}`);
+        function transformOpsData(opsData, filteredData) {
+            Logger.info(`Transforming operational data, lastUpdated: ${opsData.lastUpdated}`);
             
-            // Extract essential data from the correct location
+            // Group data by production line
+            const lineGroups = groupDataByProductionLine(filteredData);
+            
+            // Calculate plant-wide metrics
+            const plantWideMetrics = calculatePlantWideMetrics(filteredData);
+            
+            // Get date range for display
+            const dateRange = {
+                start: currentDateRange.start,
+                end: currentDateRange.end
+            };
+            
+            // Transform production lines data
+            const productionLines = transformProductionLines(lineGroups);
+            
+            // Build the final transformed data structure
             const transformedData = {
-                lastUpdated: productionData.lastUpdated,
-                dateRange: productionData.dateRange,
-                plantWideMetrics: transformPlantWideMetrics(productionData.plantWideMetrics),
-                lines: transformProductionLines(productionData.productionLines),
-                thresholds: productionData.thresholds || CONFIG.thresholds
+                lastUpdated: opsData.lastUpdated,
+                dateRange: dateRange,
+                plantWideMetrics: plantWideMetrics,
+                lines: productionLines,
+                thresholds: CONFIG.thresholds
             };
             
             Logger.info(`Transformed ${transformedData.lines.length} production lines`);
             return transformedData;
         }
-
+        
         /**
-         * Transforms plant-wide metrics
-         * @param {Object} metrics - The plant-wide metrics from KPI data
-         * @returns {Object} Transformed metrics for UI rendering
+         * Groups filtered data by production line
+         * @param {Array} filteredData - The filtered production data records
+         * @returns {Object} Data grouped by production line ID
          */
-        function transformPlantWideMetrics(metrics) {
-            if (!metrics) {
-                Logger.warn('No plant-wide metrics found in data');
+        function groupDataByProductionLine(filteredData) {
+            if (!filteredData || filteredData.length === 0) {
+                Logger.warn('No filtered data available to group');
+                return {};
+            }
+            
+            const lineGroups = {};
+            
+            filteredData.forEach(record => {
+                const lineId = record['Production Line ID'];
+                
+                if (!lineId) {
+                    Logger.warn(`Record missing Production Line ID: ${JSON.stringify(record)}`);
+                    return;
+                }
+                
+                if (!lineGroups[lineId]) {
+                    lineGroups[lineId] = {
+                        id: lineId,
+                        name: record['Production Line Name'],
+                        color: record['Production Line Color'],
+                        type: record['Production Line Type'],
+                        records: []
+                    };
+                }
+                
+                lineGroups[lineId].records.push(record);
+            });
+            
+            Logger.info(`Grouped data into ${Object.keys(lineGroups).length} production lines`);
+            return lineGroups;
+        }
+        
+        /**
+         * Calculates plant-wide metrics from filtered data
+         * @param {Array} filteredData - The filtered production data records
+         * @returns {Object} Calculated plant-wide metrics
+         */
+        function calculatePlantWideMetrics(filteredData) {
+            if (!filteredData || filteredData.length === 0) {
+                Logger.warn('No filtered data available to calculate plant-wide metrics');
                 return null;
             }
             
-            Logger.info('Transforming plant-wide metrics');
+            // Initialize metrics
+            let totalScheduleAttainment = 0;
+            let totalLabourCost = 0;
+            let totalScrapPercentage = 0;
+            let totalDowntime = 0;
+            let recordCount = 0;
+            
+            // Previous period metrics for trend calculation
+            let prevTotalScheduleAttainment = 0;
+            let prevTotalLabourCost = 0;
+            let prevTotalScrapPercentage = 0;
+            let prevTotalDowntime = 0;
+            let prevRecordCount = 0;
+            
+            // Sort records by date
+            const sortedRecords = [...filteredData].sort((a, b) => 
+                new Date(a.Date) - new Date(b.Date)
+            );
+            
+            // Determine mid-point for trend calculation
+            const midPoint = Math.floor(sortedRecords.length / 2);
+            
+            sortedRecords.forEach((record, index) => {
+                // Skip records with missing data
+                if (record['Schedule Attainment'] === undefined || 
+                    record['Cost Per Unit'] === undefined || 
+                    record['Scrap Cost as % of Production Value'] === undefined) {
+                    return;
+                }
+                
+                // For the first half of records (previous period)
+                if (index < midPoint) {
+                    prevTotalScheduleAttainment += record['Schedule Attainment'] || 0;
+                    prevTotalLabourCost += record['Cost Per Unit'] || 0;
+                    prevTotalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
+                    prevTotalDowntime += record['Downtime Duration (min)'] || 0;
+                    prevRecordCount++;
+                } 
+                // For the second half of records (current period)
+                else {
+                    totalScheduleAttainment += record['Schedule Attainment'] || 0;
+                    totalLabourCost += record['Cost Per Unit'] || 0;
+                    totalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
+                    totalDowntime += record['Downtime Duration (min)'] || 0;
+                    recordCount++;
+                }
+            });
+            
+            // Calculate current averages
+            const avgScheduleAttainment = recordCount > 0 ? totalScheduleAttainment / recordCount : 0;
+            const avgLabourCost = recordCount > 0 ? totalLabourCost / recordCount : 0;
+            const avgScrapPercentage = recordCount > 0 ? totalScrapPercentage / recordCount : 0;
+            // Convert downtime from minutes to hours
+            const downtimeHours = recordCount > 0 ? (totalDowntime / 60) : 0;
+            
+            // Calculate previous period averages
+            const prevAvgScheduleAttainment = prevRecordCount > 0 ? prevTotalScheduleAttainment / prevRecordCount : 0;
+            const prevAvgLabourCost = prevRecordCount > 0 ? prevTotalLabourCost / prevRecordCount : 0;
+            const prevAvgScrapPercentage = prevRecordCount > 0 ? prevTotalScrapPercentage / prevRecordCount : 0;
+            
+            // Calculate trends (percentage change)
+            const scheduleAttainmentTrend = prevAvgScheduleAttainment > 0 ? 
+                ((avgScheduleAttainment - prevAvgScheduleAttainment) / prevAvgScheduleAttainment) * 100 : 0;
+            const labourCostTrend = prevAvgLabourCost > 0 ? 
+                ((avgLabourCost - prevAvgLabourCost) / prevAvgLabourCost) * 100 : 0;
+            const scrapPercentageTrend = prevAvgScrapPercentage > 0 ? 
+                ((avgScrapPercentage - prevAvgScrapPercentage) / prevAvgScrapPercentage) * 100 : 0;
+            
+            // Count downtime events
+            const downtimeEvents = sortedRecords.filter(record => 
+                (record['Downtime Duration (min)'] || 0) > 0
+            ).length;
+            
+            // Calculate downtime events trend (not percentage)
+            const prevDowntimeEvents = prevRecordCount > 0 ? 
+                Math.round(downtimeEvents * (prevRecordCount / recordCount)) : 0;
+            const downtimeEventsTrend = downtimeEvents - prevDowntimeEvents;
+            
+            Logger.info(`Calculated plant-wide metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)}, SC=${avgScrapPercentage.toFixed(2)}, DE=${downtimeEvents}`);
+            
+            // Return structured metrics object
             return {
                 scheduleAttainment: {
-                    value: metrics.scheduleAttainment.value,
-                    trend: metrics.scheduleAttainment.trend,
-                    trendDirection: metrics.scheduleAttainment.trendDirection
+                    value: Math.round(avgScheduleAttainment * 10) / 10,  // Round to 1 decimal place
+                    trend: Math.round(Math.abs(scheduleAttainmentTrend) * 10) / 10,  // Round to 1 decimal place,
+                    trendDirection: scheduleAttainmentTrend >= 0 ? 'up' : 'down'
                 },
                 labourCostPerUnit: {
-                    value: metrics.labourCostPerUnit.value,
-                    trend: metrics.labourCostPerUnit.trend,
-                    trendDirection: metrics.labourCostPerUnit.trendDirection
+                    value: Math.round(avgLabourCost),  // Round to whole number
+                    trend: Math.round(Math.abs(labourCostTrend) * 10) / 10,  // Round to 1 decimal place
+                    trendDirection: labourCostTrend >= 0 ? 'up' : 'down'
                 },
                 scrapPercentage: {
-                    value: metrics.scrapPercentage.value,
-                    trend: metrics.scrapPercentage.trend,
-                    trendDirection: metrics.scrapPercentage.trendDirection
+                    value: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
+                    trend: Math.round(Math.abs(scrapPercentageTrend) * 10) / 10,  // Round to 1 decimal place
+                    trendDirection: scrapPercentageTrend >= 0 ? 'up' : 'down'
                 },
                 downtimeEvents: {
-                    value: metrics.downtimeEvents.value,
-                    trend: metrics.downtimeEvents.trend,
-                    trendDirection: metrics.downtimeEvents.trendDirection
+                    value: downtimeEvents,
+                    trend: Math.abs(downtimeEventsTrend),
+                    trendDirection: downtimeEventsTrend >= 0 ? 'up' : 'down'
                 }
             };
         }
-
+        
         /**
-         * Transforms production lines data
-         * @param {Array} productionLines - The production lines from KPI data
-         * @returns {Array} Transformed production lines for UI rendering
+         * Transforms grouped production lines data
+         * @param {Object} lineGroups - Data grouped by production line ID
+         * @returns {Array} Transformed production lines data
          */
-        function transformProductionLines(productionLines) {
-            if (!productionLines || !Array.isArray(productionLines)) {
-                Logger.warn('No production lines found in data or invalid format');
+        function transformProductionLines(lineGroups) {
+            if (!lineGroups || Object.keys(lineGroups).length === 0) {
+                Logger.warn('No line groups available to transform');
                 return [];
             }
             
-            Logger.info(`Processing ${productionLines.length} production lines`);
+            const productionLines = [];
             
-            return productionLines.map(line => {
-                Logger.info(`Processing line: ${line.id} (${line.name})`);
+            for (const lineId in lineGroups) {
+                const lineGroup = lineGroups[lineId];
+                const line = {
+                    id: lineId,
+                    name: lineGroup.name,
+                    color: lineGroup.color,
+                    type: lineGroup.type,
+                    status: 'active'  // Default status
+                };
                 
-                // Check if any variant is marked as current
-                if (line.variants && Array.isArray(line.variants) && line.variants.length > 0) {
-                    const hasCurrentVariant = line.variants.some(variant => variant.isCurrentVariant);
-                    
-                    // If no variant is marked as current, mark the most recent one as current
-                    if (!hasCurrentVariant) {
-                        Logger.info(`No current variant found for ${line.id}, selecting most recent`);
-                        
-                        // Sort variants by endDate in descending order (most recent first)
-                        const sortedVariants = [...line.variants].sort((a, b) => {
-                            const aDate = new Date(a.timeline?.endDate || 0);
-                            const bDate = new Date(b.timeline?.endDate || 0);
-                            return bDate - aDate;
-                        });
-                        
-                        // Mark the most recent variant as current
-                        if (sortedVariants.length > 0) {
-                            sortedVariants[0].isCurrentVariant = true;
-                            sortedVariants[0].status = 'active';
-                            Logger.info(`Set variant "${sortedVariants[0].name}" as current for ${line.id}`);
-                        }
-                    }
+                // Handle different line types
+                if (lineGroup.type === 'popup' || lineId.includes('popup')) {
+                    const popupLine = transformPopupLine(lineGroup);
+                    productionLines.push(popupLine);
+                } else {
+                    const regularLine = transformRegularLine(lineGroup);
+                    productionLines.push(regularLine);
                 }
-                
-                // Handle PopUp line type separately
-                if (line.status === 'standby' && line.recentRuns) {
-                    Logger.info(`Processing PopUp line: ${line.id}`);
-                    return transformPopUpLine(line);
-                }
-                
-                // Handle regular production lines
-                return transformRegularLine(line);
-            });
+            }
+            
+            Logger.info(`Transformed ${productionLines.length} production lines`);
+            return productionLines;
         }
-
+        
         /**
          * Transforms a regular production line
-         * @param {Object} line - A production line from KPI data
-         * @returns {Object} Transformed line for UI rendering
+         * @param {Object} lineGroup - Grouped data for a production line
+         * @returns {Object} Transformed regular production line
          */
-        function transformRegularLine(line) {
-            // Make sure the line name has appropriate formatting
-            // If it's a simple code like "SCD", format it to "Apelele: SCD Line"
-            let displayName = line.name;
+        function transformRegularLine(lineGroup) {
+            Logger.info(`Transforming regular line: ${lineGroup.id}`);
             
-            // Normalize the ID for comparison (handle "mvokwe-3rd line" vs "mvokwe-3rd")
-            const normalizedId = line.id.replace(/\s+/g, '-').toLowerCase();
+            // Group records by variants
+            const variantGroups = {};
+            
+            lineGroup.records.forEach(record => {
+                const variantName = record.Variant;
+                
+                if (!variantName) {
+                    Logger.warn(`Record missing Variant: ${JSON.stringify(record)}`);
+                    return;
+                }
+                
+                if (!variantGroups[variantName]) {
+                    variantGroups[variantName] = {
+                        name: variantName,
+                        status: record['Variant Status'] || 'active',
+                        isCurrentVariant: record['Is Current Variant'] === true,
+                        records: []
+                    };
+                }
+                
+                variantGroups[variantName].records.push(record);
+            });
+            
+            // Transform variants
+            const variants = [];
+            for (const variantName in variantGroups) {
+                const variantGroup = variantGroups[variantName];
+                const variant = transformVariant(variantGroup);
+                variants.push(variant);
+            }
+            
+            // Make sure we have a current variant
+            if (variants.length > 0 && !variants.some(v => v.isCurrentVariant)) {
+                // Sort by date (most recent first)
+                variants.sort((a, b) => {
+                    const aDate = new Date(a.latestDate || 0);
+                    const bDate = new Date(b.latestDate || 0);
+                    return bDate - aDate;
+                });
+                
+                // Mark the most recent variant as current
+                variants[0].isCurrentVariant = true;
+                variants[0].status = 'active';
+                Logger.info(`Set variant "${variants[0].name}" as current for ${lineGroup.id}`);
+            }
+            
+            // Make sure the line name has appropriate formatting
+            let displayName = lineGroup.name;
+            
+            // Normalize the ID for comparison
+            const normalizedId = lineGroup.id.replace(/\s+/g, '-').toLowerCase();
             
             // Use known line name mappings based on the design specification
             if (normalizedId === "apelele-scd") {
@@ -892,11 +1243,11 @@
             } else if (normalizedId.includes("nosi-scalpel")) {
                 // Special case for Scalpel line that has both Assembly and Packaging variants
                 // Check the variants to determine if it's assembly or packaging
-                const isAssembly = line.variants && line.variants.some(v => 
+                const isAssembly = variantGroups && Object.values(variantGroups).some(v => 
                     v.name && v.name.toLowerCase().includes('assembly')
                 );
                 
-                const isPackaging = line.variants && line.variants.some(v => 
+                const isPackaging = variantGroups && Object.values(variantGroups).some(v => 
                     v.name && v.name.toLowerCase().includes('packaging')
                 );
                 
@@ -912,151 +1263,200 @@
                 displayName = "Mvokwe: PopUp Line";
             }
             
-            Logger.info(`Transformed line name from "${line.name}" to "${displayName}"`);
+            Logger.info(`Transformed line name from "${lineGroup.name}" to "${displayName}"`);
             
-            const transformedLine = {
+            return {
                 name: displayName,
-                color: CONFIG.lineColors[line.color] || 'blue-header',
+                color: CONFIG.lineColors[lineGroup.color] || 'blue-header',
                 // Mvokwe 3rd Line spans two rows
                 isDoubleHeight: normalizedId === 'mvokwe-3rd' || normalizedId === 'mvokwe-3rd-line',
-                variants: transformVariants(line.variants)
-            };
-            
-            return transformedLine;
-        }
-
-        /**
-         * Transforms a PopUp line
-         * @param {Object} line - A PopUp line from KPI data
-         * @returns {Object} Transformed PopUp line for UI rendering
-         */
-        function transformPopUpLine(line) {
-            Logger.info(`Transforming PopUp line: ${line.name}`);
-            return {
-                name: "Mvokwe: PopUp Line", // Ensure consistent naming
-                color: CONFIG.lineColors[line.color] || 'orange-header',
-                isPopUpLine: true,
-                status: capitalizeFirstLetter(line.status),
-                statusText: line.statusLabel || 'Intermittent Operation',
-                recentRuns: transformPopUpRuns(line.recentRuns)
+                variants: variants
             };
         }
-
+        
         /**
-         * Transforms PopUp line runs
-         * @param {Array} runs - Recent runs from PopUp line data
-         * @returns {Array} Transformed runs for UI rendering
+         * Transforms a popup production line
+         * @param {Object} lineGroup - Grouped data for a popup line
+         * @returns {Object} Transformed popup production line
          */
-        function transformPopUpRuns(runs) {
-            if (!runs || !Array.isArray(runs)) {
-                Logger.warn('No recent runs found for PopUp line');
-                return [];
-            }
+        function transformPopupLine(lineGroup) {
+            Logger.info(`Transforming popup line: ${lineGroup.id}`);
             
-            Logger.info(`Transforming ${runs.length} PopUp line runs`);
-            
-            return runs.map(run => {
-                // Format the date if needed
-                let formattedDate = run.date;
-                if (run.date && run.date.length > 10) {
-                    try {
-                        const date = new Date(run.date);
-                        formattedDate = `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()}`;
-                    } catch (error) {
-                        Logger.warn(`Error formatting date "${run.date}": ${error.message}`);
-                    }
+            // Create recent runs from records
+            const recentRuns = lineGroup.records.map(record => {
+                // Format the date
+                let formattedDate;
+                try {
+                    const date = new Date(record.Date);
+                    formattedDate = `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()}`;
+                } catch (error) {
+                    Logger.warn(`Error formatting date "${record.Date}": ${error.message}`);
+                    formattedDate = record.Date;
                 }
                 
                 return {
                     date: formattedDate,
-                    variant: run.variant,
-                    attainment: run.metrics?.scheduleAttainment || 0,
-                    scrapPercentage: run.metrics?.scrapPercentage || 0
+                    variant: record.Variant,
+                    attainment: record['Schedule Attainment'] || 0,
+                    scrapPercentage: record['Scrap Cost as % of Production Value'] || 0
                 };
             });
+            
+            return {
+                name: "Mvokwe: PopUp Line", // Ensure consistent naming
+                color: CONFIG.lineColors[lineGroup.color] || 'orange-header',
+                isPopUpLine: true,
+                status: 'Standby', // Default for popup lines
+                statusText: 'Intermittent Operation',
+                recentRuns: recentRuns
+            };
         }
-
+        
         /**
-         * Transforms variants data
-         * @param {Array} variants - Variants from a production line
-         * @returns {Array} Transformed variants for UI rendering
+         * Transforms a variant group
+         * @param {Object} variantGroup - Grouped data for a variant
+         * @returns {Object} Transformed variant
          */
-        function transformVariants(variants) {
-            if (!variants || !Array.isArray(variants)) {
-                Logger.warn('No variants found or invalid format');
-                return [];
+        function transformVariant(variantGroup) {
+            Logger.info(`Transforming variant: ${variantGroup.name}`);
+            
+            // Calculate metrics
+            const metrics = calculateVariantMetrics(variantGroup.records);
+            
+            // Get latest date for this variant
+            const latestDate = variantGroup.records.reduce((latest, record) => {
+                const recordDate = new Date(record.Date);
+                return recordDate > latest ? recordDate : latest;
+            }, new Date(0));
+            
+            // Create timeline
+            const timeline = {
+                percentage: 100, // Default to 100% of timeline
+                label: extractVariantShortName(variantGroup.name)
+            };
+            
+            // Check if variant has start/end dates
+            if (variantGroup.records.some(r => r['Variant Start Date'])) {
+                const startDate = variantGroup.records.find(r => r['Variant Start Date'])['Variant Start Date'];
+                timeline.startDate = startDate;
             }
             
-            Logger.info(`Transforming ${variants.length} variants`);
+            if (variantGroup.records.some(r => r['Variant End Date'])) {
+                const endDate = variantGroup.records.find(r => r['Variant End Date'])['Variant End Date'];
+                timeline.endDate = endDate;
+            }
             
-            return variants.map(variant => {
-                // Need to ensure metrics has all required properties
-                const metrics = variant.metrics || {};
-                
-                // Format metric values for display
-                const formattedMetrics = {
-                    scheduleAttainment: formatNumericValue(metrics.scheduleAttainment || 0, 'scheduleAttainment'),
-                    labourCostPerUnit: formatNumericValue(metrics.labourCostPerUnit || 0, 'labourCostPerUnit'),
-                    scrapPercentage: formatNumericValue(metrics.scrapPercentage || 0, 'scrapPercentage'),
-                    downtimeHours: formatNumericValue(metrics.downtimeHours || 0, 'downtimeHours')
-                };
-                
-                Logger.info(`Transformed variant: ${variant.name}, current: ${variant.isCurrentVariant}, status: ${variant.status}`);
-                
+            return {
+                name: variantGroup.name,
+                status: variantGroup.status || 'active',
+                isCurrentVariant: variantGroup.isCurrentVariant || false,
+                latestDate: latestDate.toISOString(),
+                timeline: timeline,
+                metrics: {
+                    scheduleAttainment: metrics.scheduleAttainment,
+                    labourCostPerUnit: metrics.labourCostPerUnit,
+                    scrapPercentage: metrics.scrapPercentage,
+                    downtimeHours: metrics.downtimeHours
+                },
+                formattedMetrics: {
+                    scheduleAttainment: formatNumericValue(metrics.scheduleAttainment, 'scheduleAttainment'),
+                    labourCostPerUnit: formatNumericValue(metrics.labourCostPerUnit, 'labourCostPerUnit'),
+                    scrapPercentage: formatNumericValue(metrics.scrapPercentage, 'scrapPercentage'),
+                    downtimeHours: formatNumericValue(metrics.downtimeHours, 'downtimeHours')
+                }
+            };
+        }
+        
+        /**
+         * Calculates metrics for a variant
+         * @param {Array} records - Production records for a variant
+         * @returns {Object} Calculated metrics
+         */
+        function calculateVariantMetrics(records) {
+            if (!records || records.length === 0) {
+                Logger.warn('No records available to calculate variant metrics');
                 return {
-                    name: variant.name,
-                    status: capitalizeFirstLetter(variant.status || 'active'),
-                    isCurrentVariant: variant.isCurrentVariant || false,
-                    timeline: transformTimeline(variant.timeline, variant.name),
-                    metrics: {
-                        scheduleAttainment: metrics.scheduleAttainment || 0,
-                        labourCostPerUnit: metrics.labourCostPerUnit || 0,
-                        scrapPercentage: metrics.scrapPercentage || 0,
-                        downtimeHours: metrics.downtimeHours || 0 // Add default since this is missing in the KPI.json
-                    },
-                    formattedMetrics: formattedMetrics
+                    scheduleAttainment: 0,
+                    labourCostPerUnit: 0,
+                    scrapPercentage: 0,
+                    downtimeHours: 0
                 };
+            }
+            
+            let totalScheduleAttainment = 0;
+            let totalLabourCost = 0;
+            let totalScrapPercentage = 0;
+            let totalDowntimeMinutes = 0;
+            let validRecords = 0;
+            
+            records.forEach(record => {
+                if (record['Schedule Attainment'] !== undefined && 
+                    record['Cost Per Unit'] !== undefined && 
+                    record['Scrap Cost as % of Production Value'] !== undefined) {
+                    
+                    totalScheduleAttainment += record['Schedule Attainment'] || 0;
+                    totalLabourCost += record['Cost Per Unit'] || 0;
+                    totalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
+                    totalDowntimeMinutes += record['Downtime Duration (min)'] || 0;
+                    validRecords++;
+                }
             });
+            
+            // Calculate averages
+            const avgScheduleAttainment = validRecords > 0 ? totalScheduleAttainment / validRecords : 0;
+            const avgLabourCost = validRecords > 0 ? totalLabourCost / validRecords : 0;
+            const avgScrapPercentage = validRecords > 0 ? totalScrapPercentage / validRecords : 0;
+            // Convert downtime from minutes to hours
+            const downtimeHours = validRecords > 0 ? (totalDowntimeMinutes / 60) : 0;
+            
+            Logger.info(`Calculated variant metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)}, SC=${avgScrapPercentage.toFixed(2)}, DH=${downtimeHours.toFixed(2)}`);
+            
+            return {
+                scheduleAttainment: Math.round(avgScheduleAttainment * 10) / 10,  // Round to 1 decimal place
+                labourCostPerUnit: Math.round(avgLabourCost),  // Round to whole number
+                scrapPercentage: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
+                downtimeHours: Math.round(downtimeHours * 10) / 10  // Round to 1 decimal place
+            };
         }
-
+        
         /**
-         * Transforms timeline data from percentage-based to segment-based
-         * @param {Object} timeline - Timeline from variant data
-         * @param {string} variantName - The name of the variant
-         * @returns {Array} Timeline segments for UI rendering
+         * Extracts a short name from a full variant name
+         * @param {string} variantName - The full variant name
+         * @returns {string} Short name for display in timeline
          */
-        function transformTimeline(timeline, variantName) {
-            if (!timeline) {
-                Logger.warn(`No timeline data for variant "${variantName}"`);
-                return [];
+        function extractVariantShortName(variantName) {
+            if (!variantName) return '';
+            
+            // Try to extract the most distinctive part of the variant name
+            const parts = variantName.split(' ');
+            
+            // If it's a two-part name (e.g., "SCD XL1000"), return the second part
+            if (parts.length >= 2) {
+                return parts[1];
             }
             
-            // If it's already in segment format, return as is
-            if (Array.isArray(timeline)) {
-                return timeline;
-            }
-            
-            // Get color based on variant name
-            const color = getVariantColor(variantName);
-            
-            // Custom label if provided, otherwise use variant name
-            const label = timeline.label || extractVariantShortName(variantName);
-            
-            // For percentage-based timeline, create a single segment
-            // Default to a reasonable percentage if not specified or zero
-            const percentage = timeline.percentage > 0 ? timeline.percentage : 100;
-            
-            Logger.info(`Created timeline segment for "${variantName}" with percentage ${percentage}%`);
-            
-            return [{
-                variant: label,
-                displayText: label,
-                width: `${percentage}%`,
-                position: `${(100 - percentage) / 2}%`,
-                color: color
-            }];
+            // Otherwise return the full name
+            return variantName;
         }
-
+        
+        /**
+         * Gets color for a variant based on its name
+         * @param {string} variantName - The variant name
+         * @returns {string} CSS color value for the variant
+         */
+        function getVariantColor(variantName) {
+            if (!variantName) return CONFIG.timelineColors.default;
+            
+            // Check for specific variant patterns in the name
+            for (const [key, color] of Object.entries(CONFIG.timelineColors)) {
+                if (variantName.includes(key)) {
+                    return color;
+                }
+            }
+            
+            return CONFIG.timelineColors.default;
+        }
+        
         /**
          * Format numeric values for display
          * @param {number} value - The numeric value to format
@@ -1452,10 +1852,47 @@
 
         /**
          * Renders timeline segments
+         * @param {Object} timeline - Timeline data for a variant
+         * @returns {string} HTML for the timeline segments
+         */
+        function renderTimeline(timeline) {
+            if (!timeline) {
+                Logger.warn('No timeline data to render');
+                return '';
+            }
+            
+            // If timeline is already in segment format, use it directly
+            if (Array.isArray(timeline)) {
+                return renderTimelineSegments(timeline);
+            }
+            
+            // Get color based on variant name
+            const color = getVariantColor(timeline.label);
+            
+            // Custom label if provided, otherwise use variant name
+            const label = timeline.label || '';
+            
+            // Default to a reasonable percentage if not specified or zero
+            const percentage = timeline.percentage > 0 ? timeline.percentage : 100;
+            
+            // Create segment object
+            const segment = {
+                variant: label,
+                displayText: label,
+                width: `${percentage}%`,
+                position: `${(100 - percentage) / 2}%`,
+                color: color
+            };
+            
+            return renderTimelineSegments([segment]);
+        }
+        
+        /**
+         * Renders timeline segments from array
          * @param {Array} segments - Timeline segments for a variant
          * @returns {string} HTML for the timeline segments
          */
-        function renderTimeline(segments) {
+        function renderTimelineSegments(segments) {
             if (!segments || segments.length === 0) {
                 Logger.warn('No timeline segments to render');
                 return '';
@@ -1554,44 +1991,6 @@
         }
 
         /**
-         * Gets color for a variant based on its name
-         * @param {string} variantName - The variant name
-         * @returns {string} CSS color value for the variant
-         */
-        function getVariantColor(variantName) {
-            if (!variantName) return CONFIG.timelineColors.default;
-            
-            // Check for specific variant patterns in the name
-            for (const [key, color] of Object.entries(CONFIG.timelineColors)) {
-                if (variantName.includes(key)) {
-                    return color;
-                }
-            }
-            
-            return CONFIG.timelineColors.default;
-        }
-
-        /**
-         * Extracts a short name from a full variant name
-         * @param {string} variantName - The full variant name
-         * @returns {string} Short name for display in timeline
-         */
-        function extractVariantShortName(variantName) {
-            if (!variantName) return '';
-            
-            // Try to extract the most distinctive part of the variant name
-            const parts = variantName.split(' ');
-            
-            // If it's a two-part name (e.g., "SCD XL1000"), return the second part
-            if (parts.length >= 2) {
-                return parts[1];
-            }
-            
-            // Otherwise return the full name
-            return variantName;
-        }
-
-        /**
          * Shows a loading state in the dashboard grid
          */
         function showLoading() {
@@ -1664,10 +2063,74 @@
             Logger.info('Manual refresh requested');
             initializeDashboard();
         }
+        
+        /**
+         * Handles date range button click
+         */
+        function handleDateRangeButton() {
+            Logger.info('Date range button clicked');
+            const dropdown = document.getElementById('datePickerDropdown');
+            dropdown.classList.toggle('show');
+            
+            // Set date inputs to current values
+            setDateInputs();
+        }
+        
+        /**
+         * Handles apply date range button click
+         */
+        function handleApplyDateRange() {
+            Logger.info('Apply date range button clicked');
+            
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            
+            // Validate inputs
+            if (!startDateInput.value || !endDateInput.value) {
+                Logger.warn('Invalid date range inputs');
+                return;
+            }
+            
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            
+            // Validate date range
+            if (startDate > endDate) {
+                Logger.warn('Start date cannot be after end date');
+                alert('Start date cannot be after end date');
+                return;
+            }
+            
+            // Update current date range
+            currentDateRange.start = startDateInput.value;
+            currentDateRange.end = endDateInput.value;
+            
+            // Hide dropdown
+            document.getElementById('datePickerDropdown').classList.remove('show');
+            
+            // Reload dashboard with new date range
+            initializeDashboard();
+        }
+        
+        /**
+         * Handles document click to close date picker dropdown
+         * @param {Event} e - The click event
+         */
+        function handleDocumentClick(e) {
+            const dropdown = document.getElementById('datePickerDropdown');
+            const dateRangeButton = document.getElementById('dateRangeButton');
+            
+            // Close dropdown if click is outside the dropdown and button
+            if (dropdown.classList.contains('show') && 
+                !dropdown.contains(e.target) && 
+                e.target !== dateRangeButton) {
+                dropdown.classList.remove('show');
+            }
+        }
 
         /**
          * ======================================
-         * INITIALIZATION
+         * DASHBOARD INITIALIZATION
          * ======================================
          */
         
@@ -1683,11 +2146,29 @@
             showLoading();
             
             try {
-                // Fetch KPI data
-                const kpiData = await fetchKpiData();
+                // Fetch operational data
+                const opsData = await fetchOpsData();
+                
+                // If current date range is not set, get default
+                if (!currentDateRange.start || !currentDateRange.end) {
+                    // Use last 5 production dates as default
+                    const defaultRange = getLastNProductionDates(opsData, CONFIG.defaultDateRange.days);
+                    currentDateRange.start = defaultRange.start;
+                    currentDateRange.end = defaultRange.end;
+                    Logger.info(`Using default date range: ${currentDateRange.start} to ${currentDateRange.end}`);
+                }
+                
+                // Filter data by date range
+                const filteredData = filterDataByDateRange(opsData, currentDateRange.start, currentDateRange.end);
+                
+                if (filteredData.length === 0) {
+                    Logger.warn('No data available for selected date range');
+                    showError('No data available for the selected date range. Please try a different date range.');
+                    return;
+                }
                 
                 // Transform data for UI
-                const transformedData = transformKpiData(kpiData);
+                const transformedData = transformOpsData(opsData, filteredData);
                 
                 // Render dashboard
                 renderDashboard(transformedData);
@@ -1706,6 +2187,11 @@
             // Add event listeners for buttons
             document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
             document.getElementById('refreshButton').addEventListener('click', handleRefresh);
+            document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
+            document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
+            
+            // Add event listener for document click (to close dropdown)
+            document.addEventListener('click', handleDocumentClick);
             
             // Initialize the dashboard
             initializeDashboard();
