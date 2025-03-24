@@ -269,6 +269,7 @@
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto;
             gap: 10px;
             padding: 0 15px;
             margin-bottom: 15px;
@@ -284,6 +285,8 @@
             border: 1px solid var(--border-color);
             border-radius: 5px;
             overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
 
         .line-card-header {
@@ -405,12 +408,14 @@
         EXPLICIT GRID POSITIONING
         ======================================
         */
-        .grid-row-1 { grid-row: 1; }
-        .grid-row-2 { grid-row: 2; }
-        .grid-col-1 { grid-column: 1; }
-        .grid-col-2 { grid-column: 2; }
-        .grid-col-3 { grid-column: 3; }
-        .grid-col-4 { grid-column: 4; }
+        .grid-position-1-1 { grid-row: 1; grid-column: 1; }
+        .grid-position-1-2 { grid-row: 1; grid-column: 2; }
+        .grid-position-1-3 { grid-row: 1; grid-column: 3; }
+        .grid-position-1-4 { grid-row: 1; grid-column: 4; }
+        .grid-position-2-1 { grid-row: 2; grid-column: 1; }
+        .grid-position-2-2 { grid-row: 2; grid-column: 2; }
+        .grid-position-2-3 { grid-row: 2; grid-column: 3; }
+        .grid-position-2-4 { grid-row: 2; grid-column: 4; }
         
         /* 
         ======================================
@@ -587,7 +592,6 @@
             grid-column-start: var(--column-start);
         }
 
-        //**
         @media (max-width: 1279px) {
             .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -597,7 +601,6 @@
                 grid-column: span 1;
             }
         }
-        **//
 
         @media (max-width: 767px) {
             .header {
@@ -705,7 +708,7 @@
         'mvokwe-3rd line': true
     },
     
-    // Variant timeline colors - THIS WAS MISSING
+    // Variant timeline colors
     timelineColors: {
         'default': 'var(--timeline-blue)',
         'XL': 'var(--timeline-orange)',
@@ -1057,137 +1060,132 @@
          * @param {Array} filteredData - The filtered production data records
          * @returns {Object} Calculated plant-wide metrics
          */
-        /**
- * Calculates plant-wide metrics from filtered data
- * @param {Array} filteredData - The filtered production data records
- * @returns {Object} Calculated plant-wide metrics
- */
-function calculatePlantWideMetrics(filteredData) {
-    if (!filteredData || filteredData.length === 0) {
-        Logger.warn('No filtered data available to calculate plant-wide metrics');
-        return null;
-    }
-    
-    // Initialize metrics
-    let totalScheduleAttainment = 0;
-    let totalStaffCost = 0;
-    let totalUnits = 0;
-    let totalScrapPercentage = 0;
-    let totalDowntime = 0;
-    let recordCount = 0;
-    
-    // Previous period metrics for trend calculation
-    let prevTotalScheduleAttainment = 0;
-    let prevTotalStaffCost = 0;
-    let prevTotalUnits = 0;
-    let prevTotalScrapPercentage = 0;
-    let prevTotalDowntime = 0;
-    let prevRecordCount = 0;
-    
-    // Sort records by date
-    const sortedRecords = [...filteredData].sort((a, b) => 
-        new Date(a.Date) - new Date(b.Date)
-    );
-    
-    // Determine mid-point for trend calculation
-    const midPoint = Math.floor(sortedRecords.length / 2);
-    
-    sortedRecords.forEach((record, index) => {
-        // Skip records with missing data
-        if (record['Schedule Attainment'] === undefined || 
-            record['Staff Cost'] === undefined ||
-            record['Actual Devices Produced'] === undefined ||
-            record['Scrap Cost as % of Production Value'] === undefined) {
-            return;
+        function calculatePlantWideMetrics(filteredData) {
+            if (!filteredData || filteredData.length === 0) {
+                Logger.warn('No filtered data available to calculate plant-wide metrics');
+                return null;
+            }
+            
+            // Initialize metrics
+            let totalScheduleAttainment = 0;
+            let totalStaffCost = 0;
+            let totalUnits = 0;
+            let totalScrapPercentage = 0;
+            let totalDowntime = 0;
+            let recordCount = 0;
+            
+            // Previous period metrics for trend calculation
+            let prevTotalScheduleAttainment = 0;
+            let prevTotalStaffCost = 0;
+            let prevTotalUnits = 0;
+            let prevTotalScrapPercentage = 0;
+            let prevTotalDowntime = 0;
+            let prevRecordCount = 0;
+            
+            // Sort records by date
+            const sortedRecords = [...filteredData].sort((a, b) => 
+                new Date(a.Date) - new Date(b.Date)
+            );
+            
+            // Determine mid-point for trend calculation
+            const midPoint = Math.floor(sortedRecords.length / 2);
+            
+            sortedRecords.forEach((record, index) => {
+                // Skip records with missing data
+                if (record['Schedule Attainment'] === undefined || 
+                    record['Staff Cost'] === undefined ||
+                    record['Actual Devices Produced'] === undefined ||
+                    record['Scrap Cost as % of Production Value'] === undefined) {
+                    return;
+                }
+                
+                // For the first half of records (previous period)
+                if (index < midPoint) {
+                    prevTotalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+                    
+                    // Ensure Staff Cost is correctly parsed - always convert to number
+                    const staffCost = parseFloat(record['Staff Cost']);
+                    prevTotalStaffCost += !isNaN(staffCost) ? staffCost : 0;
+                    
+                    prevTotalUnits += parseInt(record['Actual Devices Produced'] || 0);
+                    prevTotalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+                    prevTotalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
+                    prevRecordCount++;
+                } 
+                // For the second half of records (current period)
+                else {
+                    totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+                    
+                    // Ensure Staff Cost is correctly parsed - always convert to number
+                    const staffCost = parseFloat(record['Staff Cost']);
+                    totalStaffCost += !isNaN(staffCost) ? staffCost : 0;
+                    
+                    totalUnits += parseInt(record['Actual Devices Produced'] || 0);
+                    totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+                    totalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
+                    recordCount++;
+                    
+                    // Debug log to see values
+                    Logger.info(`Record ${record.Date}: staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
+                }
+            });
+            
+            // Calculate current averages
+            const avgScheduleAttainment = recordCount > 0 ? totalScheduleAttainment / recordCount : 0;
+            const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / recordCount) : 0;
+            const avgScrapPercentage = recordCount > 0 ? totalScrapPercentage / recordCount : 0;
+            // Convert downtime from minutes to hours
+            const downtimeHours = totalDowntime / 60;
+            
+            // Calculate previous period averages
+            const prevAvgScheduleAttainment = prevRecordCount > 0 ? prevTotalScheduleAttainment / prevRecordCount : 0;
+            const prevAvgLabourCost = (prevTotalUnits > 0) ? (prevTotalStaffCost / prevRecordCount) : 0;
+            const prevAvgScrapPercentage = prevRecordCount > 0 ? prevTotalScrapPercentage / prevRecordCount : 0;
+            
+            // Calculate trends (percentage change)
+            const scheduleAttainmentTrend = prevAvgScheduleAttainment > 0 ? 
+                ((avgScheduleAttainment - prevAvgScheduleAttainment) / prevAvgScheduleAttainment) * 100 : 0;
+            const labourCostTrend = prevAvgLabourCost > 0 ? 
+                ((avgLabourCost - prevAvgLabourCost) / prevAvgLabourCost) * 100 : 0;
+            const scrapPercentageTrend = prevAvgScrapPercentage > 0 ? 
+                ((avgScrapPercentage - prevAvgScrapPercentage) / prevAvgScrapPercentage) * 100 : 0;
+            
+            // Count downtime events
+            const downtimeEvents = sortedRecords.filter(record => 
+                (parseFloat(record['Downtime Duration (min)'] || 0)) > 0
+            ).length;
+            
+            // Calculate downtime events trend (not percentage)
+            const prevDowntimeEvents = prevRecordCount > 0 ? 
+                Math.round(downtimeEvents * (prevRecordCount / recordCount)) : 0;
+            const downtimeEventsTrend = downtimeEvents - prevDowntimeEvents;
+            
+            Logger.info(`Calculated plant-wide metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)} (from ${totalStaffCost}/${totalUnits}), SC=${avgScrapPercentage.toFixed(2)}, DE=${downtimeEvents}`);
+            
+            // Return structured metrics object
+            return {
+                scheduleAttainment: {
+                    value: Math.round(avgScheduleAttainment * 10) / 10,  // Round to 1 decimal place
+                    trend: Math.round(Math.abs(scheduleAttainmentTrend) * 10) / 10,  // Round to 1 decimal place,
+                    trendDirection: scheduleAttainmentTrend >= 0 ? 'up' : 'down'
+                },
+                labourCostPerUnit: {
+                    value: Math.round(avgLabourCost),  // Round to whole number
+                    trend: Math.round(Math.abs(labourCostTrend) * 10) / 10,  // Round to 1 decimal place
+                    trendDirection: labourCostTrend >= 0 ? 'up' : 'down'
+                },
+                scrapPercentage: {
+                    value: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
+                    trend: Math.round(Math.abs(scrapPercentageTrend) * 10) / 10,  // Round to 1 decimal place
+                    trendDirection: scrapPercentageTrend >= 0 ? 'up' : 'down'
+                },
+                downtimeEvents: {
+                    value: downtimeEvents,
+                    trend: Math.abs(downtimeEventsTrend),
+                    trendDirection: downtimeEventsTrend >= 0 ? 'up' : 'down'
+                }
+            };
         }
-        
-        // For the first half of records (previous period)
-        if (index < midPoint) {
-            prevTotalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
-            
-            // Ensure Staff Cost is correctly parsed - always convert to number
-            const staffCost = parseFloat(record['Staff Cost']);
-            prevTotalStaffCost += !isNaN(staffCost) ? staffCost : 0;
-            
-            prevTotalUnits += parseInt(record['Actual Devices Produced'] || 0);
-            prevTotalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
-            prevTotalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
-            prevRecordCount++;
-        } 
-        // For the second half of records (current period)
-        else {
-            totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
-            
-            // Ensure Staff Cost is correctly parsed - always convert to number
-            const staffCost = parseFloat(record['Staff Cost']);
-            totalStaffCost += !isNaN(staffCost) ? staffCost : 0;
-            
-            totalUnits += parseInt(record['Actual Devices Produced'] || 0);
-            totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
-            totalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
-            recordCount++;
-            
-            // Debug log to see values
-            Logger.info(`Record ${record.Date}: staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
-        }
-    });
-    
-    // Calculate current averages
-    const avgScheduleAttainment = recordCount > 0 ? totalScheduleAttainment / recordCount : 0;
-    const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / recordCount) : 0;
-    const avgScrapPercentage = recordCount > 0 ? totalScrapPercentage / recordCount : 0;
-    // Convert downtime from minutes to hours
-    const downtimeHours = totalDowntime / 60;
-    
-    // Calculate previous period averages
-    const prevAvgScheduleAttainment = prevRecordCount > 0 ? prevTotalScheduleAttainment / prevRecordCount : 0;
-    const prevAvgLabourCost = (prevTotalUnits > 0) ? (prevTotalStaffCost / prevRecordCount) : 0;
-    const prevAvgScrapPercentage = prevRecordCount > 0 ? prevTotalScrapPercentage / prevRecordCount : 0;
-    
-    // Calculate trends (percentage change)
-    const scheduleAttainmentTrend = prevAvgScheduleAttainment > 0 ? 
-        ((avgScheduleAttainment - prevAvgScheduleAttainment) / prevAvgScheduleAttainment) * 100 : 0;
-    const labourCostTrend = prevAvgLabourCost > 0 ? 
-        ((avgLabourCost - prevAvgLabourCost) / prevAvgLabourCost) * 100 : 0;
-    const scrapPercentageTrend = prevAvgScrapPercentage > 0 ? 
-        ((avgScrapPercentage - prevAvgScrapPercentage) / prevAvgScrapPercentage) * 100 : 0;
-    
-    // Count downtime events
-    const downtimeEvents = sortedRecords.filter(record => 
-        (parseFloat(record['Downtime Duration (min)'] || 0)) > 0
-    ).length;
-    
-    // Calculate downtime events trend (not percentage)
-    const prevDowntimeEvents = prevRecordCount > 0 ? 
-        Math.round(downtimeEvents * (prevRecordCount / recordCount)) : 0;
-    const downtimeEventsTrend = downtimeEvents - prevDowntimeEvents;
-    
-    Logger.info(`Calculated plant-wide metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)} (from ${totalStaffCost}/${totalUnits}), SC=${avgScrapPercentage.toFixed(2)}, DE=${downtimeEvents}`);
-    
-    // Return structured metrics object
-    return {
-        scheduleAttainment: {
-            value: Math.round(avgScheduleAttainment * 10) / 10,  // Round to 1 decimal place
-            trend: Math.round(Math.abs(scheduleAttainmentTrend) * 10) / 10,  // Round to 1 decimal place,
-            trendDirection: scheduleAttainmentTrend >= 0 ? 'up' : 'down'
-        },
-        labourCostPerUnit: {
-            value: Math.round(avgLabourCost),  // Round to whole number
-            trend: Math.round(Math.abs(labourCostTrend) * 10) / 10,  // Round to 1 decimal place
-            trendDirection: labourCostTrend >= 0 ? 'up' : 'down'
-        },
-        scrapPercentage: {
-            value: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
-            trend: Math.round(Math.abs(scrapPercentageTrend) * 10) / 10,  // Round to 1 decimal place
-            trendDirection: scrapPercentageTrend >= 0 ? 'up' : 'down'
-        },
-        downtimeEvents: {
-            value: downtimeEvents,
-            trend: Math.abs(downtimeEventsTrend),
-            trendDirection: downtimeEventsTrend >= 0 ? 'up' : 'down'
-        }
-    };
-}
 
         // Define lineBaseProductMap as a global variable to fix the scope issue
         let lineBaseProductMap = {};
@@ -1196,98 +1194,97 @@ function calculatePlantWideMetrics(filteredData) {
          * Transforms grouped production lines data
          * @param {Object} lineGroups - Data grouped by production line ID and base product
          * @returns {Array} Transformed production lines data
-// Replace the dynamic column assignment with fixed positions
-        **/
-function transformProductionLines(lineGroups) {
-    if (!lineGroups || Object.keys(lineGroups).length === 0) {
-        Logger.warn('No line groups available to transform');
-        return [];
-    }
-    
-    // Create a fixed order array to ensure cards appear in the correct order
-    const fixedOrderLines = [
-        // ROW 1
-        { id: 'apelele-scd', row: 1, col: 1, found: false },         // SCD in row 1, col 1
-        { id: 'siyabonga-levo', row: 1, col: 2, found: false },      // LEVO in row 1, col 2
-        { id: 'nosi-scalpel-assembly', row: 1, col: 3, found: false },// Scalpel Assembly in row 1, col 3
-        { id: 'mvokwe-3rd-line-ubt', row: 1, col: 4, found: false }, // 3rd Line UBT in row 1, col 4
-        
-        // ROW 2
-        { id: 'luthando-sum', row: 2, col: 1, found: false },        // SUM in row 2, col 1
-        { id: 'mvokwe-popup', row: 2, col: 2, found: false },        // PopUp in row 2, col 2
-        { id: 'nosi-scalpel-packaging', row: 2, col: 3, found: false },// Scalpel Packaging in row 2, col 3
-        { id: 'mvokwe-3rd-line-scd', row: 2, col: 4, found: false }  // 3rd Line SCD in row 2, col 4
-    ];
-    
-    // Process all line groups first
-    const processedLines = [];
-    
-    for (const groupKey in lineGroups) {
-        const lineGroup = lineGroups[groupKey];
-        
-        // Set display name that may include base product
-        if (lineGroup.baseProduct) {
-            lineGroup.displayName = `${lineGroup.name}: ${lineGroup.baseProduct}`;
-        } else {
-            lineGroup.displayName = lineGroup.name;
-        }
-        
-        // Create a special ID for fixed positioning
-        let specialId = lineGroup.id;
-        
-        // Special handling for Scalpel and 3rd Line
-        if (lineGroup.id === 'nosi-scalpel') {
-            if (lineGroup.displayName.toLowerCase().includes('packaging')) {
-                specialId = 'nosi-scalpel-packaging';
-            } else {
-                specialId = 'nosi-scalpel-assembly';
+         */
+        function transformProductionLines(lineGroups) {
+            if (!lineGroups || Object.keys(lineGroups).length === 0) {
+                Logger.warn('No line groups available to transform');
+                return [];
             }
-        } else if (lineGroup.id === 'mvokwe-3rd line') {
-            if (lineGroup.baseProduct === 'UBT') {
-                specialId = 'mvokwe-3rd-line-ubt';
-            } else {
-                specialId = 'mvokwe-3rd-line-scd';
+            
+            // Create a fixed order array to ensure cards appear in the correct order
+            const fixedOrderLines = [
+                // ROW 1
+                { id: 'apelele-scd', row: 1, col: 1, found: false },         // SCD in row 1, col 1
+                { id: 'siyabonga-levo', row: 1, col: 2, found: false },      // LEVO in row 1, col 2
+                { id: 'nosi-scalpel-assembly', row: 1, col: 3, found: false },// Scalpel Assembly in row 1, col 3
+                { id: 'mvokwe-3rd-line-ubt', row: 1, col: 4, found: false }, // 3rd Line UBT in row 1, col 4
+                
+                // ROW 2
+                { id: 'luthando-sum', row: 2, col: 1, found: false },        // SUM in row 2, col 1
+                { id: 'mvokwe-popup', row: 2, col: 2, found: false },        // PopUp in row 2, col 2
+                { id: 'nosi-scalpel-packaging', row: 2, col: 3, found: false },// Scalpel Packaging in row 2, col 3
+                { id: 'mvokwe-3rd-line-scd', row: 2, col: 4, found: false }  // 3rd Line SCD in row 2, col 4
+            ];
+            
+            // Process all line groups first
+            const processedLines = [];
+            
+            for (const groupKey in lineGroups) {
+                const lineGroup = lineGroups[groupKey];
+                
+                // Set display name that may include base product
+                if (lineGroup.baseProduct) {
+                    lineGroup.displayName = `${lineGroup.name}: ${lineGroup.baseProduct}`;
+                } else {
+                    lineGroup.displayName = lineGroup.name;
+                }
+                
+                // Create a special ID for fixed positioning
+                let specialId = lineGroup.id;
+                
+                // Special handling for Scalpel and 3rd Line
+                if (lineGroup.id === 'nosi-scalpel') {
+                    if (lineGroup.displayName.toLowerCase().includes('packaging')) {
+                        specialId = 'nosi-scalpel-packaging';
+                    } else {
+                        specialId = 'nosi-scalpel-assembly';
+                    }
+                } else if (lineGroup.id === 'mvokwe-3rd line') {
+                    if (lineGroup.baseProduct === 'UBT') {
+                        specialId = 'mvokwe-3rd-line-ubt';
+                    } else {
+                        specialId = 'mvokwe-3rd-line-scd';
+                    }
+                }
+                
+                // Find the fixed position for this line
+                const fixedPosition = fixedOrderLines.find(item => item.id === specialId || item.id === lineGroup.id);
+                
+                if (fixedPosition) {
+                    // Mark as found and set the position
+                    fixedPosition.found = true;
+                    fixedPosition.lineGroup = lineGroup;
+                    
+                    // Store the position for the actual element
+                    lineGroup.row = fixedPosition.row;
+                    lineGroup.col = fixedPosition.col;
+                    lineGroup.gridPosition = `grid-row: ${fixedPosition.row}; grid-column: ${fixedPosition.col};`;
+                    
+                    Logger.info(`Assigned fixed position row:${fixedPosition.row}, col:${fixedPosition.col} to ${lineGroup.displayName}`);
+                } else {
+                    Logger.warn(`No fixed position found for line: ${lineGroup.displayName}`);
+                }
+                
+                // Process the line based on its type
+                if (lineGroup.type && lineGroup.type.toLowerCase() === 'popup' || 
+                    lineGroup.id.toLowerCase().includes('popup')) {
+                    processedLines.push(transformPopUpLine(lineGroup));
+                } else {
+                    processedLines.push(transformRegularLine(lineGroup));
+                }
             }
-        }
-        
-        // Find the fixed position for this line
-        const fixedPosition = fixedOrderLines.find(item => item.id === specialId || item.id === lineGroup.id);
-        
-        if (fixedPosition) {
-            // Mark as found and set the position
-            fixedPosition.found = true;
-            fixedPosition.lineGroup = lineGroup;
             
-            // Store the position for the actual element
-            lineGroup.row = fixedPosition.row;
-            lineGroup.col = fixedPosition.col;
-            lineGroup.gridPosition = `grid-row: ${fixedPosition.row}; grid-column: ${fixedPosition.col};`;
+            // Now sort the processed lines by row and column to ensure proper order
+            processedLines.sort((a, b) => {
+                if (a.row === b.row) {
+                    return a.col - b.col;
+                }
+                return a.row - b.row;
+            });
             
-            Logger.info(`Assigned fixed position row:${fixedPosition.row}, col:${fixedPosition.col} to ${lineGroup.displayName}`);
-        } else {
-            Logger.warn(`No fixed position found for line: ${lineGroup.displayName}`);
+            Logger.info(`Transformed and sorted ${processedLines.length} production lines`);
+            return processedLines;
         }
-        
-        // Process the line based on its type
-        if (lineGroup.type && lineGroup.type.toLowerCase() === 'popup' || 
-            lineGroup.id.toLowerCase().includes('popup')) {
-            processedLines.push(transformPopUpLine(lineGroup));
-        } else {
-            processedLines.push(transformRegularLine(lineGroup));
-        }
-    }
-    
-    // Now sort the processed lines by row and column to ensure proper order
-    processedLines.sort((a, b) => {
-        if (a.row === b.row) {
-            return a.col - b.col;
-        }
-        return a.row - b.row;
-    });
-    
-    Logger.info(`Transformed and sorted ${processedLines.length} production lines`);
-    return processedLines;
-}
         
         /**
          * Transforms a regular production line
@@ -1374,6 +1371,7 @@ function transformProductionLines(lineGroups) {
             Logger.info(`Using line name from data: "${displayName}"`);
             
             return {
+                id: lineGroup.id,
                 name: displayName,
                 color: getHeaderColorClass(lineGroup.color),
                 isDoubleHeight: isDoubleHeight,
@@ -1382,7 +1380,9 @@ function transformProductionLines(lineGroups) {
                 trends: trends,
                 cssClass: cssClass,
                 customStyle: customStyle,
-                baseProduct: lineGroup.baseProduct
+                baseProduct: lineGroup.baseProduct,
+                row: lineGroup.row,
+                col: lineGroup.col
             };
         }
         
@@ -1429,13 +1429,15 @@ function transformProductionLines(lineGroups) {
             });
             
             return {
-                // Use the line name directly from the data instead of hardcoding
+                id: lineGroup.id,
                 name: lineGroup.displayName,
                 color: getHeaderColorClass(lineGroup.color),
                 isPopUpLine: true,
                 status: status,
                 statusText: statusText,
-                recentRuns: recentRuns
+                recentRuns: recentRuns,
+                row: lineGroup.row,
+                col: lineGroup.col
             };
         }
         
@@ -1503,137 +1505,137 @@ function transformProductionLines(lineGroups) {
          * @param {Array} records - Production records for a variant
          * @returns {Object} Calculated metrics
          */
-function calculateVariantMetrics(records) {
-    if (!records || records.length === 0) {
-        Logger.warn('No records available to calculate variant metrics');
-        return {
-            scheduleAttainment: 0,
-            labourCostPerUnit: 0,
-            scrapPercentage: 0,
-            downtimeHours: 0
-        };
-    }
-    
-    let totalScheduleAttainment = 0;
-    let totalStaffCost = 0;
-    let totalUnits = 0;
-    let totalScrapPercentage = 0;
-    let totalDowntimeMinutes = 0;
-    let validRecords = 0;
-    
-    records.forEach(record => {
-        // Ensure we have valid data
-        if (record['Schedule Attainment'] !== undefined && 
-            record['Staff Cost'] !== undefined && 
-            record['Actual Devices Produced'] !== undefined &&
-            record['Scrap Cost as % of Production Value'] !== undefined) {
+        function calculateVariantMetrics(records) {
+            if (!records || records.length === 0) {
+                Logger.warn('No records available to calculate variant metrics');
+                return {
+                    scheduleAttainment: 0,
+                    labourCostPerUnit: 0,
+                    scrapPercentage: 0,
+                    downtimeHours: 0
+                };
+            }
             
-            totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+            let totalScheduleAttainment = 0;
+            let totalStaffCost = 0;
+            let totalUnits = 0;
+            let totalScrapPercentage = 0;
+            let totalDowntimeMinutes = 0;
+            let validRecords = 0;
             
-            // Ensure Staff Cost is correctly parsed - always convert to number
-            const staffCost = parseFloat(record['Staff Cost']);
-            totalStaffCost += !isNaN(staffCost) ? staffCost : 0;
+            records.forEach(record => {
+                // Ensure we have valid data
+                if (record['Schedule Attainment'] !== undefined && 
+                    record['Staff Cost'] !== undefined && 
+                    record['Actual Devices Produced'] !== undefined &&
+                    record['Scrap Cost as % of Production Value'] !== undefined) {
+                    
+                    totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+                    
+                    // Ensure Staff Cost is correctly parsed - always convert to number
+                    const staffCost = parseFloat(record['Staff Cost']);
+                    totalStaffCost += !isNaN(staffCost) ? staffCost : 0;
+                    
+                    totalUnits += parseInt(record['Actual Devices Produced'] || 0);
+                    totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+                    totalDowntimeMinutes += parseFloat(record['Downtime Duration (min)'] || 0);
+                    validRecords++;
+                    
+                    // Debug log to see values
+                    Logger.info(`Record ${record.Date}: staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
+                }
+            });
             
-            totalUnits += parseInt(record['Actual Devices Produced'] || 0);
-            totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
-            totalDowntimeMinutes += parseFloat(record['Downtime Duration (min)'] || 0);
-            validRecords++;
+            // Calculate averages
+            const avgScheduleAttainment = validRecords > 0 ? totalScheduleAttainment / validRecords : 0;
             
-            // Debug log to see values
-            Logger.info(`Record ${record.Date}: staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
+            // Ensure labour cost is calculated correctly - only divide if we have units produced
+            const avgLabourCost = (totalUnits > 0) ? (totalStaffCost/validRecords) : 0;
+            
+            const avgScrapPercentage = validRecords > 0 ? totalScrapPercentage / validRecords : 0;
+            // Convert downtime from minutes to hours
+            const downtimeHours = totalDowntimeMinutes / 60;
+            
+            Logger.info(`Calculated variant metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)} (from ${totalStaffCost}/${totalUnits}), SC=${avgScrapPercentage.toFixed(2)}, DH=${downtimeHours.toFixed(2)}`);
+            
+            return {
+                scheduleAttainment: Math.round(avgScheduleAttainment * 10) / 10,  // Round to 1 decimal place
+                labourCostPerUnit: Math.round(avgLabourCost),  // Round to whole number
+                scrapPercentage: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
+                downtimeHours: Math.round(downtimeHours * 10) / 10  // Round to 1 decimal place
+            };
         }
-    });
-    
-    // Calculate averages
-    const avgScheduleAttainment = validRecords > 0 ? totalScheduleAttainment / validRecords : 0;
-    
-    // Ensure labour cost is calculated correctly - only divide if we have units produced
-    const avgLabourCost = (totalUnits > 0) ? (totalStaffCost/validRecords) : 0;
-    
-    const avgScrapPercentage = validRecords > 0 ? totalScrapPercentage / validRecords : 0;
-    // Convert downtime from minutes to hours
-    const downtimeHours = totalDowntimeMinutes / 60;
-    
-    Logger.info(`Calculated variant metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)} (from ${totalStaffCost}/${totalUnits}), SC=${avgScrapPercentage.toFixed(2)}, DH=${downtimeHours.toFixed(2)}`);
-    
-    return {
-        scheduleAttainment: Math.round(avgScheduleAttainment * 10) / 10,  // Round to 1 decimal place
-        labourCostPerUnit: Math.round(avgLabourCost),  // Round to whole number
-        scrapPercentage: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
-        downtimeHours: Math.round(downtimeHours * 10) / 10  // Round to 1 decimal place
-    };
-}
         
         /**
          * Calculates trend metrics for a variant
          * @param {Array} records - Production records for a variant
          * @returns {Object} Calculated trend metrics
          */
-function calculateVariantTrends(records) {
-    if (!records || records.length < 2) {
-        Logger.warn('Not enough records available to calculate variant trends');
-        return {
-            scheduleAttainment: { value: 0, direction: 'up' },
-            labourCostPerUnit: { value: 0, direction: 'up' },
-            scrapPercentage: { value: 0, direction: 'up' },
-            downtimeHours: { value: 0, direction: 'up' }
-        };
-    }
-    
-    // Sort records by date
-    const sortedRecords = [...records].sort((a, b) => 
-        new Date(a.Date) - new Date(b.Date)
-    );
-    
-    // Divide records into first half and second half for trend calculation
-    const midPoint = Math.floor(sortedRecords.length / 2);
-    const firstHalf = sortedRecords.slice(0, midPoint);
-    const secondHalf = sortedRecords.slice(midPoint);
-    
-    Logger.info(`Calculating trends from ${firstHalf.length} early records and ${secondHalf.length} recent records`);
-    
-    // Calculate metrics for each half
-    const firstHalfMetrics = calculateVariantMetrics(firstHalf);
-    const secondHalfMetrics = calculateVariantMetrics(secondHalf);
-    
-    // Calculate trends
-    const scheduleAttainmentTrend = firstHalfMetrics.scheduleAttainment > 0 ?
-        ((secondHalfMetrics.scheduleAttainment - firstHalfMetrics.scheduleAttainment) / firstHalfMetrics.scheduleAttainment) * 100 : 0;
-        
-    const labourCostTrend = firstHalfMetrics.labourCostPerUnit > 0 ?
-        ((secondHalfMetrics.labourCostPerUnit - firstHalfMetrics.labourCostPerUnit) / firstHalfMetrics.labourCostPerUnit) * 100 : 0;
-        
-    const scrapPercentageTrend = firstHalfMetrics.scrapPercentage > 0 ?
-        ((secondHalfMetrics.scrapPercentage - firstHalfMetrics.scrapPercentage) / firstHalfMetrics.scrapPercentage) * 100 : 0;
-        
-    const downtimeHoursTrend = firstHalfMetrics.downtimeHours > 0 ?
-        ((secondHalfMetrics.downtimeHours - firstHalfMetrics.downtimeHours) / firstHalfMetrics.downtimeHours) * 100 : 0;
-    
-    // Log trend calculations for debugging
-    Logger.info(`Trend calculations - SA: ${scheduleAttainmentTrend.toFixed(2)}% (${firstHalfMetrics.scheduleAttainment} → ${secondHalfMetrics.scheduleAttainment})`);
-    Logger.info(`Trend calculations - LC: ${labourCostTrend.toFixed(2)}% (${firstHalfMetrics.labourCostPerUnit} → ${secondHalfMetrics.labourCostPerUnit})`);
-    Logger.info(`Trend calculations - SC: ${scrapPercentageTrend.toFixed(2)}% (${firstHalfMetrics.scrapPercentage} → ${secondHalfMetrics.scrapPercentage})`);
-    Logger.info(`Trend calculations - DH: ${downtimeHoursTrend.toFixed(2)}% (${firstHalfMetrics.downtimeHours} → ${secondHalfMetrics.downtimeHours})`);
-    
-    return {
-        scheduleAttainment: {
-            value: Math.round(Math.abs(scheduleAttainmentTrend) * 10) / 10,
-            direction: scheduleAttainmentTrend >= 0 ? 'up' : 'down'
-        },
-        labourCostPerUnit: {
-            value: Math.round(Math.abs(labourCostTrend) * 10) / 10,
-            direction: labourCostTrend >= 0 ? 'up' : 'down'
-        },
-        scrapPercentage: {
-            value: Math.round(Math.abs(scrapPercentageTrend) * 10) / 10,
-            direction: scrapPercentageTrend >= 0 ? 'up' : 'down'
-        },
-        downtimeHours: {
-            value: Math.round(Math.abs(downtimeHoursTrend) * 10) / 10,
-            direction: downtimeHoursTrend >= 0 ? 'up' : 'down'
+        function calculateVariantTrends(records) {
+            if (!records || records.length < 2) {
+                Logger.warn('Not enough records available to calculate variant trends');
+                return {
+                    scheduleAttainment: { value: 0, direction: 'up' },
+                    labourCostPerUnit: { value: 0, direction: 'up' },
+                    scrapPercentage: { value: 0, direction: 'up' },
+                    downtimeHours: { value: 0, direction: 'up' }
+                };
+            }
+            
+            // Sort records by date
+            const sortedRecords = [...records].sort((a, b) => 
+                new Date(a.Date) - new Date(b.Date)
+            );
+            
+            // Divide records into first half and second half for trend calculation
+            const midPoint = Math.floor(sortedRecords.length / 2);
+            const firstHalf = sortedRecords.slice(0, midPoint);
+            const secondHalf = sortedRecords.slice(midPoint);
+            
+            Logger.info(`Calculating trends from ${firstHalf.length} early records and ${secondHalf.length} recent records`);
+            
+            // Calculate metrics for each half
+            const firstHalfMetrics = calculateVariantMetrics(firstHalf);
+            const secondHalfMetrics = calculateVariantMetrics(secondHalf);
+            
+            // Calculate trends
+            const scheduleAttainmentTrend = firstHalfMetrics.scheduleAttainment > 0 ?
+                ((secondHalfMetrics.scheduleAttainment - firstHalfMetrics.scheduleAttainment) / firstHalfMetrics.scheduleAttainment) * 100 : 0;
+                
+            const labourCostTrend = firstHalfMetrics.labourCostPerUnit > 0 ?
+                ((secondHalfMetrics.labourCostPerUnit - firstHalfMetrics.labourCostPerUnit) / firstHalfMetrics.labourCostPerUnit) * 100 : 0;
+                
+            const scrapPercentageTrend = firstHalfMetrics.scrapPercentage > 0 ?
+                ((secondHalfMetrics.scrapPercentage - firstHalfMetrics.scrapPercentage) / firstHalfMetrics.scrapPercentage) * 100 : 0;
+                
+            const downtimeHoursTrend = firstHalfMetrics.downtimeHours > 0 ?
+                ((secondHalfMetrics.downtimeHours - firstHalfMetrics.downtimeHours) / firstHalfMetrics.downtimeHours) * 100 : 0;
+            
+            // Log trend calculations for debugging
+            Logger.info(`Trend calculations - SA: ${scheduleAttainmentTrend.toFixed(2)}% (${firstHalfMetrics.scheduleAttainment} → ${secondHalfMetrics.scheduleAttainment})`);
+            Logger.info(`Trend calculations - LC: ${labourCostTrend.toFixed(2)}% (${firstHalfMetrics.labourCostPerUnit} → ${secondHalfMetrics.labourCostPerUnit})`);
+            Logger.info(`Trend calculations - SC: ${scrapPercentageTrend.toFixed(2)}% (${firstHalfMetrics.scrapPercentage} → ${secondHalfMetrics.scrapPercentage})`);
+            Logger.info(`Trend calculations - DH: ${downtimeHoursTrend.toFixed(2)}% (${firstHalfMetrics.downtimeHours} → ${secondHalfMetrics.downtimeHours})`);
+            
+            return {
+                scheduleAttainment: {
+                    value: Math.round(Math.abs(scheduleAttainmentTrend) * 10) / 10,
+                    direction: scheduleAttainmentTrend >= 0 ? 'up' : 'down'
+                },
+                labourCostPerUnit: {
+                    value: Math.round(Math.abs(labourCostTrend) * 10) / 10,
+                    direction: labourCostTrend >= 0 ? 'up' : 'down'
+                },
+                scrapPercentage: {
+                    value: Math.round(Math.abs(scrapPercentageTrend) * 10) / 10,
+                    direction: scrapPercentageTrend >= 0 ? 'up' : 'down'
+                },
+                downtimeHours: {
+                    value: Math.round(Math.abs(downtimeHoursTrend) * 10) / 10,
+                    direction: downtimeHoursTrend >= 0 ? 'up' : 'down'
+                }
+            };
         }
-    };
-}
         
         /**
          * Calculates trend metrics for all data
@@ -1725,23 +1727,23 @@ function calculateVariantTrends(records) {
          * @returns {string} Formatted value for display
          */
         function formatNumericValue(value, type) {
-    if (value === null || value === undefined) return '0';
-    
-    switch(type) {
-        case 'scheduleAttainment':
-        case 'scrapPercentage':
-            // Round percentage to 1 decimal place
-            return parseFloat(value).toFixed(1);
-        case 'labourCostPerUnit':
-            // Round cost to 2 decimal places
-            return parseFloat(value).toFixed(2);
-        case 'downtimeHours':
-            // Round hours to 1 decimal place
-            return parseFloat(value).toFixed(1);
-        default:
-            return value.toString();
-    }
-}
+            if (value === null || value === undefined) return '0';
+            
+            switch(type) {
+                case 'scheduleAttainment':
+                case 'scrapPercentage':
+                    // Round percentage to 1 decimal place
+                    return parseFloat(value).toFixed(1);
+                case 'labourCostPerUnit':
+                    // Round cost to 2 decimal places
+                    return parseFloat(value).toFixed(2);
+                case 'downtimeHours':
+                    // Round hours to 1 decimal place
+                    return parseFloat(value).toFixed(1);
+                default:
+                    return value.toString();
+            }
+        }
 
         /**
          * ======================================
@@ -1753,120 +1755,60 @@ function calculateVariantTrends(records) {
          * Renders the entire dashboard with the provided data
          * @param {Object} data - The transformed dashboard data
          */
-function renderDashboard(data) {
-    Logger.info('Rendering dashboard with transformed data');
-    
-    // Update date range display
-    updateDateRangeDisplay(data.dateRange);
-    
-    // Render KPI summary
-    renderKpiSummary(data.plantWideMetrics);
-    
-    // COMPLETE OVERHAUL OF THE GRID LAYOUT
-    const dashboardGrid = document.getElementById('dashboardGrid');
-    
-    // Clear the dashboard
-    dashboardGrid.innerHTML = '';
-    
-    // Create a fixed layout container
-    const fixedLayoutHTML = `
-        <div class="fixed-layout" style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
-            <!-- Row 1 -->
-            <div class="row" style="display: flex; gap: 10px; width: 100%;">
-                <div id="position-1-1" style="flex: 1;"></div>
-                <div id="position-1-2" style="flex: 1;"></div>
-                <div id="position-1-3" style="flex: 1;"></div>
-                <div id="position-1-4" style="flex: 1;"></div>
-            </div>
+        function renderDashboard(data) {
+            Logger.info('Rendering dashboard with transformed data');
             
-            <!-- Row 2 -->
-            <div class="row" style="display: flex; gap: 10px; width: 100%;">
-                <div id="position-2-1" style="flex: 1;"></div>
-                <div id="position-2-2" style="flex: 1;"></div>
-                <div id="position-2-3" style="flex: 1;"></div>
-                <div id="position-2-4" style="flex: 1;"></div>
-            </div>
-        </div>
-    `;
-    
-    // Set the fixed layout HTML
-    dashboardGrid.innerHTML = fixedLayoutHTML;
-    
-    // Create a map to store which lines go in which position
-    const positionMap = {
-        'position-1-1': null,  // SCD
-        'position-1-2': null,  // LEVO
-        'position-1-3': null,  // Scalpel Assembly
-        'position-1-4': null,  // 3rd Line UBT
-        'position-2-1': null,  // SUM
-        'position-2-2': null,  // PopUp
-        'position-2-3': null,  // Scalpel Packaging
-        'position-2-4': null   // 3rd Line SCD
-    };
-    
-    // First, identify all cards by their IDs
-    data.lines.forEach(line => {
-        // Make sure line has all necessary properties
-        line.id = line.id || '';
-        line.name = line.name || '';
-        line.baseProduct = line.baseProduct || '';
-        
-        // Check if line.name includes specific keywords
-        const nameLower = line.name.toString().toLowerCase();
-        const isScalpel = nameLower.includes('scalpel');
-        const isPackaging = nameLower.includes('packaging');
-        const isAssembly = nameLower.includes('assembly');
-        const isThirdLine = nameLower.includes('3rd line') || nameLower.includes('3rd');
-        const isUBT = line.baseProduct.toString().toLowerCase().includes('ubt');
-        const isSCD = line.id.includes('scd') || line.name.toLowerCase().includes('scd');
-        const isLEVO = line.id.includes('levo') || line.name.toLowerCase().includes('levo');
-        const isSUM = line.id.includes('sum') || line.name.toLowerCase().includes('sum');
-        const isPopUp = line.id.includes('popup') || line.name.toLowerCase().includes('popup');
-        
-        Logger.info(`Processing line: ${line.name}, id: ${line.id}, baseProduct: ${line.baseProduct}`);
-        
-        // Place each line in the correct position
-        if (isSCD && !isThirdLine) {
-            positionMap['position-1-1'] = line;
-        } else if (isLEVO) {
-            positionMap['position-1-2'] = line;
-        } else if (isSUM) {
-            positionMap['position-2-1'] = line;
-        } else if (isPopUp) {
-            positionMap['position-2-2'] = line;
-        } else if (isScalpel && isAssembly) {
-            positionMap['position-1-3'] = line;
-        } else if (isScalpel && isPackaging) {
-            positionMap['position-2-3'] = line;
-        } else if (isScalpel) {
-            // Default Scalpel placement if not assembly or packaging
-            if (!positionMap['position-1-3']) {
-                positionMap['position-1-3'] = line;
-            } else {
-                positionMap['position-2-3'] = line;
-            }
-        } else if (isThirdLine && isUBT) {
-            positionMap['position-1-4'] = line;
-        } else if (isThirdLine) {
-            positionMap['position-2-4'] = line;
-        }
-    });
-    
-    // Now render each line in its position
-    for (const [positionId, line] of Object.entries(positionMap)) {
-        if (line) {
-            const container = document.getElementById(positionId);
-            if (container) {
+            // Update date range display
+            updateDateRangeDisplay(data.dateRange);
+            
+            // Render KPI summary
+            renderKpiSummary(data.plantWideMetrics);
+            
+            // Clear the dashboard grid
+            const dashboardGrid = document.getElementById('dashboardGrid');
+            dashboardGrid.innerHTML = '';
+            
+            // Create a position map for the grid cells
+            const positionMap = {
+                '1-1': null, // Row 1, Column 1 (SCD)
+                '1-2': null, // Row 1, Column 2 (LEVO)
+                '1-3': null, // Row 1, Column 3 (Scalpel Assembly)
+                '1-4': null, // Row 1, Column 4 (3rd Line UBT)
+                '2-1': null, // Row 2, Column 1 (SUM)
+                '2-2': null, // Row 2, Column 2 (PopUp)
+                '2-3': null, // Row 2, Column 3 (Scalpel Packaging)
+                '2-4': null  // Row 2, Column 4 (3rd Line SCD)
+            };
+            
+            // Assign the lines to their positions
+            data.lines.forEach(line => {
+                // Skip lines without position information
+                if (!line.row || !line.col) return;
+                
+                const positionKey = `${line.row}-${line.col}`;
+                positionMap[positionKey] = line;
+                Logger.info(`Assigned ${line.name} to position ${positionKey}`);
+            });
+            
+            // Create and render the line cards in the grid
+            for (const [positionKey, line] of Object.entries(positionMap)) {
+                if (!line) continue;
+                
+                // Create a new grid cell div
+                const gridCell = document.createElement('div');
+                gridCell.className = `grid-position-${positionKey}`;
+                
+                // Render the appropriate card type
                 if (line.isPopUpLine) {
-                    container.innerHTML = renderPopUpLineCard(line);
+                    gridCell.innerHTML = renderPopUpLineCard(line);
                 } else {
-                    container.innerHTML = renderLineCard(line);
+                    gridCell.innerHTML = renderLineCard(line);
                 }
-                Logger.info(`Placed ${line.name} in position ${positionId}`);
+                
+                // Add the grid cell to the dashboard
+                dashboardGrid.appendChild(gridCell);
             }
         }
-    }
-}
 
         /**
          * Updates the date range display
@@ -1980,39 +1922,6 @@ function renderDashboard(data) {
         }
 
         /**
-         * Renders the production lines grid
-         * @param {Array} lines - The production lines data
-         */
-        function renderProductionLines(lines) {
-            if (!lines || lines.length === 0) {
-                Logger.error('No production lines available for rendering');
-                showProductionLinesError();
-                return;
-            }
-            
-            const dashboardGrid = document.getElementById('dashboardGrid');
-            dashboardGrid.innerHTML = '';
-            
-            Logger.info(`Rendering ${lines.length} production lines`);
-            
-            lines.forEach(line => {
-                dashboardGrid.innerHTML += renderLineCard(line);
-            });
-        }
-
-        /**
-         * Shows an error message in the production lines grid
-         */
-        function showProductionLinesError() {
-            const dashboardGrid = document.getElementById('dashboardGrid');
-            dashboardGrid.innerHTML = `
-                <div class="error-message">
-                    Unable to load production line data. Please refresh the page or try again later.
-                </div>
-            `;
-        }
-
-        /**
          * Renders a production line card
          * @param {Object} line - The production line data
          * @returns {string} HTML for the line card
@@ -2030,11 +1939,16 @@ function renderDashboard(data) {
             if (!line.variants || !Array.isArray(line.variants) || line.variants.length === 0) {
                 Logger.warn(`No variants available for line: ${line.name}`);
                 return `
-        <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
-            <!-- rest of the function -->
-        </div>
-    `;
-}
+                    <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
+                        <div class="line-card-header ${line.color}">
+                            ${line.name}
+                        </div>
+                        <div class="line-card-content">
+                            <div class="error-message">No variant data available for this line.</div>
+                        </div>
+                    </div>
+                `;
+            }
             
             // Get current variant (first one that's marked as current)
             const currentVariant = line.variants.find(v => v.isCurrentVariant);
@@ -2174,15 +2088,15 @@ function renderDashboard(data) {
             }
             
             return `
-        <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''}">
-            <div class="line-card-header ${line.color}">
-                ${line.name}
-            </div>
-            <div class="line-card-content">
-                ${variantSections}
-            </div>
-        </div>
-    `;
+                <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
+                    <div class="line-card-header ${line.color}">
+                        ${line.name}
+                    </div>
+                    <div class="line-card-content">
+                        ${variantSections}
+                    </div>
+                </div>
+            `;
         }
 
         /**
@@ -2627,5 +2541,3 @@ function renderDashboard(data) {
     </script>
 </body>
 </html>
-
-                    
