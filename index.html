@@ -1753,7 +1753,7 @@ function calculateVariantTrends(records) {
          * Renders the entire dashboard with the provided data
          * @param {Object} data - The transformed dashboard data
          */
-        function renderDashboard(data) {
+function renderDashboard(data) {
     Logger.info('Rendering dashboard with transformed data');
     
     // Update date range display
@@ -1792,40 +1792,69 @@ function calculateVariantTrends(records) {
     // Set the fixed layout HTML
     dashboardGrid.innerHTML = fixedLayoutHTML;
     
-    // Function to determine the correct position for a line
-    function getPositionId(line) {
-        if (line.id === 'apelele-scd') return 'position-1-1';
-        if (line.id === 'siyabonga-levo') return 'position-1-2';
-        if (line.id === 'luthando-sum') return 'position-2-1';
-        if (line.id === 'mvokwe-popup' || line.id.toLowerCase().includes('popup')) return 'position-2-2';
-        
-        // Special handling for Scalpel
-        if (line.id === 'nosi-scalpel') {
-            if (line.displayName.toLowerCase().includes('packaging')) {
-                return 'position-2-3';
-            } else {
-                return 'position-1-3';
-            }
-        }
-        
-        // Special handling for 3rd Line
-        if (line.id === 'mvokwe-3rd line' || line.id === 'mvokwe-3rd') {
-            if (line.baseProduct === 'UBT') {
-                return 'position-1-4';
-            } else {
-                return 'position-2-4';
-            }
-        }
-        
-        // If we can't determine, use a default
-        Logger.warn(`No position found for line: ${line.id}`);
-        return null;
-    }
+    // Create a map to store which lines go in which position
+    const positionMap = {
+        'position-1-1': null,  // SCD
+        'position-1-2': null,  // LEVO
+        'position-1-3': null,  // Scalpel Assembly
+        'position-1-4': null,  // 3rd Line UBT
+        'position-2-1': null,  // SUM
+        'position-2-2': null,  // PopUp
+        'position-2-3': null,  // Scalpel Packaging
+        'position-2-4': null   // 3rd Line SCD
+    };
     
-    // Place each line in its designated position
+    // First, identify all cards by their IDs
     data.lines.forEach(line => {
-        const positionId = getPositionId(line);
-        if (positionId) {
+        // Make sure line has all necessary properties
+        line.id = line.id || '';
+        line.name = line.name || '';
+        line.baseProduct = line.baseProduct || '';
+        
+        // Check if line.name includes specific keywords
+        const nameLower = line.name.toString().toLowerCase();
+        const isScalpel = nameLower.includes('scalpel');
+        const isPackaging = nameLower.includes('packaging');
+        const isAssembly = nameLower.includes('assembly');
+        const isThirdLine = nameLower.includes('3rd line') || nameLower.includes('3rd');
+        const isUBT = line.baseProduct.toString().toLowerCase().includes('ubt');
+        const isSCD = line.id.includes('scd') || line.name.toLowerCase().includes('scd');
+        const isLEVO = line.id.includes('levo') || line.name.toLowerCase().includes('levo');
+        const isSUM = line.id.includes('sum') || line.name.toLowerCase().includes('sum');
+        const isPopUp = line.id.includes('popup') || line.name.toLowerCase().includes('popup');
+        
+        Logger.info(`Processing line: ${line.name}, id: ${line.id}, baseProduct: ${line.baseProduct}`);
+        
+        // Place each line in the correct position
+        if (isSCD && !isThirdLine) {
+            positionMap['position-1-1'] = line;
+        } else if (isLEVO) {
+            positionMap['position-1-2'] = line;
+        } else if (isSUM) {
+            positionMap['position-2-1'] = line;
+        } else if (isPopUp) {
+            positionMap['position-2-2'] = line;
+        } else if (isScalpel && isAssembly) {
+            positionMap['position-1-3'] = line;
+        } else if (isScalpel && isPackaging) {
+            positionMap['position-2-3'] = line;
+        } else if (isScalpel) {
+            // Default Scalpel placement if not assembly or packaging
+            if (!positionMap['position-1-3']) {
+                positionMap['position-1-3'] = line;
+            } else {
+                positionMap['position-2-3'] = line;
+            }
+        } else if (isThirdLine && isUBT) {
+            positionMap['position-1-4'] = line;
+        } else if (isThirdLine) {
+            positionMap['position-2-4'] = line;
+        }
+    });
+    
+    // Now render each line in its position
+    for (const [positionId, line] of Object.entries(positionMap)) {
+        if (line) {
             const container = document.getElementById(positionId);
             if (container) {
                 if (line.isPopUpLine) {
@@ -1834,11 +1863,9 @@ function calculateVariantTrends(records) {
                     container.innerHTML = renderLineCard(line);
                 }
                 Logger.info(`Placed ${line.name} in position ${positionId}`);
-            } else {
-                Logger.error(`Position container ${positionId} not found`);
             }
         }
-    });
+    }
 }
 
         /**
