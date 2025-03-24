@@ -1,12 +1,12 @@
 {
-  "lastUpdated": "2025-03-24T19:23:51.390Z",
+  "lastUpdated": "2025-03-24T19:34:52.610Z",
   "dateRange": {
     "start": "2023-09-11",
     "end": "2025-03-24"
   },
   "plantWideMetrics": {
     "scheduleAttainment": {
-      "value": 65,
+      "value": 66,
       "trend": 0,
       "trendDirection": "up"
     },
@@ -37,8 +37,8 @@
           "status": "active",
           "isCurrentVariant": true,
           "metrics": {
-            "scheduleAttainment": 7.84,
-            "labourCostPerUnit": 247.85,
+            "scheduleAttainment": 77.45,
+            "labourCostPerUnit": 96.48,
             "scrapPercentage": 0,
             "downtimeHours": 0
           },
@@ -214,8 +214,8 @@
           "status": "active",
           "isCurrentVariant": true,
           "metrics": {
-            "scheduleAttainment": 9.48,
-            "labourCostPerUnit": 126.41,
+            "scheduleAttainment": 79.62,
+            "labourCostPerUnit": 51.08,
             "scrapPercentage": 0,
             "downtimeHours": 0
           },
@@ -234,20 +234,20 @@
       "color": "pink",
       "variants": [
         {
-          "name": "UBT UBT",
+          "name": "SCD XL2000SP",
           "status": "active",
           "isCurrentVariant": true,
           "metrics": {
-            "scheduleAttainment": 50,
-            "labourCostPerUnit": 54.96,
-            "scrapPercentage": 1.72,
+            "scheduleAttainment": 83.67,
+            "labourCostPerUnit": 207.48,
+            "scrapPercentage": 0,
             "downtimeHours": 0
           },
           "timeline": {
             "percentage": 0,
             "label": "",
-            "startDate": "2025-03-18T22:00:00.000Z",
-            "endDate": "2025-03-19T22:00:00.000Z"
+            "startDate": "2025-03-23T22:00:00.000Z",
+            "endDate": "2025-03-23T22:00:00.000Z"
           }
         },
         {
@@ -285,12 +285,12 @@
           }
         },
         {
-          "name": "SCD XL2000SDP",
+          "name": "UBT UBT",
           "status": "ended",
           "isCurrentVariant": false,
           "metrics": {
-            "scheduleAttainment": 47.81,
-            "labourCostPerUnit": 235.15,
+            "scheduleAttainment": 25,
+            "labourCostPerUnit": 70.73,
             "scrapPercentage": 0,
             "downtimeHours": 0
           },
@@ -302,14 +302,14 @@
           }
         },
         {
-          "name": "SCD XL2000SP",
+          "name": "SCD XL2000SDP",
           "status": "ended",
           "isCurrentVariant": false,
           "metrics": {
-            "scheduleAttainment": 48.39,
-            "labourCostPerUnit": 221.65,
+            "scheduleAttainment": 47.81,
+            "labourCostPerUnit": 235.15,
             "scrapPercentage": 0,
-            "downtimeHours": 0.11666666666666667
+            "downtimeHours": 0
           },
           "timeline": {
             "percentage": 100,
@@ -347,8 +347,8 @@
           "status": "active",
           "isCurrentVariant": true,
           "metrics": {
-            "scheduleAttainment": 4.86,
-            "labourCostPerUnit": 497.59,
+            "scheduleAttainment": 97.3,
+            "labourCostPerUnit": 103.72,
             "scrapPercentage": 0,
             "downtimeHours": 0
           },
@@ -463,8 +463,8 @@
           "status": "active",
           "isCurrentVariant": true,
           "metrics": {
-            "scheduleAttainment": 3.17,
-            "labourCostPerUnit": 65.75,
+            "scheduleAttainment": 117.17,
+            "labourCostPerUnit": 50.43,
             "scrapPercentage": 0,
             "downtimeHours": 0
           },
@@ -480,8 +480,8 @@
           "status": "active",
           "isCurrentVariant": true,
           "metrics": {
-            "scheduleAttainment": 88.67,
-            "labourCostPerUnit": 50.56,
+            "scheduleAttainment": 63.34,
+            "labourCostPerUnit": 50.79,
             "scrapPercentage": 0,
             "downtimeHours": 0
           },
@@ -489,7 +489,7 @@
             "percentage": 1,
             "label": "",
             "startDate": "2025-03-17T22:00:00.000Z",
-            "endDate": "2025-03-21T22:00:00.000Z"
+            "endDate": "2025-03-23T22:00:00.000Z"
           }
         },
         {
@@ -927,7 +927,7 @@
     },
     "labourCostPerUnit": {
       "good": 90,
-      "warning": 125,
+      "warning": 124,
       "calculationMethod": "Dynamic: Based on (Labour R/h * Hours Worked) / (Target Devices Made)"
     },
     "scrapPercentage": {
