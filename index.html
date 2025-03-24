@@ -668,17 +668,6 @@
             // Debug mode to show the debug log
             debugMode: true,
             
-            // Line color mapping
-            lineColors: {
-                'blue': 'blue-header',
-                'orange': 'orange-header',
-                'purple': 'purple-header',
-                'black': 'blue-header',
-                'yellow': 'orange-header',
-                'grey': 'blue-header',
-                'green': 'orange-header',
-                'pink': 'purple-header'
-            },
             
             // Variant timeline colors
             timelineColors: {
@@ -1176,141 +1165,126 @@
          * @param {Object} lineGroup - Grouped data for a production line
          * @returns {Object} Transformed regular production line
          */
-        function transformRegularLine(lineGroup) {
-            Logger.info(`Transforming regular line: ${lineGroup.id}`);
-            
-            // Group records by variants
-            const variantGroups = {};
-            
-            lineGroup.records.forEach(record => {
-                const variantName = record.Variant;
-                
-                if (!variantName) {
-                    Logger.warn(`Record missing Variant: ${JSON.stringify(record)}`);
-                    return;
-                }
-                
-                if (!variantGroups[variantName]) {
-                    variantGroups[variantName] = {
-                        name: variantName,
-                        status: record['Variant Status'] || 'active',
-                        isCurrentVariant: record['Is Current Variant'] === true,
-                        records: []
-                    };
-                }
-                
-                variantGroups[variantName].records.push(record);
-            });
-            
-            // Transform variants
-            const variants = [];
-            for (const variantName in variantGroups) {
-                const variantGroup = variantGroups[variantName];
-                const variant = transformVariant(variantGroup);
-                variants.push(variant);
-            }
-            
-            // Make sure we have a current variant
-            if (variants.length > 0 && !variants.some(v => v.isCurrentVariant)) {
-                // Sort by date (most recent first)
-                variants.sort((a, b) => {
-                    const aDate = new Date(a.latestDate || 0);
-                    const bDate = new Date(b.latestDate || 0);
-                    return bDate - aDate;
-                });
-                
-                // Mark the most recent variant as current
-                variants[0].isCurrentVariant = true;
-                variants[0].status = 'active';
-                Logger.info(`Set variant "${variants[0].name}" as current for ${lineGroup.id}`);
-            }
-            
-            // Make sure the line name has appropriate formatting
-            let displayName = lineGroup.name;
-            
-            // Normalize the ID for comparison
-            const normalizedId = lineGroup.id.replace(/\s+/g, '-').toLowerCase();
-            
-            // Use known line name mappings based on the design specification
-            if (normalizedId === "apelele-scd") {
-                displayName = "Apelele: SCD Line";
-            } else if (normalizedId === "luthando-sum") {
-                displayName = "Luthando: SUM Line";
-            } else if (normalizedId === "siyabonga-levo") {
-                displayName = "Siyabonga: Levo Line";
-            } else if (normalizedId === "mvokwe-3rd" || normalizedId === "mvokwe-3rd-line") {
-                displayName = "Mvokwe: 3rd Line";
-            } else if (normalizedId.includes("nosi-scalpel")) {
-                // Special case for Scalpel line that has both Assembly and Packaging variants
-                // Check the variants to determine if it's assembly or packaging
-                const isAssembly = variantGroups && Object.values(variantGroups).some(v => 
-                    v.name && v.name.toLowerCase().includes('assembly')
-                );
-                
-                const isPackaging = variantGroups && Object.values(variantGroups).some(v => 
-                    v.name && v.name.toLowerCase().includes('packaging')
-                );
-                
-                if (isAssembly && !isPackaging) {
-                    displayName = "Nosi: Scalpel Assembly Line";
-                } else if (isPackaging && !isAssembly) {
-                    displayName = "Nosi: Scalpel Packaging Line";
-                } else {
-                    // If the line has both or neither, use a generic name
-                    displayName = "Nosi: Scalpel Line";
-                }
-            } else if (normalizedId === "mvokwe-popup") {
-                displayName = "Mvokwe: PopUp Line";
-            }
-            
-            Logger.info(`Transformed line name from "${lineGroup.name}" to "${displayName}"`);
-            
-            return {
-                name: displayName,
-                color: CONFIG.lineColors[lineGroup.color] || 'blue-header',
-                // Mvokwe 3rd Line spans two rows
-                isDoubleHeight: normalizedId === 'mvokwe-3rd' || normalizedId === 'mvokwe-3rd-line',
-                variants: variants
+function transformRegularLine(lineGroup) {
+    Logger.info(`Transforming regular line: ${lineGroup.id}`);
+    
+    // Group records by variants
+    const variantGroups = {};
+    
+    lineGroup.records.forEach(record => {
+        const variantName = record.Variant;
+        
+        if (!variantName) {
+            Logger.warn(`Record missing Variant: ${JSON.stringify(record)}`);
+            return;
+        }
+        
+        if (!variantGroups[variantName]) {
+            variantGroups[variantName] = {
+                name: variantName,
+                status: record['Variant Status'] || 'active',
+                isCurrentVariant: record['Is Current Variant'] === true,
+                records: []
             };
         }
+        
+        variantGroups[variantName].records.push(record);
+    });
+    
+    // Transform variants
+    const variants = [];
+    for (const variantName in variantGroups) {
+        const variantGroup = variantGroups[variantName];
+        const variant = transformVariant(variantGroup);
+        variants.push(variant);
+    }
+    
+    // Make sure we have a current variant
+    if (variants.length > 0 && !variants.some(v => v.isCurrentVariant)) {
+        // Sort by date (most recent first)
+        variants.sort((a, b) => {
+            const aDate = new Date(a.latestDate || 0);
+            const bDate = new Date(b.latestDate || 0);
+            return bDate - aDate;
+        });
+        
+        // Mark the most recent variant as current
+        variants[0].isCurrentVariant = true;
+        variants[0].status = 'active';
+        Logger.info(`Set variant "${variants[0].name}" as current for ${lineGroup.id}`);
+    }
+    
+    // Use the line name directly from the data
+    const displayName = lineGroup.name;
+    
+    // Check if this is the line that should be double height
+    // You can also make this dynamic based on data if needed
+    const isDoubleHeight = lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line';
+    
+    Logger.info(`Using line name from data: "${displayName}"`);
+    
+    return {
+        name: displayName,
+        color: getHeaderColorClass(lineGroup.color),
+        isDoubleHeight: isDoubleHeight,
+        variants: variants
+    };
+}
+
         
         /**
          * Transforms a popup production line
          * @param {Object} lineGroup - Grouped data for a popup line
          * @returns {Object} Transformed popup production line
          */
-        function transformPopupLine(lineGroup) {
-            Logger.info(`Transforming popup line: ${lineGroup.id}`);
-            
-            // Create recent runs from records
-            const recentRuns = lineGroup.records.map(record => {
-                // Format the date
-                let formattedDate;
-                try {
-                    const date = new Date(record.Date);
-                    formattedDate = `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()}`;
-                } catch (error) {
-                    Logger.warn(`Error formatting date "${record.Date}": ${error.message}`);
-                    formattedDate = record.Date;
-                }
-                
-                return {
-                    date: formattedDate,
-                    variant: record.Variant,
-                    attainment: record['Schedule Attainment'] || 0,
-                    scrapPercentage: record['Scrap Cost as % of Production Value'] || 0
-                };
-            });
-            
-            return {
-                name: "Mvokwe: PopUp Line", // Ensure consistent naming
-                color: CONFIG.lineColors[lineGroup.color] || 'orange-header',
-                isPopUpLine: true,
-                status: 'Standby', // Default for popup lines
-                statusText: 'Intermittent Operation',
-                recentRuns: recentRuns
-            };
+function transformPopUpLine(lineGroup) {
+    Logger.info(`Transforming popup line: ${lineGroup.id}`);
+    
+    // Get the most recent record for status
+    const sortedRecords = [...lineGroup.records].sort((a, b) => {
+        const dateA = new Date(a.Date);
+        const dateB = new Date(b.Date);
+        return dateB - dateA; // Sort descending (most recent first)
+    });
+    
+    const latestRecord = sortedRecords.length > 0 ? sortedRecords[0] : null;
+    
+    // Use data from the latest record, or fallback
+    const status = latestRecord && latestRecord['Variant Status'] ? 
+        capitalizeFirstLetter(latestRecord['Variant Status']) : 'Standby';
+    const statusText = status.toLowerCase() === 'active' ? 'Active Operation' : 'Intermittent Operation';
+    
+    // Create recent runs from records
+    const recentRuns = lineGroup.records.map(record => {
+        // Format the date
+        let formattedDate;
+        try {
+            const date = new Date(record.Date);
+            formattedDate = `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()}`;
+        } catch (error) {
+            Logger.warn(`Error formatting date "${record.Date}": ${error.message}`);
+            formattedDate = record.Date;
         }
+        
+        return {
+            date: formattedDate,
+            variant: record.Variant,
+            attainment: record['Schedule Attainment'] || 0,
+            scrapPercentage: record['Scrap Cost as % of Production Value'] || 0
+        };
+    });
+    
+    return {
+        // Use the line name directly from the data instead of hardcoding
+        name: lineGroup.name,
+        color: getHeaderColorClass(lineGroup.color),
+        isPopUpLine: true,
+        status: status,
+        statusText: statusText,
+        recentRuns: recentRuns
+    };
+}
+
         
         /**
          * Transforms a variant group
@@ -1925,6 +1899,33 @@
          * UTILITY FUNCTIONS
          * ======================================
          */
+
+/**
+ * Gets a header color class from a line color
+ * @param {string} lineColor - The line color from data
+ * @returns {string} Header CSS class
+ */
+function getHeaderColorClass(lineColor) {
+    // If the color is already a header class, use it directly
+    if (lineColor && lineColor.includes('header')) {
+        return lineColor;
+    }
+    
+    // Map common colors to header classes for CSS compatibility
+    switch(lineColor && lineColor.toLowerCase()) {
+        case 'blue': return 'blue-header';
+        case 'orange': return 'orange-header';
+        case 'purple': return 'purple-header';
+        case 'black': return 'blue-header';
+        case 'yellow': return 'orange-header';
+        case 'grey': 
+        case 'gray': 
+            return 'blue-header';
+        case 'green': return 'orange-header';
+        case 'pink': return 'purple-header';
+        default: return 'blue-header'; // Default fallback
+    }
+}
         
         /**
          * Determines CSS class for a value based on its type and thresholds
