@@ -1205,7 +1205,7 @@ function transformProductionLines(lineGroups) {
     
     const productionLines = [];
     
-    // Fixed positions map for specific lines - fixed to match actual IDs in the data
+    // Fixed positions map for specific lines
     const fixedPositions = {
         // First row, first and second column
         'apelele-scd': { row: 1, col: 1 },
@@ -1216,34 +1216,15 @@ function transformProductionLines(lineGroups) {
         'mvokwe-popup': { row: 2, col: 2 },
         
         // First row, third and fourth column
-        'nosi-scalpel': { row: 1, col: 3 },
         'mvokwe-3rd': { row: 1, col: 4 },
-        'mvokwe-3rd line': { row: 1, col: 4 } // Added with space to match ID in log
+        'mvokwe-3rd line': { row: 1, col: 4 }
     };
     
     // Handle special case for Scalpel and 3rd Line products
     const scalpelBaseProducts = [];
     const thirdLineBaseProducts = [];
     
-    // First pass: Identify base products for special handling
-    for (const groupKey in lineGroups) {
-        const lineGroup = lineGroups[groupKey];
-        
-        if (lineGroup.id === 'nosi-scalpel' && lineGroup.baseProduct) {
-            scalpelBaseProducts.push(lineGroup);
-        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') && lineGroup.baseProduct) {
-            thirdLineBaseProducts.push(lineGroup);
-        }
-    }
-    
-    // Sort base products to ensure consistent placement
-    scalpelBaseProducts.sort((a, b) => a.baseProduct.localeCompare(b.baseProduct));
-    thirdLineBaseProducts.sort((a, b) => a.baseProduct.localeCompare(b.baseProduct));
-    
-    // Separate Scalpel Assembly from Packaging
-    let scalpelCount = 0;
-    
-    // Second pass: Transform line groups into production lines
+    // First pass: gather info on special lines
     for (const groupKey in lineGroups) {
         const lineGroup = lineGroups[groupKey];
         
@@ -1254,17 +1235,38 @@ function transformProductionLines(lineGroups) {
             lineGroup.displayName = lineGroup.name;
         }
         
+        if (lineGroup.id === 'nosi-scalpel') {
+            scalpelBaseProducts.push(lineGroup);
+        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') && lineGroup.baseProduct) {
+            thirdLineBaseProducts.push(lineGroup);
+        }
+    }
+    
+    // Sort scalpel products to ensure consistent order
+    scalpelBaseProducts.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    
+    // Second pass: Transform line groups into production lines
+    for (const groupKey in lineGroups) {
+        const lineGroup = lineGroups[groupKey];
+        
         // Assign positions based on fixed positions map or special rules
         let cssClass = '';
         
-        if (fixedPositions[lineGroup.id]) {
-            // Standard fixed positions
+        if (fixedPositions[lineGroup.id] && !lineGroup.baseProduct) {
+            // Standard fixed positions for main cards
             cssClass = `grid-row-${fixedPositions[lineGroup.id].row} grid-col-${fixedPositions[lineGroup.id].col}`;
-        } else if (lineGroup.id === 'nosi-scalpel' && lineGroup.baseProduct) {
-            // Alternating between row 1 and 2 for different Scalpel products
-            const rowIndex = (scalpelCount % 2) + 1;
-            cssClass = `grid-row-${rowIndex} grid-col-3`;
-            scalpelCount++;
+        } else if (lineGroup.id === 'nosi-scalpel') {
+            // Special handling for Scalpel cards
+            if (lineGroup.displayName.includes('Packaging')) {
+                // Scalpel Packaging in row 2, col 3
+                cssClass = `grid-row-2 grid-col-3`;
+            } else if (lineGroup.displayName.includes('Assembly')) {
+                // Scalpel Assembly in row 1, col 3
+                cssClass = `grid-row-1 grid-col-3`;
+            } else {
+                // Other Scalpel products (fallback)
+                cssClass = `grid-row-1 grid-col-3`;
+            }
         } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') && lineGroup.baseProduct) {
             // Only show the last 2 base products if there are more than 2
             if (thirdLineBaseProducts.length <= 2 || 
