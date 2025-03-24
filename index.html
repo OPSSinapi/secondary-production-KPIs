@@ -1102,32 +1102,32 @@ function calculatePlantWideMetrics(filteredData) {
         
         // For the first half of records (previous period)
         if (index < midPoint) {
-            prevTotalScheduleAttainment += record['Schedule Attainment'] || 0;
+            prevTotalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
             
-            // Ensure Staff Cost is correctly parsed - force as number
-            const staffCost = parseFloat(record['Staff Cost'] || 0);
-            prevTotalStaffCost += isNaN(staffCost) ? 0 : staffCost;
+            // Ensure Staff Cost is correctly parsed - always convert to number
+            const staffCost = parseFloat(record['Staff Cost']);
+            prevTotalStaffCost += !isNaN(staffCost) ? staffCost : 0;
             
-            prevTotalUnits += record['Actual Devices Produced'] || 0;
-            prevTotalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
-            prevTotalDowntime += record['Downtime Duration (min)'] || 0;
+            prevTotalUnits += parseInt(record['Actual Devices Produced'] || 0);
+            prevTotalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+            prevTotalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
             prevRecordCount++;
         } 
         // For the second half of records (current period)
         else {
-            totalScheduleAttainment += record['Schedule Attainment'] || 0;
+            totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
             
-            // Ensure Staff Cost is correctly parsed - force as number
-            const staffCost = parseFloat(record['Staff Cost'] || 0);
-            totalStaffCost += isNaN(staffCost) ? 0 : staffCost;
+            // Ensure Staff Cost is correctly parsed - always convert to number
+            const staffCost = parseFloat(record['Staff Cost']);
+            totalStaffCost += !isNaN(staffCost) ? staffCost : 0;
             
-            totalUnits += record['Actual Devices Produced'] || 0;
-            totalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
-            totalDowntime += record['Downtime Duration (min)'] || 0;
+            totalUnits += parseInt(record['Actual Devices Produced'] || 0);
+            totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+            totalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
             recordCount++;
             
             // Debug log to see values
-            Logger.info(`Record staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
+            Logger.info(`Record ${record.Date}: staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
         }
     });
     
@@ -1136,7 +1136,7 @@ function calculatePlantWideMetrics(filteredData) {
     const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / totalUnits) : 0;
     const avgScrapPercentage = recordCount > 0 ? totalScrapPercentage / recordCount : 0;
     // Convert downtime from minutes to hours
-    const downtimeHours = recordCount > 0 ? (totalDowntime / 60) : 0;
+    const downtimeHours = totalDowntime / 60;
     
     // Calculate previous period averages
     const prevAvgScheduleAttainment = prevRecordCount > 0 ? prevTotalScheduleAttainment / prevRecordCount : 0;
@@ -1153,7 +1153,7 @@ function calculatePlantWideMetrics(filteredData) {
     
     // Count downtime events
     const downtimeEvents = sortedRecords.filter(record => 
-        (record['Downtime Duration (min)'] || 0) > 0
+        (parseFloat(record['Downtime Duration (min)'] || 0)) > 0
     ).length;
     
     // Calculate downtime events trend (not percentage)
@@ -1205,7 +1205,7 @@ function transformProductionLines(lineGroups) {
     
     const productionLines = [];
     
-    // Fixed positions map for specific lines
+    // Fixed positions map for specific lines - corrected placement
     const fixedPositions = {
         // First row, first and second column
         'apelele-scd': { row: 1, col: 1 },
@@ -1214,6 +1214,10 @@ function transformProductionLines(lineGroups) {
         // Second row, first and second column
         'luthando-sum': { row: 2, col: 1 },
         'popup-line': { row: 2, col: 2 },
+        
+        // First row, third and fourth column
+        'nosi-scalpel': { row: 1, col: 3 },
+        'mvokwe-3rd': { row: 1, col: 4 },
     };
     
     // Handle special case for Scalpel and 3rd Line products
@@ -1252,29 +1256,22 @@ function transformProductionLines(lineGroups) {
         if (fixedPositions[lineGroup.id]) {
             // Standard fixed positions
             cssClass = `grid-row-${fixedPositions[lineGroup.id].row} grid-col-${fixedPositions[lineGroup.id].col}`;
-        } else if (lineGroup.id === 'nosi-scalpel') {
-            if (lineGroup.baseProduct) {
-                // Scalpel Products in third column (first and second row)
-                const idx = scalpelBaseProducts.indexOf(lineGroup);
-                cssClass = `grid-col-3 grid-row-${(idx % 2) + 1}`;
+        } else if (lineGroup.id === 'nosi-scalpel' && lineGroup.baseProduct) {
+            // Scalpel Products always in third column (first or second row)
+            const idx = scalpelBaseProducts.indexOf(lineGroup);
+            cssClass = `grid-col-3 grid-row-${(idx % 2) + 1}`;
+        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line') && lineGroup.baseProduct) {
+            // Only show the last 2 base products if there are more than 2
+            if (thirdLineBaseProducts.length <= 2 || 
+                thirdLineBaseProducts.indexOf(lineGroup) >= thirdLineBaseProducts.length - 2) {
+                // Calculate row (1 or 2) based on position in the last 2
+                const position = thirdLineBaseProducts.indexOf(lineGroup);
+                const relativePosition = thirdLineBaseProducts.length <= 2 ? position : 
+                    position - (thirdLineBaseProducts.length - 2);
+                cssClass = `grid-col-4 grid-row-${relativePosition + 1}`;
             } else {
-                // Main Scalpel card in fourth column, first row
-                cssClass = `grid-col-4 grid-row-1`;
-            }
-        } else if (lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line') {
-            if (lineGroup.baseProduct) {
-                // Only show the last 2 base products if there are more than 2
-                if (thirdLineBaseProducts.length <= 2 || 
-                    thirdLineBaseProducts.indexOf(lineGroup) >= thirdLineBaseProducts.length - 2) {
-                    // Calculate row (1 or 2) based on position in the last 2
-                    const position = thirdLineBaseProducts.indexOf(lineGroup);
-                    const relativePosition = thirdLineBaseProducts.length <= 2 ? position : 
-                        position - (thirdLineBaseProducts.length - 2);
-                    cssClass = `grid-col-4 grid-row-${relativePosition + 1}`;
-                }
-            } else {
-                // Main 3rd Line card in third column, first row
-                cssClass = `grid-col-3 grid-row-1`;
+                // Skip this base product as we only show the last 2
+                continue;
             }
         }
         
@@ -1528,36 +1525,37 @@ function calculateVariantMetrics(records) {
     let validRecords = 0;
     
     records.forEach(record => {
+        // Ensure we have valid data
         if (record['Schedule Attainment'] !== undefined && 
             record['Staff Cost'] !== undefined && 
             record['Actual Devices Produced'] !== undefined &&
             record['Scrap Cost as % of Production Value'] !== undefined) {
             
-            totalScheduleAttainment += record['Schedule Attainment'] || 0;
+            totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
             
-            // Ensure Staff Cost is correctly parsed - force as number
-            const staffCost = parseFloat(record['Staff Cost'] || 0);
-            totalStaffCost += isNaN(staffCost) ? 0 : staffCost;
+            // Ensure Staff Cost is correctly parsed - always convert to number
+            const staffCost = parseFloat(record['Staff Cost']);
+            totalStaffCost += !isNaN(staffCost) ? staffCost : 0;
             
-            totalUnits += record['Actual Devices Produced'] || 0;
-            totalScrapPercentage += record['Scrap Cost as % of Production Value'] || 0;
-            totalDowntimeMinutes += record['Downtime Duration (min)'] || 0;
+            totalUnits += parseInt(record['Actual Devices Produced'] || 0);
+            totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+            totalDowntimeMinutes += parseFloat(record['Downtime Duration (min)'] || 0);
             validRecords++;
             
             // Debug log to see values
-            Logger.info(`Record staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
+            Logger.info(`Record ${record.Date}: staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
         }
     });
     
     // Calculate averages
     const avgScheduleAttainment = validRecords > 0 ? totalScheduleAttainment / validRecords : 0;
     
-    // Ensure labour cost is calculated correctly
+    // Ensure labour cost is calculated correctly - only divide if we have units produced
     const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / totalUnits) : 0;
     
     const avgScrapPercentage = validRecords > 0 ? totalScrapPercentage / validRecords : 0;
     // Convert downtime from minutes to hours
-    const downtimeHours = validRecords > 0 ? (totalDowntimeMinutes / 60) : 0;
+    const downtimeHours = totalDowntimeMinutes / 60;
     
     Logger.info(`Calculated variant metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)} (from ${totalStaffCost}/${totalUnits}), SC=${avgScrapPercentage.toFixed(2)}, DH=${downtimeHours.toFixed(2)}`);
     
