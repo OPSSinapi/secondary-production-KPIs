@@ -1974,20 +1974,8 @@
                 return renderPopUpLineCard(line);
             }
             
-            // Extract supervisor name from lineId
-            const supervisor = line.id ? extractSupervisorName(line.id) : '';
-            
-            // Combine line name with supervisor and base product
-            // Format: "Production Line Name: Supervisor (Base Product)"
-            let displayName = line.name;
-            if (supervisor) {
-                displayName = `${line.name}: ${supervisor}`;
-            }
-            
-            // Add base product in parentheses if available and different from line name
-            if (line.baseProduct && line.baseProduct !== line.name) {
-                displayName += ` (${line.baseProduct})`;
-            }
+            // Format the display name for the card header
+            const displayName = formatCardHeaderName(line);
             
             // Check if the line has a variants array
             if (!line.variants || !Array.isArray(line.variants) || line.variants.length === 0) {
@@ -2164,12 +2152,8 @@
         function renderPopUpLineCard(line) {
             Logger.info(`Rendering PopUp line card: ${line.name}`);
             
-            // Extract supervisor name
-            const supervisor = line.id ? extractSupervisorName(line.id) : '';
-            
-            // For PopUp lines, Production Line Name and Base Product are the same
-            // Format: "Production Line Name: Supervisor"
-            const displayName = supervisor ? `${line.name}: ${supervisor}` : line.name;
+            // Format the display name for the card header
+            const displayName = formatCardHeaderName({...line, isPopUpLine: true});
             
             // Create table rows for recent runs
             let tableRows = '';
@@ -2347,6 +2331,33 @@
             // Capitalize the first letter
             const supervisor = parts[0];
             return supervisor.charAt(0).toUpperCase() + supervisor.slice(1);
+        }
+        
+        /**
+         * Formats a complete display name for the card header
+         * @param {Object} line - The line object with name, id, baseProduct
+         * @returns {string} The formatted display name
+         */
+        function formatCardHeaderName(line) {
+            if (!line) return '';
+            
+            // Extract supervisor name
+            const supervisor = extractSupervisorName(line.id);
+            
+            // Start with the line name
+            let displayName = line.name;
+            
+            // Add supervisor if available
+            if (supervisor) {
+                displayName = `${line.name}: ${supervisor}`;
+            }
+            
+            // For non-popup lines, add the base product if different from line name
+            if (!line.isPopUpLine && line.baseProduct && line.baseProduct !== line.name) {
+                displayName += ` (${line.baseProduct})`;
+            }
+            
+            return displayName;
         }
         
         /**
