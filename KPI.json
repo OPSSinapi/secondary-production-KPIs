@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-03-24T19:34:52.610Z",
+  "lastUpdated": "2025-03-24T19:50:31.445Z",
   "dateRange": {
     "start": "2023-09-11",
     "end": "2025-03-24"
@@ -38,8 +38,8 @@
           "isCurrentVariant": true,
           "metrics": {
             "scheduleAttainment": 77.45,
-            "labourCostPerUnit": 96.48,
-            "scrapPercentage": 0,
+            "labourCostPerUnit": 97.63,
+            "scrapPercentage": 1.45,
             "downtimeHours": 0
           },
           "timeline": {
@@ -215,8 +215,8 @@
           "isCurrentVariant": true,
           "metrics": {
             "scheduleAttainment": 79.62,
-            "labourCostPerUnit": 51.08,
-            "scrapPercentage": 0,
+            "labourCostPerUnit": 52.08,
+            "scrapPercentage": 2.45,
             "downtimeHours": 0
           },
           "timeline": {
@@ -348,8 +348,8 @@
           "isCurrentVariant": true,
           "metrics": {
             "scheduleAttainment": 97.3,
-            "labourCostPerUnit": 103.72,
-            "scrapPercentage": 0,
+            "labourCostPerUnit": 104.58,
+            "scrapPercentage": 1.03,
             "downtimeHours": 0
           },
           "timeline": {
