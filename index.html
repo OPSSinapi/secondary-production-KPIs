@@ -587,6 +587,7 @@
             grid-column-start: var(--column-start);
         }
 
+        //**
         @media (max-width: 1279px) {
             .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -596,6 +597,7 @@
                 grid-column: span 1;
             }
         }
+        **//
 
         @media (max-width: 767px) {
             .header {
@@ -700,20 +702,7 @@
             // Production lines that need special handling for Base Products
             specialLinesBaseProducts: {
                 'nosi-scalpel': true,
-                'mvokwe-3rd': true,
-                'mvokwe-3rd-line': true
-            },
-            
-            // Variant timeline colors
-            timelineColors: {
-                'default': 'var(--timeline-blue)',
-                'XL': 'var(--timeline-orange)',
-                'S10': 'var(--timeline-red)',
-                'S20': 'var(--timeline-blue)',
-                'Plus': 'var(--timeline-purple)',
-                'Regular': 'var(--timeline-blue)',
-                'Deluxe': 'var(--timeline-purple)',
-                'Standard': 'var(--timeline-blue)'
+                'mvokwe-3rd line': true
             },
             
             // Thresholds for KPI color coding
@@ -1926,16 +1915,11 @@ function calculateVariantTrends(records) {
             if (!line.variants || !Array.isArray(line.variants) || line.variants.length === 0) {
                 Logger.warn(`No variants available for line: ${line.name}`);
                 return `
-                         <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
-        <div class="line-card-header ${line.color}">
-            ${line.name}
+        <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
+            <!-- rest of the function -->
         </div>
-        <div class="line-card-content">
-            ${variantSections}
-        </div>
-    </div>
-`;
-            }
+    `;
+}
             
             // Get current variant (first one that's marked as current)
             const currentVariant = line.variants.find(v => v.isCurrentVariant);
