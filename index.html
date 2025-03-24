@@ -2881,6 +2881,9 @@
                 // Fetch operational data
                 const opsData = await fetchOpsData();
                 
+                // Store data globally for detail view
+                window.dashboardData = opsData;
+                
                 // If current date range is not set, get default
                 if (!currentDateRange.start || !currentDateRange.end) {
                     // Use last 5 production dates as default
@@ -3122,62 +3125,459 @@
         function loadDetailViewData() {
             Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
             
-            // In a real implementation, this would fetch filtered data for the specific line
-            // For this example, we'll work with the existing data
+            // Get the filtered data for the line and date range
+            const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
             
-            // Render placeholder charts
-            renderPlaceholderCharts();
+            if (filteredData.length === 0) {
+                Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
+                showNoDataMessage();
+                return;
+            }
             
-            // Update lists
-            updateTopScrapList();
-            updateTopDowntimeList();
+            // Render charts with actual data
+            renderScheduleAttainmentChart(filteredData);
+            renderLabourCostChart(filteredData);
+            renderScrapPercentageChart(filteredData);
+            renderDowntimeChart(filteredData);
+            
+            // Update lists with actual data
+            updateTopScrapList(filteredData);
+            updateTopDowntimeList(filteredData);
         }
         
         /**
-         * Renders placeholder charts for the detail view
+         * Gets filtered data for a specific line and date range
+         * @param {string} lineId - The ID of the line
+         * @param {string} startDate - Start date in ISO format
+         * @param {string} endDate - End date in ISO format
+         * @returns {Array} Filtered production data records
          */
-        function renderPlaceholderCharts() {
-            // This is where we would integrate with a charting library
-            // For this example, we'll just show placeholder texts
+        function getFilteredLineData(lineId, startDate, endDate) {
+            // Check if we have data available
+            if (!window.dashboardData || !window.dashboardData.productionData) {
+                Logger.warn('No production data available');
+                return [];
+            }
             
-            document.getElementById('scheduleAttainmentChart').innerHTML = 
-                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Schedule Attainment Chart (Bar Graph)</div>';
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999); // Include the entire end day
+            
+            // Filter by line ID and date range
+            return window.dashboardData.productionData.filter(record => {
+                const recordDate = new Date(record.Date);
+                return record['Production Line ID'] === lineId && 
+                       recordDate >= start && 
+                       recordDate <= end;
+            });
+        }
+        
+        /**
+         * Shows a message when no data is available
+         */
+        function showNoDataMessage() {
+            const noDataMessage = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No data available for the selected period.</div>';
+            
+            document.getElementById('scheduleAttainmentChart').innerHTML = noDataMessage;
+            document.getElementById('labourCostChart').innerHTML = noDataMessage;
+            document.getElementById('scrapPercentageChart').innerHTML = noDataMessage;
+            document.getElementById('downtimeChart').innerHTML = noDataMessage;
+            
+            document.getElementById('topScrapList').innerHTML = noDataMessage;
+            document.getElementById('topDowntimeList').innerHTML = noDataMessage;
+        }
+        
+        /**
+         * Renders the schedule attainment chart
+         * @param {Array} data - Filtered data for the line
+         */
+        function renderScheduleAttainmentChart(data) {
+            const chartContainer = document.getElementById('scheduleAttainmentChart');
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Format data for chart
+            const chartData = sortedData.map(record => {
+                const date = new Date(record.Date);
+                return {
+                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    actual: Math.round(parseFloat(record['Schedule Attainment']) || 0),
+                    target: 100 // Target is always 100%
+                };
+            });
+            
+            // Create chart HTML
+            let html = '<div style="width: 100%; height: 100%;">';
+            
+            // Create axes and labels
+            html += '<div style="display: flex; height: 100%;">';
+            
+            // Y-axis
+            html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+            html += '<div>100%</div>';
+            html += '<div>75%</div>';
+            html += '<div>50%</div>';
+            html += '<div>25%</div>';
+            html += '<div>0%</div>';
+            html += '</div>';
+            
+            // Chart content
+            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+            
+            // Chart area
+            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px;">';
+            
+            // Render bars
+            chartData.forEach(item => {
+                const actualHeight = `${item.actual}%`;
+                const targetHeight = '100%';
                 
-            document.getElementById('labourCostChart').innerHTML = 
-                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Labour Cost Chart (Line Graph)</div>';
+                html += `<div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">`;
                 
-            document.getElementById('scrapPercentageChart').innerHTML = 
-                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Scrap Percentage Chart (Line Graph)</div>';
+                // Target line
+                html += `<div style="width: 100%; height: 2px; background-color: var(--danger-color); position: relative; bottom: ${targetHeight}; z-index: 2;"></div>`;
                 
-            document.getElementById('downtimeChart').innerHTML = 
-                '<div style="display: flex; justify-content: center; align-items: center; height: 100%; background: #f5f7fa;">Downtime Chart (Line Graph)</div>';
+                // Actual bar
+                const barColor = item.actual >= 100 ? 'var(--success-color)' : 
+                                item.actual >= 85 ? 'var(--warning-color)' : 'var(--danger-color)';
+                                
+                html += `<div style="width: 60%; height: ${actualHeight}; background-color: ${barColor}; margin-top: auto;"></div>`;
+                
+                html += `</div>`;
+            });
+            
+            html += '</div>'; // End chart area
+            
+            // X-axis labels
+            html += '<div style="height: 30px; display: flex; gap: 2px;">';
+            chartData.forEach(item => {
+                html += `<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">${item.date}</div>`;
+            });
+            html += '</div>';
+            
+            html += '</div>'; // End chart content
+            html += '</div>'; // End axes and labels
+            html += '</div>'; // End chart container
+            
+            chartContainer.innerHTML = html;
+        }
+        
+        /**
+         * Renders the labour cost chart
+         * @param {Array} data - Filtered data for the line
+         */
+        function renderLabourCostChart(data) {
+            const chartContainer = document.getElementById('labourCostChart');
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Format data for chart
+            const chartData = sortedData.map(record => {
+                const date = new Date(record.Date);
+                return {
+                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    cost: Math.round(parseFloat(record['Cost Per Unit']) || 0)
+                };
+            });
+            
+            // Find min and max for scaling
+            const costs = chartData.map(item => item.cost);
+            const minCost = Math.min(...costs);
+            const maxCost = Math.max(...costs);
+            const range = maxCost - minCost;
+            const padding = range * 0.1; // 10% padding
+            
+            const yMin = Math.max(0, minCost - padding);
+            const yMax = maxCost + padding;
+            
+            // Create chart HTML
+            let html = '<div style="width: 100%; height: 100%;">';
+            
+            // Create axes and labels
+            html += '<div style="display: flex; height: 100%;">';
+            
+            // Y-axis
+            html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+            html += `<div>R${Math.round(yMax)}</div>`;
+            html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.75)}</div>`;
+            html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.5)}</div>`;
+            html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.25)}</div>`;
+            html += `<div>R${Math.round(yMin)}</div>`;
+            html += '</div>';
+            
+            // Chart content
+            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
+            
+            // Chart area
+            html += '<div style="flex-grow: 1; position: relative;">';
+            
+            // Background grid lines
+            html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '</div>';
+            
+            // Line chart
+            if (chartData.length > 1) {
+                // Calculate line points
+                let points = '';
+                chartData.forEach((item, index) => {
+                    const x = (index / (chartData.length - 1)) * 100;
+                    const y = 100 - ((item.cost - yMin) / (yMax - yMin)) * 100;
+                    points += `${x},${y} `;
+                });
+                
+                // Create SVG for line
+                html += `
+                    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                        <polyline 
+                            points="${points}" 
+                            fill="none" 
+                            stroke="var(--primary-blue)" 
+                            stroke-width="2" 
+                        />
+                    </svg>
+                `;
+                
+                // Add data points
+                chartData.forEach((item, index) => {
+                    const x = (index / (chartData.length - 1)) * 100;
+                    const y = 100 - ((item.cost - yMin) / (yMax - yMin)) * 100;
+                    html += `
+                        <div style="position: absolute; top: calc(${y}% - 4px); left: calc(${x}% - 4px); width: 8px; height: 8px; background-color: var(--primary-blue); border-radius: 50%;" title="R${item.cost}"></div>
+                    `;
+                });
+            }
+            
+            html += '</div>'; // End chart area
+            
+            // X-axis labels
+            html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
+            chartData.forEach(item => {
+                html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${item.date}</div>`;
+            });
+            html += '</div>';
+            
+            html += '</div>'; // End chart content
+            html += '</div>'; // End axes and labels
+            html += '</div>'; // End chart container
+            
+            chartContainer.innerHTML = html;
+        }
+        
+        /**
+         * Renders the scrap percentage chart
+         * @param {Array} data - Filtered data for the line
+         */
+        function renderScrapPercentageChart(data) {
+            const chartContainer = document.getElementById('scrapPercentageChart');
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Format data for chart
+            const chartData = sortedData.map(record => {
+                const date = new Date(record.Date);
+                return {
+                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    scrap: parseFloat(record['Scrap Cost as % of Production Value']) || 0
+                };
+            });
+            
+            // Find max for scaling
+            const scraps = chartData.map(item => item.scrap);
+            const maxScrap = Math.max(...scraps, 5); // At least 5% to have a reasonable scale
+            const yMax = Math.ceil(maxScrap * 1.1); // 10% padding
+            
+            // Create chart HTML
+            let html = '<div style="width: 100%; height: 100%;">';
+            
+            // Create axes and labels
+            html += '<div style="display: flex; height: 100%;">';
+            
+            // Y-axis
+            html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+            html += `<div>${yMax}%</div>`;
+            html += `<div>${Math.round(yMax * 0.75)}%</div>`;
+            html += `<div>${Math.round(yMax * 0.5)}%</div>`;
+            html += `<div>${Math.round(yMax * 0.25)}%</div>`;
+            html += `<div>0%</div>`;
+            html += '</div>';
+            
+            // Chart content
+            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
+            
+            // Chart area
+            html += '<div style="flex-grow: 1; position: relative;">';
+            
+            // Background grid lines
+            html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '</div>';
+            
+            // Line chart
+            if (chartData.length > 1) {
+                // Calculate line points
+                let points = '';
+                chartData.forEach((item, index) => {
+                    const x = (index / (chartData.length - 1)) * 100;
+                    const y = 100 - (item.scrap / yMax) * 100;
+                    points += `${x},${y} `;
+                });
+                
+                // Create SVG for line
+                html += `
+                    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                        <polyline 
+                            points="${points}" 
+                            fill="none" 
+                            stroke="var(--danger-color)" 
+                            stroke-width="2" 
+                        />
+                    </svg>
+                `;
+                
+                // Add data points
+                chartData.forEach((item, index) => {
+                    const x = (index / (chartData.length - 1)) * 100;
+                    const y = 100 - (item.scrap / yMax) * 100;
+                    html += `
+                        <div style="position: absolute; top: calc(${y}% - 4px); left: calc(${x}% - 4px); width: 8px; height: 8px; background-color: var(--danger-color); border-radius: 50%;" title="${item.scrap.toFixed(2)}%"></div>
+                    `;
+                });
+            }
+            
+            html += '</div>'; // End chart area
+            
+            // X-axis labels
+            html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
+            chartData.forEach(item => {
+                html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${item.date}</div>`;
+            });
+            html += '</div>';
+            
+            html += '</div>'; // End chart content
+            html += '</div>'; // End axes and labels
+            html += '</div>'; // End chart container
+            
+            chartContainer.innerHTML = html;
+        }
+        
+        /**
+         * Renders the downtime chart
+         * @param {Array} data - Filtered data for the line
+         */
+        function renderDowntimeChart(data) {
+            const chartContainer = document.getElementById('downtimeChart');
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Format data for chart
+            const chartData = sortedData.map(record => {
+                const date = new Date(record.Date);
+                return {
+                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    downtime: parseFloat(record['Downtime Duration (min)']) || 0
+                };
+            });
+            
+            // Find max for scaling
+            const downtimes = chartData.map(item => item.downtime);
+            const maxDowntime = Math.max(...downtimes, 60); // At least 60 minutes to have a reasonable scale
+            const yMax = Math.ceil(maxDowntime * 1.1 / 60) * 60; // Round up to nearest hour with 10% padding
+            
+            // Create chart HTML
+            let html = '<div style="width: 100%; height: 100%;">';
+            
+            // Create axes and labels
+            html += '<div style="display: flex; height: 100%;">';
+            
+            // Y-axis (convert minutes to hours for display)
+            html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+            html += `<div>${yMax / 60}h</div>`;
+            html += `<div>${(yMax * 0.75) / 60}h</div>`;
+            html += `<div>${(yMax * 0.5) / 60}h</div>`;
+            html += `<div>${(yMax * 0.25) / 60}h</div>`;
+            html += `<div>0h</div>`;
+            html += '</div>';
+            
+            // Chart content
+            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
+            
+            // Chart area
+            html += '<div style="flex-grow: 1; position: relative;">';
+            
+            // Background grid lines
+            html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+            html += '</div>';
+            
+            // Bars for downtime
+            html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: space-around; align-items: flex-end;">';
+            
+            chartData.forEach(item => {
+                const height = (item.downtime / yMax) * 100;
+                const barColor = item.downtime > 120 ? 'var(--danger-color)' : 
+                             item.downtime > 60 ? 'var(--warning-color)' : 'var(--primary-blue)';
+                             
+                html += `
+                    <div style="width: 30px; height: ${height}%; background-color: ${barColor};" title="${Math.round(item.downtime)} minutes"></div>
+                `;
+            });
+            
+            html += '</div>'; // End bars
+            
+            html += '</div>'; // End chart area
+            
+            // X-axis labels
+            html += '<div style="height: 30px; display: flex; justify-content: space-around;">';
+            chartData.forEach(item => {
+                html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${item.date}</div>`;
+            });
+            html += '</div>';
+            
+            html += '</div>'; // End chart content
+            html += '</div>'; // End axes and labels
+            html += '</div>'; // End chart container
+            
+            chartContainer.innerHTML = html;
         }
         
         /**
          * Updates the top scrap list based on the current view
+         * @param {Array} data - Filtered data for the line
          */
-        function updateTopScrapList() {
+        function updateTopScrapList(data) {
             const listElement = document.getElementById('topScrapList');
             
-            // Simple placeholder data
-            const listItems = detailViewState.scrapView === 'qty' ?
-                [
-                    { label: 'Broken hook', value: '278 units' },
-                    { label: 'Leaking', value: '187 units' },
-                    { label: 'Damaged assembly', value: '93 units' }
-                ] :
-                [
-                    { label: 'Pressure mark', value: 'R 423.64' },
-                    { label: 'Acetone mark on lid', value: 'R 367.23' },
-                    { label: 'Device failing on V-test', value: 'R 208.33' }
-                ];
+            // Extract top rejects data based on current view
+            const topItems = getTopScrapItems(data, detailViewState.scrapView);
+            
+            if (topItems.length === 0) {
+                listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No scrap data available.</div>';
+                return;
+            }
             
             // Generate HTML
             let html = '';
-            listItems.forEach((item, index) => {
+            topItems.forEach((item, index) => {
                 html += `
                     <div class="top-item">
-                        <div class="top-item-label">${index + 1}. ${item.label}</div>
+                        <div class="top-item-label">${index + 1}. ${item.reason}</div>
                         <div class="top-item-value">${item.value}</div>
                     </div>
                 `;
@@ -3187,52 +3587,200 @@
         }
         
         /**
-         * Updates the top downtime list based on the current view
+         * Extracts top scrap items from data
+         * @param {Array} data - Filtered data for the line
+         * @param {string} view - The view to extract ('qty' or 'cost')
+         * @returns {Array} Top scrap items
          */
-        function updateTopDowntimeList() {
+        function getTopScrapItems(data, view) {
+            // Use the most recent record that has reject data
+            const recentRecords = [...data].sort((a, b) => new Date(b.Date) - new Date(a.Date));
+            
+            const dataField = view === 'qty' ? 
+                'Top Rejects by QTY (Reason - Station - QTY - Cost)' : 
+                'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+            
+            for (const record of recentRecords) {
+                if (record[dataField] && record[dataField] !== "No rejects") {
+                    // Parse the field which has format "1. Reason - Station - QTY: X - Cost: Y | 2. ..."
+                    const items = parseRejectData(record[dataField], view);
+                    return items.slice(0, 3); // Return top 3 items
+                }
+            }
+            
+            return [];
+        }
+        
+        /**
+         * Parses reject data string into structured items
+         * @param {string} dataString - The data string to parse
+         * @param {string} view - The view type ('qty' or 'cost')
+         * @returns {Array} Parsed items
+         */
+        function parseRejectData(dataString, view) {
+            if (!dataString || dataString === "No rejects") {
+                return [];
+            }
+            
+            // Split by pipe to get individual items
+            const itemStrings = dataString.split(' | ');
+            
+            // Parse each item
+            return itemStrings.map(itemString => {
+                // Remove the numbering
+                const withoutNumber = itemString.replace(/^\d+\.\s*/, '');
+                
+                // Extract parts
+                const parts = withoutNumber.split(' - ');
+                if (parts.length < 3) {
+                    return { reason: withoutNumber, value: 'N/A' };
+                }
+                
+                const reason = parts[0];
+                const station = parts[1];
+                
+                // Extract quantity and cost
+                let qty = 0;
+                let cost = 0;
+                
+                const qtyMatch = parts[2].match(/QTY:\s*(\d+)/);
+                if (qtyMatch) {
+                    qty = parseInt(qtyMatch[1]);
+                }
+                
+                const costMatch = parts[3] && parts[3].match(/Cost:\s*([0-9.]+)/);
+                if (costMatch) {
+                    cost = parseFloat(costMatch[1]);
+                }
+                
+                return {
+                    reason: `${reason} (${station})`,
+                    value: view === 'qty' ? `${qty} units` : `R ${cost.toFixed(2)}`,
+                    rawValue: view === 'qty' ? qty : cost
+                };
+            }).sort((a, b) => b.rawValue - a.rawValue); // Sort by value in descending order
+        }
+        
+        /**
+         * Updates the top downtime list based on the current view
+         * @param {Array} data - Filtered data for the line
+         */
+        function updateTopDowntimeList(data) {
             const listElement = document.getElementById('topDowntimeList');
             
-            // Simple placeholder data
-            let listItems;
+            // Extract top downtime data based on current view
+            const topItems = getTopDowntimeItems(data, detailViewState.downtimeView);
             
-            switch (detailViewState.downtimeView) {
-                case 'reason':
-                    listItems = [
-                        { label: 'Machine calibration', value: '240 min' },
-                        { label: 'Material changeover', value: '120 min' },
-                        { label: 'Power outage', value: '60 min' }
-                    ];
-                    break;
-                case 'machine':
-                    listItems = [
-                        { label: 'Welder station', value: '180 min' },
-                        { label: 'Testing unit', value: '150 min' },
-                        { label: 'Assembly line', value: '90 min' }
-                    ];
-                    break;
-                case 'duration':
-                    listItems = [
-                        { label: 'Machine calibration - Welder', value: 'R 857.20' },
-                        { label: 'Material changeover - Assembly', value: 'R 456.50' },
-                        { label: 'Power outage - All stations', value: 'R 320.75' }
-                    ];
-                    break;
-                default:
-                    listItems = [];
+            if (topItems.length === 0) {
+                listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No downtime data available.</div>';
+                return;
             }
             
             // Generate HTML
             let html = '';
-            listItems.forEach((item, index) => {
+            topItems.forEach((item, index) => {
                 html += `
                     <div class="top-item">
-                        <div class="top-item-label">${index + 1}. ${item.label}</div>
+                        <div class="top-item-label">${index + 1}. ${item.reason}</div>
                         <div class="top-item-value">${item.value}</div>
                     </div>
                 `;
             });
             
             listElement.innerHTML = html;
+        }
+        
+        /**
+         * Extracts top downtime items from data
+         * @param {Array} data - Filtered data for the line
+         * @param {string} view - The view to extract ('reason', 'machine', or 'duration')
+         * @returns {Array} Top downtime items
+         */
+        function getTopDowntimeItems(data, view) {
+            // Use the most recent record that has downtime data
+            const recentRecords = [...data].sort((a, b) => new Date(b.Date) - new Date(a.Date));
+            
+            const dataField = view === 'reason' || view === 'machine' ? 
+                'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)' : 
+                'Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)';
+            
+            for (const record of recentRecords) {
+                if (record[dataField] && record[dataField] !== "No downtime") {
+                    // Parse the field which has format "1. Reason - Machine - Cost: X - Duration: Y min | 2. ..."
+                    const items = parseDowntimeData(record[dataField], view);
+                    return items.slice(0, 3); // Return top 3 items
+                }
+            }
+            
+            return [];
+        }
+        
+        /**
+         * Parses downtime data string into structured items
+         * @param {string} dataString - The data string to parse
+         * @param {string} view - The view type ('reason', 'machine', or 'duration')
+         * @returns {Array} Parsed items
+         */
+        function parseDowntimeData(dataString, view) {
+            if (!dataString || dataString === "No downtime") {
+                return [];
+            }
+            
+            // Split by pipe to get individual items
+            const itemStrings = dataString.split(' | ');
+            
+            // Parse each item
+            return itemStrings.map(itemString => {
+                // Remove the numbering
+                const withoutNumber = itemString.replace(/^\d+\.\s*/, '');
+                
+                // Extract parts
+                const parts = withoutNumber.split(' - ');
+                if (parts.length < 3) {
+                    return { reason: withoutNumber, value: 'N/A' };
+                }
+                
+                const reason = parts[0];
+                const machine = parts[1];
+                
+                // Extract cost and duration
+                let cost = 0;
+                let duration = 0;
+                
+                const costMatch = parts[2].match(/Cost:\s*([0-9.]+)/);
+                if (costMatch) {
+                    cost = parseFloat(costMatch[1]);
+                }
+                
+                const durationMatch = parts[3] && parts[3].match(/Duration:\s*(\d+)/);
+                if (durationMatch) {
+                    duration = parseInt(durationMatch[1]);
+                }
+                
+                // Select display based on view
+                let displayValue, sortValue;
+                let displayReason;
+                
+                if (view === 'reason') {
+                    displayReason = reason;
+                    displayValue = `R ${cost.toFixed(2)}`;
+                    sortValue = cost;
+                } else if (view === 'machine') {
+                    displayReason = machine;
+                    displayValue = `R ${cost.toFixed(2)}`;
+                    sortValue = cost;
+                } else { // duration
+                    displayReason = `${reason} - ${machine}`;
+                    displayValue = `${duration} min`;
+                    sortValue = duration;
+                }
+                
+                return {
+                    reason: displayReason,
+                    value: displayValue,
+                    rawValue: sortValue
+                };
+            }).sort((a, b) => b.rawValue - a.rawValue); // Sort by value in descending order
         }
     </script>
 </body>
