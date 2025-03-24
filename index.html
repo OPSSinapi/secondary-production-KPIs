@@ -1680,13 +1680,28 @@
                 return [];
             }
             
-            // For a single variant, use the default timeline
-            if (variants.length === 1) {
-                return null;
+            // Filter out the active variant
+            const nonActiveVariants = variants.filter(v => !v.isCurrentVariant);
+            
+            // If no non-active variants, return empty array
+            if (nonActiveVariants.length === 0) {
+                return [];
+            }
+            
+            // For a single non-active variant, use the default timeline
+            if (nonActiveVariants.length === 1) {
+                const segment = {
+                    variant: nonActiveVariants[0].name,
+                    displayText: extractVariantShortName(nonActiveVariants[0].name),
+                    width: '100%',
+                    position: '0%',
+                    color: getVariantColor(nonActiveVariants[0].name)
+                };
+                return [segment];
             }
             
             // Sort variants by date (oldest first)
-            const sortedVariants = [...variants].sort((a, b) => {
+            const sortedVariants = [...nonActiveVariants].sort((a, b) => {
                 const aDate = new Date(a.latestDate || 0);
                 const bDate = new Date(b.latestDate || 0);
                 return aDate - bDate;
@@ -1962,8 +1977,17 @@
             // Extract supervisor name from lineId
             const supervisor = line.id ? extractSupervisorName(line.id) : '';
             
-            // Combine line name with supervisor
-            const displayName = supervisor ? `${line.name}: ${supervisor}` : line.name;
+            // Combine line name with supervisor and base product
+            // Format: "Production Line Name: Supervisor (Base Product)"
+            let displayName = line.name;
+            if (supervisor) {
+                displayName = `${line.name}: ${supervisor}`;
+            }
+            
+            // Add base product in parentheses if available and different from line name
+            if (line.baseProduct && line.baseProduct !== line.name) {
+                displayName += ` (${line.baseProduct})`;
+            }
             
             // Check if the line has a variants array
             if (!line.variants || !Array.isArray(line.variants) || line.variants.length === 0) {
@@ -2008,8 +2032,11 @@
                             <div class="variant-label">Variant: <span class="variant-name">${currentVariant.name}</span>
                                 <span class="status-badge status-${currentVariant.status.toLowerCase()}" style="display: inline-block; margin-left: 8px; height: 16px; font-size: 9px; padding: 1px 6px;">${currentVariant.status}</span>
                             </div>
-                            <div class="timeline-container" style="width: 120px; height: 20px; margin-left: auto;">
-                                ${line.timelineSegments ? renderTimelineSegments(line.timelineSegments) : renderTimeline(currentVariant.timeline)}
+                            <div class="timeline-container" style="width: 120px; height: 20px; margin-left: auto; display: ${line.timelineSegments && line.timelineSegments.length > 0 ? 'block' : 'none'};">
+                                ${line.timelineSegments && line.timelineSegments.length > 0 ? 
+                                  `<div style="font-size: 8px; text-align: center; color: var(--text-light);">Previous Variants</div>` + 
+                                  renderTimelineSegments(line.timelineSegments) : 
+                                  ''}
                             </div>
                         </div>
                     </div>
@@ -2140,7 +2167,8 @@
             // Extract supervisor name
             const supervisor = line.id ? extractSupervisorName(line.id) : '';
             
-            // Combine line name with supervisor
+            // For PopUp lines, Production Line Name and Base Product are the same
+            // Format: "Production Line Name: Supervisor"
             const displayName = supervisor ? `${line.name}: ${supervisor}` : line.name;
             
             // Create table rows for recent runs
