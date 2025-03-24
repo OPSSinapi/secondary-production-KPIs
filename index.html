@@ -1206,11 +1206,19 @@ function transformProductionLines(lineGroups) {
     
     const productionLines = [];
     
-    // Gather Scalpel and 3rd Line products
-    const scalpelProducts = [];
-    const thirdLineProducts = [];
+    // Fixed position mapping - this is the key to correct placement
+    const fixedPositions = {
+        'apelele-scd': { row: 1, column: 1 },
+        'siyabonga-levo': { row: 1, column: 2 },
+        'luthando-sum': { row: 2, column: 1 },
+        'mvokwe-popup': { row: 2, column: 2 },
+        'nosi-scalpel-assembly': { row: 1, column: 3 },
+        'nosi-scalpel-packaging': { row: 2, column: 3 },
+        'mvokwe-3rd-line-ubt': { row: 1, column: 4 },
+        'mvokwe-3rd-line-scd': { row: 2, column: 4 }
+    };
     
-    // First pass: Gather special line info
+    // Process each line group with fixed positioning
     for (const groupKey in lineGroups) {
         const lineGroup = lineGroups[groupKey];
         
@@ -1221,80 +1229,32 @@ function transformProductionLines(lineGroups) {
             lineGroup.displayName = lineGroup.name;
         }
         
-        // Identify Scalpel and 3rd Line products
+        // Create a unique ID for positioning
+        let positionKey = lineGroup.id;
+        
+        // For Scalpel and 3rd Line, append product type for unique positioning
         if (lineGroup.id === 'nosi-scalpel') {
-            scalpelProducts.push(lineGroup);
-        } else if (lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') {
-            thirdLineProducts.push(lineGroup);
-        }
-    }
-    
-    // Sort thirdLineProducts if there are multiple to ensure consistent display
-    if (thirdLineProducts.length > 1) {
-        thirdLineProducts.sort((a, b) => (a.baseProduct || '').localeCompare(b.baseProduct || ''));
-    }
-    
-    // Second pass: Assign positions and transform
-    for (const groupKey in lineGroups) {
-        const lineGroup = lineGroups[groupKey];
-        let skip = false;
-        
-        // EXPLICIT FIXED POSITIONING FOR ALL CARDS
-        if (lineGroup.id === 'apelele-scd') {
-            // SCD in first row, first column
-            lineGroup.cssClass = 'grid-row-1 grid-col-1';
-        } 
-        else if (lineGroup.id === 'siyabonga-levo') {
-            // LEVO in first row, second column
-            lineGroup.cssClass = 'grid-row-1 grid-col-2';
-        } 
-        else if (lineGroup.id === 'luthando-sum') {
-            // SUM in second row, first column
-            lineGroup.cssClass = 'grid-row-2 grid-col-1';
-        } 
-        else if (lineGroup.id === 'mvokwe-popup' || lineGroup.id.toLowerCase().includes('popup')) {
-            // PopUp in second row, second column
-            lineGroup.cssClass = 'grid-row-2 grid-col-2';
-        } 
-        else if (lineGroup.id === 'nosi-scalpel') {
-            // Scalpel products in third column
             if (lineGroup.displayName.toLowerCase().includes('packaging')) {
-                lineGroup.cssClass = 'grid-row-2 grid-col-3';
+                positionKey = 'nosi-scalpel-packaging';
             } else {
-                lineGroup.cssClass = 'grid-row-1 grid-col-3';
+                positionKey = 'nosi-scalpel-assembly';
             }
-        } 
-        else if (lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') {
-            // 3rd Line products in fourth column
-            if (thirdLineProducts.length <= 1) {
-                // Only one product, place in row 1
-                lineGroup.cssClass = 'grid-row-1 grid-col-4';
+        } else if (lineGroup.id === 'mvokwe-3rd line') {
+            if (lineGroup.baseProduct === 'UBT') {
+                positionKey = 'mvokwe-3rd-line-ubt';
             } else {
-                // Multiple products - show at most 2
-                const index = thirdLineProducts.indexOf(lineGroup);
-                if (index === 0) {
-                    lineGroup.cssClass = 'grid-row-1 grid-col-4';
-                } else if (index === 1) {
-                    lineGroup.cssClass = 'grid-row-2 grid-col-4';
-                } else {
-                    // Skip displaying more than 2 products
-                    skip = true;
-                }
+                positionKey = 'mvokwe-3rd-line-scd';
             }
-        } 
-        else {
-            // Default fallback
-            lineGroup.cssClass = '';
-            Logger.warn(`No fixed position for line: ${lineGroup.displayName}`);
         }
         
-        // Skip this line if flagged
-        if (skip) {
-            Logger.info(`Skipping extra 3rd Line product: ${lineGroup.displayName}`);
-            continue;
-        }
+        // Apply fixed position if available, otherwise use default
+        const position = fixedPositions[positionKey] || 
+                         fixedPositions[lineGroup.id] || 
+                         { row: 1, column: 1 };
         
-        Logger.info(`Assigned CSS class "${lineGroup.cssClass}" to line: ${lineGroup.displayName}`);
+        // Apply position directly using style instead of class
+        lineGroup.style = `grid-row: ${position.row}; grid-column: ${position.column};`;
+        Logger.info(`Assigned fixed position row:${position.row}, col:${position.column} to ${lineGroup.displayName}`);
         
         // Handle different line types
         if (lineGroup.type && lineGroup.type.toLowerCase() === 'popup' || 
@@ -2094,15 +2054,15 @@ function calculateVariantTrends(records) {
             }
             
             return `
-                <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
-                    <div class="line-card-header ${line.color}">
-                        ${line.name}
-                    </div>
-                    <div class="line-card-content">
-                        ${variantSections}
-                    </div>
-                </div>
-            `;
+        <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''}" style="${line.style || ''}">
+            <div class="line-card-header ${line.color}">
+                ${line.name}
+            </div>
+            <div class="line-card-content">
+                ${variantSections}
+            </div>
+        </div>
+    `;
         }
 
         /**
