@@ -1205,7 +1205,7 @@ function transformProductionLines(lineGroups) {
     
     const productionLines = [];
     
-    // Fixed positions map for specific lines
+    // Fixed positions map for specific lines - hard-coded positions for all lines
     const fixedPositions = {
         // First row, first and second column
         'apelele-scd': { row: 1, col: 1 },
@@ -1214,17 +1214,13 @@ function transformProductionLines(lineGroups) {
         // Second row, first and second column
         'luthando-sum': { row: 2, col: 1 },
         'mvokwe-popup': { row: 2, col: 2 },
-        
-        // First row, third and fourth column
-        'mvokwe-3rd': { row: 1, col: 4 },
-        'mvokwe-3rd line': { row: 1, col: 4 }
     };
     
-    // Handle special case for Scalpel and 3rd Line products
-    const scalpelBaseProducts = [];
-    const thirdLineBaseProducts = [];
+    // Gather Scalpel and 3rd Line products
+    const scalpelProducts = [];
+    const thirdLineProducts = [];
     
-    // First pass: gather info on special lines
+    // First pass: Gather special line info
     for (const groupKey in lineGroups) {
         const lineGroup = lineGroups[groupKey];
         
@@ -1235,50 +1231,54 @@ function transformProductionLines(lineGroups) {
             lineGroup.displayName = lineGroup.name;
         }
         
+        // Identify Scalpel and 3rd Line products
         if (lineGroup.id === 'nosi-scalpel') {
-            scalpelBaseProducts.push(lineGroup);
-        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') && lineGroup.baseProduct) {
-            thirdLineBaseProducts.push(lineGroup);
+            scalpelProducts.push(lineGroup);
+        } else if (lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') {
+            thirdLineProducts.push(lineGroup);
         }
     }
     
-    // Sort scalpel products to ensure consistent order
-    scalpelBaseProducts.sort((a, b) => a.displayName.localeCompare(b.displayName));
-    
-    // Second pass: Transform line groups into production lines
+    // Second pass: Assign positions and transform
     for (const groupKey in lineGroups) {
         const lineGroup = lineGroups[groupKey];
-        
-        // Assign positions based on fixed positions map or special rules
         let cssClass = '';
         
-        if (fixedPositions[lineGroup.id] && !lineGroup.baseProduct) {
-            // Standard fixed positions for main cards
-            cssClass = `grid-row-${fixedPositions[lineGroup.id].row} grid-col-${fixedPositions[lineGroup.id].col}`;
+        // Assign position based on line ID
+        if (lineGroup.id === 'apelele-scd') {
+            cssClass = 'grid-row-1 grid-col-1';
+        } else if (lineGroup.id === 'siyabonga-levo') {
+            cssClass = 'grid-row-1 grid-col-2';
+        } else if (lineGroup.id === 'luthando-sum') {
+            cssClass = 'grid-row-2 grid-col-1';
+        } else if (lineGroup.id === 'mvokwe-popup' || lineGroup.id.toLowerCase().includes('popup')) {
+            cssClass = 'grid-row-2 grid-col-2';
         } else if (lineGroup.id === 'nosi-scalpel') {
             // Special handling for Scalpel cards
             if (lineGroup.displayName.includes('Packaging')) {
-                // Scalpel Packaging in row 2, col 3
-                cssClass = `grid-row-2 grid-col-3`;
+                cssClass = 'grid-row-2 grid-col-3';
             } else if (lineGroup.displayName.includes('Assembly')) {
-                // Scalpel Assembly in row 1, col 3
-                cssClass = `grid-row-1 grid-col-3`;
+                cssClass = 'grid-row-1 grid-col-3';
             } else {
-                // Other Scalpel products (fallback)
-                cssClass = `grid-row-1 grid-col-3`;
+                // Fallback for other Scalpel products
+                cssClass = 'grid-row-1 grid-col-3';
             }
-        } else if ((lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') && lineGroup.baseProduct) {
-            // Only show the last 2 base products if there are more than 2
-            if (thirdLineBaseProducts.length <= 2 || 
-                thirdLineBaseProducts.indexOf(lineGroup) >= thirdLineBaseProducts.length - 2) {
-                // Calculate row (1 or 2) based on position in the last 2
-                const position = thirdLineBaseProducts.indexOf(lineGroup);
-                const relativePosition = thirdLineBaseProducts.length <= 2 ? position : 
-                    position - (thirdLineBaseProducts.length - 2);
-                cssClass = `grid-col-4 grid-row-${relativePosition + 1}`;
+        } else if (lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd line') {
+            // 3rd Line base card or first product
+            if (!lineGroup.baseProduct || thirdLineProducts.length <= 1) {
+                cssClass = 'grid-row-1 grid-col-4';
             } else {
-                // Skip this base product as we only show the last 2
-                continue;
+                // Base products in 3rd Line
+                const position = thirdLineProducts.indexOf(lineGroup);
+                // Only show the last 2 base products if there are more than 2
+                if (thirdLineProducts.length <= 2 || position >= thirdLineProducts.length - 2) {
+                    const relativePosition = thirdLineProducts.length <= 2 ? position : 
+                        position - (thirdLineProducts.length - 2);
+                    cssClass = `grid-row-${relativePosition + 1} grid-col-4`;
+                } else {
+                    // Skip this base product
+                    continue;
+                }
             }
         }
         
