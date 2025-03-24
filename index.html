@@ -551,6 +551,11 @@
                 'blue': 'blue-header',
                 'orange': 'orange-header',
                 'purple': 'purple-header'
+                'black': 'blue-header',
+                'yellow': 'orange-header',
+                'grey': 'blue-header',
+                'green': 'orange-header',
+                'pink': 'purple-header'
             },
             
             // Variant timeline colors
@@ -624,18 +629,21 @@
          * @param {Object} kpiData - The raw KPI data from the JSON file
          * @returns {Object} Transformed data ready for UI rendering
          */
-        function transformKpiData(kpiData) {
-            // Extract essential data from kpiData
-            const transformedData = {
-                lastUpdated: kpiData.lastUpdated,
-                dateRange: kpiData.dateRange,
-                plantWideMetrics: transformPlantWideMetrics(kpiData.plantWideMetrics),
-                lines: transformProductionLines(kpiData.productionLines),
-                thresholds: kpiData.thresholds || CONFIG.thresholds
-            };
-            
-            return transformedData;
-        }
+            function transformKpiData(kpiData) {
+                // Access the nested productionData property
+                const productionData = kpiData.productionData || kpiData;
+                
+                // Extract essential data from the correct location
+                const transformedData = {
+                    lastUpdated: productionData.lastUpdated,
+                    dateRange: productionData.dateRange,
+                    plantWideMetrics: transformPlantWideMetrics(productionData.plantWideMetrics),
+                    lines: transformProductionLines(productionData.productionLines),
+                    thresholds: productionData.thresholds || CONFIG.thresholds
+                };
+                
+                return transformedData;
+            }
 
         /**
          * Transforms plant-wide metrics
