@@ -1279,7 +1279,8 @@ function transformProductionLines(lineGroups) {
         Logger.info(`Assigned CSS class "${cssClass}" to line: ${lineGroup.displayName}`);
         
         // Handle different line types
-        if (lineGroup.type === 'popup' || lineGroup.id.includes('popup')) {
+        if (lineGroup.type.toLowerCase() === 'popup' || 
+    lineGroup.id.toLowerCase().includes('popup')) {
             const popupLine = transformPopUpLine(lineGroup);
             productionLines.push(popupLine);
         } else {
