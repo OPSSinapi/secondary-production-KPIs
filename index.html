@@ -889,7 +889,7 @@
         <div class="date-controls">
             <div class="date-filter" id="dateRangeDisplay">Loading...</div>
             <button class="date-range-btn" id="dateRangeButton">Select Dates</button>
-            <button class="period-btn" id="periodToggle">Daily</button>
+            <button class="period-btn" id="periodToggle">Weekly</button>
             <button class="refresh-btn" id="refreshButton">Refresh</button>
         </div>
     </header>
@@ -1002,61 +1002,61 @@
         
         // Main configuration object for the dashboard
         const CONFIG = {
-    // URL to fetch operational data from
-    dataUrl: 'OpsData.json',
-    
-    // Refresh interval in milliseconds (5 minutes)
-    refreshInterval: 5 * 60 * 1000,
-    
-    // Default period for data display
-    defaultPeriod: 'daily',
-    
-    // Default date range (last 5 production dates)
-    defaultDateRange: {
-        days: 5
-    },
-    
-    // Debug mode to show the debug log
-    debugMode: true,
-    
-    // Production lines that need special handling for Base Products
-    specialLinesBaseProducts: {
-        'nosi-scalpel': true,
-        'mvokwe-3rd line': true
-    },
-    
-    // Variant timeline colors
-    timelineColors: {
-        'default': 'var(--timeline-blue)',
-        'XL': 'var(--timeline-orange)',
-        'S10': 'var(--timeline-red)',
-        'S20': 'var(--timeline-blue)',
-        'Plus': 'var(--timeline-purple)',
-        'Regular': 'var(--timeline-blue)',
-        'Deluxe': 'var(--timeline-purple)',
-        'Standard': 'var(--timeline-blue)'
-    },
-    
-    // Thresholds for KPI color coding
-    thresholds: {
-        scheduleAttainment: {
-            good: 95,      // >= 95% = green
-            warning: 85    // >= 85% = yellow, < 85% = red
-        },
-        labourCostPerUnit: {
-            good: 300,     // <= 300 = green
-            warning: 400   // <= 400 = yellow, > 400 = red
-        },
-        scrapPercentage: {
-            good: 5,       // <= 5% = green
-            warning: 15    // <= 15% = yellow, > 15% = red
-        },
-        downtimeHours: {
-            good: 3,       // <= 3 hours = green
-            warning: 6     // <= 6 hours = yellow, > 6 hours = red
-        }
-    }
-};
+            // URL to fetch operational data from
+            dataUrl: 'OpsData.json',
+            
+            // Refresh interval in milliseconds (5 minutes)
+            refreshInterval: 5 * 60 * 1000,
+            
+            // Default period for data display
+            defaultPeriod: 'weekly', // Changed from 'daily' to 'weekly'
+            
+            // Default date range (last 5 production dates)
+            defaultDateRange: {
+                days: 7  // Changed from 5 to 7 days (one week)
+            },
+            
+            // Debug mode to show the debug log
+            debugMode: true,
+            
+            // Production lines that need special handling for Base Products
+            specialLinesBaseProducts: {
+                'nosi-scalpel': true,
+                'mvokwe-3rd line': true
+            },
+            
+            // Variant timeline colors
+            timelineColors: {
+                'default': 'var(--timeline-blue)',
+                'XL': 'var(--timeline-orange)',
+                'S10': 'var(--timeline-red)',
+                'S20': 'var(--timeline-blue)',
+                'Plus': 'var(--timeline-purple)',
+                'Regular': 'var(--timeline-blue)',
+                'Deluxe': 'var(--timeline-purple)',
+                'Standard': 'var(--timeline-blue)'
+            },
+            
+            // Thresholds for KPI color coding
+            thresholds: {
+                scheduleAttainment: {
+                    good: 95,      // >= 95% = green
+                    warning: 85    // >= 85% = yellow, < 85% = red
+                },
+                labourCostPerUnit: {
+                    good: 300,     // <= 300 = green
+                    warning: 400   // <= 400 = yellow, > 400 = red
+                },
+                scrapPercentage: {
+                    good: 5,       // <= 5% = green
+                    warning: 15    // <= 15% = yellow, > 15% = red
+                },
+                downtimeHours: {
+                    good: 3,       // <= 3 hours = green
+                    warning: 6     // <= 6 hours = yellow, > 6 hours = red
+                }
+            }
+        };
 
         /**
          * ======================================
@@ -1071,14 +1071,24 @@
         };
 
         /**
-         * Gets the default date range (last 5 production dates)
+         * Gets the default date range (current week: Monday to Sunday)
          * @returns {Object} Object with start and end dates
          */
         function getDefaultDateRange() {
             const now = new Date();
-            const end = new Date(now);
+            
+            // Get current day of week (0-6, where 0 is Sunday)
+            const currentDay = now.getDay();
+            
+            // Calculate Monday (start of week)
             const start = new Date(now);
-            start.setDate(start.getDate() - CONFIG.defaultDateRange.days);
+            start.setDate(start.getDate() - (currentDay === 0 ? 6 : currentDay - 1));
+            start.setHours(0, 0, 0, 0);
+            
+            // Calculate Sunday (end of week)
+            const end = new Date(start);
+            end.setDate(end.getDate() + 6);
+            end.setHours(23, 59, 59, 999);
             
             return {
                 start: start.toISOString().split('T')[0],
@@ -1602,6 +1612,57 @@
             Logger.info(`Transformed and sorted ${processedLines.length} production lines`);
             return processedLines;
         }
+
+        /**
+         * Extracts the supervisor name from the production line ID
+         * @param {string} lineId - The production line ID (e.g., "mvokwe-3rd line")
+         * @returns {string} The capitalized supervisor name
+         */
+        function extractSupervisorName(lineId) {
+            if (!lineId) return '';
+            
+            // Split by hyphen and take the first part
+            const parts = lineId.split('-');
+            if (parts.length < 1) return '';
+            
+            // Capitalize the first letter
+            const supervisor = parts[0];
+            return supervisor.charAt(0).toUpperCase() + supervisor.slice(1);
+        }
+        
+        /**
+         * Formats a complete display name for the card header
+         * @param {Object} line - The line object with name, id, baseProduct
+         * @returns {string} The formatted display name
+         */
+        function formatCardHeaderName(line) {
+            if (!line) return '';
+            
+            // Extract supervisor name
+            const supervisor = extractSupervisorName(line.id);
+            
+            // For PopUp lines, show "PopUp: Supervisor"
+            if (line.isPopUpLine) {
+                return supervisor ? `PopUp: ${supervisor}` : 'PopUp';
+            }
+            
+            // For regular lines, show "Product: Supervisor"
+            if (line.name) {
+                let productName = line.name;
+                
+                // If line name includes base product, just use the first part
+                if (productName.includes(':')) {
+                    productName = productName.split(':')[0].trim();
+                }
+                
+                // Use base product if available, otherwise use the line name
+                const displayProduct = line.baseProduct || productName;
+                
+                return supervisor ? `${displayProduct}: ${supervisor}` : displayProduct;
+            }
+            
+            return line.name || '';
+        }
         
         /**
          * Transforms a regular production line
@@ -1661,7 +1722,7 @@
             const trends = calculateTrends(lineGroup.records);
             
             // Use the display name that may include base product
-            const displayName = lineGroup.displayName;
+            const displayName = formatCardHeaderName(lineGroup);
             
             // Check if this is the line that should be double height
             const isDoubleHeight = lineGroup.id === 'mvokwe-3rd' || lineGroup.id === 'mvokwe-3rd-line';
@@ -1685,7 +1746,7 @@
                 }
             }
             
-            Logger.info(`Using line name from data: "${displayName}"`);
+            Logger.info(`Using line name: "${displayName}"`);
             
             return {
                 id: lineGroup.id,
@@ -1744,10 +1805,13 @@
                     scrapPercentage: record['Scrap Cost as % of Production Value'] || 0
                 };
             });
+
+            // Format display name using product and supervisor
+            const displayName = formatCardHeaderName({...lineGroup, isPopUpLine: true});
             
             return {
                 id: lineGroup.id,
-                name: lineGroup.displayName,
+                name: displayName,
                 color: getHeaderColorClass(lineGroup.color),
                 isPopUpLine: true,
                 status: status,
@@ -2274,9 +2338,14 @@
             if (!line.variants || !Array.isArray(line.variants) || line.variants.length === 0) {
                 Logger.warn(`No variants available for line: ${line.name}`);
                 return `
-                    <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
+                    <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}" data-line-id="${line.id}">
                         <div class="line-card-header ${line.color}">
-                            ${displayName}
+                            <div class="card-title">${displayName}</div>
+                            <div class="card-actions">
+                                <div class="enlarge-icon" onclick="showDetailView('${line.id}')">
+                                    <i class="fas fa-expand-alt"></i>
+                                </div>
+                            </div>
                         </div>
                         <div class="line-card-content">
                             <div class="error-message">No variant data available for this line.</div>
@@ -2342,7 +2411,7 @@
                             </div>
                         </div>
                         <div class="metric-card">
-                            <div class="metric-title">% Scrap</div>
+                        <div class="metric-title">% Scrap</div>
                             <div class="metric-value ${valueToCssClass(currentVariant.metrics.scrapPercentage, 'scrapPercentage')}">
                                 ${currentVariant.metrics.scrapPercentage}%
                                 <div class="metric-trend ${currentVariant.trends.scrapPercentage.direction === 'down' ? 'trend-up' : 'trend-down'}">
@@ -2426,9 +2495,14 @@
             }
             
             return `
-                <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}">
+                <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}" data-line-id="${line.id}">
                     <div class="line-card-header ${line.color}">
-                        ${line.name}
+                        <div class="card-title">${displayName}</div>
+                        <div class="card-actions">
+                            <div class="enlarge-icon" onclick="showDetailView('${line.id}')">
+                                <i class="fas fa-expand-alt"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="line-card-content">
                         ${variantSections}
@@ -2615,50 +2689,6 @@
         }
         
         /**
-         * Extracts the supervisor name from the production line ID
-         * @param {string} lineId - The production line ID (e.g., "mvokwe-3rd line")
-         * @returns {string} The capitalized supervisor name
-         */
-        function extractSupervisorName(lineId) {
-            if (!lineId) return '';
-            
-            // Split by hyphen and take the first part
-            const parts = lineId.split('-');
-            if (parts.length < 1) return '';
-            
-            // Capitalize the first letter
-            const supervisor = parts[0];
-            return supervisor.charAt(0).toUpperCase() + supervisor.slice(1);
-        }
-        
-        /**
-         * Formats a complete display name for the card header
-         * @param {Object} line - The line object with name, id, baseProduct
-         * @returns {string} The formatted display name
-         */
-        function formatCardHeaderName(line) {
-            if (!line) return '';
-            
-            // Extract supervisor name
-            const supervisor = extractSupervisorName(line.id);
-            
-            // Start with the line name
-            let displayName = line.name;
-            
-            // Add supervisor if available
-            if (supervisor) {
-                displayName = `${line.name}: ${supervisor}`;
-            }
-            
-            // For non-popup lines, add the base product if different from line name
-            if (!line.isPopUpLine && line.baseProduct && line.baseProduct !== line.name) {
-                displayName += ` (${line.baseProduct})`;
-            }
-            
-            return displayName;
-        }
-        
-        /**
          * Determines CSS class for a value based on its type and thresholds
          * @param {number} value - The value to evaluate
          * @param {string} type - The type of value ('scheduleAttainment', 'labourCostPerUnit', etc.)
@@ -2772,16 +2802,16 @@
          */
         function handlePeriodToggle(e) {
             const btn = e.target;
-            // Toggle between Daily/Weekly/Monthly
-            if (btn.textContent === 'Daily') {
-                btn.textContent = 'Weekly';
-                Logger.info('Switched to Weekly view');
-            } else if (btn.textContent === 'Weekly') {
+            // Toggle between Weekly/Monthly/Daily
+            if (btn.textContent === 'Weekly') {
                 btn.textContent = 'Monthly';
                 Logger.info('Switched to Monthly view');
-            } else {
+            } else if (btn.textContent === 'Monthly') {
                 btn.textContent = 'Daily';
                 Logger.info('Switched to Daily view');
+            } else {
+                btn.textContent = 'Weekly';
+                Logger.info('Switched to Weekly view');
             }
             
             // Reload dashboard with new period setting
@@ -2862,94 +2892,6 @@
 
         /**
          * ======================================
-         * DASHBOARD INITIALIZATION
-         * ======================================
-         */
-        
-        /**
-         * Initializes the dashboard by fetching and rendering data
-         */
-        async function initializeDashboard() {
-            // Initialize logger
-            Logger.init();
-            Logger.info('Initializing dashboard');
-            
-            // Show loading state
-            showLoading();
-            
-            try {
-                // Fetch operational data
-                const opsData = await fetchOpsData();
-                
-                // Store data globally for detail view
-                window.dashboardData = opsData;
-                
-                // If current date range is not set, get default
-                if (!currentDateRange.start || !currentDateRange.end) {
-                    // Use last 5 production dates as default
-                    const defaultRange = getLastNProductionDates(opsData, CONFIG.defaultDateRange.days);
-                    currentDateRange.start = defaultRange.start;
-                    currentDateRange.end = defaultRange.end;
-                    Logger.info(`Using default date range: ${currentDateRange.start} to ${currentDateRange.end}`);
-                }
-                
-                // Filter data by date range
-                const filteredData = filterDataByDateRange(opsData, currentDateRange.start, currentDateRange.end);
-                
-                if (filteredData.length === 0) {
-                    Logger.warn('No data available for selected date range');
-                    showError('No data available for the selected date range. Please try a different date range.');
-                    return;
-                }
-                
-                // Transform data for UI
-                const transformedData = transformOpsData(opsData, filteredData);
-                
-                // Render dashboard
-                renderDashboard(transformedData);
-                
-                Logger.info('Dashboard initialization completed successfully');
-            } catch (error) {
-                Logger.error('Error initializing dashboard', error);
-                showError('Unable to load dashboard data. Please check your connection and try again.');
-            }
-        }
-
-        /**
-         * Add event listeners when the DOM is loaded
-         */
-        document.addEventListener('DOMContentLoaded', () => {
-            // Add event listeners for buttons
-            document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
-            document.getElementById('refreshButton').addEventListener('click', handleRefresh);
-            document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
-            document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
-            
-            // Add event listener for document click (to close dropdown)
-            document.addEventListener('click', handleDocumentClick);
-            
-            // Detail view event listeners
-            document.getElementById('modalClose').addEventListener('click', hideDetailView);
-            document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
-            document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
-            document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
-            document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
-            document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
-            document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
-            document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
-            
-            // Initialize the dashboard
-            initializeDashboard();
-            
-            // Set up auto-refresh interval
-            setInterval(initializeDashboard, CONFIG.refreshInterval);
-        });
-        
-        // Make showDetailView available in the global scope
-        window.showDetailView = showDetailView;
-        
-        /**
-         * ======================================
          * DETAIL VIEW FUNCTIONS
          * ======================================
          */
@@ -3001,6 +2943,27 @@
                 const headerElement = lineElement.querySelector('.card-title');
                 if (headerElement) {
                     document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+                } else {
+                    // Fallback if card-title is not found
+                    const supervisor = extractSupervisorName(lineId);
+                    let productName = '';
+                    
+                    // Try to determine product from line ID
+                    if (lineId.includes('scd')) {
+                        productName = 'SCD';
+                    } else if (lineId.includes('sum')) {
+                        productName = 'SUM';
+                    } else if (lineId.includes('levo')) {
+                        productName = 'LEVO';
+                    } else if (lineId.includes('popup')) {
+                        productName = 'PopUp';
+                    } else if (lineId.includes('scalpel')) {
+                        productName = 'Scalpel';
+                    } else {
+                        productName = 'Production Line';
+                    }
+                    
+                    document.getElementById('modalTitle').textContent = `${productName}: ${supervisor} Details`;
                 }
             }
             
@@ -3782,6 +3745,96 @@
                 };
             }).sort((a, b) => b.rawValue - a.rawValue); // Sort by value in descending order
         }
+        
+        /**
+         * ======================================
+         * DASHBOARD INITIALIZATION
+         * ======================================
+         */
+        
+        /**
+         * Initializes the dashboard by fetching and rendering data
+         */
+        async function initializeDashboard() {
+            // Initialize logger
+            Logger.init();
+            Logger.info('Initializing dashboard');
+            
+            // Show loading state
+            showLoading();
+            
+            try {
+                // Fetch operational data
+                const opsData = await fetchOpsData();
+                
+                // Store data globally for detail view
+                window.dashboardData = opsData;
+                
+                // If current date range is not set, get default
+                if (!currentDateRange.start || !currentDateRange.end) {
+                    // Use default week (Monday to Sunday)
+                    const defaultRange = getDefaultDateRange();
+                    currentDateRange.start = defaultRange.start;
+                    currentDateRange.end = defaultRange.end;
+                    Logger.info(`Using default date range: ${currentDateRange.start} to ${currentDateRange.end}`);
+                }
+                
+                // Filter data by date range
+                const filteredData = filterDataByDateRange(opsData, currentDateRange.start, currentDateRange.end);
+                
+                if (filteredData.length === 0) {
+                    Logger.warn('No data available for selected date range');
+                    showError('No data available for the selected date range. Please try a different date range.');
+                    return;
+                }
+                
+                // Transform data for UI
+                const transformedData = transformOpsData(opsData, filteredData);
+                
+                // Render dashboard
+                renderDashboard(transformedData);
+                
+                Logger.info('Dashboard initialization completed successfully');
+            } catch (error) {
+                Logger.error('Error initializing dashboard', error);
+                showError('Unable to load dashboard data. Please check your connection and try again.');
+            }
+        }
+
+        /**
+         * Add event listeners when the DOM is loaded
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add event listeners for buttons
+            document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
+            document.getElementById('refreshButton').addEventListener('click', handleRefresh);
+            document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
+            document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
+            
+            // Add event listener for document click (to close dropdown)
+            document.addEventListener('click', handleDocumentClick);
+            
+            // Detail view event listeners
+            document.getElementById('modalClose').addEventListener('click', hideDetailView);
+            document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
+            document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
+            document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
+            document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
+            document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
+            document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
+            document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
+            
+            // Initialize the dashboard
+            initializeDashboard();
+            
+            // Set up auto-refresh interval
+            setInterval(initializeDashboard, CONFIG.refreshInterval);
+        });
+        
+        // Make showDetailView available in the global scope
+        window.showDetailView = showDetailView;
+        window.navigateToPreviousWeek = navigateToPreviousWeek;
+        window.navigateToNextWeek = navigateToNextWeek;
     </script>
 </body>
 </html>
