@@ -3903,10 +3903,11 @@ function renderLabourCostChart(data) {
     // Add data points (separate from SVG for better tooltips)
     variantDatasets.forEach(dataset => {
         dataset.points.forEach(point => {
-            html += `
-                <div style="position: absolute; top: calc(${point.yPos} - 4px); left: calc(${point.xPos} - 4px); width: 8px; height: 8px; background-color: ${dataset.color}; border-radius: 50%;" 
-                     title="${dataset.variant}: R${Math.round(point.cost)}"></div>
-            `;
+            
+html += `
+    <div style="position: absolute; top: ${point.y}%; left: ${point.x}%; transform: translate(-50%, -50%); width: 8px; height: 8px; background-color: ${dataset.color}; border-radius: 50%;" 
+         title="${dataset.variant}: R${Math.round(point.cost)}"></div>
+`;
         });
     });
     
@@ -4218,12 +4219,14 @@ function renderRejectPieChart(data) {
     // Add legend with improved styling
     pieData.forEach(slice => {
         html += `
-            <div style="display: flex; align-items: center; gap: 5px; font-size: 10px; padding: 2px 0;">
-                <div style="width: 10px; height: 10px; background-color: ${slice.color}; border-radius: 2px;"></div>
-                <div style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${slice.name}</div>
-                <div style="font-weight: bold; width: 40px; text-align: right;">${slice.percentage}%</div>
-            </div>
-        `;
+    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; padding: 3px 0; border-bottom: 1px solid #f0f0f0;">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <div style="width: 10px; height: 10px; background-color: ${slice.color}; border-radius: 2px;"></div>
+            <div style="flex: 1;">${slice.name}</div>
+        </div>
+        <div style="font-weight: bold; min-width: 40px; text-align: right;">${slice.percentage}%</div>
+    </div>
+`;
     });
     
     html += `
