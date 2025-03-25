@@ -3292,7 +3292,46 @@ function toggleCostView(view) {
         renderLabourCostChart(detailViewState.filteredData);
     }
 }
-        
+        /**
+ * Toggles the scrap view between quantity and cost
+ * @param {string} view - The view to switch to ('qty' or 'cost')
+ */
+function toggleScrapView(view) {
+    Logger.info(`Toggling scrap view to: ${view}`);
+    
+    // Update the state
+    detailViewState.scrapView = view;
+    
+    // Update button active states
+    document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
+    document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
+    
+    // Update the display using the stored filtered data
+    if (detailViewState.filteredData) {
+        updateTopScrapList(detailViewState.filteredData);
+    }
+}
+
+/**
+ * Toggles the downtime view
+ * @param {string} view - The view to switch to ('reason', 'machine', or 'duration')
+ */
+function toggleDowntimeView(view) {
+    Logger.info(`Toggling downtime view to: ${view}`);
+    
+    // Update the state
+    detailViewState.downtimeView = view;
+    
+    // Update button active states
+    document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
+    document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
+    document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
+    
+    // Update the display using the stored filtered data
+    if (detailViewState.filteredData) {
+        updateTopDowntimeList(detailViewState.filteredData);
+    }
+}
         
         /**
          * Hides the detail view
@@ -4574,10 +4613,13 @@ function renderRejectPieChart(data) {
             setInterval(initializeDashboard, CONFIG.refreshInterval);
         });
         
-        // Make showDetailView available in the global scope
-        window.showDetailView = showDetailView;
-        window.navigateToPreviousWeek = navigateToPreviousWeek;
-        window.navigateToNextWeek = navigateToNextWeek;
+        // Make functions available in the global scope
+window.showDetailView = showDetailView;
+window.navigateToPreviousWeek = navigateToPreviousWeek;
+window.navigateToNextWeek = navigateToNextWeek;
+window.toggleScrapView = toggleScrapView;
+window.toggleDowntimeView = toggleDowntimeView;
+window.toggleCostView = toggleCostView;
     </script>
 </body>
 </html>
