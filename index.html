@@ -3199,10 +3199,9 @@ const detailViewState = {
  * @param {string} lineId - The ID of the line to show details for
  */
 function showDetailView(lineId) {
-    Logger.info(`Showing detail view for line: ${lineId}`);
-    
-    // Process the line ID to handle special cases
+    console.log("Original lineId:", lineId);
     const processedLineId = processLineId(lineId);
+    console.log("Processed lineId:", processedLineId);
     
     // Store the current line ID
     detailViewState.lineId = processedLineId;
