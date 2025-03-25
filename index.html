@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assembly Plant Performance Dashboard</title>
+    <title>Sinapi Biomedical Operations Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 
@@ -12,7 +12,7 @@
         ======================================
         */
         :root {
-            /* Color System as defined in specification */
+            /* Color System */
             --primary-blue: #3498db;
             --primary-dark-blue: #2c3e50;
             --primary-orange: #f39c12;
@@ -91,6 +91,25 @@
             cursor: pointer;
         }
 
+        /* Date navigation buttons */
+        .date-nav-btn {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .date-nav-btn:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
         .period-btn, .refresh-btn {
             background-color: rgba(255,255,255,0.2);
             border: none;
@@ -118,6 +137,7 @@
             padding: 15px;
             z-index: 101;
             display: none;
+            width: 300px;
         }
 
         .date-picker-dropdown.show {
@@ -131,12 +151,18 @@
             color: var(--text-dark);
         }
 
-        .date-picker-dropdown input {
+        .date-picker-dropdown input, .date-picker-dropdown select {
             padding: 8px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             width: 100%;
             margin-bottom: 10px;
+        }
+
+        .date-picker-dropdown .cycle-selection {
+            margin-top: 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
         }
 
         .date-picker-dropdown button {
@@ -201,56 +227,63 @@
         ======================================
         */
         .kpi-summary {
-            background-color: white;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            margin: 10px 15px;
-            padding: 10px;
-            height: 70px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 15px 15px;
+            padding: 15px;
+            height: 85px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);
         }
 
         .kpi-summary-label {
-            font-size: 12px;
-            color: var(--text-light);
-            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         .kpi-cards {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
-            height: 40px;
+            gap: 15px;
+            height: 45px;
         }
 
         .kpi-card {
             flex: 1;
-            background-color: #f5f7fa;
-            border-radius: 3px;
-            padding: 0 10px;
+            background-color: white;
+            border-radius: 6px;
+            padding: 8px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         .kpi-title {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-dark);
+            font-weight: 500;
         }
 
         .kpi-value {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
         }
 
         .kpi-value-number {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: var(--text-dark);
         }
 
         .kpi-trend {
             font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: rgba(0,0,0,0.04);
         }
 
         .trend-up {
@@ -623,7 +656,7 @@
         
         /* 
         ======================================
-        MODAL / DETAIL VIEW (UPDATED)
+        MODAL / DETAIL VIEW (IMPROVED)
         ======================================
         */
         .modal-overlay {
@@ -643,11 +676,11 @@
             display: flex;
         }
         
-        /* Updated Modal Styling */
+        /* Improved Modal Styling */
         .modal-content {
             background-color: #f8f9fa;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
             width: 95%;
             max-width: 1600px;
             height: 90vh;
@@ -658,33 +691,39 @@
         
         .modal-header {
             padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
+            background-color: var(--primary-dark-blue);
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .modal-title {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
-            color: var(--text-dark);
         }
         
         .modal-close {
-            font-size: 24px;
-            color: var(--text-light);
+            font-size: 22px;
+            color: white;
             background: none;
             border: none;
             cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .modal-close:hover {
+            opacity: 1;
         }
         
         .modal-body {
             flex: 1;
             overflow: hidden;
-            padding: 10px 20px;
+            padding: 15px 20px;
         }
         
-        /* Make charts responsive without scrolling */
+        /* Improved compact charts */
         .detail-metrics {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -694,25 +733,35 @@
         }
         
         .detail-metric-card {
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
             height: 100%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            padding: 12px;
         }
         
         .chart-container {
             flex: 1;
             position: relative;
             min-height: 0;
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 5px;
         }
         
         .detail-metric-footer {
             margin-top: 10px;
-            max-height: 120px;
+            max-height: 110px;
             overflow-y: auto;
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 10px;
         }
         
-        /* Pie Chart Container */
         .chart-row {
             display: flex;
             gap: 15px;
@@ -723,13 +772,17 @@
             flex: 1;
             height: 100%;
             position: relative;
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 5px;
         }
         
         .detail-metric-header {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
-            margin-bottom: 10px;
             color: var(--text-dark);
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
         }
         
         /* 
@@ -741,12 +794,17 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: 6px;
+            padding: 10px 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
         
         .date-range-display {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
+            color: var(--text-dark);
         }
         
         .date-nav-controls {
@@ -759,11 +817,12 @@
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 5px 10px;
+            padding: 6px 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 5px;
+            font-size: 13px;
         }
         
         .date-nav-btn:hover {
@@ -777,17 +836,17 @@
         */
         .toggle-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin-bottom: 8px;
         }
         
         .toggle-btn {
             background-color: #e8e8e8;
             border: none;
             border-radius: 4px;
-            padding: 5px 10px;
+            padding: 4px 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
         }
         
         .toggle-btn.active {
@@ -798,7 +857,6 @@
         .top-items-list {
             background-color: white;
             border-radius: 4px;
-            padding: 10px;
         }
         
         .top-item {
@@ -814,10 +872,12 @@
         
         .top-item-label {
             font-weight: bold;
+            font-size: 11px;
         }
         
         .top-item-value {
             color: var(--text-light);
+            font-size: 11px;
         }
 
         /* 
@@ -886,7 +946,7 @@
             }
             
             .modal-title {
-                font-size: 18px;
+                font-size: 16px;
             }
             
             .chart-container {
@@ -898,12 +958,14 @@
 <body>
     <!-- Header Section -->
     <header class="header">
-        <h1>Assembly Plant Performance Dashboard</h1>
+        <h1>Sinapi Biomedical Operations Dashboard</h1>
         <div class="date-controls">
+            <button class="date-nav-btn" id="prevPeriodButton"><i class="fas fa-chevron-left"></i></button>
             <div class="date-filter" id="dateRangeDisplay">Loading...</div>
+            <button class="date-nav-btn" id="nextPeriodButton"><i class="fas fa-chevron-right"></i></button>
             <button class="date-range-btn" id="dateRangeButton">Select Dates</button>
             <button class="period-btn" id="periodToggle">Weekly</button>
-            <button class="refresh-btn" id="refreshButton">Refresh</button>
+            <button class="refresh-btn" id="refreshButton"><i class="fas fa-sync-alt"></i></button>
         </div>
     </header>
 
@@ -913,7 +975,23 @@
         <input type="date" id="startDate" name="startDate">
         <label for="endDate">End Date:</label>
         <input type="date" id="endDate" name="endDate">
-        <button id="applyDateRange">Apply</button>
+        
+        <div class="cycle-selection">
+            <label for="cycleStartDay">Select Week Cycle:</label>
+            <select id="cycleStartDay">
+                <option value="1">Monday to Sunday</option>
+                <option value="2">Tuesday to Monday</option>
+                <option value="3">Wednesday to Tuesday</option>
+                <option value="4">Thursday to Wednesday</option>
+                <option value="5">Friday to Thursday</option>
+                <option value="6">Saturday to Friday</option>
+                <option value="0">Sunday to Saturday</option>
+            </select>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button id="applyDateRange" style="flex: 1;">Apply</button>
+                <button id="applyAndRememberCycle" style="flex: 1; background-color: var(--primary-dark-blue);">Apply & Remember</button>
+            </div>
+        </div>
     </div>
 
     <!-- KPI Summary Section -->
@@ -940,7 +1018,7 @@
         <div class="debug-log-entry info">Debug log initialized.</div>
     </div>
     
-    <!-- Detail View Modal (UPDATED) -->
+    <!-- Detail View Modal (IMPROVED) -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -957,7 +1035,7 @@
                     </div>
                 </div>
                 
-                <!-- Detail Metrics (UPDATED) -->
+                <!-- Detail Metrics (IMPROVED) -->
                 <div class="detail-metrics">
                     <!-- Schedule Attainment -->
                     <div class="detail-metric-card">
@@ -973,12 +1051,14 @@
                     
                     <!-- Scrap Percentage with Pie Chart -->
                     <div class="detail-metric-card">
+                        <div class="detail-metric-header">Scrap Analysis</div>
                         <div class="chart-row">
-                            <div style="flex: 1; display: flex; flex-direction: column;">
-                                <div class="detail-metric-header">Scrap Percentage</div>
+                            <div style="flex: 1.5; display: flex; flex-direction: column;">
+                                <div style="font-size: 12px; margin-bottom: 5px;">Scrap Percentage Trend</div>
                                 <div class="chart-container" id="scrapPercentageChart"></div>
                             </div>
                             <div style="flex: 1;">
+                                <div style="font-size: 12px; margin-bottom: 5px;">Reject Distribution</div>
                                 <div class="pie-chart-container" id="rejectPieChart"></div>
                             </div>
                         </div>
@@ -995,7 +1075,7 @@
                     
                     <!-- Downtime -->
                     <div class="detail-metric-card">
-                        <div class="detail-metric-header">Downtime</div>
+                        <div class="detail-metric-header">Downtime Analysis</div>
                         <div class="chart-container" id="downtimeChart"></div>
                         <div class="detail-metric-footer">
                             <div class="toggle-container">
@@ -1089,9 +1169,15 @@
             start: null,
             end: null
         };
+        
+        // Store current period type
+        let currentPeriod = CONFIG.defaultPeriod;
+        
+        // Store week cycle preference (0-6, where 0 is Sunday, 1 is Monday, etc.)
+        let weekCycleStartDay = 1; // Default to Monday
 
         /**
-         * Gets the default date range (current week: Monday to Sunday)
+         * Gets the default date range based on week cycle preference
          * @returns {Object} Object with start and end dates
          */
         function getDefaultDateRange() {
@@ -1100,12 +1186,15 @@
             // Get current day of week (0-6, where 0 is Sunday)
             const currentDay = now.getDay();
             
-            // Calculate Monday (start of week)
+            // Calculate days to subtract to get to the start day
+            const daysToSubtract = (currentDay - weekCycleStartDay + 7) % 7;
+            
+            // Calculate start date (the selected start day of the current/most recent week)
             const start = new Date(now);
-            start.setDate(start.getDate() - (currentDay === 0 ? 6 : currentDay - 1));
+            start.setDate(start.getDate() - daysToSubtract);
             start.setHours(0, 0, 0, 0);
             
-            // Calculate Sunday (end of week)
+            // Calculate end date (start + 6 days to complete the week)
             const end = new Date(start);
             end.setDate(end.getDate() + 6);
             end.setHours(23, 59, 59, 999);
@@ -1129,6 +1218,130 @@
             
             if (currentDateRange.end) {
                 endDateInput.value = currentDateRange.end.split('T')[0];
+            }
+        }
+        
+        /**
+         * Navigates to the previous period
+         */
+        function navigateToPreviousPeriod() {
+            Logger.info('Navigating to previous period: ' + currentPeriod);
+            
+            const start = new Date(currentDateRange.start);
+            const end = new Date(currentDateRange.end);
+            
+            switch(currentPeriod) {
+                case 'daily':
+                    // Move back one day
+                    start.setDate(start.getDate() - 1);
+                    end.setDate(end.getDate() - 1);
+                    break;
+                case 'weekly':
+                    // Move back one week
+                    start.setDate(start.getDate() - 7);
+                    end.setDate(end.getDate() - 7);
+                    break;
+                case 'monthly':
+                    // Move back one month
+                    start.setMonth(start.getMonth() - 1);
+                    end.setMonth(end.getMonth() - 1);
+                    break;
+            }
+            
+            // Update date range
+            currentDateRange.start = start.toISOString().split('T')[0];
+            currentDateRange.end = end.toISOString().split('T')[0];
+            
+            // Reload dashboard
+            initializeDashboard();
+        }
+        
+        /**
+         * Navigates to the next period
+         */
+        function navigateToNextPeriod() {
+            Logger.info('Navigating to next period: ' + currentPeriod);
+            
+            const start = new Date(currentDateRange.start);
+            const end = new Date(currentDateRange.end);
+            
+            switch(currentPeriod) {
+                case 'daily':
+                    // Move forward one day
+                    start.setDate(start.getDate() + 1);
+                    end.setDate(end.getDate() + 1);
+                    break;
+                case 'weekly':
+                    // Move forward one week
+                    start.setDate(start.getDate() + 7);
+                    end.setDate(end.getDate() + 7);
+                    break;
+                case 'monthly':
+                    // Move forward one month
+                    start.setMonth(start.getMonth() + 1);
+                    end.setMonth(end.getMonth() + 1);
+                    break;
+            }
+            
+            // Update date range
+            currentDateRange.start = start.toISOString().split('T')[0];
+            currentDateRange.end = end.toISOString().split('T')[0];
+            
+            // Reload dashboard
+            initializeDashboard();
+        }
+        
+        /**
+         * Stores user preferences in localStorage
+         */
+        function storeUserPreferences() {
+            try {
+                const preferences = {
+                    weekCycleStartDay: weekCycleStartDay,
+                    period: currentPeriod
+                };
+                
+                localStorage.setItem('dashboardPreferences', JSON.stringify(preferences));
+                Logger.info('Stored user preferences: ' + JSON.stringify(preferences));
+            } catch (error) {
+                Logger.error('Error storing user preferences', error);
+            }
+        }
+        
+        /**
+         * Loads user preferences from localStorage
+         */
+        function loadUserPreferences() {
+            try {
+                const preferencesString = localStorage.getItem('dashboardPreferences');
+                
+                if (preferencesString) {
+                    const preferences = JSON.parse(preferencesString);
+                    
+                    // Set week cycle start day if defined
+                    if (preferences.weekCycleStartDay !== undefined) {
+                        weekCycleStartDay = preferences.weekCycleStartDay;
+                        // Update dropdown
+                        const cycleStartSelect = document.getElementById('cycleStartDay');
+                        if (cycleStartSelect) {
+                            cycleStartSelect.value = weekCycleStartDay.toString();
+                        }
+                    }
+                    
+                    // Set period if defined
+                    if (preferences.period) {
+                        currentPeriod = preferences.period;
+                        // Update button text
+                        const periodToggle = document.getElementById('periodToggle');
+                        if (periodToggle) {
+                            periodToggle.textContent = currentPeriod.charAt(0).toUpperCase() + currentPeriod.slice(1);
+                        }
+                    }
+                    
+                    Logger.info('Loaded user preferences: ' + JSON.stringify(preferences));
+                }
+            } catch (error) {
+                Logger.error('Error loading user preferences', error);
             }
         }
 
@@ -2270,7 +2483,29 @@
                 return `${startDate} to ${endDate}`;
             }
         }
-
+         */
+        function formatDateRange(startDate, endDate) {
+            try {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                
+                // Format to MMM d-d, yyyy pattern
+                const startMonth = start.toLocaleString('default', { month: 'short' });
+                const endMonth = end.toLocaleString('default', { month: 'short' });
+                const startDay = start.getDate();
+                const endDay = end.getDate();
+                const year = end.getFullYear();
+                
+                if (startMonth === endMonth) {
+                    return `${startMonth} ${startDay}-${endDay}, ${year}`;
+                } else {
+                    return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
+                }
+            } catch (error) {
+                Logger.error('Error formatting date range', error);
+                return `${startDate} to ${endDate}`;
+            }
+        }
         /**
          * Renders the KPI summary section
          * @param {Object} metrics - The plant-wide metrics
@@ -2291,7 +2526,7 @@
                     <div class="kpi-value">
                         <div class="kpi-value-number">${metrics.scheduleAttainment.value}%</div>
                         <div class="kpi-trend ${metrics.scheduleAttainment.trendDirection === 'up' ? 'trend-up' : 'trend-down'}">
-                            ${metrics.scheduleAttainment.trendDirection === 'up' ? '▲' : '▼'}${Math.abs(metrics.scheduleAttainment.trend)}%
+                            ${metrics.scheduleAttainment.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.scheduleAttainment.trend)}%
                         </div>
                     </div>
                 </div>
@@ -2300,16 +2535,16 @@
                     <div class="kpi-value">
                         <div class="kpi-value-number">R${metrics.labourCostPerUnit.value}</div>
                         <div class="kpi-trend ${metrics.labourCostPerUnit.trendDirection === 'down' ? 'trend-up' : 'trend-down'}">
-                            ${metrics.labourCostPerUnit.trendDirection === 'up' ? '▲' : '▼'}${Math.abs(metrics.labourCostPerUnit.trend)}%
+                            ${metrics.labourCostPerUnit.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.labourCostPerUnit.trend)}%
                         </div>
                     </div>
                 </div>
                 <div class="kpi-card">
-                    <div class="kpi-title">% Scrap of Production Value</div>
+                    <div class="kpi-title">Scrap Percentage</div>
                     <div class="kpi-value">
                         <div class="kpi-value-number">${metrics.scrapPercentage.value}%</div>
                         <div class="kpi-trend ${metrics.scrapPercentage.trendDirection === 'down' ? 'trend-up' : 'trend-down'}">
-                            ${metrics.scrapPercentage.trendDirection === 'up' ? '▲' : '▼'}${Math.abs(metrics.scrapPercentage.trend)}%
+                            ${metrics.scrapPercentage.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.scrapPercentage.trend)}%
                         </div>
                     </div>
                 </div>
@@ -2318,7 +2553,7 @@
                     <div class="kpi-value">
                         <div class="kpi-value-number">${metrics.downtimeEvents.value}</div>
                         <div class="kpi-trend ${metrics.downtimeEvents.trendDirection === 'down' ? 'trend-up' : 'trend-down'}">
-                            ${metrics.downtimeEvents.trendDirection === 'up' ? '▲' : '▼'}${Math.abs(metrics.downtimeEvents.trend)}
+                            ${metrics.downtimeEvents.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.downtimeEvents.trend)}
                         </div>
                     </div>
                 </div>
@@ -2417,7 +2652,7 @@
                             <div class="metric-value ${valueToCssClass(currentVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">
                                 ${currentVariant.metrics.scheduleAttainment}%
                                 <div class="metric-trend ${currentVariant.trends.scheduleAttainment.direction === 'up' ? 'trend-up' : 'trend-down'}">
-                                    ${currentVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.scheduleAttainment.value}%
+                                    ${currentVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.scheduleAttainment.value}%
                                 </div>
                             </div>
                         </div>
@@ -2426,7 +2661,7 @@
                             <div class="metric-value ${valueToCssClass(currentVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">
                                 R${currentVariant.metrics.labourCostPerUnit}
                                 <div class="metric-trend ${currentVariant.trends.labourCostPerUnit.direction === 'down' ? 'trend-up' : 'trend-down'}">
-                                    ${currentVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.labourCostPerUnit.value}%
+                                    ${currentVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.labourCostPerUnit.value}%
                                 </div>
                             </div>
                         </div>
@@ -2435,7 +2670,7 @@
                             <div class="metric-value ${valueToCssClass(currentVariant.metrics.scrapPercentage, 'scrapPercentage')}">
                                 ${currentVariant.metrics.scrapPercentage}%
                                 <div class="metric-trend ${currentVariant.trends.scrapPercentage.direction === 'down' ? 'trend-up' : 'trend-down'}">
-                                    ${currentVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.scrapPercentage.value}%
+                                    ${currentVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.scrapPercentage.value}%
                                 </div>
                             </div>
                         </div>
@@ -2444,7 +2679,7 @@
                             <div class="metric-value ${valueToCssClass(currentVariant.metrics.downtimeHours, 'downtimeHours')}">
                                 ${currentVariant.metrics.downtimeHours} hrs
                                 <div class="metric-trend ${currentVariant.trends.downtimeHours.direction === 'down' ? 'trend-up' : 'trend-down'}">
-                                    ${currentVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'}${currentVariant.trends.downtimeHours.value}%
+                                    ${currentVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.downtimeHours.value}%
                                 </div>
                             </div>
                         </div>
@@ -2479,7 +2714,7 @@
                             <div class="metric-value ${valueToCssClass(previousVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">
                                 ${previousVariant.metrics.scheduleAttainment}%
                                 <div class="metric-trend ${previousVariant.trends.scheduleAttainment.direction === 'up' ? 'trend-up' : 'trend-down'}">
-                                    ${previousVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.scheduleAttainment.value}%
+                                    ${previousVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.scheduleAttainment.value}%
                                 </div>
                             </div>
                         </div>
@@ -2488,7 +2723,7 @@
                             <div class="metric-value ${valueToCssClass(previousVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">
                                 R${previousVariant.metrics.labourCostPerUnit}
                                 <div class="metric-trend ${previousVariant.trends.labourCostPerUnit.direction === 'down' ? 'trend-up' : 'trend-down'}">
-                                    ${previousVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.labourCostPerUnit.value}%
+                                    ${previousVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.labourCostPerUnit.value}%
                                 </div>
                             </div>
                         </div>
@@ -2497,7 +2732,7 @@
                             <div class="metric-value ${valueToCssClass(previousVariant.metrics.scrapPercentage, 'scrapPercentage')}">
                                 ${previousVariant.metrics.scrapPercentage}%
                                 <div class="metric-trend ${previousVariant.trends.scrapPercentage.direction === 'down' ? 'trend-up' : 'trend-down'}">
-                                    ${previousVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.scrapPercentage.value}%
+                                    ${previousVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.scrapPercentage.value}%
                                 </div>
                             </div>
                         </div>
@@ -2506,7 +2741,7 @@
                             <div class="metric-value ${valueToCssClass(previousVariant.metrics.downtimeHours, 'downtimeHours')}">
                                 ${previousVariant.metrics.downtimeHours} hrs
                                 <div class="metric-trend ${previousVariant.trends.downtimeHours.direction === 'down' ? 'trend-up' : 'trend-down'}">
-                                    ${previousVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'}${previousVariant.trends.downtimeHours.value}%
+                                    ${previousVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.downtimeHours.value}%
                                 </div>
                             </div>
                         </div>
@@ -2825,14 +3060,20 @@
             // Toggle between Weekly/Monthly/Daily
             if (btn.textContent === 'Weekly') {
                 btn.textContent = 'Monthly';
+                currentPeriod = 'monthly';
                 Logger.info('Switched to Monthly view');
             } else if (btn.textContent === 'Monthly') {
                 btn.textContent = 'Daily';
+                currentPeriod = 'daily';
                 Logger.info('Switched to Daily view');
             } else {
                 btn.textContent = 'Weekly';
+                currentPeriod = 'weekly';
                 Logger.info('Switched to Weekly view');
             }
+            
+            // Store the user preference
+            storeUserPreferences();
             
             // Reload dashboard with new period setting
             initializeDashboard();
@@ -3020,8 +3261,8 @@
             end.setDate(end.getDate() - 7);
             
             // Update both the detail view state and the main page state
-            detailViewState.dateRange.start = start.toISOString();
-            detailViewState.dateRange.end = end.toISOString();
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
             
             // Also update the main date range
             currentDateRange.start = detailViewState.dateRange.start;
@@ -3047,8 +3288,8 @@
             end.setDate(end.getDate() + 7);
             
             // Update both the detail view state and the main page state
-            detailViewState.dateRange.start = start.toISOString();
-            detailViewState.dateRange.end = end.toISOString();
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
             
             // Also update the main date range
             currentDateRange.start = detailViewState.dateRange.start;
@@ -3228,8 +3469,8 @@
             // Create axes and labels
             html += '<div style="display: flex; height: 100%;">';
             
-            // Y-axis
-            html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+            // Y-axis with better styling
+            html += '<div style="width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 8px; color: var(--text-light); font-size: 11px; border-right: 1px solid #eee;">';
             html += '<div>100%</div>';
             html += '<div>75%</div>';
             html += '<div>50%</div>';
@@ -3240,8 +3481,17 @@
             // Chart content
             html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
             
+            // Background grid lines
+            html += '<div style="position: absolute; left: 40px; right: 0; height: calc(100% - 50px); display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;">';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '</div>';
+            
             // Chart area
-            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px;">';
+            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
             
             // Define variant colors
             const variantColors = {
@@ -3676,7 +3926,7 @@
                 
             // If no data, show message
             if (sortedStations.length === 0) {
-                chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No reject data available for the selected period.</div>';
+                chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light); font-size: 12px;">No reject data available</div>';
                 return;
             }
             
@@ -3713,34 +3963,71 @@
                 });
             }
             
-            // Create SVG for pie chart
+            // Create SVG for pie chart with improved styling
             let html = `
                 <div style="height: 100%; width: 100%; display: flex; flex-direction: column;">
-                    <div class="detail-metric-header">Reject Rate by Station</div>
-                    <div style="flex: 1; display: flex;">
-                        <div style="flex: 1; position: relative;">
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                        <div style="position: relative; width: 90%; height: 90%;">
                             <svg width="100%" height="100%" viewBox="0 0 100 100" style="transform: rotate(-90deg)">
+                                <!-- Drop shadow filter -->
+                                <defs>
+                                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.2"/>
+                                    </filter>
+                                </defs>
             `;
             
             // Calculate pie slices
             let cumulativePercentage = 0;
             
+            // Create donut chart instead of pie chart
+            const outerRadius = 40;
+            const innerRadius = 25; // Inner circle radius to create donut
+            
+            // Add a light circular background
+            html += `
+                <circle cx="50" cy="50" r="${outerRadius}" fill="#f5f7fa" filter="url(#shadow)" />
+            `;
+            
+            // Center text showing total rejects
+            html += `
+                <g transform="rotate(90, 50, 50)">
+                    <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" 
+                          font-size="10" font-weight="bold" fill="var(--text-dark)">
+                        ${totalRejects}
+                    </text>
+                    <text x="50" y="60" text-anchor="middle" dominant-baseline="middle" 
+                          font-size="6" fill="var(--text-light)">
+                        Rejects
+                    </text>
+                </g>
+            `;
+            
             pieData.forEach(slice => {
                 const startPercentage = cumulativePercentage;
                 cumulativePercentage += parseFloat(slice.percentage);
                 
-                // Convert percentages to coordinates on a circle
-                const startX = 50 + 40 * Math.cos(2 * Math.PI * startPercentage / 100);
-                const startY = 50 + 40 * Math.sin(2 * Math.PI * startPercentage / 100);
-                const endX = 50 + 40 * Math.cos(2 * Math.PI * cumulativePercentage / 100);
-                const endY = 50 + 40 * Math.sin(2 * Math.PI * cumulativePercentage / 100);
+                // Convert percentages to coordinates on a circle for outer arc
+                const startOuterX = 50 + outerRadius * Math.cos(2 * Math.PI * startPercentage / 100);
+                const startOuterY = 50 + outerRadius * Math.sin(2 * Math.PI * startPercentage / 100);
+                const endOuterX = 50 + outerRadius * Math.cos(2 * Math.PI * cumulativePercentage / 100);
+                const endOuterY = 50 + outerRadius * Math.sin(2 * Math.PI * cumulativePercentage / 100);
+                
+                // Convert percentages to coordinates for inner arc
+                const startInnerX = 50 + innerRadius * Math.cos(2 * Math.PI * cumulativePercentage / 100);
+                const startInnerY = 50 + innerRadius * Math.sin(2 * Math.PI * cumulativePercentage / 100);
+                const endInnerX = 50 + innerRadius * Math.cos(2 * Math.PI * startPercentage / 100);
+                const endInnerY = 50 + innerRadius * Math.sin(2 * Math.PI * startPercentage / 100);
                 
                 // Determine if slice is more than 50%
                 const largeArcFlag = (slice.percentage > 50) ? 1 : 0;
                 
-                // Add pie slice
+                // Add donut slice with path that goes outer arc, then inner arc (in reverse)
                 html += `
-                    <path d="M 50 50 L ${startX} ${startY} A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY} Z" 
+                    <path d="M ${startOuterX} ${startOuterY} 
+                            A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endOuterX} ${endOuterY} 
+                            L ${startInnerX} ${startInnerY} 
+                            A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${endInnerX} ${endInnerY} Z" 
                           fill="${slice.color}" 
                           stroke="white" 
                           stroke-width="0.5" />
@@ -3750,18 +4037,20 @@
             html += `
                             </svg>
                         </div>
-                        <div style="flex: 1; padding-left: 20px;">
-                            <div style="font-weight: bold; margin-bottom: 10px;">Top Stations</div>
-                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                    </div>
+                    
+                    <div style="flex: 0 0 auto; padding: 5px 0 0 5px;">
+                        <div style="font-weight: bold; font-size: 11px; margin-bottom: 5px;">Top Reject Stations</div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
             `;
             
-            // Add legend
+            // Add legend with improved styling
             pieData.forEach(slice => {
                 html += `
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <div style="width: 12px; height: 12px; background-color: ${slice.color}; border-radius: 2px;"></div>
-                        <div style="flex: 1;">${slice.name}</div>
-                        <div style="font-weight: bold;">${slice.percentage}%</div>
+                    <div style="display: flex; align-items: center; gap: 5px; font-size: 10px; padding: 2px 0;">
+                        <div style="width: 10px; height: 10px; background-color: ${slice.color}; border-radius: 2px;"></div>
+                        <div style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${slice.name}</div>
+                        <div style="font-weight: bold; width: 40px; text-align: right;">${slice.percentage}%</div>
                     </div>
                 `;
             });
@@ -4111,13 +4400,13 @@
                 // Store data globally for detail view
                 window.dashboardData = opsData;
                 
-                // If current date range is not set, get default
+                // If current date range is not set, get default based on user preferences
                 if (!currentDateRange.start || !currentDateRange.end) {
-                    // Use default week (Monday to Sunday)
+                    // Get default range based on week cycle preference
                     const defaultRange = getDefaultDateRange();
                     currentDateRange.start = defaultRange.start;
                     currentDateRange.end = defaultRange.end;
-                    Logger.info(`Using default date range: ${currentDateRange.start} to ${currentDateRange.end}`);
+                    Logger.info(`Using default date range based on cycle preference (${weekCycleStartDay}): ${currentDateRange.start} to ${currentDateRange.end}`);
                 }
                 
                 // Filter data by date range
@@ -4135,22 +4424,55 @@
                 // Render dashboard
                 renderDashboard(transformedData);
                 
+                // Update period button text to match current period
+                const periodToggle = document.getElementById('periodToggle');
+                periodToggle.textContent = currentPeriod.charAt(0).toUpperCase() + currentPeriod.slice(1);
+                
                 Logger.info('Dashboard initialization completed successfully');
             } catch (error) {
                 Logger.error('Error initializing dashboard', error);
                 showError('Unable to load dashboard data. Please check your connection and try again.');
             }
         }
-
+        
+        /**
+         * Handles 'Apply & Remember' button click
+         */
+        function handleApplyAndRememberCycle() {
+            Logger.info('Apply and remember cycle button clicked');
+            
+            // Get selected cycle
+            const cycleStartSelect = document.getElementById('cycleStartDay');
+            const selectedCycle = parseInt(cycleStartSelect.value);
+            
+            // Update cycle preference
+            weekCycleStartDay = selectedCycle;
+            
+            // Store preference in localStorage
+            storeUserPreferences();
+            
+            // Apply date range
+            handleApplyDateRange();
+        }
+        
         /**
          * Add event listeners when the DOM is loaded
          */
         document.addEventListener('DOMContentLoaded', () => {
+            // Load user preferences
+            loadUserPreferences();
+            
+            // Update cycle dropdown to match stored preference
+            document.getElementById('cycleStartDay').value = weekCycleStartDay.toString();
+            
             // Add event listeners for buttons
             document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
             document.getElementById('refreshButton').addEventListener('click', handleRefresh);
             document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
             document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
+            document.getElementById('applyAndRememberCycle').addEventListener('click', handleApplyAndRememberCycle);
+            document.getElementById('prevPeriodButton').addEventListener('click', navigateToPreviousPeriod);
+            document.getElementById('nextPeriodButton').addEventListener('click', navigateToNextPeriod);
             
             // Add event listener for document click (to close dropdown)
             document.addEventListener('click', handleDocumentClick);
@@ -4179,4 +4501,3 @@
     </script>
 </body>
 </html>
-                                
