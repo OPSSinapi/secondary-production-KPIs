@@ -655,230 +655,239 @@
         }
         
         /* 
-        ======================================
-        MODAL / DETAIL VIEW (IMPROVED)
-        ======================================
-        */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-overlay.show {
-            display: flex;
-        }
-        
-        /* Improved Modal Styling */
-        .modal-content {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-            width: 95%;
-            max-width: 1600px;
-            height: 90vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .modal-header {
-            padding: 15px 20px;
-            background-color: var(--primary-dark-blue);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .modal-close {
-            font-size: 22px;
-            color: white;
-            background: none;
-            border: none;
-            cursor: pointer;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-        
-        .modal-close:hover {
-            opacity: 1;
-        }
-        
-        .modal-body {
-            flex: 1;
-            overflow: hidden;
-            padding: 15px 20px;
-        }
-        
-        /* Improved compact charts */
-        .detail-metrics {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 15px;
-            height: calc(100% - 60px); /* Subtract date nav height */
-        }
-        
-        .detail-metric-card {
-            background-color: white;
-            border-radius: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            padding: 12px;
-        }
-        
-        .chart-container {
-            flex: 1;
-            position: relative;
-            min-height: 0;
-            background-color: #ffffff;
-            border-radius: 4px;
-            padding: 10px;
-            margin-top: 5px;
-        }
-        
-        .detail-metric-footer {
-            margin-top: 10px;
-            max-height: 110px;
-            overflow-y: auto;
-            background-color: #ffffff;
-            border-radius: 4px;
-            padding: 10px;
-        }
-        
-        .chart-row {
-            display: flex;
-            gap: 15px;
-            height: 100%;
-        }
-        
-        .pie-chart-container {
-            flex: 1;
-            height: 100%;
-            position: relative;
-            background-color: #ffffff;
-            border-radius: 4px;
-            padding: 5px;
-        }
-        
-        .detail-metric-header {
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--text-dark);
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        /* 
-        ======================================
-        DATE NAVIGATION
-        ======================================
-        */
-        .date-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            background-color: white;
-            border-radius: 6px;
-            padding: 10px 15px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-        
-        .date-range-display {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--text-dark);
-        }
-        
-        .date-nav-controls {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .date-nav-btn {
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 13px;
-        }
-        
-        .date-nav-btn:hover {
-            background-color: #2980b9;
-        }
-        
-        /* 
-        ======================================
-        TOGGLE BUTTONS
-        ======================================
-        */
-        .toggle-container {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        
-        .toggle-btn {
-            background-color: #e8e8e8;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-        
-        .toggle-btn.active {
-            background-color: var(--primary-blue);
-            color: white;
-        }
-        
-        .top-items-list {
-            background-color: white;
-            border-radius: 4px;
-        }
-        
-        .top-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .top-item:last-child {
-            border-bottom: none;
-        }
-        
-        .top-item-label {
-            font-weight: bold;
-            font-size: 11px;
-        }
-        
-        .top-item-value {
-            color: var(--text-light);
-            font-size: 11px;
-        }
+======================================
+MODAL / DETAIL VIEW (IMPROVED)
+======================================
+*/
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+/* Improved Modal Styling */
+.modal-content {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    width: 95%;
+    max-width: 1600px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background-color: var(--primary-dark-blue);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.modal-close {
+    font-size: 22px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.modal-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 15px 20px;
+}
+
+/* Improved compact charts */
+.detail-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+    height: calc(100% - 60px); /* Subtract date nav height */
+}
+
+.detail-metric-card {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 12px;
+}
+
+.chart-container {
+    flex: 0.6; /* Reduced from 1 to 0.6 to make charts smaller */
+    position: relative;
+    min-height: 0;
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.detail-metric-footer {
+    margin-top: 10px;
+    max-height: 160px; /* Increased from 110px to 160px to show more data */
+    overflow-y: auto;
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.chart-row {
+    display: flex;
+    gap: 15px;
+    height: 100%;
+}
+
+.pie-chart-container {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.detail-metric-header {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-dark);
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* 
+======================================
+DATE NAVIGATION
+======================================
+*/
+.date-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    background-color: white;
+    border-radius: 6px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.date-range-display {
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.date-nav-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.date-nav-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    min-width: 120px; /* Added min-width to prevent text cutoff */
+    justify-content: center; /* Center content in button */
+}
+
+.date-nav-btn:hover {
+    background-color: #2980b9;
+}
+
+/* 
+======================================
+TOGGLE BUTTONS
+======================================
+*/
+.toggle-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap; /* Allow wrapping for multiple buttons */
+}
+
+.toggle-btn {
+    background-color: #e8e8e8;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.toggle-btn.active {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.top-items-list {
+    background-color: white;
+    border-radius: 4px;
+}
+
+.top-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.top-item:last-child {
+    border-bottom: none;
+}
+
+.top-item-label {
+    font-weight: bold;
+    font-size: 11px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 8px;
+}
+
+.top-item-value {
+    color: var(--text-light);
+    font-size: 11px;
+    flex-shrink: 0;
+}
 
         /* 
         ======================================
@@ -3157,71 +3166,133 @@
          * ======================================
          */
         
-        // Track current detail view state
-        const detailViewState = {
-            lineId: null,
-            dateRange: {
-                start: null,
-                end: null
-            },
-            scrapView: 'qty',   // 'qty' or 'cost'
-            downtimeView: 'reason',  // 'reason', 'machine', or 'duration'
-            filteredData: null    // Store filtered data for reuse
-        };
+/**
+ * Track current detail view state
+ */
+const detailViewState = {
+    lineId: null,
+    dateRange: {
+        start: null,
+        end: null
+    },
+    scrapView: 'qty',         // 'qty' or 'cost'
+    downtimeView: 'reason',   // 'reason', 'machine', or 'duration'
+    costView: 'labour',       // 'labour' or 'unit'
+    filteredData: null        // Store filtered data for reuse
+};
 
-        /**
-         * Shows the detail view for a specific line
-         * @param {string} lineId - The ID of the line to show details for
-         */
-        function showDetailView(lineId) {
-            Logger.info(`Showing detail view for line: ${lineId}`);
+/**
+ * Shows the detail view for a specific line
+ * @param {string} lineId - The ID of the line to show details for
+ */
+function showDetailView(lineId) {
+    Logger.info(`Showing detail view for line: ${lineId}`);
+    
+    // Process the line ID to handle special cases
+    const processedLineId = processLineId(lineId);
+    
+    // Store the current line ID
+    detailViewState.lineId = processedLineId;
+    
+    // Use the date range from the main page
+    detailViewState.dateRange.start = currentDateRange.start;
+    detailViewState.dateRange.end = currentDateRange.end;
+    
+    // Update modal title
+    const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
+    if (lineElement) {
+        const headerElement = lineElement.querySelector('.card-title');
+        if (headerElement) {
+            document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+        } else {
+            // Fallback if card-title is not found
+            const supervisor = extractSupervisorName(processedLineId);
+            let productName = '';
             
-            // Store the current line ID
-            detailViewState.lineId = lineId;
-            
-            // Use the date range from the main page
-            detailViewState.dateRange.start = currentDateRange.start;
-            detailViewState.dateRange.end = currentDateRange.end;
-            
-            // Update modal title
-            const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
-            if (lineElement) {
-                const headerElement = lineElement.querySelector('.card-title');
-                if (headerElement) {
-                    document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
-                } else {
-                    // Fallback if card-title is not found
-                    const supervisor = extractSupervisorName(lineId);
-                    let productName = '';
-                    
-                    // Try to determine product from line ID
-                    if (lineId.includes('scd')) {
-                        productName = 'SCD';
-                    } else if (lineId.includes('sum')) {
-                        productName = 'SUM';
-                    } else if (lineId.includes('levo')) {
-                        productName = 'LEVO';
-                    } else if (lineId.includes('popup')) {
-                        productName = 'PopUp';
-                    } else if (lineId.includes('scalpel')) {
-                        productName = 'Scalpel';
-                    } else {
-                        productName = 'Production Line';
-                    }
-                    
-                    document.getElementById('modalTitle').textContent = `${productName}: ${supervisor} Details`;
-                }
+            // Try to determine product from line ID
+            if (processedLineId.includes('scd')) {
+                productName = 'SCD';
+            } else if (processedLineId.includes('sum')) {
+                productName = 'SUM';
+            } else if (processedLineId.includes('levo')) {
+                productName = 'LEVO';
+            } else if (processedLineId.includes('popup')) {
+                productName = 'PopUp';
+            } else if (processedLineId.includes('scalpel')) {
+                productName = 'Scalpel';
+            } else {
+                productName = 'Production Line';
             }
             
-            // Update date range display
-            updateModalDateRange();
-            
-            // Load and render the charts
-            loadDetailViewData();
-            
-            // Show the modal
-            document.getElementById('detailModal').classList.add('show');
+            document.getElementById('modalTitle').textContent = `${productName}: ${supervisor} Details`;
         }
+    }
+    
+    // Update date range display
+    updateModalDateRange();
+    
+    // Load and render the charts
+    loadDetailViewData();
+    
+    // Show the modal
+    document.getElementById('detailModal').classList.add('show');
+}
+
+/**
+ * Processes the line ID to handle special cases
+ * @param {string} lineId - The original line ID
+ * @returns {string} The processed line ID
+ */
+function processLineId(lineId) {
+    // Look for card data attributes to get more accurate information
+    const lineCard = document.querySelector(`[data-line-id="${lineId}"]`);
+    if (!lineCard) return lineId;
+    
+    // Check for Scalpel cases
+    if (lineId === 'nosi-scalpel') {
+        // Determine if it's packaging or assembly based on the card title
+        const cardTitle = lineCard.querySelector('.card-title');
+        if (cardTitle && cardTitle.textContent.toLowerCase().includes('packaging')) {
+            return 'nosi-scalpel-packaging';
+        } else {
+            return 'nosi-scalpel-assembly';
+        }
+    }
+    
+    // Check for 3rd line cases
+    if (lineId === 'mvokwe-3rd line' || lineId === 'mvokwe-3rd-line') {
+        // Determine if it's UBT or SCD based on the card title
+        const cardTitle = lineCard.querySelector('.card-title');
+        if (cardTitle && cardTitle.textContent.toLowerCase().includes('ubt')) {
+            return 'mvokwe-3rd-line-ubt';
+        } else {
+            return 'mvokwe-3rd-line-scd';
+        }
+    }
+    
+    return lineId;
+}
+
+        /**
+ * Toggles the cost view
+ * @param {string} view - The view to switch to ('labour' or 'unit')
+ */
+function toggleCostView(view) {
+    Logger.info(`Toggling cost view to: ${view}`);
+    
+    // Update the state
+    detailViewState.costView = view;
+    
+    // Update button active states
+    document.getElementById('labourCostBtn').classList.toggle('active', view === 'labour');
+    document.getElementById('unitCostBtn').classList.toggle('active', view === 'unit');
+    
+    // Update the chart with the stored filtered data
+    if (detailViewState.filteredData) {
+        renderLabourCostChart(detailViewState.filteredData);
+    }
+}
+        
         
         /**
          * Hides the detail view
@@ -3301,103 +3372,86 @@
             loadDetailViewData();
         }
         
-        /**
-         * Toggles the scrap view between quantity and cost
-         * @param {string} view - The view to switch to ('qty' or 'cost')
-         */
-        function toggleScrapView(view) {
-            Logger.info(`Toggling scrap view to: ${view}`);
-            
-            // Update the state
-            detailViewState.scrapView = view;
-            
-            // Update button active states
-            document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
-            document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
-            
-            // Update the display using the stored filtered data
-            if (detailViewState.filteredData) {
-                updateTopScrapList(detailViewState.filteredData);
-            }
-        }
+       
+        
+/**
+ * Loads data for the detail view
+ */
+function loadDetailViewData() {
+    Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
+    
+    // Get the filtered data for the line and date range
+    const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
+    
+    // Store the filtered data for reuse
+    detailViewState.filteredData = filteredData;
+    
+    if (filteredData.length === 0) {
+        Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
+        showNoDataMessage();
+        return;
+    }
+    
+    // Render charts with actual data
+    renderScheduleAttainmentChart(filteredData);
+    renderLabourCostChart(filteredData);
+    renderScrapPercentageChart(filteredData);
+    renderDowntimeChart(filteredData);
+    renderRejectPieChart(filteredData);
+    
+    // Update lists with actual data
+    updateTopScrapList(filteredData);
+    updateTopDowntimeList(filteredData);
+}
         
         /**
-         * Toggles the downtime view
-         * @param {string} view - The view to switch to ('reason', 'machine', or 'duration')
-         */
-        function toggleDowntimeView(view) {
-            Logger.info(`Toggling downtime view to: ${view}`);
-            
-            // Update the state
-            detailViewState.downtimeView = view;
-            
-            // Update button active states
-            document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
-            document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
-            document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
-            
-            // Update the display using the stored filtered data
-            if (detailViewState.filteredData) {
-                updateTopDowntimeList(detailViewState.filteredData);
-            }
+ * Gets filtered data for a specific line and date range
+ * @param {string} lineId - The ID of the line
+ * @param {string} startDate - Start date in ISO format
+ * @param {string} endDate - End date in ISO format
+ * @returns {Array} Filtered production data records
+ */
+function getFilteredLineData(lineId, startDate, endDate) {
+    // Check if we have data available
+    if (!window.dashboardData || !window.dashboardData.productionData) {
+        Logger.warn('No production data available');
+        return [];
+    }
+    
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0); // Set to beginning of day to include all start date data
+    
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999); // Include the entire end day
+    
+    // Filter by line ID and date range
+    return window.dashboardData.productionData.filter(record => {
+        const recordDate = new Date(record.Date);
+        
+        // Proper comparison ensuring start date is included
+        const isInDateRange = recordDate >= start && recordDate <= end;
+        
+        // Mapping for special cases
+        let matchesLineId = record['Production Line ID'] === lineId;
+        
+        // Special case for Scalpel packaging vs assembly
+        if (lineId === 'nosi-scalpel-packaging' && record['Production Line ID'] === 'nosi-scalpel') {
+            matchesLineId = record.Variant && record.Variant.toLowerCase().includes('packaging');
+        } 
+        else if (lineId === 'nosi-scalpel-assembly' && record['Production Line ID'] === 'nosi-scalpel') {
+            matchesLineId = !record.Variant || !record.Variant.toLowerCase().includes('packaging');
+        }
+        // Special case for 3rd line UBT vs SCD
+        else if (lineId === 'mvokwe-3rd-line-ubt' && record['Production Line ID'] === 'mvokwe-3rd line') {
+            matchesLineId = record['Base Product'] === 'UBT';
+        }
+        else if (lineId === 'mvokwe-3rd-line-scd' && record['Production Line ID'] === 'mvokwe-3rd line') {
+            matchesLineId = record['Base Product'] === 'SCD';
         }
         
-        /**
-         * Loads data for the detail view
-         */
-        function loadDetailViewData() {
-            Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
-            
-            // Get the filtered data for the line and date range
-            const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
-            
-            // Store the filtered data for reuse
-            detailViewState.filteredData = filteredData;
-            
-            if (filteredData.length === 0) {
-                Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
-                showNoDataMessage();
-                return;
-            }
-            
-            // Render charts with actual data
-            renderScheduleAttainmentChart(filteredData);
-            renderLabourCostChart(filteredData);
-            renderScrapPercentageChart(filteredData);
-            renderDowntimeChart(filteredData);
-            renderRejectPieChart(filteredData); // New pie chart
-            
-            // Update lists with actual data
-            updateTopScrapList(filteredData);
-            updateTopDowntimeList(filteredData);
-        }
-        
-        /**
-         * Gets filtered data for a specific line and date range
-         * @param {string} lineId - The ID of the line
-         * @param {string} startDate - Start date in ISO format
-         * @param {string} endDate - End date in ISO format
-         * @returns {Array} Filtered production data records
-         */
-        function getFilteredLineData(lineId, startDate, endDate) {
-            // Check if we have data available
-            if (!window.dashboardData || !window.dashboardData.productionData) {
-                Logger.warn('No production data available');
-                return [];
-            }
-            
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            end.setHours(23, 59, 59, 999); // Include the entire end day
-            
-            // Filter by line ID and date range
-            return window.dashboardData.productionData.filter(record => {
-                const recordDate = new Date(record.Date);
-                return record['Production Line ID'] === lineId && 
-                       recordDate >= start && 
-                       recordDate <= end;
-            });
-        }
+        return matchesLineId && isInDateRange;
+    });
+}
         
         /**
          * Shows a message when no data is available
@@ -3574,197 +3628,225 @@
             chartContainer.innerHTML = html;
         }
         
-        /**
-         * Renders the labour cost chart with multiple variants
-         * @param {Array} data - Filtered data for the line
-         */
-        function renderLabourCostChart(data) {
-            const chartContainer = document.getElementById('labourCostChart');
-            
-            // Sort data by date
-            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            
-            // Group data by date and variant
-            const groupedData = {};
-            
-            sortedData.forEach(record => {
-                const date = new Date(record.Date);
-                const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                const variant = record.Variant || 'Unknown';
-                
-                if (!groupedData[dateKey]) {
-                    groupedData[dateKey] = {};
-                }
-                
-                if (!groupedData[dateKey][variant]) {
-                    groupedData[dateKey][variant] = {
-                        cost: parseFloat(record['Cost Per Unit'] || record['Staff Cost'] || 0),
-                        count: 1
-                    };
-                } else {
-                    // Average if we have multiple records for same date/variant
-                    const current = groupedData[dateKey][variant];
-                    current.cost = (current.cost * current.count + parseFloat(record['Cost Per Unit'] || record['Staff Cost'] || 0)) / (current.count + 1);
-                    current.count++;
-                }
-            });
-            
-            // Get unique date keys and variants
-            const dateKeys = Object.keys(groupedData).sort((a, b) => {
-                const dateA = new Date(a);
-                const dateB = new Date(b);
-                return dateA - dateB;
-            });
-            
-            const allVariants = new Set();
-            Object.values(groupedData).forEach(variants => {
-                Object.keys(variants).forEach(variant => allVariants.add(variant));
-            });
-            const uniqueVariants = Array.from(allVariants);
-            
-            // Find min and max for scaling
-            let minCost = Infinity;
-            let maxCost = -Infinity;
-            
-            Object.values(groupedData).forEach(variants => {
-                Object.values(variants).forEach(data => {
-                    minCost = Math.min(minCost, data.cost);
-                    maxCost = Math.max(maxCost, data.cost);
-                });
-            });
-            
-            const range = maxCost - minCost;
-            const padding = range * 0.1; // 10% padding
-            
-            const yMin = Math.max(0, minCost - padding);
-            const yMax = maxCost + padding;
-            
-            // Create chart HTML
-            let html = '<div style="width: 100%; height: 100%;">';
-            
-            // Create axes and labels
-            html += '<div style="display: flex; height: 100%;">';
-            
-            // Y-axis
-            html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
-            html += `<div>R${Math.round(yMax)}</div>`;
-            html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.75)}</div>`;
-            html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.5)}</div>`;
-            html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.25)}</div>`;
-            html += `<div>R${Math.round(yMin)}</div>`;
-            html += '</div>';
-            
-            // Chart content
-            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
-            
-            // Chart area
-            html += '<div style="flex-grow: 1; position: relative;">';
-            
-            // Background grid lines
-            html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '</div>';
-            
-            // Define variant colors
-            const variantColors = {
-                'XL': 'var(--timeline-orange)',
-                'S10': 'var(--timeline-red)',
-                'S20': 'var(--timeline-blue)',
-                'Plus': 'var(--timeline-purple)',
-                'Regular': 'var(--timeline-blue)',
-                'Deluxe': 'var(--timeline-purple)',
-                'Standard': 'var(--timeline-blue)'
-            };
-            
-            // Function to get color for variant
-            const getVariantColor = (variant) => {
-                // Check if variant name contains any of our color keys
-                for (const [key, color] of Object.entries(variantColors)) {
-                    if (variant.includes(key)) {
-                        return color;
-                    }
-                }
-                return 'var(--primary-blue)'; // Default color
-            };
-            
-            // Line chart for each variant
-            uniqueVariants.forEach(variant => {
-                const variantColor = getVariantColor(variant);
-                
-                // Calculate line points
-                let points = '';
-                let hasPoints = false;
-                
-                dateKeys.forEach((dateKey, index) => {
-                    if (groupedData[dateKey][variant]) {
-                        const x = (index / (dateKeys.length - 1)) * 100;
-                        const cost = groupedData[dateKey][variant].cost;
-                        const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
-                        points += `${x},${y} `;
-                        hasPoints = true;
-                    }
-                });
-                
-                if (hasPoints) {
-                    // Create SVG for line
-                    html += `
-                        <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-                            <polyline 
-                                points="${points}" 
-                                fill="none" 
-                                stroke="${variantColor}" 
-                                stroke-width="2" 
-                            />
-                        </svg>
-                    `;
-                    
-                    // Add data points
-                    dateKeys.forEach((dateKey, index) => {
-                        if (groupedData[dateKey][variant]) {
-                            const x = (index / (dateKeys.length - 1)) * 100;
-                            const cost = groupedData[dateKey][variant].cost;
-                            const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
-                            html += `
-                                <div style="position: absolute; top: calc(${y}% - 4px); left: calc(${x}% - 4px); width: 8px; height: 8px; background-color: ${variantColor}; border-radius: 50%;" 
-                                     title="${variant}: R${Math.round(cost)}"></div>
-                            `;
-                        }
-                    });
-                }
-            });
-            
-            html += '</div>'; // End chart area
-            
-            // X-axis labels
-            html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
-            dateKeys.forEach(dateKey => {
-                html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${dateKey}</div>`;
-            });
-            html += '</div>';
-            
-            // Legend for variants
-            html += '<div style="height: 30px; display: flex; justify-content: center; gap: 15px; margin-top: 5px;">';
-            uniqueVariants.forEach(variant => {
-                const variantColor = getVariantColor(variant);
-                html += `
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <div style="width: 10px; height: 10px; background-color: ${variantColor};"></div>
-                        <div style="font-size: 10px;">${variant}</div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            
-            html += '</div>'; // End chart content
-            html += '</div>'; // End axes and labels
-            html += '</div>'; // End chart container
-            
-            chartContainer.innerHTML = html;
+/**
+ * Renders the labour cost chart with multiple variants
+ * @param {Array} data - Filtered data for the line
+ */
+function renderLabourCostChart(data) {
+    const chartContainer = document.getElementById('labourCostChart');
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Group data by date and variant
+    const groupedData = {};
+    
+    // Track which view we're showing (labor cost or cost per unit)
+    const costType = detailViewState.costView || 'labour'; // Default to labour cost
+    
+    sortedData.forEach(record => {
+        const date = new Date(record.Date);
+        const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const variant = record.Variant || 'Unknown';
+        
+        if (!groupedData[dateKey]) {
+            groupedData[dateKey] = {};
         }
+        
+        // Use the appropriate cost field based on view
+        const costValue = costType === 'unit' && record['Cost Per Unit'] ? 
+            parseFloat(record['Cost Per Unit']) : 
+            parseFloat(record['Staff Cost'] || 0);
+            
+        if (!groupedData[dateKey][variant]) {
+            groupedData[dateKey][variant] = {
+                cost: costValue,
+                count: 1
+            };
+        } else {
+            // Average if we have multiple records for same date/variant
+            const current = groupedData[dateKey][variant];
+            current.cost = (current.cost * current.count + costValue) / (current.count + 1);
+            current.count++;
+        }
+    });
+    
+    // Get unique date keys and variants
+    const dateKeys = Object.keys(groupedData).sort((a, b) => {
+        const dateA = new Date(a);
+        const dateB = new Date(b);
+        return dateA - dateB;
+    });
+    
+    const allVariants = new Set();
+    Object.values(groupedData).forEach(variants => {
+        Object.keys(variants).forEach(variant => allVariants.add(variant));
+    });
+    const uniqueVariants = Array.from(allVariants);
+    
+    // Find min and max for scaling
+    let minCost = Infinity;
+    let maxCost = -Infinity;
+    
+    Object.values(groupedData).forEach(variants => {
+        Object.values(variants).forEach(data => {
+            minCost = Math.min(minCost, data.cost);
+            maxCost = Math.max(maxCost, data.cost);
+        });
+    });
+    
+    const range = maxCost - minCost;
+    const padding = range * 0.1; // 10% padding
+    
+    const yMin = Math.max(0, minCost - padding);
+    const yMax = maxCost + padding;
+    
+    // Create chart HTML
+    let html = '<div style="width: 100%; height: 100%;">';
+    
+    // Add toggle for cost type
+    html += `
+    <div class="toggle-container" style="margin-bottom: 5px;">
+        <button class="toggle-btn ${costType === 'labour' ? 'active' : ''}" id="labourCostBtn" onclick="toggleCostView('labour')">Labour Cost</button>
+        <button class="toggle-btn ${costType === 'unit' ? 'active' : ''}" id="unitCostBtn" onclick="toggleCostView('unit')">Cost Per Unit</button>
+    </div>`;
+    
+    // Create axes and labels
+    html += '<div style="display: flex; height: calc(100% - 20px);">'; // Adjust height to account for toggle
+    
+    // Y-axis
+    html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+    html += `<div>R${Math.round(yMax)}</div>`;
+    html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.75)}</div>`;
+    html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.5)}</div>`;
+    html += `<div>R${Math.round(yMin + (yMax - yMin) * 0.25)}</div>`;
+    html += `<div>R${Math.round(yMin)}</div>`;
+    html += '</div>';
+    
+    // Chart content
+    html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
+    
+    // Chart area
+    html += '<div style="flex-grow: 1; position: relative;">';
+    
+    // Background grid lines
+    html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '</div>';
+    
+    // Define variant colors
+    const variantColors = {
+        'XL': 'var(--timeline-orange)',
+        'S10': 'var(--timeline-red)',
+        'S20': 'var(--timeline-blue)',
+        'Plus': 'var(--timeline-purple)',
+        'Regular': 'var(--timeline-blue)',
+        'Deluxe': 'var(--timeline-purple)',
+        'Standard': 'var(--timeline-blue)'
+    };
+    
+    // Function to get color for variant
+    const getVariantColor = (variant) => {
+        // Check if variant name contains any of our color keys
+        for (const [key, color] of Object.entries(variantColors)) {
+            if (variant.includes(key)) {
+                return color;
+            }
+        }
+        return 'var(--primary-blue)'; // Default color
+    };
+    
+    // Create SVG container for all lines
+    html += `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">`;
+    
+    // Line chart for each variant
+    uniqueVariants.forEach(variant => {
+        const variantColor = getVariantColor(variant);
+        
+        // Store the points for both the line and dots
+        const svgPoints = [];
+        const dotPositions = [];
+        
+        dateKeys.forEach((dateKey, index) => {
+            if (groupedData[dateKey][variant]) {
+                const x = (index / (dateKeys.length - 1)) * 100;
+                const cost = groupedData[dateKey][variant].cost;
+                const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
+                
+                // Store the point for both SVG line and dot
+                svgPoints.push({x, y});
+                dotPositions.push({x, y, cost});
+            }
+        });
+        
+        if (svgPoints.length > 0) {
+            // Create polyline using the collected points
+            const pointsString = svgPoints.map(p => `${p.x},${p.y}`).join(' ');
+            
+            html += `
+                <polyline 
+                    points="${pointsString}" 
+                    fill="none" 
+                    stroke="${variantColor}" 
+                    stroke-width="2" 
+                />
+            `;
+        }
+    });
+    
+    // Close the SVG
+    html += `</svg>`;
+    
+    // Add data points after SVG
+    uniqueVariants.forEach(variant => {
+        const variantColor = getVariantColor(variant);
+        
+        dateKeys.forEach((dateKey, index) => {
+            if (groupedData[dateKey][variant]) {
+                const x = (index / (dateKeys.length - 1)) * 100;
+                const cost = groupedData[dateKey][variant].cost;
+                const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
+                
+                html += `
+                    <div style="position: absolute; top: calc(${y}% - 4px); left: calc(${x}% - 4px); width: 8px; height: 8px; background-color: ${variantColor}; border-radius: 50%;" 
+                         title="${variant}: R${Math.round(cost)}"></div>
+                `;
+            }
+        });
+    });
+    
+    html += '</div>'; // End chart area
+    
+    // X-axis labels
+    html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
+    dateKeys.forEach(dateKey => {
+        html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${dateKey}</div>`;
+    });
+    html += '</div>';
+    
+    // Legend for variants
+    html += '<div style="height: 20px; display: flex; justify-content: center; gap: 15px; margin-top: 5px;">';
+    uniqueVariants.forEach(variant => {
+        const variantColor = getVariantColor(variant);
+        html += `
+            <div style="display: flex; align-items: center; gap: 5px;">
+                <div style="width: 10px; height: 10px; background-color: ${variantColor};"></div>
+                <div style="font-size: 10px;">${variant}</div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    html += '</div>'; // End chart content
+    html += '</div>'; // End axes and labels
+    html += '</div>'; // End chart container
+    
+    chartContainer.innerHTML = html;
+}
         
         /**
          * Renders the scrap percentage chart
@@ -3869,201 +3951,199 @@
         }
         
         /**
-         * Renders the reject rate pie chart
-         * @param {Array} data - Filtered data for the line
-         */
-        function renderRejectPieChart(data) {
-            const chartContainer = document.getElementById('rejectPieChart');
-            if (!chartContainer) return; // Safety check
+ * Renders the reject rate pie chart
+ * @param {Array} data - Filtered data for the line
+ */
+function renderRejectPieChart(data) {
+    const chartContainer = document.getElementById('rejectPieChart');
+    if (!chartContainer) return; // Safety check
+    
+    // Collect reject data from all records
+    let rejectsByStation = {};
+    let totalRejects = 0;
+    
+    data.forEach(record => {
+        // Parse reject data from both QTY and Cost fields to get comprehensive station data
+        const rejectDataQty = record['Top Rejects by QTY (Reason - Station - QTY - Cost)'];
+        const rejectDataCost = record['Top Rejects by Cost (Reason - Station - QTY - Cost)'];
+        
+        [rejectDataQty, rejectDataCost].forEach(dataString => {
+            if (!dataString || dataString === "No rejects") return;
             
-            // Collect reject data from all records
-            let rejectsByStation = {};
-            let totalRejects = 0;
+            // Split by pipe to get individual items
+            const itemStrings = dataString.split(' | ');
             
-            data.forEach(record => {
-                // Parse reject data from both QTY and Cost fields to get comprehensive station data
-                const rejectDataQty = record['Top Rejects by QTY (Reason - Station - QTY - Cost)'];
-                const rejectDataCost = record['Top Rejects by Cost (Reason - Station - QTY - Cost)'];
+            // Parse each item
+            itemStrings.forEach(itemString => {
+                // Remove the numbering
+                const withoutNumber = itemString.replace(/^\d+\.\s*/, '');
                 
-                [rejectDataQty, rejectDataCost].forEach(dataString => {
-                    if (!dataString || dataString === "No rejects") return;
+                // Extract parts
+                const parts = withoutNumber.split(' - ');
+                if (parts.length < 3) return;
+                
+                // Get station name
+                const station = parts[1];
+                
+                // Extract quantity
+                const qtyMatch = parts[2].match(/QTY:\s*(\d+)/);
+                if (qtyMatch) {
+                    const qty = parseInt(qtyMatch[1]);
                     
-                    // Split by pipe to get individual items
-                    const itemStrings = dataString.split(' | ');
-                    
-                    // Parse each item
-                    itemStrings.forEach(itemString => {
-                        // Remove the numbering
-                        const withoutNumber = itemString.replace(/^\d+\.\s*/, '');
-                        
-                        // Extract parts
-                        const parts = withoutNumber.split(' - ');
-                        if (parts.length < 3) return;
-                        
-                        // Get station name
-                        const station = parts[1];
-                        
-                        // Extract quantity
-                        const qtyMatch = parts[2].match(/QTY:\s*(\d+)/);
-                        if (qtyMatch) {
-                            const qty = parseInt(qtyMatch[1]);
-                            
-                            // Add to station totals
-                            if (!rejectsByStation[station]) {
-                                rejectsByStation[station] = 0;
-                            }
-                            rejectsByStation[station] += qty;
-                            totalRejects += qty;
-                        }
-                    });
-                });
+                    // Add to station totals
+                    if (!rejectsByStation[station]) {
+                        rejectsByStation[station] = 0;
+                    }
+                    rejectsByStation[station] += qty;
+                    totalRejects += qty;
+                }
             });
+        });
+    });
+    
+    // Sort stations by reject count
+    const sortedStations = Object.entries(rejectsByStation)
+        .sort((a, b) => b[1] - a[1]);
+    
+    // Get top 3 stations
+    const top3Stations = sortedStations.slice(0, 3);
+        
+    // If no data, show message
+    if (top3Stations.length === 0) {
+        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light); font-size: 12px;">No reject data available</div>';
+        return;
+    }
+    
+    // Create pie chart
+    const colors = [
+        'var(--primary-blue)',
+        'var(--primary-orange)',
+        'var(--primary-purple)',
+        'var(--text-light)' // For "Other"
+    ];
+    
+    // Get percentages for top 3
+    let pieData = top3Stations.map((station, index) => ({
+        name: station[0],
+        value: station[1],
+        percentage: (station[1] / totalRejects * 100).toFixed(1),
+        color: colors[index]
+    }));
+    
+    // If there are more stations, add an "Other" category
+    const otherStations = sortedStations.slice(3);
+    
+    if (otherStations.length > 0) {
+        const otherTotal = otherStations.reduce((sum, station) => sum + station[1], 0);
+        pieData.push({
+            name: 'Other Stations',
+            value: otherTotal,
+            percentage: (otherTotal / totalRejects * 100).toFixed(1),
+            color: colors[3]
+        });
+    }
+    
+    // Create SVG for pie chart with improved styling
+    let html = `
+        <div style="height: 100%; width: 100%; display: flex; flex-direction: column;">
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                <div style="position: relative; width: 90%; height: 90%;">
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" style="transform: rotate(-90deg)">
+                        <!-- Drop shadow filter -->
+                        <defs>
+                            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.2"/>
+                            </filter>
+                        </defs>
+    `;
+    
+    // Calculate pie slices
+    let cumulativePercentage = 0;
+    
+    // Create donut chart instead of pie chart
+    const outerRadius = 40;
+    const innerRadius = 25; // Inner circle radius to create donut
+    
+    // Add a light circular background
+    html += `
+        <circle cx="50" cy="50" r="${outerRadius}" fill="#f5f7fa" filter="url(#shadow)" />
+    `;
+    
+    // Center text showing total rejects
+    html += `
+        <g transform="rotate(90, 50, 50)">
+            <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" 
+                  font-size="10" font-weight="bold" fill="var(--text-dark)">
+                ${totalRejects}
+            </text>
+            <text x="50" y="60" text-anchor="middle" dominant-baseline="middle" 
+                  font-size="6" fill="var(--text-light)">
+                Rejects
+            </text>
+        </g>
+    `;
+    
+    pieData.forEach(slice => {
+        const startPercentage = cumulativePercentage;
+        cumulativePercentage += parseFloat(slice.percentage);
+        
+        // Convert percentages to coordinates on a circle for outer arc
+        const startOuterX = 50 + outerRadius * Math.cos(2 * Math.PI * startPercentage / 100);
+        const startOuterY = 50 + outerRadius * Math.sin(2 * Math.PI * startPercentage / 100);
+        const endOuterX = 50 + outerRadius * Math.cos(2 * Math.PI * cumulativePercentage / 100);
+        const endOuterY = 50 + outerRadius * Math.sin(2 * Math.PI * cumulativePercentage / 100);
+        
+        // Convert percentages to coordinates for inner arc
+        const startInnerX = 50 + innerRadius * Math.cos(2 * Math.PI * cumulativePercentage / 100);
+        const startInnerY = 50 + innerRadius * Math.sin(2 * Math.PI * cumulativePercentage / 100);
+        const endInnerX = 50 + innerRadius * Math.cos(2 * Math.PI * startPercentage / 100);
+        const endInnerY = 50 + innerRadius * Math.sin(2 * Math.PI * startPercentage / 100);
+        
+        // Determine if slice is more than 50%
+        const largeArcFlag = (slice.percentage > 50) ? 1 : 0;
+        
+        // Add donut slice with path that goes outer arc, then inner arc (in reverse)
+        html += `
+            <path d="M ${startOuterX} ${startOuterY} 
+                    A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endOuterX} ${endOuterY} 
+                    L ${startInnerX} ${startInnerY} 
+                    A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${endInnerX} ${endInnerY} Z" 
+                  fill="${slice.color}" 
+                  stroke="white" 
+                  stroke-width="0.5" />
+        `;
+    });
+    
+    html += `
+                    </svg>
+                </div>
+            </div>
             
-            // Sort stations by reject count
-            const sortedStations = Object.entries(rejectsByStation)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5); // Top 5 stations
-                
-            // If no data, show message
-            if (sortedStations.length === 0) {
-                chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light); font-size: 12px;">No reject data available</div>';
-                return;
-            }
-            
-            // Create pie chart
-            const colors = [
-                'var(--primary-blue)',
-                'var(--primary-orange)',
-                'var(--primary-purple)',
-                'var(--danger-color)',
-                'var(--warning-color)',
-                'var(--text-light)' // For "Other"
-            ];
-            
-            // Get percentages and add "Other" category if needed
-            let pieData = sortedStations.map((station, index) => ({
-                name: station[0],
-                value: station[1],
-                percentage: (station[1] / totalRejects * 100).toFixed(1),
-                color: colors[index]
-            }));
-            
-            // If there are more stations, add an "Other" category
-            const otherStations = Object.entries(rejectsByStation)
-                .sort((a, b) => b[1] - a[1])
-                .slice(5);
-                
-            if (otherStations.length > 0) {
-                const otherTotal = otherStations.reduce((sum, station) => sum + station[1], 0);
-                pieData.push({
-                    name: 'Other Stations',
-                    value: otherTotal,
-                    percentage: (otherTotal / totalRejects * 100).toFixed(1),
-                    color: colors[5]
-                });
-            }
-            
-            // Create SVG for pie chart with improved styling
-            let html = `
-                <div style="height: 100%; width: 100%; display: flex; flex-direction: column;">
-                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-                        <div style="position: relative; width: 90%; height: 90%;">
-                            <svg width="100%" height="100%" viewBox="0 0 100 100" style="transform: rotate(-90deg)">
-                                <!-- Drop shadow filter -->
-                                <defs>
-                                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.2"/>
-                                    </filter>
-                                </defs>
-            `;
-            
-            // Calculate pie slices
-            let cumulativePercentage = 0;
-            
-            // Create donut chart instead of pie chart
-            const outerRadius = 40;
-            const innerRadius = 25; // Inner circle radius to create donut
-            
-            // Add a light circular background
-            html += `
-                <circle cx="50" cy="50" r="${outerRadius}" fill="#f5f7fa" filter="url(#shadow)" />
-            `;
-            
-            // Center text showing total rejects
-            html += `
-                <g transform="rotate(90, 50, 50)">
-                    <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" 
-                          font-size="10" font-weight="bold" fill="var(--text-dark)">
-                        ${totalRejects}
-                    </text>
-                    <text x="50" y="60" text-anchor="middle" dominant-baseline="middle" 
-                          font-size="6" fill="var(--text-light)">
-                        Rejects
-                    </text>
-                </g>
-            `;
-            
-            pieData.forEach(slice => {
-                const startPercentage = cumulativePercentage;
-                cumulativePercentage += parseFloat(slice.percentage);
-                
-                // Convert percentages to coordinates on a circle for outer arc
-                const startOuterX = 50 + outerRadius * Math.cos(2 * Math.PI * startPercentage / 100);
-                const startOuterY = 50 + outerRadius * Math.sin(2 * Math.PI * startPercentage / 100);
-                const endOuterX = 50 + outerRadius * Math.cos(2 * Math.PI * cumulativePercentage / 100);
-                const endOuterY = 50 + outerRadius * Math.sin(2 * Math.PI * cumulativePercentage / 100);
-                
-                // Convert percentages to coordinates for inner arc
-                const startInnerX = 50 + innerRadius * Math.cos(2 * Math.PI * cumulativePercentage / 100);
-                const startInnerY = 50 + innerRadius * Math.sin(2 * Math.PI * cumulativePercentage / 100);
-                const endInnerX = 50 + innerRadius * Math.cos(2 * Math.PI * startPercentage / 100);
-                const endInnerY = 50 + innerRadius * Math.sin(2 * Math.PI * startPercentage / 100);
-                
-                // Determine if slice is more than 50%
-                const largeArcFlag = (slice.percentage > 50) ? 1 : 0;
-                
-                // Add donut slice with path that goes outer arc, then inner arc (in reverse)
-                html += `
-                    <path d="M ${startOuterX} ${startOuterY} 
-                            A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${endOuterX} ${endOuterY} 
-                            L ${startInnerX} ${startInnerY} 
-                            A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${endInnerX} ${endInnerY} Z" 
-                          fill="${slice.color}" 
-                          stroke="white" 
-                          stroke-width="0.5" />
-                `;
-            });
-            
-            html += `
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <div style="flex: 0 0 auto; padding: 5px 0 0 5px;">
-                        <div style="font-weight: bold; font-size: 11px; margin-bottom: 5px;">Top Reject Stations</div>
-                        <div style="display: flex; flex-direction: column; gap: 2px;">
-            `;
-            
-            // Add legend with improved styling
-            pieData.forEach(slice => {
-                html += `
-                    <div style="display: flex; align-items: center; gap: 5px; font-size: 10px; padding: 2px 0;">
-                        <div style="width: 10px; height: 10px; background-color: ${slice.color}; border-radius: 2px;"></div>
-                        <div style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${slice.name}</div>
-                        <div style="font-weight: bold; width: 40px; text-align: right;">${slice.percentage}%</div>
-                    </div>
-                `;
-            });
-            
-            html += `
-                            </div>
-                        </div>
+            <div style="flex: 0 0 auto; padding: 5px 0 0 5px;">
+                <div style="font-weight: bold; font-size: 11px; margin-bottom: 5px;">Top Reject Stations</div>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+    `;
+    
+    // Add legend with improved styling
+    pieData.forEach(slice => {
+        html += `
+            <div style="display: flex; align-items: center; gap: 5px; font-size: 10px; padding: 2px 0;">
+                <div style="width: 10px; height: 10px; background-color: ${slice.color}; border-radius: 2px;"></div>
+                <div style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${slice.name}</div>
+                <div style="font-weight: bold; width: 40px; text-align: right;">${slice.percentage}%</div>
+            </div>
+        `;
+    });
+    
+    html += `
                     </div>
                 </div>
-            `;
-            
-            chartContainer.innerHTML = html;
-        }
+            </div>
+        </div>
+    `;
+    
+    chartContainer.innerHTML = html;
+}
         
         /**
          * Renders the downtime chart
