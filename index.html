@@ -623,7 +623,7 @@
         
         /* 
         ======================================
-        MODAL / DETAIL VIEW
+        MODAL / DETAIL VIEW (UPDATED)
         ======================================
         */
         .modal-overlay {
@@ -643,15 +643,17 @@
             display: flex;
         }
         
+        /* Updated Modal Styling */
         .modal-content {
-            background-color: white;
+            background-color: #f8f9fa;
             border-radius: 5px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 1200px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
+            width: 95%;
+            max-width: 1600px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         
         .modal-header {
@@ -677,14 +679,57 @@
         }
         
         .modal-body {
-            padding: 20px;
+            flex: 1;
+            overflow: hidden;
+            padding: 10px 20px;
         }
         
-        .modal-footer {
-            padding: 15px 20px;
-            border-top: 1px solid var(--border-color);
+        /* Make charts responsive without scrolling */
+        .detail-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 15px;
+            height: calc(100% - 60px); /* Subtract date nav height */
+        }
+        
+        .detail-metric-card {
+            height: 100%;
             display: flex;
-            justify-content: flex-end;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chart-container {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+        
+        .detail-metric-footer {
+            margin-top: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        
+        /* Pie Chart Container */
+        .chart-row {
+            display: flex;
+            gap: 15px;
+            height: 100%;
+        }
+        
+        .pie-chart-container {
+            flex: 1;
+            height: 100%;
+            position: relative;
+        }
+        
+        .detail-metric-header {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-dark);
         }
         
         /* 
@@ -727,41 +772,9 @@
         
         /* 
         ======================================
-        DETAILED CHARTS
+        TOGGLE BUTTONS
         ======================================
         */
-        .detail-metrics {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        
-        .detail-metric-card {
-            background-color: #f5f7fa;
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .detail-metric-header {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: var(--text-dark);
-        }
-        
-        .chart-container {
-            height: 300px;
-            width: 100%;
-        }
-        
-        .detail-metric-footer {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
         .toggle-container {
             display: flex;
             gap: 10px;
@@ -927,7 +940,7 @@
         <div class="debug-log-entry info">Debug log initialized.</div>
     </div>
     
-    <!-- Detail View Modal -->
+    <!-- Detail View Modal (UPDATED) -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -944,7 +957,7 @@
                     </div>
                 </div>
                 
-                <!-- Detail Metrics -->
+                <!-- Detail Metrics (UPDATED) -->
                 <div class="detail-metrics">
                     <!-- Schedule Attainment -->
                     <div class="detail-metric-card">
@@ -958,10 +971,17 @@
                         <div class="chart-container" id="labourCostChart"></div>
                     </div>
                     
-                    <!-- Scrap Percentage -->
+                    <!-- Scrap Percentage with Pie Chart -->
                     <div class="detail-metric-card">
-                        <div class="detail-metric-header">Scrap Percentage</div>
-                        <div class="chart-container" id="scrapPercentageChart"></div>
+                        <div class="chart-row">
+                            <div style="flex: 1; display: flex; flex-direction: column;">
+                                <div class="detail-metric-header">Scrap Percentage</div>
+                                <div class="chart-container" id="scrapPercentageChart"></div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="pie-chart-container" id="rejectPieChart"></div>
+                            </div>
+                        </div>
                         <div class="detail-metric-footer">
                             <div class="toggle-container">
                                 <button class="toggle-btn active" id="scrapQtyBtn">By Quantity</button>
@@ -2904,9 +2924,10 @@
                 end: null
             },
             scrapView: 'qty',   // 'qty' or 'cost'
-            downtimeView: 'reason'  // 'reason', 'machine', or 'duration'
+            downtimeView: 'reason',  // 'reason', 'machine', or 'duration'
+            filteredData: null    // Store filtered data for reuse
         };
-        
+
         /**
          * Shows the detail view for a specific line
          * @param {string} lineId - The ID of the line to show details for
@@ -2917,25 +2938,9 @@
             // Store the current line ID
             detailViewState.lineId = lineId;
             
-            // Set the date range to the current week if not already set
-            if (!detailViewState.dateRange.start || !detailViewState.dateRange.end) {
-                const currentDate = new Date();
-                
-                // Set to the beginning of the current week (Monday)
-                const startDate = new Date(currentDate);
-                const day = startDate.getDay();
-                const diff = startDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-                startDate.setDate(diff);
-                startDate.setHours(0, 0, 0, 0);
-                
-                // Set to the end of the current week (Sunday)
-                const endDate = new Date(startDate);
-                endDate.setDate(endDate.getDate() + 6);
-                endDate.setHours(23, 59, 59, 999);
-                
-                detailViewState.dateRange.start = startDate.toISOString();
-                detailViewState.dateRange.end = endDate.toISOString();
-            }
+            // Use the date range from the main page
+            detailViewState.dateRange.start = currentDateRange.start;
+            detailViewState.dateRange.end = currentDateRange.end;
             
             // Update modal title
             const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
@@ -3014,12 +3019,17 @@
             start.setDate(start.getDate() - 7);
             end.setDate(end.getDate() - 7);
             
-            // Update the state
+            // Update both the detail view state and the main page state
             detailViewState.dateRange.start = start.toISOString();
             detailViewState.dateRange.end = end.toISOString();
             
-            // Update display and reload data
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
             updateModalDateRange();
+            updateDateRangeDisplay(currentDateRange);
             loadDetailViewData();
         }
         
@@ -3036,12 +3046,17 @@
             start.setDate(start.getDate() + 7);
             end.setDate(end.getDate() + 7);
             
-            // Update the state
+            // Update both the detail view state and the main page state
             detailViewState.dateRange.start = start.toISOString();
             detailViewState.dateRange.end = end.toISOString();
             
-            // Update display and reload data
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
             updateModalDateRange();
+            updateDateRangeDisplay(currentDateRange);
             loadDetailViewData();
         }
         
@@ -3059,8 +3074,10 @@
             document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
             document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
             
-            // Update the display
-            updateTopScrapList();
+            // Update the display using the stored filtered data
+            if (detailViewState.filteredData) {
+                updateTopScrapList(detailViewState.filteredData);
+            }
         }
         
         /**
@@ -3078,8 +3095,10 @@
             document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
             document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
             
-            // Update the display
-            updateTopDowntimeList();
+            // Update the display using the stored filtered data
+            if (detailViewState.filteredData) {
+                updateTopDowntimeList(detailViewState.filteredData);
+            }
         }
         
         /**
@@ -3090,6 +3109,9 @@
             
             // Get the filtered data for the line and date range
             const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
+            
+            // Store the filtered data for reuse
+            detailViewState.filteredData = filteredData;
             
             if (filteredData.length === 0) {
                 Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
@@ -3102,6 +3124,7 @@
             renderLabourCostChart(filteredData);
             renderScrapPercentageChart(filteredData);
             renderDowntimeChart(filteredData);
+            renderRejectPieChart(filteredData); // New pie chart
             
             // Update lists with actual data
             updateTopScrapList(filteredData);
@@ -3145,13 +3168,14 @@
             document.getElementById('labourCostChart').innerHTML = noDataMessage;
             document.getElementById('scrapPercentageChart').innerHTML = noDataMessage;
             document.getElementById('downtimeChart').innerHTML = noDataMessage;
+            document.getElementById('rejectPieChart').innerHTML = noDataMessage;
             
             document.getElementById('topScrapList').innerHTML = noDataMessage;
             document.getElementById('topDowntimeList').innerHTML = noDataMessage;
         }
         
         /**
-         * Renders the schedule attainment chart
+         * Renders the schedule attainment chart with stacked bars for multiple variants
          * @param {Array} data - Filtered data for the line
          */
         function renderScheduleAttainmentChart(data) {
@@ -3160,15 +3184,43 @@
             // Sort data by date
             const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
             
-            // Format data for chart
-            const chartData = sortedData.map(record => {
+            // Group data by date and variant
+            const groupedData = {};
+            
+            sortedData.forEach(record => {
                 const date = new Date(record.Date);
-                return {
-                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                    actual: Math.round(parseFloat(record['Schedule Attainment']) || 0),
-                    target: 100 // Target is always 100%
-                };
+                const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const variant = record.Variant || 'Unknown';
+                
+                if (!groupedData[dateKey]) {
+                    groupedData[dateKey] = {};
+                }
+                
+                if (!groupedData[dateKey][variant]) {
+                    groupedData[dateKey][variant] = {
+                        attainment: parseFloat(record['Schedule Attainment'] || 0),
+                        count: 1
+                    };
+                } else {
+                    // Average if we have multiple records for same date/variant
+                    const current = groupedData[dateKey][variant];
+                    current.attainment = (current.attainment * current.count + parseFloat(record['Schedule Attainment'] || 0)) / (current.count + 1);
+                    current.count++;
+                }
             });
+            
+            // Get unique date keys and variants
+            const dateKeys = Object.keys(groupedData).sort((a, b) => {
+                const dateA = new Date(a);
+                const dateB = new Date(b);
+                return dateA - dateB;
+            });
+            
+            const allVariants = new Set();
+            Object.values(groupedData).forEach(variants => {
+                Object.keys(variants).forEach(variant => allVariants.add(variant));
+            });
+            const uniqueVariants = Array.from(allVariants);
             
             // Create chart HTML
             let html = '<div style="width: 100%; height: 100%;">';
@@ -3191,21 +3243,54 @@
             // Chart area
             html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px;">';
             
-            // Render bars
-            chartData.forEach(item => {
-                const actualHeight = `${item.actual}%`;
-                const targetHeight = '100%';
+            // Define variant colors
+            const variantColors = {
+                'XL': 'var(--timeline-orange)',
+                'S10': 'var(--timeline-red)',
+                'S20': 'var(--timeline-blue)',
+                'Plus': 'var(--timeline-purple)',
+                'Regular': 'var(--timeline-blue)',
+                'Deluxe': 'var(--timeline-purple)',
+                'Standard': 'var(--timeline-blue)'
+            };
+            
+            // Function to get color for variant
+            const getVariantColor = (variant) => {
+                // Check if variant name contains any of our color keys
+                for (const [key, color] of Object.entries(variantColors)) {
+                    if (variant.includes(key)) {
+                        return color;
+                    }
+                }
+                return 'var(--primary-blue)'; // Default color
+            };
+            
+            // Render stacked bars
+            dateKeys.forEach(dateKey => {
+                const variants = groupedData[dateKey];
                 
                 html += `<div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">`;
                 
-                // Target line
-                html += `<div style="width: 100%; height: 2px; background-color: var(--danger-color); position: relative; bottom: ${targetHeight}; z-index: 2;"></div>`;
+                // Target line (100%)
+                html += `<div style="width: 100%; height: 2px; background-color: var(--danger-color); position: relative; bottom: 100%; z-index: 2;"></div>`;
                 
-                // Actual bar
-                const barColor = item.actual >= 100 ? 'var(--success-color)' : 
-                                item.actual >= 85 ? 'var(--warning-color)' : 'var(--danger-color)';
-                                
-                html += `<div style="width: 60%; height: ${actualHeight}; background-color: ${barColor}; margin-top: auto;"></div>`;
+                // Stack bars for each variant
+                let totalHeight = 0;
+                Object.entries(variants).forEach(([variant, data]) => {
+                    const variantColor = getVariantColor(variant);
+                    const attainment = Math.round(data.attainment);
+                    const barHeight = Math.min(attainment, 100 - totalHeight); // Cap at 100%
+                    
+                    if (barHeight > 0) {
+                        html += `
+                            <div style="width: 60%; height: ${barHeight}%; background-color: ${variantColor}; position: relative;" 
+                                 title="${variant}: ${attainment}%">
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 9px; color: white;">${attainment}%</div>
+                            </div>
+                        `;
+                        totalHeight += barHeight;
+                    }
+                });
                 
                 html += `</div>`;
             });
@@ -3214,8 +3299,21 @@
             
             // X-axis labels
             html += '<div style="height: 30px; display: flex; gap: 2px;">';
-            chartData.forEach(item => {
-                html += `<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">${item.date}</div>`;
+            dateKeys.forEach(dateKey => {
+                html += `<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">${dateKey}</div>`;
+            });
+            html += '</div>';
+            
+            // Legend for variants
+            html += '<div style="height: 30px; display: flex; justify-content: center; gap: 15px; margin-top: 5px;">';
+            uniqueVariants.forEach(variant => {
+                const variantColor = getVariantColor(variant);
+                html += `
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 10px; height: 10px; background-color: ${variantColor};"></div>
+                        <div style="font-size: 10px;">${variant}</div>
+                    </div>
+                `;
             });
             html += '</div>';
             
@@ -3227,7 +3325,7 @@
         }
         
         /**
-         * Renders the labour cost chart
+         * Renders the labour cost chart with multiple variants
          * @param {Array} data - Filtered data for the line
          */
         function renderLabourCostChart(data) {
@@ -3236,19 +3334,55 @@
             // Sort data by date
             const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
             
-            // Format data for chart
-            const chartData = sortedData.map(record => {
+            // Group data by date and variant
+            const groupedData = {};
+            
+            sortedData.forEach(record => {
                 const date = new Date(record.Date);
-                return {
-                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                    cost: Math.round(parseFloat(record['Cost Per Unit']) || 0)
-                };
+                const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const variant = record.Variant || 'Unknown';
+                
+                if (!groupedData[dateKey]) {
+                    groupedData[dateKey] = {};
+                }
+                
+                if (!groupedData[dateKey][variant]) {
+                    groupedData[dateKey][variant] = {
+                        cost: parseFloat(record['Cost Per Unit'] || record['Staff Cost'] || 0),
+                        count: 1
+                    };
+                } else {
+                    // Average if we have multiple records for same date/variant
+                    const current = groupedData[dateKey][variant];
+                    current.cost = (current.cost * current.count + parseFloat(record['Cost Per Unit'] || record['Staff Cost'] || 0)) / (current.count + 1);
+                    current.count++;
+                }
             });
             
+            // Get unique date keys and variants
+            const dateKeys = Object.keys(groupedData).sort((a, b) => {
+                const dateA = new Date(a);
+                const dateB = new Date(b);
+                return dateA - dateB;
+            });
+            
+            const allVariants = new Set();
+            Object.values(groupedData).forEach(variants => {
+                Object.keys(variants).forEach(variant => allVariants.add(variant));
+            });
+            const uniqueVariants = Array.from(allVariants);
+            
             // Find min and max for scaling
-            const costs = chartData.map(item => item.cost);
-            const minCost = Math.min(...costs);
-            const maxCost = Math.max(...costs);
+            let minCost = Infinity;
+            let maxCost = -Infinity;
+            
+            Object.values(groupedData).forEach(variants => {
+                Object.values(variants).forEach(data => {
+                    minCost = Math.min(minCost, data.cost);
+                    maxCost = Math.max(maxCost, data.cost);
+                });
+            });
+            
             const range = maxCost - minCost;
             const padding = range * 0.1; // 10% padding
             
@@ -3285,44 +3419,93 @@
             html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
             html += '</div>';
             
-            // Line chart
-            if (chartData.length > 1) {
+            // Define variant colors
+            const variantColors = {
+                'XL': 'var(--timeline-orange)',
+                'S10': 'var(--timeline-red)',
+                'S20': 'var(--timeline-blue)',
+                'Plus': 'var(--timeline-purple)',
+                'Regular': 'var(--timeline-blue)',
+                'Deluxe': 'var(--timeline-purple)',
+                'Standard': 'var(--timeline-blue)'
+            };
+            
+            // Function to get color for variant
+            const getVariantColor = (variant) => {
+                // Check if variant name contains any of our color keys
+                for (const [key, color] of Object.entries(variantColors)) {
+                    if (variant.includes(key)) {
+                        return color;
+                    }
+                }
+                return 'var(--primary-blue)'; // Default color
+            };
+            
+            // Line chart for each variant
+            uniqueVariants.forEach(variant => {
+                const variantColor = getVariantColor(variant);
+                
                 // Calculate line points
                 let points = '';
-                chartData.forEach((item, index) => {
-                    const x = (index / (chartData.length - 1)) * 100;
-                    const y = 100 - ((item.cost - yMin) / (yMax - yMin)) * 100;
-                    points += `${x},${y} `;
+                let hasPoints = false;
+                
+                dateKeys.forEach((dateKey, index) => {
+                    if (groupedData[dateKey][variant]) {
+                        const x = (index / (dateKeys.length - 1)) * 100;
+                        const cost = groupedData[dateKey][variant].cost;
+                        const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
+                        points += `${x},${y} `;
+                        hasPoints = true;
+                    }
                 });
                 
-                // Create SVG for line
-                html += `
-                    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-                        <polyline 
-                            points="${points}" 
-                            fill="none" 
-                            stroke="var(--primary-blue)" 
-                            stroke-width="2" 
-                        />
-                    </svg>
-                `;
-                
-                // Add data points
-                chartData.forEach((item, index) => {
-                    const x = (index / (chartData.length - 1)) * 100;
-                    const y = 100 - ((item.cost - yMin) / (yMax - yMin)) * 100;
+                if (hasPoints) {
+                    // Create SVG for line
                     html += `
-                        <div style="position: absolute; top: calc(${y}% - 4px); left: calc(${x}% - 4px); width: 8px; height: 8px; background-color: var(--primary-blue); border-radius: 50%;" title="R${item.cost}"></div>
+                        <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                            <polyline 
+                                points="${points}" 
+                                fill="none" 
+                                stroke="${variantColor}" 
+                                stroke-width="2" 
+                            />
+                        </svg>
                     `;
-                });
-            }
+                    
+                    // Add data points
+                    dateKeys.forEach((dateKey, index) => {
+                        if (groupedData[dateKey][variant]) {
+                            const x = (index / (dateKeys.length - 1)) * 100;
+                            const cost = groupedData[dateKey][variant].cost;
+                            const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
+                            html += `
+                                <div style="position: absolute; top: calc(${y}% - 4px); left: calc(${x}% - 4px); width: 8px; height: 8px; background-color: ${variantColor}; border-radius: 50%;" 
+                                     title="${variant}: R${Math.round(cost)}"></div>
+                            `;
+                        }
+                    });
+                }
+            });
             
             html += '</div>'; // End chart area
             
             // X-axis labels
             html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
-            chartData.forEach(item => {
-                html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${item.date}</div>`;
+            dateKeys.forEach(dateKey => {
+                html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${dateKey}</div>`;
+            });
+            html += '</div>';
+            
+            // Legend for variants
+            html += '<div style="height: 30px; display: flex; justify-content: center; gap: 15px; margin-top: 5px;">';
+            uniqueVariants.forEach(variant => {
+                const variantColor = getVariantColor(variant);
+                html += `
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 10px; height: 10px; background-color: ${variantColor};"></div>
+                        <div style="font-size: 10px;">${variant}</div>
+                    </div>
+                `;
             });
             html += '</div>';
             
@@ -3431,6 +3614,164 @@
             html += '</div>'; // End chart content
             html += '</div>'; // End axes and labels
             html += '</div>'; // End chart container
+            
+            chartContainer.innerHTML = html;
+        }
+        
+        /**
+         * Renders the reject rate pie chart
+         * @param {Array} data - Filtered data for the line
+         */
+        function renderRejectPieChart(data) {
+            const chartContainer = document.getElementById('rejectPieChart');
+            if (!chartContainer) return; // Safety check
+            
+            // Collect reject data from all records
+            let rejectsByStation = {};
+            let totalRejects = 0;
+            
+            data.forEach(record => {
+                // Parse reject data from both QTY and Cost fields to get comprehensive station data
+                const rejectDataQty = record['Top Rejects by QTY (Reason - Station - QTY - Cost)'];
+                const rejectDataCost = record['Top Rejects by Cost (Reason - Station - QTY - Cost)'];
+                
+                [rejectDataQty, rejectDataCost].forEach(dataString => {
+                    if (!dataString || dataString === "No rejects") return;
+                    
+                    // Split by pipe to get individual items
+                    const itemStrings = dataString.split(' | ');
+                    
+                    // Parse each item
+                    itemStrings.forEach(itemString => {
+                        // Remove the numbering
+                        const withoutNumber = itemString.replace(/^\d+\.\s*/, '');
+                        
+                        // Extract parts
+                        const parts = withoutNumber.split(' - ');
+                        if (parts.length < 3) return;
+                        
+                        // Get station name
+                        const station = parts[1];
+                        
+                        // Extract quantity
+                        const qtyMatch = parts[2].match(/QTY:\s*(\d+)/);
+                        if (qtyMatch) {
+                            const qty = parseInt(qtyMatch[1]);
+                            
+                            // Add to station totals
+                            if (!rejectsByStation[station]) {
+                                rejectsByStation[station] = 0;
+                            }
+                            rejectsByStation[station] += qty;
+                            totalRejects += qty;
+                        }
+                    });
+                });
+            });
+            
+            // Sort stations by reject count
+            const sortedStations = Object.entries(rejectsByStation)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5); // Top 5 stations
+                
+            // If no data, show message
+            if (sortedStations.length === 0) {
+                chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No reject data available for the selected period.</div>';
+                return;
+            }
+            
+            // Create pie chart
+            const colors = [
+                'var(--primary-blue)',
+                'var(--primary-orange)',
+                'var(--primary-purple)',
+                'var(--danger-color)',
+                'var(--warning-color)',
+                'var(--text-light)' // For "Other"
+            ];
+            
+            // Get percentages and add "Other" category if needed
+            let pieData = sortedStations.map((station, index) => ({
+                name: station[0],
+                value: station[1],
+                percentage: (station[1] / totalRejects * 100).toFixed(1),
+                color: colors[index]
+            }));
+            
+            // If there are more stations, add an "Other" category
+            const otherStations = Object.entries(rejectsByStation)
+                .sort((a, b) => b[1] - a[1])
+                .slice(5);
+                
+            if (otherStations.length > 0) {
+                const otherTotal = otherStations.reduce((sum, station) => sum + station[1], 0);
+                pieData.push({
+                    name: 'Other Stations',
+                    value: otherTotal,
+                    percentage: (otherTotal / totalRejects * 100).toFixed(1),
+                    color: colors[5]
+                });
+            }
+            
+            // Create SVG for pie chart
+            let html = `
+                <div style="height: 100%; width: 100%; display: flex; flex-direction: column;">
+                    <div class="detail-metric-header">Reject Rate by Station</div>
+                    <div style="flex: 1; display: flex;">
+                        <div style="flex: 1; position: relative;">
+                            <svg width="100%" height="100%" viewBox="0 0 100 100" style="transform: rotate(-90deg)">
+            `;
+            
+            // Calculate pie slices
+            let cumulativePercentage = 0;
+            
+            pieData.forEach(slice => {
+                const startPercentage = cumulativePercentage;
+                cumulativePercentage += parseFloat(slice.percentage);
+                
+                // Convert percentages to coordinates on a circle
+                const startX = 50 + 40 * Math.cos(2 * Math.PI * startPercentage / 100);
+                const startY = 50 + 40 * Math.sin(2 * Math.PI * startPercentage / 100);
+                const endX = 50 + 40 * Math.cos(2 * Math.PI * cumulativePercentage / 100);
+                const endY = 50 + 40 * Math.sin(2 * Math.PI * cumulativePercentage / 100);
+                
+                // Determine if slice is more than 50%
+                const largeArcFlag = (slice.percentage > 50) ? 1 : 0;
+                
+                // Add pie slice
+                html += `
+                    <path d="M 50 50 L ${startX} ${startY} A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY} Z" 
+                          fill="${slice.color}" 
+                          stroke="white" 
+                          stroke-width="0.5" />
+                `;
+            });
+            
+            html += `
+                            </svg>
+                        </div>
+                        <div style="flex: 1; padding-left: 20px;">
+                            <div style="font-weight: bold; margin-bottom: 10px;">Top Stations</div>
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+            `;
+            
+            // Add legend
+            pieData.forEach(slice => {
+                html += `
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 12px; height: 12px; background-color: ${slice.color}; border-radius: 2px;"></div>
+                        <div style="flex: 1;">${slice.name}</div>
+                        <div style="font-weight: bold;">${slice.percentage}%</div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
             
             chartContainer.innerHTML = html;
         }
@@ -3838,3 +4179,4 @@
     </script>
 </body>
 </html>
+                                
