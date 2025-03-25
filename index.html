@@ -654,7 +654,7 @@
             color: var(--text-dark);
         }
         
-        /* 
+         /* 
 ======================================
 MODAL / DETAIL VIEW (IMPROVED)
 ======================================
@@ -744,7 +744,7 @@ MODAL / DETAIL VIEW (IMPROVED)
 }
 
 .chart-container {
-    flex: 0.6; /* Reduced from 1 to 0.6 to make charts smaller */
+    flex: 0.5; /* Reduced from 1 to 0.5 to make charts smaller */
     position: relative;
     min-height: 0;
     background-color: #ffffff;
@@ -755,7 +755,7 @@ MODAL / DETAIL VIEW (IMPROVED)
 
 .detail-metric-footer {
     margin-top: 10px;
-    max-height: 160px; /* Increased from 110px to 160px to show more data */
+    max-height: 180px; /* Increased from 110px to 180px to show more data */
     overflow-y: auto;
     background-color: #ffffff;
     border-radius: 4px;
@@ -823,8 +823,9 @@ DATE NAVIGATION
     align-items: center;
     gap: 5px;
     font-size: 13px;
-    min-width: 120px; /* Added min-width to prevent text cutoff */
+    min-width: 150px; /* Increased min-width to prevent text cutoff */
     justify-content: center; /* Center content in button */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 .date-nav-btn:hover {
@@ -860,6 +861,8 @@ TOGGLE BUTTONS
 .top-items-list {
     background-color: white;
     border-radius: 4px;
+    overflow-y: visible; /* Ensure all items are visible */
+    max-height: none; /* No height limit in the list container */
 }
 
 .top-item {
@@ -887,6 +890,17 @@ TOGGLE BUTTONS
     color: var(--text-light);
     font-size: 11px;
     flex-shrink: 0;
+}
+
+/* Specific adjustment for scrap/downtime detail sections */
+.detail-metric-card:nth-child(3) .chart-container,
+.detail-metric-card:nth-child(4) .chart-container {
+    flex: 0.4; /* Even smaller charts for scrap and downtime sections */
+}
+
+.detail-metric-card:nth-child(3) .detail-metric-footer,
+.detail-metric-card:nth-child(4) .detail-metric-footer {
+    max-height: 200px; /* Taller footers for scrap and downtime sections */
 }
 
         /* 
@@ -1028,80 +1042,79 @@ TOGGLE BUTTONS
     </div>
     
     <!-- Detail View Modal (IMPROVED) -->
-    <div class="modal-overlay" id="detailModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="modalTitle">Line Details</div>
-                <button class="modal-close" id="modalClose">&times;</button>
+<div class="modal-overlay" id="detailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title" id="modalTitle">Line Details</div>
+            <button class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Date Navigation -->
+            <div class="date-nav">
+                <div class="date-range-display" id="modalDateRange">March 18-25, 2025</div>
+                <div class="date-nav-controls">
+                    <button class="date-nav-btn" id="prevWeekBtn"><i class="fas fa-chevron-left"></i> Previous Week</button>
+                    <button class="date-nav-btn" id="nextWeekBtn">Next Week <i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
-            <div class="modal-body">
-                <!-- Date Navigation -->
-                <div class="date-nav">
-                    <div class="date-range-display" id="modalDateRange">March 18-25, 2025</div>
-                    <div class="date-nav-controls">
-                        <button class="date-nav-btn" id="prevWeekBtn"><i class="fas fa-chevron-left"></i> Previous Week</button>
-                        <button class="date-nav-btn" id="nextWeekBtn">Next Week <i class="fas fa-chevron-right"></i></button>
+            
+            <!-- Detail Metrics (IMPROVED) -->
+            <div class="detail-metrics">
+                <!-- Schedule Attainment -->
+                <div class="detail-metric-card">
+                    <div class="detail-metric-header">Schedule Attainment</div>
+                    <div class="chart-container" id="scheduleAttainmentChart"></div>
+                </div>
+                
+                <!-- Labour Cost per Unit -->
+                <div class="detail-metric-card">
+                    <div class="detail-metric-header">Labour Cost per Unit</div>
+                    <div class="chart-container" id="labourCostChart"></div>
+                </div>
+                
+                <!-- Scrap Percentage with Pie Chart -->
+                <div class="detail-metric-card">
+                    <div class="detail-metric-header">Scrap Analysis</div>
+                    <div class="chart-row" style="flex: 0.4;">
+                        <div style="flex: 1.5; display: flex; flex-direction: column;">
+                            <div style="font-size: 12px; margin-bottom: 5px;">Scrap Percentage Trend</div>
+                            <div class="chart-container" id="scrapPercentageChart" style="margin-bottom: 0;"></div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 12px; margin-bottom: 5px;">Reject Distribution</div>
+                            <div class="pie-chart-container" id="rejectPieChart"></div>
+                        </div>
+                    </div>
+                    <div class="detail-metric-footer">
+                        <div class="toggle-container">
+                            <button class="toggle-btn active" id="scrapQtyBtn">By Quantity</button>
+                            <button class="toggle-btn" id="scrapCostBtn">By Cost</button>
+                        </div>
+                        <div class="top-items-list" id="topScrapList">
+                            <!-- Top scrap items will be inserted here -->
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Detail Metrics (IMPROVED) -->
-                <div class="detail-metrics">
-                    <!-- Schedule Attainment -->
-                    <div class="detail-metric-card">
-                        <div class="detail-metric-header">Schedule Attainment</div>
-                        <div class="chart-container" id="scheduleAttainmentChart"></div>
-                    </div>
-                    
-                    <!-- Labour Cost per Unit -->
-                    <div class="detail-metric-card">
-                        <div class="detail-metric-header">Labour Cost per Unit</div>
-                        <div class="chart-container" id="labourCostChart"></div>
-                    </div>
-                    
-                    <!-- Scrap Percentage with Pie Chart -->
-                    <div class="detail-metric-card">
-                        <div class="detail-metric-header">Scrap Analysis</div>
-                        <div class="chart-row">
-                            <div style="flex: 1.5; display: flex; flex-direction: column;">
-                                <div style="font-size: 12px; margin-bottom: 5px;">Scrap Percentage Trend</div>
-                                <div class="chart-container" id="scrapPercentageChart"></div>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="font-size: 12px; margin-bottom: 5px;">Reject Distribution</div>
-                                <div class="pie-chart-container" id="rejectPieChart"></div>
-                            </div>
+                <!-- Downtime -->
+                <div class="detail-metric-card">
+                    <div class="detail-metric-header">Downtime Analysis</div>
+                    <div class="chart-container" id="downtimeChart"></div>
+                    <div class="detail-metric-footer">
+                        <div class="toggle-container">
+                            <button class="toggle-btn active" id="downtimeReasonBtn">By Reason</button>
+                            <button class="toggle-btn" id="downtimeMachineBtn">By Machine</button>
+                            <button class="toggle-btn" id="downtimeDurationBtn">By Duration</button>
                         </div>
-                        <div class="detail-metric-footer">
-                            <div class="toggle-container">
-                                <button class="toggle-btn active" id="scrapQtyBtn">By Quantity</button>
-                                <button class="toggle-btn" id="scrapCostBtn">By Cost</button>
-                            </div>
-                            <div class="top-items-list" id="topScrapList">
-                                <!-- Top scrap items will be inserted here -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Downtime -->
-                    <div class="detail-metric-card">
-                        <div class="detail-metric-header">Downtime Analysis</div>
-                        <div class="chart-container" id="downtimeChart"></div>
-                        <div class="detail-metric-footer">
-                            <div class="toggle-container">
-                                <button class="toggle-btn active" id="downtimeReasonBtn">By Reason</button>
-                                <button class="toggle-btn" id="downtimeMachineBtn">By Machine</button>
-                                <button class="toggle-btn" id="downtimeDurationBtn">By Duration</button>
-                            </div>
-                            <div class="top-items-list" id="topDowntimeList">
-                                <!-- Top downtime items will be inserted here -->
-                            </div>
+                        <div class="top-items-list" id="topDowntimeList">
+                            <!-- Top downtime items will be inserted here -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
     <script>
         /**
          * ======================================
@@ -3250,9 +3263,17 @@ function processLineId(lineId) {
     
     // Check for Scalpel cases
     if (lineId === 'nosi-scalpel') {
-        // Determine if it's packaging or assembly based on the card title
+        // Check if card title contains "Packaging" explicitly
         const cardTitle = lineCard.querySelector('.card-title');
         if (cardTitle && cardTitle.textContent.toLowerCase().includes('packaging')) {
+            return 'nosi-scalpel-packaging';
+        } else if (cardTitle && cardTitle.textContent.toLowerCase().includes('assembly')) {
+            return 'nosi-scalpel-assembly';
+        }
+        
+        // Fallback to checking variant info if available
+        const variantInfo = lineCard.querySelector('.variant-label');
+        if (variantInfo && variantInfo.textContent.toLowerCase().includes('packaging')) {
             return 'nosi-scalpel-packaging';
         } else {
             return 'nosi-scalpel-assembly';
@@ -3261,12 +3282,36 @@ function processLineId(lineId) {
     
     // Check for 3rd line cases
     if (lineId === 'mvokwe-3rd line' || lineId === 'mvokwe-3rd-line') {
-        // Determine if it's UBT or SCD based on the card title
+        // Check card title explicitly for UBT or SCD
         const cardTitle = lineCard.querySelector('.card-title');
-        if (cardTitle && cardTitle.textContent.toLowerCase().includes('ubt')) {
-            return 'mvokwe-3rd-line-ubt';
-        } else {
-            return 'mvokwe-3rd-line-scd';
+        if (cardTitle) {
+            if (cardTitle.textContent.toLowerCase().includes('ubt')) {
+                return 'mvokwe-3rd-line-ubt';
+            } else if (cardTitle.textContent.toLowerCase().includes('scd')) {
+                return 'mvokwe-3rd-line-scd';
+            }
+        }
+        
+        // Check variant info if title check fails
+        const variantInfo = lineCard.querySelector('.variant-info');
+        if (variantInfo) {
+            const variantText = variantInfo.textContent.toLowerCase();
+            if (variantText.includes('ubt')) {
+                return 'mvokwe-3rd-line-ubt';
+            } else if (variantText.includes('scd')) {
+                return 'mvokwe-3rd-line-scd';
+            }
+        }
+        
+        // Check base product if both checks fail
+        const baseProductElement = lineCard.querySelector('.base-product');
+        if (baseProductElement) {
+            const baseProduct = baseProductElement.textContent.trim();
+            if (baseProduct === 'UBT') {
+                return 'mvokwe-3rd-line-ubt';
+            } else if (baseProduct === 'SCD') {
+                return 'mvokwe-3rd-line-scd';
+            }
         }
     }
     
@@ -3799,62 +3844,70 @@ function renderLabourCostChart(data) {
         return 'var(--primary-blue)'; // Default color
     };
     
-    // Create SVG container for all lines
-    html += `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">`;
+    // Create line and point data for each variant
+    const variantDatasets = [];
     
-    // Line chart for each variant
     uniqueVariants.forEach(variant => {
         const variantColor = getVariantColor(variant);
+        const pointData = [];
         
-        // Store the points for both the line and dots
-        const svgPoints = [];
-        const dotPositions = [];
-        
+        // Calculate positions for consistent lines and points
         dateKeys.forEach((dateKey, index) => {
+            const xPercent = (index / (dateKeys.length - 1)) * 100;
+            const xPos = `${xPercent}%`;
+            
             if (groupedData[dateKey][variant]) {
-                const x = (index / (dateKeys.length - 1)) * 100;
                 const cost = groupedData[dateKey][variant].cost;
-                const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
+                const yPercent = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
+                const yPos = `${yPercent}%`;
                 
-                // Store the point for both SVG line and dot
-                svgPoints.push({x, y});
-                dotPositions.push({x, y, cost});
+                pointData.push({
+                    x: xPercent,
+                    y: yPercent,
+                    xPos,
+                    yPos,
+                    cost
+                });
             }
         });
         
-        if (svgPoints.length > 0) {
-            // Create polyline using the collected points
-            const pointsString = svgPoints.map(p => `${p.x},${p.y}`).join(' ');
+        if (pointData.length > 0) {
+            variantDatasets.push({
+                variant,
+                color: variantColor,
+                points: pointData
+            });
+        }
+    });
+    
+    // Create SVG container for lines
+    html += `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">`;
+    
+    // Add polylines for each variant
+    variantDatasets.forEach(dataset => {
+        if (dataset.points.length > 1) {
+            const pointsString = dataset.points.map(p => `${p.x},${p.y}`).join(' ');
             
             html += `
                 <polyline 
                     points="${pointsString}" 
                     fill="none" 
-                    stroke="${variantColor}" 
+                    stroke="${dataset.color}" 
                     stroke-width="2" 
                 />
             `;
         }
     });
     
-    // Close the SVG
     html += `</svg>`;
     
-    // Add data points after SVG
-    uniqueVariants.forEach(variant => {
-        const variantColor = getVariantColor(variant);
-        
-        dateKeys.forEach((dateKey, index) => {
-            if (groupedData[dateKey][variant]) {
-                const x = (index / (dateKeys.length - 1)) * 100;
-                const cost = groupedData[dateKey][variant].cost;
-                const y = 100 - ((cost - yMin) / (yMax - yMin)) * 100;
-                
-                html += `
-                    <div style="position: absolute; top: calc(${y}% - 4px); left: calc(${x}% - 4px); width: 8px; height: 8px; background-color: ${variantColor}; border-radius: 50%;" 
-                         title="${variant}: R${Math.round(cost)}"></div>
-                `;
-            }
+    // Add data points (separate from SVG for better tooltips)
+    variantDatasets.forEach(dataset => {
+        dataset.points.forEach(point => {
+            html += `
+                <div style="position: absolute; top: calc(${point.yPos} - 4px); left: calc(${point.xPos} - 4px); width: 8px; height: 8px; background-color: ${dataset.color}; border-radius: 50%;" 
+                     title="${dataset.variant}: R${Math.round(point.cost)}"></div>
+            `;
         });
     });
     
@@ -3989,7 +4042,7 @@ function renderLabourCostChart(data) {
             chartContainer.innerHTML = html;
         }
         
-        /**
+/**
  * Renders the reject rate pie chart
  * @param {Array} data - Filtered data for the line
  */
@@ -4270,33 +4323,34 @@ function renderRejectPieChart(data) {
         }
         
         /**
-         * Updates the top scrap list based on the current view
-         * @param {Array} data - Filtered data for the line
-         */
-        function updateTopScrapList(data) {
-            const listElement = document.getElementById('topScrapList');
-            
-            // Extract top rejects data based on current view
-            const topItems = getTopScrapItems(data, detailViewState.scrapView);
-            
-            if (topItems.length === 0) {
-                listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No scrap data available.</div>';
-                return;
-            }
-            
-            // Generate HTML
-            let html = '';
-            topItems.forEach((item, index) => {
-                html += `
-                    <div class="top-item">
-                        <div class="top-item-label">${index + 1}. ${item.reason}</div>
-                        <div class="top-item-value">${item.value}</div>
-                    </div>
-                `;
-            });
-            
-            listElement.innerHTML = html;
-        }
+ * Updates the top scrap list based on the current view
+ * @param {Array} data - Filtered data for the line
+ */
+function updateTopScrapList(data) {
+    const listElement = document.getElementById('topScrapList');
+    
+    // Extract top rejects data based on current view
+    const topItems = getTopScrapItems(data, detailViewState.scrapView);
+    
+    if (topItems.length === 0) {
+        listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No scrap data available.</div>';
+        return;
+    }
+    
+    // Generate HTML
+    let html = '';
+    topItems.forEach((item, index) => {
+        html += `
+            <div class="top-item">
+                <div class="top-item-label">${index + 1}. ${item.reason}</div>
+                <div class="top-item-value">${item.value}</div>
+            </div>
+        `;
+    });
+    
+    listElement.innerHTML = html;
+}
+
         
         /**
          * Extracts top scrap items from data
@@ -4374,33 +4428,33 @@ function renderRejectPieChart(data) {
         }
         
         /**
-         * Updates the top downtime list based on the current view
-         * @param {Array} data - Filtered data for the line
-         */
-        function updateTopDowntimeList(data) {
-            const listElement = document.getElementById('topDowntimeList');
-            
-            // Extract top downtime data based on current view
-            const topItems = getTopDowntimeItems(data, detailViewState.downtimeView);
-            
-            if (topItems.length === 0) {
-                listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No downtime data available.</div>';
-                return;
-            }
-            
-            // Generate HTML
-            let html = '';
-            topItems.forEach((item, index) => {
-                html += `
-                    <div class="top-item">
-                        <div class="top-item-label">${index + 1}. ${item.reason}</div>
-                        <div class="top-item-value">${item.value}</div>
-                    </div>
-                `;
-            });
-            
-            listElement.innerHTML = html;
-        }
+ * Updates the top downtime list based on the current view
+ * @param {Array} data - Filtered data for the line
+ */
+function updateTopDowntimeList(data) {
+    const listElement = document.getElementById('topDowntimeList');
+    
+    // Extract top downtime data based on current view
+    const topItems = getTopDowntimeItems(data, detailViewState.downtimeView);
+    
+    if (topItems.length === 0) {
+        listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No downtime data available.</div>';
+        return;
+    }
+    
+    // Generate HTML
+    let html = '';
+    topItems.forEach((item, index) => {
+        html += `
+            <div class="top-item">
+                <div class="top-item-label">${index + 1}. ${item.reason}</div>
+                <div class="top-item-value">${item.value}</div>
+            </div>
+        `;
+    });
+    
+    listElement.innerHTML = html;
+}
         
         /**
          * Extracts top downtime items from data
