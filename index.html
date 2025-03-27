@@ -3947,120 +3947,200 @@ function calculateVariantTrends(records) {
             chartContainer.innerHTML = html;
         }
 
-        /**
-         * Renders the scrap percentage chart
-         * @param {Array} data - Filtered data for the line
-         */
-        function renderScrapPercentageChart(data) {
-            const chartContainer = document.getElementById('scrapPercentageChart');
-            
-            // Sort data by date
-            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            
-            // Format data for chart
-            const chartData = sortedData.map(record => {
-                const date = new Date(record.Date);
-                return {
-                    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                    scrap: parseFloat(record['Scrap Cost as % of Production Value']) || 0
-                };
-            });
-            
-            // Find max for scaling
-            const scraps = chartData.map(item => item.scrap);
-            const maxScrap = Math.max(...scraps, 5); // At least 5% to have a reasonable scale
-            const yMax = Math.ceil(maxScrap * 1.1); // 10% padding
-            
-            // Create chart HTML
-            let html = '<div style="width: 100%; height: 100%;">';
-            
-            // Create axes and labels
-            html += '<div style="display: flex; height: 100%;">';
-            
-            // Y-axis
-            html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
-            html += '<div>' + yMax + '%</div>';
-            html += '<div>' + Math.round(yMax * 0.75) + '%</div>';
-            html += '<div>' + Math.round(yMax * 0.5) + '%</div>';
-            html += '<div>' + Math.round(yMax * 0.25) + '%</div>';
-            html += '<div>0%</div>';
-            html += '</div>';
-            
-            // Chart content
-            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
-            
-            // Chart area
-            html += '<div style="flex-grow: 1; position: relative;">';
-            
-            // Background grid lines
-            html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-            html += '</div>';
-            
-            // Line chart
-            if (chartData.length > 1) {
-                // Calculate line points
-                let points = '';
-                chartData.forEach((item, index) => {
-                    const x = (index / (chartData.length - 1)) * 100;
-                    const y = 100 - (item.scrap / yMax) * 100;
-                    points += x + ',' + y + ' ';
-                });
-                
-                // Create SVG for line
-                html += '<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">' +
-                        '<polyline ' + 
-                        'points="' + points.trim() + '" ' + 
-                        'fill="none" ' + 
-                        'stroke="var(--danger-color)" ' + 
-                        'stroke-width="2" ' + 
-                        '/>' +
-                        '</svg>';
-                
-                // Add data points
-                chartData.forEach((item, index) => {
-                    const x = (index / (chartData.length - 1)) * 100;
-                    const y = 100 - (item.scrap / yMax) * 100;
-                    html += '<div style="position: absolute; top: calc(' + y + '% - 4px); left: calc(' + x + '% - 4px); width: 8px; height: 8px; background-color: var(--danger-color); border-radius: 50%;" title="' + item.scrap.toFixed(2) + '%"></div>';
-                });
-            }
-            
-            html += '</div>'; // End chart area
-            
-            // X-axis labels
-            html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
-            chartData.forEach(item => {
-                html += '<div style="text-align: center; font-size: 10px; color: var(--text-light);">' + item.date + '</div>';
-            });
-            html += '</div>';
-            
-            html += '</div>'; // End chart content
-            html += '</div>'; // End axes and labels
-            html += '</div>'; // End chart container
-            
-            chartContainer.innerHTML = html;
-        }
+function renderScrapPercentageChart(data) {
+    const chartContainer = document.getElementById('scrapPercentageChart');
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Format data for chart
+    const chartData = sortedData.map(record => {
+        const date = new Date(record.Date);
+        return {
+            date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            scrap: parseFloat(record['Scrap Cost as % of Production Value'] || 0)
+        };
+    });
+    
+    // Log the chart data for debugging
+    Logger.info(`Scrap percentage chart data: ${JSON.stringify(chartData.map(d => d.scrap))}`);
+    
+    // Check if we have any valid data
+    if (chartData.length === 0 || chartData.every(d => d.scrap === 0)) {
+        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No scrap percentage data available.</div>';
+        return;
+    }
+    
+    // Find max for scaling (minimum 5% to have a reasonable scale)
+    const maxScrap = Math.max(...chartData.map(d => d.scrap), 5);
+    const yMax = Math.ceil(maxScrap * 1.1); // 10% padding
+    
+    // Create chart HTML
+    let html = '<div style="width: 100%; height: 100%;">';
+    
+    // Create axes and labels
+    html += '<div style="display: flex; height: 100%;">';
+    
+    // Y-axis
+    html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+    html += '<div>' + yMax + '%</div>';
+    html += '<div>' + Math.round(yMax * 0.75) + '%</div>';
+    html += '<div>' + Math.round(yMax * 0.5) + '%</div>';
+    html += '<div>' + Math.round(yMax * 0.25) + '%</div>';
+    html += '<div>0%</div>';
+    html += '</div>';
+    
+    // Chart content
+    html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
+    
+    // Chart area
+    html += '<div style="flex-grow: 1; position: relative;">';
+    
+    // Background grid lines
+    html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '</div>';
+    
+    // Line chart
+    if (chartData.length > 1) {
+        // Calculate line points
+        let points = '';
+        chartData.forEach((item, index) => {
+            const x = (index / (chartData.length - 1)) * 100;
+            const y = 100 - (item.scrap / yMax) * 100;
+            points += x + ',' + y + ' ';
+        });
+        
+        // Create SVG for line
+        html += '<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">' +
+                '<polyline ' + 
+                'points="' + points.trim() + '" ' + 
+                'fill="none" ' + 
+                'stroke="var(--danger-color)" ' + 
+                'stroke-width="2" ' + 
+                '/>' +
+                '</svg>';
+        
+        // Add data points
+        chartData.forEach((item, index) => {
+            const x = (index / (chartData.length - 1)) * 100;
+            const y = 100 - (item.scrap / yMax) * 100;
+            html += '<div style="position: absolute; top: ' + y + '%; left: ' + x + '%; transform: translate(-50%, -50%); width: 8px; height: 8px; background-color: var(--danger-color); border-radius: 50%;" title="' + item.date + ': ' + item.scrap.toFixed(2) + '%"></div>';
+        });
+    } else if (chartData.length === 1) {
+        // For single data point, show a dot with label
+        const item = chartData[0];
+        const y = 100 - (item.scrap / yMax) * 100;
+        html += '<div style="position: absolute; top: ' + y + '%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background-color: var(--danger-color); border-radius: 50%;" title="' + item.date + ': ' + item.scrap.toFixed(2) + '%"></div>';
+        html += '<div style="position: absolute; top: ' + (y - 15) + '%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; color: var(--danger-color);">' + item.scrap.toFixed(2) + '%</div>';
+    }
+    
+    html += '</div>'; // End chart area
+    
+    // X-axis labels
+    html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
+    chartData.forEach(item => {
+        html += '<div style="text-align: center; font-size: 10px; color: var(--text-light);">' + item.date + '</div>';
+    });
+    html += '</div>';
+    
+    html += '</div>'; // End chart content
+    html += '</div>'; // End axes and labels
+    html += '</div>'; // End chart container
+    
+    chartContainer.innerHTML = html;
+}
+        
         /**
  * Renders a pie chart showing distribution of reject reasons
  * @param {Array} data - Filtered data for the line
  */
-function renderRejectPieChart(data) {
+
+        function renderRejectPieChart(data) {
     const chartContainer = document.getElementById('rejectPieChart');
+    if (!chartContainer) {
+        Logger.error("rejectPieChart container not found in DOM");
+        return;
+    }
     
-    // Extract reject reasons and quantities
-    const rejectData = extractRejectReasons(data, detailViewState.scrapView);
+    // Extract reject reasons based on current view (qty or cost)
+    const view = detailViewState.scrapView || 'qty';
     
+    // Log the view mode
+    Logger.info(`Rendering reject pie chart with view: ${view}`);
+    
+    // Get the relevant field based on view
+    const field = view === 'qty' ? 
+        'Top Rejects by QTY (Reason - Station - QTY - Cost)' : 
+        'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+    
+    // Collect reject data from all records
+    const rejectMap = new Map();
+    
+    data.forEach(record => {
+        if (record[field] && record[field] !== "No rejects" && !record[field].includes("No rejects")) {
+            // Split by pipe to get individual entries
+            const entries = record[field].split('|');
+            
+            entries.forEach(entry => {
+                const trimmed = entry.trim();
+                if (!trimmed) return;
+                
+                // Parse the entry - format: "1. Reason - Station - QTY: X - Cost: Y"
+                const parts = trimmed.split(' - ');
+                if (parts.length < 3) return;
+                
+                // Extract reason (remove numbering)
+                let reason = parts[0].trim();
+                reason = reason.replace(/^\d+\.\s+/, '');
+                
+                // Extract station
+                const station = parts[1].trim();
+                
+                // Combine reason and station
+                const reasonKey = `${reason} (${station})`;
+                
+                // Extract quantity and cost
+                let qty = 0;
+                let cost = 0;
+                
+                for (let i = 2; i < parts.length; i++) {
+                    if (parts[i].includes('QTY:')) {
+                        qty = parseFloat(parts[i].replace('QTY:', '').trim()) || 0;
+                    } else if (parts[i].includes('Cost:')) {
+                        cost = parseFloat(parts[i].replace('Cost:', '').trim()) || 0;
+                    }
+                }
+                
+                // Get the value based on view
+                const value = view === 'qty' ? qty : cost;
+                
+                // Add to map
+                if (rejectMap.has(reasonKey)) {
+                    rejectMap.set(reasonKey, rejectMap.get(reasonKey) + value);
+                } else {
+                    rejectMap.set(reasonKey, value);
+                }
+            });
+        }
+    });
+    
+    // Convert to array and sort
+    const rejectData = Array.from(rejectMap.entries())
+        .map(([reason, value]) => ({ reason, value }))
+        .sort((a, b) => b.value - a.value);
+    
+    Logger.info(`Extracted ${rejectData.length} reject reasons for pie chart`);
+    
+    // If no data, show message
     if (rejectData.length === 0) {
         chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No reject data available.</div>';
         return;
     }
-    
-    // Sort by value descending
-    rejectData.sort((a, b) => b.value - a.value);
     
     // Take top 5 and group the rest as "Other"
     let pieData = rejectData.slice(0, 5);
@@ -4068,7 +4148,7 @@ function renderRejectPieChart(data) {
     // Calculate total
     const total = rejectData.reduce((sum, item) => sum + item.value, 0);
     
-    // Calculate "Other" if needed
+    // Add "Other" if needed
     if (rejectData.length > 5) {
         const otherValue = rejectData.slice(5).reduce((sum, item) => sum + item.value, 0);
         if (otherValue > 0) {
@@ -4079,7 +4159,7 @@ function renderRejectPieChart(data) {
         }
     }
     
-    // Calculate percentages and angles for the pie segments
+    // Calculate percentages and angles for pie segments
     let startAngle = 0;
     const segments = pieData.map(item => {
         const percentage = (item.value / total) * 100;
@@ -4094,7 +4174,7 @@ function renderRejectPieChart(data) {
         return segment;
     });
     
-    // Define colors for pie segments
+    // Define colors
     const colors = [
         'var(--primary-blue)',
         'var(--timeline-orange)',
@@ -4107,7 +4187,7 @@ function renderRejectPieChart(data) {
     // Create SVG for pie chart
     let html = `
         <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
-            <svg width="100%" height="100%" viewBox="0 0 100 100">
+            <svg width="100%" height="70%" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="40" fill="#f5f7fa" />
     `;
     
@@ -4124,7 +4204,7 @@ function renderRejectPieChart(data) {
         // Determine if it's a large arc
         const largeArcFlag = segment.endAngle - segment.startAngle > 180 ? 1 : 0;
         
-        // Create path for the segment
+        // Create path for segment
         const path = `M 50 50 L ${x1} ${y1} A 40 40 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
         
         html += `<path d="${path}" fill="${colors[index % colors.length]}" />`;
@@ -4133,12 +4213,14 @@ function renderRejectPieChart(data) {
     html += `</svg>`;
     
     // Add legend
-    html += `<div style="margin-top: 10px;">`;
+    html += `<div style="margin-top: 5px; overflow-y: auto; max-height: 30%;">`;
     segments.forEach((segment, index) => {
         html += `
-            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+            <div style="display: flex; align-items: center; margin-bottom: 3px;">
                 <div style="width: 10px; height: 10px; background-color: ${colors[index % colors.length]}; margin-right: 5px;"></div>
-                <div style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${segment.reason} (${segment.percentage}%)</div>
+                <div style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${segment.reason} (${segment.percentage}%)">
+                    ${segment.reason.length > 20 ? segment.reason.substring(0, 20) + '...' : segment.reason} (${segment.percentage}%)
+                </div>
             </div>
         `;
     });
@@ -4148,59 +4230,83 @@ function renderRejectPieChart(data) {
     
     chartContainer.innerHTML = html;
 }
-        /**
- * Renders the downtime chart
- * @param {Array} data - Filtered data for the line
- */
-function renderDowntimeChart(data) {
+        
+        function renderDowntimeChart(data) {
     const chartContainer = document.getElementById('downtimeChart');
+    if (!chartContainer) {
+        Logger.error("downtimeChart container not found in DOM");
+        return;
+    }
     
     // Sort data by date
     const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
     
-    // Group data by date
-    const groupedData = {};
-    
-    sortedData.forEach(record => {
+    // Extract downtime data
+    const downtimeData = sortedData.map(record => {
         const date = new Date(record.Date);
         const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         
-        if (!groupedData[dateKey]) {
-            groupedData[dateKey] = {
-                downtimeMinutes: 0,
-                downtimeCost: 0,
-                reasonCounts: {}
-            };
+        // Parse the top downtime reasons if they exist
+        let reasons = [];
+        const downtimeField = 'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
+        
+        if (record[downtimeField] && 
+            record[downtimeField] !== "No downtime" && 
+            !record[downtimeField].includes("No downtime")) {
+            
+            // Split by pipe to get individual entries
+            const entries = record[downtimeField].split('|');
+            
+            entries.forEach(entry => {
+                const trimmed = entry.trim();
+                if (!trimmed) return;
+                
+                // Parse entry - format: "1. Reason - Machine - Cost: X - Duration: Y min"
+                const parts = trimmed.split(' - ');
+                if (parts.length < 3) return;
+                
+                // Extract reason and machine
+                let reason = parts[0].trim().replace(/^\d+\.\s+/, '');
+                let machine = parts[1].trim();
+                
+                // Extract cost and duration
+                let cost = 0;
+                let duration = 0;
+                
+                for (let i = 2; i < parts.length; i++) {
+                    if (parts[i].includes('Cost:')) {
+                        cost = parseFloat(parts[i].replace('Cost:', '').trim()) || 0;
+                    } else if (parts[i].includes('Duration:')) {
+                        duration = parseFloat(parts[i].replace('Duration:', '').replace('min', '').trim()) || 0;
+                    }
+                }
+                
+                reasons.push({ reason, machine, cost, duration });
+            });
         }
         
-        // Add downtime minutes
-        groupedData[dateKey].downtimeMinutes += parseFloat(record['Downtime Duration (min)'] || 0);
+        // Get total downtime minutes
+        const downtimeMins = parseFloat(record['Downtime Duration (min)'] || 0);
         
-        // Add downtime cost
-        groupedData[dateKey].downtimeCost += parseFloat(record['Downtime Cost'] || 0);
-        
-        // Count reasons
-        const reason = record['Downtime Reason'];
-        if (reason) {
-            if (!groupedData[dateKey].reasonCounts[reason]) {
-                groupedData[dateKey].reasonCounts[reason] = 0;
-            }
-            groupedData[dateKey].reasonCounts[reason]++;
-        }
+        return {
+            date: dateKey,
+            downtimeMinutes: downtimeMins,
+            downtimeHours: downtimeMins / 60,
+            reasons: reasons
+        };
     });
     
-    // Get date keys in order
-    const dateKeys = Object.keys(groupedData).sort((a, b) => {
-        const dateA = new Date(a);
-        const dateB = new Date(b);
-        return dateA - dateB;
-    });
+    Logger.info(`Extracted downtime data for ${downtimeData.length} dates`);
     
-    // Find max value for scaling
-    let maxDowntime = 0;
-    Object.values(groupedData).forEach(data => {
-        maxDowntime = Math.max(maxDowntime, data.downtimeMinutes);
-    });
+    // If all entries have zero downtime, show a message
+    if (downtimeData.every(item => item.downtimeMinutes === 0)) {
+        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No downtime data available.</div>';
+        return;
+    }
+    
+    // Find max downtime for scaling
+    const maxDowntimeHours = Math.max(...downtimeData.map(item => item.downtimeHours));
+    const yMax = Math.ceil(Math.max(maxDowntimeHours, 1)); // At least 1 hour scale, round up
     
     // Create chart HTML
     let html = '<div style="width: 100%; height: 100%;">';
@@ -4210,7 +4316,6 @@ function renderDowntimeChart(data) {
     
     // Y-axis
     html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
-    const yMax = Math.ceil(maxDowntime / 60); // Convert to hours and round up
     html += '<div>' + yMax + ' hrs</div>';
     html += '<div>' + Math.round(yMax * 0.75) + ' hrs</div>';
     html += '<div>' + Math.round(yMax * 0.5) + ' hrs</div>';
@@ -4236,25 +4341,31 @@ function renderDowntimeChart(data) {
     // Add bars
     html += '<div style="display: flex; height: 100%; padding-top: 10px;">';
     
-    dateKeys.forEach(dateKey => {
-        const data = groupedData[dateKey];
-        const downtimeHours = data.downtimeMinutes / 60;
-        const height = (downtimeHours / yMax) * 100;
+    // Create a bar for each date
+    downtimeData.forEach(item => {
+        const height = (item.downtimeHours / yMax) * 100;
         
-        // Determine bar color based on downtime - adjust thresholds as needed
+        // Determine bar color based on downtime hours
         let barColor = 'var(--primary-blue)';
-        if (downtimeHours > CONFIG.thresholds.downtimeHours.warning) {
+        if (item.downtimeHours > CONFIG.thresholds.downtimeHours.warning) {
             barColor = 'var(--danger-color)';
-        } else if (downtimeHours > CONFIG.thresholds.downtimeHours.good) {
+        } else if (item.downtimeHours > CONFIG.thresholds.downtimeHours.good) {
             barColor = 'var(--warning-color)';
         }
         
-        // Count number of reasons for tooltip
-        const reasonCount = Object.keys(data.reasonCounts).length;
+        // Create tooltip text with reasons
+        let tooltipText = `${item.date}: ${item.downtimeHours.toFixed(1)} hrs`;
+        if (item.reasons.length > 0) {
+            tooltipText += '\n\nReasons:';
+            item.reasons.forEach(reason => {
+                tooltipText += `\n• ${reason.reason} (${reason.machine}): ${reason.duration} min`;
+            });
+        }
         
         html += '<div style="flex: 1; display: flex; justify-content: center; align-items: flex-end; height: 100%;">';
-        html += '<div style="width: 70%; height: ' + height + '%; background-color: ' + barColor + ';" ';
-        html += 'title="' + dateKey + ': ' + downtimeHours.toFixed(1) + ' hrs, ' + reasonCount + ' reasons"></div>';
+        if (height > 0) {
+            html += `<div style="width: 70%; height: ${height}%; background-color: ${barColor};" title="${tooltipText}"></div>`;
+        }
         html += '</div>';
     });
     
@@ -4264,8 +4375,8 @@ function renderDowntimeChart(data) {
     
     // X-axis labels
     html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
-    dateKeys.forEach(dateKey => {
-        html += '<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">' + dateKey + '</div>';
+    downtimeData.forEach(item => {
+        html += '<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">' + item.date + '</div>';
     });
     html += '</div>';
     
@@ -4275,7 +4386,7 @@ function renderDowntimeChart(data) {
     
     chartContainer.innerHTML = html;
 }
-
+        
 function extractRejectReasons(data, view) {
     if (!data || data.length === 0) return [];
     
