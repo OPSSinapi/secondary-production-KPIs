@@ -2069,49 +2069,40 @@
         function ensureDetailViewElementsExist() {
     const modal = document.getElementById('detailModal');
     
-    // Check for and create scrap chart container
+    // Check for schedule attainment chart container
+    let scheduleChart = document.getElementById('scheduleAttainmentChart');
+    if (scheduleChart) {
+        // Set explicit height
+        scheduleChart.style.height = '200px';
+        scheduleChart.style.minHeight = '200px';
+    }
+    
+    // Check for labour cost chart container
+    let labourChart = document.getElementById('labourCostChart');
+    if (labourChart) {
+        labourChart.style.height = '200px';
+        labourChart.style.minHeight = '200px';
+    }
+    
+    // Check for scrap chart container
     let scrapChart = document.getElementById('scrapPercentageChart');
-    if (!scrapChart) {
-        Logger.warn("scrapPercentageChart container not found, creating it");
-        const scrapCard = modal.querySelector('.detail-metric-card:nth-child(3)');
-        if (scrapCard) {
-            const chartContainer = scrapCard.querySelector('.chart-container');
-            if (chartContainer) {
-                chartContainer.id = 'scrapPercentageChart';
-                chartContainer.style.height = '100px'; // Explicit height
-            }
-        }
+    if (scrapChart) {
+        scrapChart.style.height = '150px';
+        scrapChart.style.minHeight = '150px';
     }
     
-    // Check for and create reject pie chart container
-    let rejectPie = document.getElementById('rejectPieChart');
-    if (!rejectPie) {
-        Logger.warn("rejectPieChart container not found, creating it");
-        const scrapCard = modal.querySelector('.detail-metric-card:nth-child(3)');
-        if (scrapCard) {
-            const pieContainer = scrapCard.querySelector('.pie-chart-container');
-            if (pieContainer) {
-                // Create with ID if not exists
-                if (!pieContainer.id) {
-                    pieContainer.id = 'rejectPieChart';
-                    pieContainer.style.height = '150px'; // Explicit height
-                }
-            }
-        }
-    }
-    
-    // Check for and create downtime chart container
+    // Check for downtime chart container
     let downtimeChart = document.getElementById('downtimeChart');
-    if (!downtimeChart) {
-        Logger.warn("downtimeChart container not found, creating it");
-        const downtimeCard = modal.querySelector('.detail-metric-card:nth-child(4)');
-        if (downtimeCard) {
-            const chartContainer = downtimeCard.querySelector('.chart-container');
-            if (chartContainer) {
-                chartContainer.id = 'downtimeChart';
-                chartContainer.style.height = '100px'; // Explicit height
-            }
-        }
+    if (downtimeChart) {
+        downtimeChart.style.height = '150px';
+        downtimeChart.style.minHeight = '150px';
+    }
+    
+    // Check for reject pie chart container
+    let rejectPie = document.getElementById('rejectPieChart');
+    if (rejectPie) {
+        rejectPie.style.height = '150px';
+        rejectPie.style.minHeight = '150px';
     }
     
     // Check if topScrapList exists
@@ -2122,9 +2113,13 @@
         if (scrapFooter) {
             scrapFooter.innerHTML = `
                 <div class="list-title">Top Reject Reasons</div>
-                <div class="top-items-list" id="topScrapList" style="max-height: 120px; overflow-y: auto;"></div>
+                <div class="top-items-list" id="topScrapList"></div>
             `;
         }
+    } else {
+        // Ensure list height is sufficient to show 3 items without scrolling
+        topScrapList.style.maxHeight = 'none';
+        topScrapList.style.overflowY = 'visible';
     }
     
     // Check if topDowntimeList exists
@@ -2135,9 +2130,13 @@
         if (downtimeFooter) {
             downtimeFooter.innerHTML = `
                 <div class="list-title">Top Downtime Reasons</div>
-                <div class="top-items-list" id="topDowntimeList" style="max-height: 120px; overflow-y: auto;"></div>
+                <div class="top-items-list" id="topDowntimeList"></div>
             `;
         }
+    } else {
+        // Ensure list height is sufficient
+        topDowntimeList.style.maxHeight = 'none';
+        topDowntimeList.style.overflowY = 'visible';
     }
 }
         
@@ -3737,8 +3736,8 @@ function calculateVariantTrends(records) {
     // Sort data by date
     const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
     
-    // Group data by variant
-    const variantGroups = {};
+    // Group data by date - simpler approach
+    const dateData = {};
     
     // Use the appropriate cost field based on current view
     const costType = detailViewState.costView || 'labour';
@@ -3746,175 +3745,84 @@ function calculateVariantTrends(records) {
     sortedData.forEach(record => {
         const date = new Date(record.Date);
         const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        const variant = record.Variant || 'Unknown';
-        
-        if (!variantGroups[variant]) {
-            variantGroups[variant] = {};
-        }
         
         // Get cost value based on the view
         const cost = costType === 'unit' ? 
             parseFloat(record['Cost Per Unit'] || 0) : 
             parseFloat(record['Staff Cost'] || 0);
             
-        variantGroups[variant][dateKey] = cost;
-    });
-    
-    // Get all unique dates
-    const allDates = [];
-    Object.values(variantGroups).forEach(dates => {
-        Object.keys(dates).forEach(date => {
-            if (!allDates.includes(date)) {
-                allDates.push(date);
-            }
-        });
-    });
-    
-    // Sort dates chronologically
-    allDates.sort((a, b) => new Date(a) - new Date(b));
-    
-    // Find min and max for scaling
-    let min = Infinity;
-    let max = -Infinity;
-    
-    Object.values(variantGroups).forEach(dates => {
-        Object.values(dates).forEach(cost => {
-            min = Math.min(min, cost);
-            max = Math.max(max, cost);
-        });
-    });
-    
-    // Add padding
-    const range = max - min;
-    min = Math.max(0, min - range * 0.1);
-    max = max + range * 0.1;
-    
-    // Create chart HTML with a simpler approach
-    let html = `
-        <div style="width: 100%; height: 100%;">
-            <div style="display: flex; height: 100%;">
-                <!-- Y-axis labels -->
-                <div style="width: 50px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; font-size: 12px; color: var(--text-light);">
-                    <div>R${Math.round(max)}</div>
-                    <div>R${Math.round(min + (max - min) * 0.75)}</div>
-                    <div>R${Math.round(min + (max - min) * 0.5)}</div>
-                    <div>R${Math.round(min + (max - min) * 0.25)}</div>
-                    <div>R${Math.round(min)}</div>
-                </div>
-                
-                <!-- Chart area -->
-                <div style="flex-grow: 1; position: relative; display: flex; flex-direction: column;">
-                    <!-- Main chart -->
-                    <div style="flex-grow: 1; position: relative;">
-                        <!-- Grid lines -->
-                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;">
-                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
-                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
-                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
-                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
-                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
-                        </div>
-    `;
-    
-    // Add SVG for lines - importantly, use the exact same coordinate system as the dots
-    html += `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; overflow: visible;">`;
-    
-    // Define variant colors
-    const colors = {
-        'XL1000SC': 'var(--primary-blue)',
-        'XL1000+': 'var(--timeline-orange)',
-        'XL1000S': 'var(--timeline-purple)',
-        'SUM500V2': 'var(--primary-blue)',
-        'XL1150SC': 'var(--timeline-purple)',
-        'Default': 'var(--primary-blue)'
-    };
-    
-    // Draw lines for each variant
-    Object.entries(variantGroups).forEach(([variant, dateValues]) => {
-        const variantDates = Object.keys(dateValues).sort((a, b) => new Date(a) - new Date(b));
-        
-        if (variantDates.length > 1) {
-            const color = colors[variant] || colors['Default'];
-            let pathPoints = '';
-            
-            variantDates.forEach((date, i) => {
-                // X position based on date index in all dates
-                const xIndex = allDates.indexOf(date);
-                const xPos = allDates.length > 1 ? 
-                    (xIndex / (allDates.length - 1)) * 100 : 50;
-                
-                // Y position based on cost value
-                const cost = dateValues[date];
-                const yPos = 100 - ((cost - min) / (max - min)) * 100;
-                
-                pathPoints += (i === 0 ? 'M' : 'L') + `${xPos},${yPos} `;
-            });
-            
-            html += `<path d="${pathPoints}" stroke="${color}" stroke-width="2" fill="none" />`;
+        if (!dateData[dateKey]) {
+            dateData[dateKey] = {
+                date: dateKey,
+                cost: cost,
+                variant: record.Variant || 'Unknown'
+            };
         }
     });
     
-    html += `</svg>`;
+    // Convert to array and sort by date
+    const chartData = Object.values(dateData).sort((a, b) => 
+        new Date(a.date) - new Date(b.date)
+    );
     
-    // Add dots on top with exact same positions
-    Object.entries(variantGroups).forEach(([variant, dateValues]) => {
-        const color = colors[variant] || colors['Default'];
-        
-        Object.entries(dateValues).forEach(([date, cost]) => {
-            const xIndex = allDates.indexOf(date);
-            const xPos = allDates.length > 1 ? 
-                (xIndex / (allDates.length - 1)) * 100 : 50;
+    // Find min and max for scaling
+    const values = chartData.map(d => d.cost);
+    const min = Math.max(0, Math.min(...values) * 0.9);
+    const max = Math.max(...values) * 1.1;
+    
+    // Create a pure SVG implementation for perfect alignment
+    const html = `
+    <div style="width: 100%; height: 100%;">
+        <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
+            <!-- Y-axis labels -->
+            <text x="10" y="25" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(max)}</text>
+            <text x="10" y="100" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min + (max - min) * 0.75)}</text>
+            <text x="10" y="175" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min + (max - min) * 0.5)}</text>
+            <text x="10" y="250" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min + (max - min) * 0.25)}</text>
+            <text x="10" y="290" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min)}</text>
             
-            const yPos = 100 - ((cost - min) / (max - min)) * 100;
+            <!-- Grid lines -->
+            <line x1="50" y1="25" x2="390" y2="25" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="100" x2="390" y2="100" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="175" x2="390" y2="175" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="250" x2="390" y2="250" stroke-opacity="0.1" stroke="#000" />
             
-            html += `
-                <div style="
-                    position: absolute;
-                    top: ${yPos}%;
-                    left: ${xPos}%; 
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 50%;
-                    background-color: ${color};
-                    transform: translate(-50%, -50%);
-                    z-index: 2;
-                " title="${date}: R${cost.toFixed(2)}"></div>
-            `;
-        });
-    });
-    
-    // X-axis labels
-    html += `
-                    </div>
-                    <div style="height: 30px; display: flex; align-items: center;">
-    `;
-    
-    // Add a label for each date, positioned exactly like the data points
-    allDates.forEach((date, index) => {
-        const xPos = allDates.length > 1 ? 
-            (index / (allDates.length - 1)) * 100 : 50;
+            <!-- X-axis -->
+            <line x1="50" y1="290" x2="390" y2="290" stroke="#ccc" />
             
-        html += `
-            <div style="
-                position: absolute; 
-                left: ${xPos}%; 
-                transform: translateX(-50%);
-                font-size: 10px;
-                color: var(--text-light);
-            ">${date}</div>
-        `;
-    });
-    
-    html += `
-                    </div>
-                </div>
-            </div>
-        </div>
+            <!-- Draw the line and points in a single path -->
+            <polyline 
+                points="${chartData.map((d, i) => {
+                    const x = 50 + (i * (340 / (chartData.length - 1 || 1)));
+                    const y = 25 + ((max - d.cost) / (max - min)) * 250;
+                    return `${x},${y}`;
+                }).join(' ')}"
+                fill="none"
+                stroke="#3498db"
+                stroke-width="2"
+            />
+            
+            <!-- Data points -->
+            ${chartData.map((d, i) => {
+                const x = 50 + (i * (340 / (chartData.length - 1 || 1)));
+                const y = 25 + ((max - d.cost) / (max - min)) * 250;
+                return `<circle cx="${x}" cy="${y}" r="4" fill="#3498db" />
+                        <title>${d.date}: R${d.cost.toFixed(2)}</title>`;
+            }).join('')}
+            
+            <!-- X-axis labels -->
+            ${chartData.map((d, i) => {
+                const x = 50 + (i * (340 / (chartData.length - 1 || 1)));
+                return `<text x="${x}" y="310" text-anchor="middle" font-size="10" fill="#7f8c8d">${d.date}</text>`;
+            }).join('')}
+        </svg>
+    </div>
     `;
     
     chartContainer.innerHTML = html;
 }
         
+// Fix for Scrap Percentage Trend chart
 function renderScrapPercentageChart(data) {
     const chartContainer = document.getElementById('scrapPercentageChart');
     
@@ -3930,95 +3838,122 @@ function renderScrapPercentageChart(data) {
         };
     });
     
-    // Log the chart data for debugging
-    Logger.info(`Scrap percentage chart data: ${JSON.stringify(chartData.map(d => d.scrap))}`);
-    
-    // Check if we have any valid data
-    if (chartData.length === 0 || chartData.every(d => d.scrap === 0)) {
-        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No scrap percentage data available.</div>';
-        return;
-    }
-    
     // Find max for scaling (minimum 5% to have a reasonable scale)
     const maxScrap = Math.max(...chartData.map(d => d.scrap), 5);
     const yMax = Math.ceil(maxScrap * 1.1); // 10% padding
     
-    // Create chart HTML
-    let html = '<div style="width: 100%; height: 100%;">';
+    // Create SVG for precise positioning and consistent sizing
+    const html = `
+    <div style="width: 100%; height: 100%;">
+        <svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
+            <!-- Y-axis labels - positioned for visibility -->
+            <text x="5" y="15" text-anchor="start" font-size="12" fill="#7f8c8d">${yMax}%</text>
+            <text x="5" y="65" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.75)}%</text>
+            <text x="5" y="115" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.5)}%</text>
+            <text x="5" y="165" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.25)}%</text>
+            <text x="5" y="190" text-anchor="start" font-size="12" fill="#7f8c8d">0%</text>
+            
+            <!-- Grid lines -->
+            <line x1="40" y1="15" x2="390" y2="15" stroke-opacity="0.1" stroke="#000" />
+            <line x1="40" y1="65" x2="390" y2="65" stroke-opacity="0.1" stroke="#000" />
+            <line x1="40" y1="115" x2="390" y2="115" stroke-opacity="0.1" stroke="#000" />
+            <line x1="40" y1="165" x2="390" y2="165" stroke-opacity="0.1" stroke="#000" />
+            
+            <!-- Scrap percentage line chart -->
+            <polyline 
+                points="${chartData.map((d, i) => {
+                    const x = 40 + (i * (350 / (chartData.length - 1 || 1)));
+                    const y = 15 + ((yMax - d.scrap) / yMax) * 150;
+                    return `${x},${y}`;
+                }).join(' ')}"
+                fill="none"
+                stroke="#e74c3c"
+                stroke-width="2"
+            />
+            
+            <!-- Data points -->
+            ${chartData.map((d, i) => {
+                const x = 40 + (i * (350 / (chartData.length - 1 || 1)));
+                const y = 15 + ((yMax - d.scrap) / yMax) * 150;
+                return `<circle cx="${x}" cy="${y}" r="4" fill="#e74c3c" />
+                        <title>${d.date}: ${d.scrap.toFixed(2)}%</title>`;
+            }).join('')}
+            
+            <!-- X-axis labels -->
+            ${chartData.map((d, i) => {
+                const x = 40 + (i * (350 / (chartData.length - 1 || 1)));
+                return `<text x="${x}" y="195" text-anchor="middle" font-size="10" fill="#7f8c8d">${d.date}</text>`;
+            }).join('')}
+        </svg>
+    </div>
+    `;
     
-    // Create axes and labels
-    html += '<div style="display: flex; height: 100%;">';
+    chartContainer.innerHTML = html;
+}
+
+// Fix for Downtime Chart
+function renderDowntimeChart(data) {
+    const chartContainer = document.getElementById('downtimeChart');
     
-    // Y-axis
-    html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
-    html += '<div>' + yMax + '%</div>';
-    html += '<div>' + Math.round(yMax * 0.75) + '%</div>';
-    html += '<div>' + Math.round(yMax * 0.5) + '%</div>';
-    html += '<div>' + Math.round(yMax * 0.25) + '%</div>';
-    html += '<div>0%</div>';
-    html += '</div>';
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
     
-    // Chart content
-    html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
-    
-    // Chart area
-    html += '<div style="flex-grow: 1; position: relative;">';
-    
-    // Background grid lines
-    html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '</div>';
-    
-    // Line chart
-    if (chartData.length > 1) {
-        // Calculate line points
-        let points = '';
-        chartData.forEach((item, index) => {
-            const x = (index / (chartData.length - 1)) * 100;
-            const y = 100 - (item.scrap / yMax) * 100;
-            points += x + ',' + y + ' ';
-        });
-        
-        // Create SVG for line
-        html += '<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">' +
-                '<polyline ' + 
-                'points="' + points.trim() + '" ' + 
-                'fill="none" ' + 
-                'stroke="var(--danger-color)" ' + 
-                'stroke-width="2" ' + 
-                '/>' +
-                '</svg>';
-        
-        // Add data points
-        chartData.forEach((item, index) => {
-            const x = (index / (chartData.length - 1)) * 100;
-            const y = 100 - (item.scrap / yMax) * 100;
-            html += '<div style="position: absolute; top: ' + y + '%; left: ' + x + '%; transform: translate(-50%, -50%); width: 8px; height: 8px; background-color: var(--danger-color); border-radius: 50%;" title="' + item.date + ': ' + item.scrap.toFixed(2) + '%"></div>';
-        });
-    } else if (chartData.length === 1) {
-        // For single data point, show a dot with label
-        const item = chartData[0];
-        const y = 100 - (item.scrap / yMax) * 100;
-        html += '<div style="position: absolute; top: ' + y + '%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background-color: var(--danger-color); border-radius: 50%;" title="' + item.date + ': ' + item.scrap.toFixed(2) + '%"></div>';
-        html += '<div style="position: absolute; top: ' + (y - 15) + '%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; color: var(--danger-color);">' + item.scrap.toFixed(2) + '%</div>';
-    }
-    
-    html += '</div>'; // End chart area
-    
-    // X-axis labels
-    html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
-    chartData.forEach(item => {
-        html += '<div style="text-align: center; font-size: 10px; color: var(--text-light);">' + item.date + '</div>';
+    // Extract downtime data 
+    const downtimeData = sortedData.map(record => {
+        const date = new Date(record.Date);
+        return {
+            date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            minutes: parseFloat(record['Downtime Duration (min)'] || 0),
+            hours: parseFloat(record['Downtime Duration (min)'] || 0) / 60
+        };
     });
-    html += '</div>';
     
-    html += '</div>'; // End chart content
-    html += '</div>'; // End axes and labels
-    html += '</div>'; // End chart container
+    // Find max value for scaling (ensure at least 1 hour)
+    const maxHours = Math.max(...downtimeData.map(d => d.hours), 1);
+    const yMax = Math.ceil(maxHours * 1.1); // Add 10% padding and round up
+    
+    // Create SVG for precise positioning
+    const html = `
+    <div style="width: 100%; height: 100%;">
+        <svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
+            <!-- Y-axis labels - positioned for visibility -->
+            <text x="5" y="15" text-anchor="start" font-size="12" fill="#7f8c8d">${yMax} hrs</text>
+            <text x="5" y="65" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.75)} hrs</text>
+            <text x="5" y="115" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.5)} hrs</text>
+            <text x="5" y="165" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.25)} hrs</text>
+            <text x="5" y="190" text-anchor="start" font-size="12" fill="#7f8c8d">0 hrs</text>
+            
+            <!-- Grid lines -->
+            <line x1="50" y1="15" x2="390" y2="15" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="65" x2="390" y2="65" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="115" x2="390" y2="115" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="165" x2="390" y2="165" stroke-opacity="0.1" stroke="#000" />
+            
+            <!-- Bar chart for downtime -->
+            ${downtimeData.map((d, i) => {
+                const x = 50 + (i * (340 / (downtimeData.length || 1)));
+                const barWidth = 340 / (downtimeData.length * 2);
+                const barHeight = (d.hours / yMax) * 150;
+                const y = 165 - barHeight;
+                
+                // Determine color based on downtime
+                let color = '#3498db'; // default
+                if (d.hours > 6) color = '#e74c3c'; // high
+                else if (d.hours > 3) color = '#f39c12'; // medium
+                
+                return `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" fill="${color}">
+                        <title>${d.date}: ${d.hours.toFixed(1)} hrs</title>
+                       </rect>`;
+            }).join('')}
+            
+            <!-- X-axis labels -->
+            ${downtimeData.map((d, i) => {
+                const x = 50 + (i * (340 / (downtimeData.length || 1))) + (340 / (downtimeData.length * 2)) / 2;
+                return `<text x="${x}" y="195" text-anchor="middle" font-size="10" fill="#7f8c8d">${d.date}</text>`;
+            }).join('')}
+        </svg>
+    </div>
+    `;
     
     chartContainer.innerHTML = html;
 }
@@ -4376,35 +4311,33 @@ function extractRejectReasons(data, view) {
 
         
 function updateTopScrapList(data) {
-    // Get the list container
     const listElement = document.getElementById('topScrapList');
     if (!listElement) {
         Logger.error("Element 'topScrapList' not found in DOM");
         return;
     }
     
-    // Set max-height and overflow for scrolling
-    listElement.style.maxHeight = '150px';
-    listElement.style.overflowY = 'auto';
-    
-    // Extract top rejects
+    // Extract top rejects - limit to 3 for fitting without scrolling
     const view = detailViewState.scrapView || 'qty';
-    const topItems = getTopScrapItems(data, view);
+    const allItems = getTopScrapItems(data, view);
+    
+    // Only show top 3 reasons to ensure they fit without scrolling
+    const topItems = allItems.slice(0, 3);
     
     if (topItems.length === 0) {
-        listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No scrap data available.</div>';
+        listElement.innerHTML = '<div style="text-align: center; padding: 5px; color: var(--text-light);">No scrap data available.</div>';
         return;
     }
     
-    // Generate HTML with better spacing and overflow handling
+    // Generate HTML with compact height
     let html = '';
     topItems.forEach((item, index) => {
         html += `
-            <div class="top-item" style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee;">
-                <div class="top-item-label" style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; font-weight: bold; padding-right: 5px;" title="${index + 1}. ${item.reason}">
+            <div class="top-item" style="display: flex; justify-content: space-between; padding: 2px 0; margin: 2px 0;">
+                <div class="top-item-label" style="font-size: 11px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 5px;" title="${index + 1}. ${item.reason}">
                     ${index + 1}. ${item.reason}
                 </div>
-                <div class="top-item-value" style="flex-shrink: 0; font-size: 11px; color: var(--text-light);">
+                <div class="top-item-value" style="font-size: 11px; color: var(--text-light); white-space: nowrap;">
                     ${item.value}
                 </div>
             </div>
