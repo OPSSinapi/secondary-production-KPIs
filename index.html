@@ -1327,6 +1327,30 @@
                 endDateInput.value = currentDateRange.end.split('T')[0];
             }
         }
+
+        function navigateToPreviousWeek() {
+            Logger.info('Navigating to previous week');
+            
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Move both dates back by 7 days
+            start.setDate(start.getDate() - 7);
+            end.setDate(end.getDate() - 7);
+            
+            // Update both the detail view state and the main page state
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
+            
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
+            updateModalDateRange();
+            updateDateRangeDisplay(currentDateRange);
+            loadDetailViewData();
+        }
         
         /**
          * Navigates to the previous period
@@ -1729,6 +1753,27 @@
             renderScheduleAttainmentChart(detailViewState.filteredData, view);
         }
 
+        /**
+         * Toggles the cost view
+         * @param {string} view - The view to switch to ('labour' or 'unit')
+         */
+        function toggleCostView(view) {
+            Logger.info(`Toggling cost view to: ${view}`);
+            
+            // Update the state
+            detailViewState.costView = view;
+            
+            // Update button active states
+            document.getElementById('labourCostBtn').classList.toggle('active', view === 'labour');
+            document.getElementById('unitCostBtn').classList.toggle('active', view === 'unit');
+            
+            // Update the chart with the stored filtered data
+            if (detailViewState.filteredData) {
+                renderLabourCostChart(detailViewState.filteredData);
+            }
+        }
+        
+        
         /**
          * NEW IMPLEMENTATION: Scrap Analysis with trend chart and daily details
          * @param {Array} data - Filtered data for the line
