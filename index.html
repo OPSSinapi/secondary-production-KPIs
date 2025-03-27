@@ -3737,169 +3737,180 @@ function calculateVariantTrends(records) {
     // Sort data by date
     const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
     
-    // Extract data based on current view (labour or unit cost)
+    // Group data by variant
+    const variantGroups = {};
+    
+    // Use the appropriate cost field based on current view
     const costType = detailViewState.costView || 'labour';
     
-    // Format data for chart
-    const chartData = sortedData.map(record => {
+    sortedData.forEach(record => {
         const date = new Date(record.Date);
-        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const variant = record.Variant || 'Unknown';
         
-        // Use the appropriate cost field based on view
-        const costValue = costType === 'unit' && record['Cost Per Unit'] ? 
-            parseFloat(record['Cost Per Unit']) : 
+        if (!variantGroups[variant]) {
+            variantGroups[variant] = {};
+        }
+        
+        // Get cost value based on the view
+        const cost = costType === 'unit' ? 
+            parseFloat(record['Cost Per Unit'] || 0) : 
             parseFloat(record['Staff Cost'] || 0);
             
-        return {
-            date: dateStr,
-            cost: costValue,
-            variant: record.Variant || 'Unknown'
-        };
+        variantGroups[variant][dateKey] = cost;
     });
     
+    // Get all unique dates
+    const allDates = [];
+    Object.values(variantGroups).forEach(dates => {
+        Object.keys(dates).forEach(date => {
+            if (!allDates.includes(date)) {
+                allDates.push(date);
+            }
+        });
+    });
+    
+    // Sort dates chronologically
+    allDates.sort((a, b) => new Date(a) - new Date(b));
+    
     // Find min and max for scaling
-    let minCost = Math.min(...chartData.map(d => d.cost));
-    let maxCost = Math.max(...chartData.map(d => d.cost));
+    let min = Infinity;
+    let max = -Infinity;
     
-    // Add padding to min/max
-    const padding = (maxCost - minCost) * 0.1;
-    minCost = Math.max(0, minCost - padding);
-    maxCost = maxCost + padding;
-    
-    // Create chart HTML
-    let html = '<div style="width: 100%; height: 100%;">';
-    
-    // Create axes and labels
-    html += '<div style="display: flex; height: 100%;">';
-    
-    // Y-axis with nicely formatted currency
-    html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
-    html += '<div>R' + Math.ceil(maxCost) + '</div>';
-    html += '<div>R' + Math.round(minCost + (maxCost - minCost) * 0.75) + '</div>';
-    html += '<div>R' + Math.round(minCost + (maxCost - minCost) * 0.5) + '</div>';
-    html += '<div>R' + Math.round(minCost + (maxCost - minCost) * 0.25) + '</div>';
-    html += '<div>R' + Math.floor(minCost) + '</div>';
-    html += '</div>';
-    
-    // Chart content
-    html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
-    
-    // Chart area with grid lines
-    html += '<div style="flex-grow: 1; position: relative;">';
-    
-    // Background grid lines
-    html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
-    html += '</div>';
-    
-    if (chartData.length > 0) {
-        // Calculate line points for SVG polyline
-        const svgWidth = 100; // Using percentage
-        const svgHeight = 100; // Using percentage
-        
-        // Group data by variant for multiple lines
-        const variantGroups = {};
-        chartData.forEach(item => {
-            if (!variantGroups[item.variant]) {
-                variantGroups[item.variant] = [];
-            }
-            variantGroups[item.variant].push(item);
+    Object.values(variantGroups).forEach(dates => {
+        Object.values(dates).forEach(cost => {
+            min = Math.min(min, cost);
+            max = Math.max(max, cost);
         });
-        
-        // Create SVG container
-        html += `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; overflow: visible;">`;
-        
-        // Define variant colors
-        const colors = {
-            'XL1000SC': 'var(--primary-blue)',
-            'XL1000+': 'var(--timeline-orange)',
-            'XL1000S': 'var(--timeline-purple)',
-            'SUM500V2': 'var(--primary-blue)',
-            'XL1150SC': 'var(--timeline-purple)',
-            'Default': 'var(--primary-blue)'
-        };
-        
-        // Draw lines for each variant
-        Object.entries(variantGroups).forEach(([variant, items]) => {
-            if (items.length > 1) {
-                const color = colors[variant] || colors['Default'];
+    });
+    
+    // Add padding
+    const range = max - min;
+    min = Math.max(0, min - range * 0.1);
+    max = max + range * 0.1;
+    
+    // Create chart HTML with a simpler approach
+    let html = `
+        <div style="width: 100%; height: 100%;">
+            <div style="display: flex; height: 100%;">
+                <!-- Y-axis labels -->
+                <div style="width: 50px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; font-size: 12px; color: var(--text-light);">
+                    <div>R${Math.round(max)}</div>
+                    <div>R${Math.round(min + (max - min) * 0.75)}</div>
+                    <div>R${Math.round(min + (max - min) * 0.5)}</div>
+                    <div>R${Math.round(min + (max - min) * 0.25)}</div>
+                    <div>R${Math.round(min)}</div>
+                </div>
                 
-                // Ensure items are sorted by date
-                items.sort((a, b) => new Date(a.date) - new Date(b.date));
-                
-                // Calculate points string
-                let pointsString = '';
-                items.forEach((item, index) => {
-                    // Calculate x position based on even spacing
-                    const x = (index / (items.length - 1)) * svgWidth;
-                    
-                    // Calculate y position based on cost value
-                    const y = svgHeight - ((item.cost - minCost) / (maxCost - minCost)) * svgHeight;
-                    
-                    pointsString += `${x},${y} `;
-                });
-                
-                // Draw the polyline
-                html += `<polyline 
-                    points="${pointsString.trim()}" 
-                    fill="none" 
-                    stroke="${color}" 
-                    stroke-width="2"
-                    vector-effect="non-scaling-stroke"
-                />`;
-            }
-        });
+                <!-- Chart area -->
+                <div style="flex-grow: 1; position: relative; display: flex; flex-direction: column;">
+                    <!-- Main chart -->
+                    <div style="flex-grow: 1; position: relative;">
+                        <!-- Grid lines -->
+                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;">
+                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
+                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
+                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
+                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
+                            <div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>
+                        </div>
+    `;
+    
+    // Add SVG for lines - importantly, use the exact same coordinate system as the dots
+    html += `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; overflow: visible;">`;
+    
+    // Define variant colors
+    const colors = {
+        'XL1000SC': 'var(--primary-blue)',
+        'XL1000+': 'var(--timeline-orange)',
+        'XL1000S': 'var(--timeline-purple)',
+        'SUM500V2': 'var(--primary-blue)',
+        'XL1150SC': 'var(--timeline-purple)',
+        'Default': 'var(--primary-blue)'
+    };
+    
+    // Draw lines for each variant
+    Object.entries(variantGroups).forEach(([variant, dateValues]) => {
+        const variantDates = Object.keys(dateValues).sort((a, b) => new Date(a) - new Date(b));
         
-        html += '</svg>';
-        
-        // Add data points on top
-        Object.entries(variantGroups).forEach(([variant, items]) => {
+        if (variantDates.length > 1) {
             const color = colors[variant] || colors['Default'];
+            let pathPoints = '';
             
-            items.forEach((item, index) => {
-                // Calculate positions exactly the same way as for the line
-                const x = (index / (items.length - 1)) * 100;
-                const y = 100 - ((item.cost - minCost) / (maxCost - minCost)) * 100;
+            variantDates.forEach((date, i) => {
+                // X position based on date index in all dates
+                const xIndex = allDates.indexOf(date);
+                const xPos = allDates.length > 1 ? 
+                    (xIndex / (allDates.length - 1)) * 100 : 50;
                 
-                // Create dot using absolute positioning to ensure alignment with line
-                html += `<div style="
+                // Y position based on cost value
+                const cost = dateValues[date];
+                const yPos = 100 - ((cost - min) / (max - min)) * 100;
+                
+                pathPoints += (i === 0 ? 'M' : 'L') + `${xPos},${yPos} `;
+            });
+            
+            html += `<path d="${pathPoints}" stroke="${color}" stroke-width="2" fill="none" />`;
+        }
+    });
+    
+    html += `</svg>`;
+    
+    // Add dots on top with exact same positions
+    Object.entries(variantGroups).forEach(([variant, dateValues]) => {
+        const color = colors[variant] || colors['Default'];
+        
+        Object.entries(dateValues).forEach(([date, cost]) => {
+            const xIndex = allDates.indexOf(date);
+            const xPos = allDates.length > 1 ? 
+                (xIndex / (allDates.length - 1)) * 100 : 50;
+            
+            const yPos = 100 - ((cost - min) / (max - min)) * 100;
+            
+            html += `
+                <div style="
                     position: absolute;
-                    left: ${x}%;
-                    top: ${y}%;
+                    top: ${yPos}%;
+                    left: ${xPos}%; 
                     width: 8px;
                     height: 8px;
                     border-radius: 50%;
                     background-color: ${color};
                     transform: translate(-50%, -50%);
                     z-index: 2;
-                " title="${item.date}: R${item.cost.toFixed(2)}"></div>`;
-            });
+                " title="${date}: R${cost.toFixed(2)}"></div>
+            `;
         });
-    }
-    
-    html += '</div>'; // End chart area
-    
-    // X-axis labels
-    html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
-    
-    // Get unique dates for x-axis
-    const uniqueDates = [...new Set(chartData.map(item => item.date))];
-    uniqueDates.sort((a, b) => new Date(a) - new Date(b));
-    
-    // Add date labels
-    uniqueDates.forEach(date => {
-        html += `<div style="text-align: center; font-size: 10px; color: var(--text-light);">${date}</div>`;
     });
     
-    html += '</div>'; // End x-axis
+    // X-axis labels
+    html += `
+                    </div>
+                    <div style="height: 30px; display: flex; align-items: center;">
+    `;
     
-    html += '</div>'; // End chart content
-    html += '</div>'; // End axes and labels
-    html += '</div>'; // End chart container
+    // Add a label for each date, positioned exactly like the data points
+    allDates.forEach((date, index) => {
+        const xPos = allDates.length > 1 ? 
+            (index / (allDates.length - 1)) * 100 : 50;
+            
+        html += `
+            <div style="
+                position: absolute; 
+                left: ${xPos}%; 
+                transform: translateX(-50%);
+                font-size: 10px;
+                color: var(--text-light);
+            ">${date}</div>
+        `;
+    });
+    
+    html += `
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
     
     chartContainer.innerHTML = html;
 }
@@ -4022,43 +4033,30 @@ function renderScrapPercentageChart(data) {
     // Extract reject reasons based on current view (qty or cost)
     const view = detailViewState.scrapView || 'qty';
     
-    // Log the view mode
-    Logger.info(`Rendering reject pie chart with view: ${view}`);
-    
-    // Get the relevant field based on view
+    // Get field based on view
     const field = view === 'qty' ? 
         'Top Rejects by QTY (Reason - Station - QTY - Cost)' : 
         'Top Rejects by Cost (Reason - Station - QTY - Cost)';
     
-    // Collect reject data from all records
+    // Process data to get reject reasons
     const rejectMap = new Map();
     
     data.forEach(record => {
         if (record[field] && record[field] !== "No rejects" && !record[field].includes("No rejects")) {
-            // Split by pipe to get individual entries
             const entries = record[field].split('|');
             
             entries.forEach(entry => {
                 const trimmed = entry.trim();
                 if (!trimmed) return;
                 
-                // Parse the entry - format: "1. Reason - Station - QTY: X - Cost: Y"
                 const parts = trimmed.split(' - ');
                 if (parts.length < 3) return;
                 
-                // Extract reason (remove numbering)
-                let reason = parts[0].trim();
-                reason = reason.replace(/^\d+\.\s+/, '');
-                
-                // Extract station
+                let reason = parts[0].trim().replace(/^\d+\.\s+/, '');
                 const station = parts[1].trim();
-                
-                // Combine reason and station
                 const reasonKey = `${reason} (${station})`;
                 
-                // Extract quantity and cost
-                let qty = 0;
-                let cost = 0;
+                let qty = 0, cost = 0;
                 
                 for (let i = 2; i < parts.length; i++) {
                     if (parts[i].includes('QTY:')) {
@@ -4068,10 +4066,8 @@ function renderScrapPercentageChart(data) {
                     }
                 }
                 
-                // Get the value based on view
                 const value = view === 'qty' ? qty : cost;
                 
-                // Add to map
                 if (rejectMap.has(reasonKey)) {
                     rejectMap.set(reasonKey, rejectMap.get(reasonKey) + value);
                 } else {
@@ -4086,114 +4082,74 @@ function renderScrapPercentageChart(data) {
         .map(([reason, value]) => ({ reason, value }))
         .sort((a, b) => b.value - a.value);
     
-    Logger.info(`Extracted ${rejectData.length} reject reasons for pie chart`);
-    
-    // If no data, show message
     if (rejectData.length === 0) {
         chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No reject data available.</div>';
         return;
     }
     
-    // Take top 5 and group the rest as "Other"
-    let pieData = rejectData.slice(0, 5);
-    
-    // Calculate total
+    // Take top 5 for the pie chart
+    const pieData = rejectData.slice(0, 5);
     const total = rejectData.reduce((sum, item) => sum + item.value, 0);
     
-    // Add "Other" if needed
-    if (rejectData.length > 5) {
-        const otherValue = rejectData.slice(5).reduce((sum, item) => sum + item.value, 0);
-        if (otherValue > 0) {
-            pieData.push({
-                reason: 'Other',
-                value: otherValue
-            });
-        }
-    }
+    // Create side-by-side layout (chart + legend)
+    let html = `<div style="display: flex; width: 100%; height: 100%;">`;
     
-    // Calculate percentages and angles for pie segments
-    let startAngle = 0;
-    const segments = pieData.map(item => {
-        const percentage = (item.value / total) * 100;
-        const angle = (percentage / 100) * 360;
-        const segment = {
-            reason: item.reason,
-            percentage: percentage.toFixed(1),
-            startAngle: startAngle,
-            endAngle: startAngle + angle
-        };
-        startAngle += angle;
-        return segment;
-    });
+    // Left side: Pie chart (make smaller width to fix cutoff)
+    html += `<div style="width: 40%; height: 100%;">
+        <svg viewBox="0 0 100 100" width="100%" height="100%">
+            <circle cx="50" cy="50" r="45" fill="#f5f7fa" />`;
     
     // Define colors
     const colors = [
-        'var(--primary-blue)',
-        'var(--timeline-orange)',
+        'var(--primary-blue)', 
+        'var(--timeline-orange)', 
         'var(--timeline-purple)',
-        'var(--timeline-red)',
-        'var(--success-color)',
-        'var(--text-light)'
+        'var(--timeline-red)', 
+        'var(--success-color)'
     ];
     
-    // Create layout with better sizing: pie chart on left, legend on right
-    let html = `
-        <div style="width: 100%; height: 100%; display: flex; flex-direction: row;">
-            <!-- Pie Chart -->
-            <div style="width: 50%; height: 100%; padding-right: 5px;">
-                <svg width="100%" height="100%" viewBox="0 0 100 100" style="overflow: visible;">
-                    <circle cx="50" cy="50" r="40" fill="#f5f7fa" />
-    `;
-    
-    // Add pie segments
-    segments.forEach((segment, index) => {
-        const startRad = (segment.startAngle - 90) * (Math.PI / 180);
-        const endRad = (segment.endAngle - 90) * (Math.PI / 180);
+    // Draw pie segments
+    let startAngle = 0;
+    pieData.forEach((item, index) => {
+        const percentage = (item.value / total) * 100;
+        const angle = (percentage / 100) * 360;
         
-        const x1 = 50 + 40 * Math.cos(startRad);
-        const y1 = 50 + 40 * Math.sin(startRad);
-        const x2 = 50 + 40 * Math.cos(endRad);
-        const y2 = 50 + 40 * Math.sin(endRad);
+        const startRad = (startAngle - 90) * (Math.PI / 180);
+        const endRad = (startAngle + angle - 90) * (Math.PI / 180);
         
-        // Determine if it's a large arc
-        const largeArcFlag = segment.endAngle - segment.startAngle > 180 ? 1 : 0;
+        const x1 = 50 + 45 * Math.cos(startRad);
+        const y1 = 50 + 45 * Math.sin(startRad);
+        const x2 = 50 + 45 * Math.cos(endRad);
+        const y2 = 50 + 45 * Math.sin(endRad);
         
-        // Create path for segment
-        const path = `M 50 50 L ${x1} ${y1} A 40 40 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+        const largeArcFlag = angle > 180 ? 1 : 0;
         
-        html += `<path d="${path}" fill="${colors[index % colors.length]}" />`;
+        html += `<path d="M 50 50 L ${x1} ${y1} A 45 45 0 ${largeArcFlag} 1 ${x2} ${y2} Z" 
+                    fill="${colors[index % colors.length]}" />`;
+        
+        startAngle += angle;
     });
     
-    html += `</svg>
-            </div>`;
+    html += `</svg></div>`;
     
-    // Add legend (now in its own column)
-    html += `
-            <!-- Legend -->
-            <div style="width: 50%; height: 100%; overflow-y: auto; padding-left: 5px;">
-                <div style="font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--text-dark);">Reject Reasons</div>
-    `;
+    // Right side: Legend with scrollable area
+    html += `<div style="width: 60%; height: 100%; overflow-y: auto; padding-left: 10px;">
+        <div style="font-weight: bold; margin-bottom: 5px; font-size: 11px;">Top Reject Reasons</div>`;
     
-    // Add legend items with better styling for readability
-    segments.forEach((segment, index) => {
-        const displayReason = segment.reason.length > 15 ? 
-            segment.reason.substring(0, 15) + '...' : 
-            segment.reason;
-            
-        html += `
-            <div style="display: flex; align-items: center; margin-bottom: 4px; font-size: 10px;">
-                <div style="width: 10px; height: 10px; background-color: ${colors[index % colors.length]}; margin-right: 5px; flex-shrink: 0;"></div>
-                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${segment.reason}">
-                    ${displayReason} (${segment.percentage}%)
-                </div>
+    // Add items to legend
+    pieData.forEach((item, index) => {
+        const percentage = ((item.value / total) * 100).toFixed(1);
+        
+        html += `<div style="display: flex; align-items: center; margin-bottom: 4px;">
+            <div style="width: 10px; height: 10px; background-color: ${colors[index % colors.length]}; margin-right: 5px;"></div>
+            <div style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10px;" 
+                title="${item.reason} (${percentage}%)">
+                ${item.reason.length > 20 ? item.reason.substring(0, 20) + '...' : item.reason} (${percentage}%)
             </div>
-        `;
+        </div>`;
     });
     
-    html += `
-            </div>
-        </div>
-    `;
+    html += `</div></div>`;
     
     chartContainer.innerHTML = html;
 }
@@ -4419,73 +4375,43 @@ function extractRejectReasons(data, view) {
 }
 
         
-// Fix 3: Improve updateTopScrapList with proper DOM handling and debug output
 function updateTopScrapList(data) {
-    Logger.info(`Updating top scrap list for view: ${detailViewState.scrapView}`);
-    
-    // First ensure the container exists
-    const scrapFooter = document.querySelector('.detail-metric-card:nth-child(3) .detail-metric-footer');
-    if (!scrapFooter) {
-        Logger.error("Scrap metric footer not found in DOM");
-        return;
-    }
-    
-    // Ensure the list title and container exist
-    if (!scrapFooter.querySelector('.list-title')) {
-        scrapFooter.innerHTML = `
-            <div class="list-title">Top Reject Reasons</div>
-            <div class="top-items-list" id="topScrapList"></div>
-        `;
-    }
-    
-    // Get the list element
+    // Get the list container
     const listElement = document.getElementById('topScrapList');
     if (!listElement) {
-        Logger.error("Element 'topScrapList' not found in DOM even after creation attempt");
-        // Try to create it directly in the footer
-        scrapFooter.innerHTML += '<div class="top-items-list" id="topScrapList"></div>';
-    }
-    
-    // Try again with the newly created element
-    const retryListElement = document.getElementById('topScrapList');
-    if (!retryListElement) {
-        Logger.error("Failed to create 'topScrapList' element");
+        Logger.error("Element 'topScrapList' not found in DOM");
         return;
     }
     
-    // Sample some data to debug
-    if (data && data.length > 0) {
-        const sampleRecord = data[0];
-        Logger.info(`Sample record reject fields: ${Object.keys(sampleRecord).filter(k => k.includes('Reject') || k.includes('Scrap')).join(', ')}`);
-        
-        if (sampleRecord['Top Rejects by QTY (Reason - Station - QTY - Cost)']) {
-            Logger.info(`Sample reject data: ${sampleRecord['Top Rejects by QTY (Reason - Station - QTY - Cost)'].substring(0, 100)}...`);
-        }
-    }
+    // Set max-height and overflow for scrolling
+    listElement.style.maxHeight = '150px';
+    listElement.style.overflowY = 'auto';
     
-    // Extract top rejects data based on current view
-    const topItems = getTopScrapItems(data, detailViewState.scrapView);
-    
-    Logger.info(`Generated ${topItems.length} top scrap items for view: ${detailViewState.scrapView}`);
+    // Extract top rejects
+    const view = detailViewState.scrapView || 'qty';
+    const topItems = getTopScrapItems(data, view);
     
     if (topItems.length === 0) {
-        retryListElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No scrap data available.</div>';
+        listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No scrap data available.</div>';
         return;
     }
     
-    // Generate HTML
+    // Generate HTML with better spacing and overflow handling
     let html = '';
     topItems.forEach((item, index) => {
         html += `
-            <div class="top-item">
-                <div class="top-item-label">${index + 1}. ${item.reason}</div>
-                <div class="top-item-value">${item.value}</div>
+            <div class="top-item" style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee;">
+                <div class="top-item-label" style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; font-weight: bold; padding-right: 5px;" title="${index + 1}. ${item.reason}">
+                    ${index + 1}. ${item.reason}
+                </div>
+                <div class="top-item-value" style="flex-shrink: 0; font-size: 11px; color: var(--text-light);">
+                    ${item.value}
+                </div>
             </div>
         `;
     });
     
-    retryListElement.innerHTML = html;
-    Logger.info(`Updated scrap list with ${topItems.length} items`);
+    listElement.innerHTML = html;
 }
 
     function getTopScrapItems(data, view) {
