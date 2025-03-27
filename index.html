@@ -4410,8 +4410,7 @@ function updateTopScrapList(data) {
     Logger.info(`Updated scrap list with ${topItems.length} items`);
 }
 
-    // Fixed function to properly extract top scrap items from formatted text fields
-function getTopScrapItems(data, view) {
+    function getTopScrapItems(data, view) {
     if (!data || data.length === 0) return [];
     
     // First try to extract data from formatted text strings
@@ -4421,7 +4420,7 @@ function getTopScrapItems(data, view) {
     
     const parsedItems = [];
     
-    // First try to parse from formatted text
+    // Process each record
     for (const record of data) {
         if (record[formattedField] && record[formattedField] !== "No rejects" && !record[formattedField].includes("No rejects")) {
             const rejectsText = record[formattedField];
@@ -4436,7 +4435,7 @@ function getTopScrapItems(data, view) {
                 // Parse out reason, station, quantity, and cost
                 // Example: "1. Leaking - Seal - QTY: 68 - Cost: 81.61"
                 const parts = trimmedEntry.split(' - ');
-                if (parts.length >= 2) {
+                if (parts.length >= 3) {  // Need at least reason, station, and some quantity/cost
                     // Extract reason (remove numbering if present)
                     let reason = parts[0].trim();
                     if (reason.match(/^\d+\.\s/)) {
@@ -4458,12 +4457,9 @@ function getTopScrapItems(data, view) {
                         }
                     }
                     
-                    // Create consistent reason format
-                    const reasonWithStation = `${reason} (${station})`;
-                    
                     // Add to parsed items with appropriate value format
                     parsedItems.push({
-                        reason: reasonWithStation,
+                        reason: `${reason} (${station})`,
                         value: view === 'qty' ? `${quantity} units` : `R ${cost}`
                     });
                 }
@@ -4488,33 +4484,42 @@ function getTopScrapItems(data, view) {
     
     // If no structured data found, check if we have reject rate data
     for (const record of data) {
-        if (record['Reject Rate by Station'] && record['Reject Rate by Station'] !== "No rejects") {
+        if (record['Reject Rate by Station'] && 
+            record['Reject Rate by Station'] !== "No rejects" && 
+            !record['Reject Rate by Station'].includes("No rejects")) {
+            
+            // Parse reject rates - format: "HNV Ass: 14.29%, Add Tube: 33.33%, Chamber-Lid Weld & P-Test: 42.86%, Tap Ass: 45.45%"
             const rejectRates = record['Reject Rate by Station'].split(',');
-            const rejectItems = rejectRates.map(rate => {
+            const rejectItems = [];
+            
+            rejectRates.forEach(rate => {
                 const parts = rate.trim().split(':');
                 if (parts.length === 2) {
                     const station = parts[0].trim();
                     const percentage = parts[1].trim();
-                    return {
+                    rejectItems.push({
                         reason: `${station}`,
-                        value: view === 'qty' ? `${percentage}` : `${percentage} value`
-                    };
+                        value: view === 'qty' ? `${percentage}` : `${percentage}`
+                    });
                 }
-                return null;
-            }).filter(item => item !== null);
+            });
             
             if (rejectItems.length > 0) {
                 Logger.info(`Parsed ${rejectItems.length} reject items from Reject Rate by Station`);
-                return rejectItems.slice(0, 5);
+                return rejectItems
+                    .sort((a, b) => {
+                        const valA = parseFloat(a.value.replace(/[^0-9.]/g, ''));
+                        const valB = parseFloat(b.value.replace(/[^0-9.]/g, ''));
+                        return valB - valA;
+                    })
+                    .slice(0, 5);
             }
         }
     }
     
-    // If still no data, generate placeholder
-    Logger.warn('No reject reason data found in records, generating placeholder data');
-    return [
-        { reason: 'No detailed reject data available', value: '-' }
-    ];
+    // If still no data, return placeholder
+    Logger.warn('No reject data found in records');
+    return [{ reason: 'No reject data available', value: '-' }];
 }
 
         
@@ -4586,9 +4591,7 @@ function updateTopDowntimeList(data) {
     retryListElement.innerHTML = html;
     Logger.info(`Updated downtime list with ${topItems.length} items`);
 }
-        
-// Fixed function to properly extract top downtime items from formatted text fields
-function getTopDowntimeItems(data, view) {
+        function getTopDowntimeItems(data, view) {
     if (!data || data.length === 0) return [];
     
     // First try to extract data from formatted text strings
@@ -4598,9 +4601,12 @@ function getTopDowntimeItems(data, view) {
     
     const parsedItems = [];
     
-    // First try to parse from formatted text
+    // Process each record
     for (const record of data) {
-        if (record[formattedField] && record[formattedField] !== "No downtime" && !record[formattedField].includes("No downtime")) {
+        if (record[formattedField] && 
+            record[formattedField] !== "No downtime" && 
+            !record[formattedField].includes("No downtime")) {
+            
             const downtimeText = record[formattedField];
             
             // Split by pipe character to get individual downtime entries
@@ -4611,9 +4617,9 @@ function getTopDowntimeItems(data, view) {
                 if (!trimmedEntry) continue;
                 
                 // Parse out reason, machine, cost, and duration
-                // Example: "1. Maintenance - Sealer - Cost: 420.00 - Downtime Min: 60"
+                // Format: "1. Equipment Failure - Machine A - Cost: 420.00 - Downtime Min: 60"
                 const parts = trimmedEntry.split(' - ');
-                if (parts.length >= 2) {
+                if (parts.length >= 3) {  // Need at least reason, machine, and some cost/duration
                     // Extract reason (remove numbering if present)
                     let reason = parts[0].trim();
                     if (reason.match(/^\d+\.\s/)) {
@@ -4639,10 +4645,10 @@ function getTopDowntimeItems(data, view) {
                         }
                     }
                     
-                    // Create consistent reason format, include machine for machine view
+                    // Create consistent reason format based on view
                     const displayReason = view === 'machine' ? 
                         machine : 
-                        `${reason} (${machine})`;
+                        (view === 'reason' ? `${reason} (${machine})` : `${reason} (${machine})`);
                     
                     // Add to parsed items with appropriate value format
                     parsedItems.push({
@@ -4662,34 +4668,30 @@ function getTopDowntimeItems(data, view) {
         return parsedItems
             .sort((a, b) => {
                 // Extract numeric values for comparison
-                const valA = parseFloat(a.value.replace(/[^0-9.]/g, ''));
-                const valB = parseFloat(b.value.replace(/[^0-9.]/g, ''));
+                const valA = parseFloat(a.value.replace(/[^0-9.]/g, '')) || 0;
+                const valB = parseFloat(b.value.replace(/[^0-9.]/g, '')) || 0;
                 return valB - valA;
             })
             .slice(0, 5);
     }
     
-    // Check if any record has downtime duration > 0
+    // Check for downtime duration values
     let hasDowntime = false;
     for (const record of data) {
-        if (record['Downtime Duration (min)'] && parseFloat(record['Downtime Duration (min)']) > 0) {
+        const downtimeDuration = parseFloat(record['Downtime Duration (min)'] || 0);
+        if (downtimeDuration > 0) {
             hasDowntime = true;
             break;
         }
     }
     
-    // If no downtime, return appropriate message
+    // Return appropriate message based on whether downtime exists
     if (!hasDowntime) {
         Logger.info('No downtime records found');
-        return [
-            { reason: 'No downtime recorded', value: view === 'duration' ? '0 min' : 'R 0' }
-        ];
+        return [{ reason: 'No downtime recorded', value: '0 min' }];
     } else {
-        // We have downtime but no structured data
-        Logger.warn('Downtime duration found but no structured downtime data, providing placeholder');
-        return [
-            { reason: 'Downtime details not available', value: view === 'duration' ? '- min' : 'R -' }
-        ];
+        Logger.warn('Downtime duration found but no structured downtime data');
+        return [{ reason: 'Total downtime', value: 'Details not available' }];
     }
 }
 
