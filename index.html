@@ -1779,22 +1779,39 @@
          * @returns {Array} Filtered production data records
          */
         function filterDataByDateRange(opsData, startDate, endDate) {
-            Logger.info(`Filtering data from ${startDate} to ${endDate}`);
-            
-            if (!opsData || !opsData.productionData || !Array.isArray(opsData.productionData)) {
-                Logger.warn('No production data available to filter');
-                return [];
-            }
-            
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            end.setHours(23, 59, 59, 999); // Include the entire end day
-            
-            return opsData.productionData.filter(record => {
-                const recordDate = new Date(record.Date);
-                return recordDate >= start && recordDate <= end;
-            });
+    Logger.info(`Filtering data from ${startDate} to ${endDate}`);
+    
+    if (!opsData || !opsData.productionData || !Array.isArray(opsData.productionData)) {
+        Logger.warn('No production data available to filter');
+        return [];
+    }
+    
+    // Ensure we're working with date objects and SET EXACT TIMES to include all records
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0); // Start of day
+    
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999); // End of day
+    
+    Logger.info(`Date range as objects: ${start.toISOString()} to ${end.toISOString()}`);
+    
+    // Filter data and log date comparison for debugging
+    const filtered = opsData.productionData.filter(record => {
+        const recordDate = new Date(record.Date);
+        const isInRange = recordDate >= start && recordDate <= end;
+        
+        // Debug logging for edge cases
+        if (recordDate.toISOString().substring(0, 10) === start.toISOString().substring(0, 10) ||
+            recordDate.toISOString().substring(0, 10) === end.toISOString().substring(0, 10)) {
+            Logger.info(`Date comparison for ${recordDate.toISOString()}: ${isInRange}`);
         }
+        
+        return isInRange;
+    });
+    
+    Logger.info(`Filtered ${filtered.length} records from ${opsData.productionData.length} total`);
+    return filtered;
+}
 
         /**
          * Gets the last N production dates from the data
@@ -1872,7 +1889,8 @@
             return transformedData;
         }
 
-        function groupDataByProductionLineAndBaseProduct(filteredData) {
+        // Replace your groupDataByProductionLineAndBaseProduct function with this:
+function groupDataByProductionLineAndBaseProduct(filteredData) {
     if (!filteredData || filteredData.length === 0) {
         Logger.warn('No filtered data available to group');
         return {};
@@ -1880,6 +1898,20 @@
     
     const lineGroups = {};
     
+    // First, find all unique combinations of Production Line ID and Base Product
+    const uniqueGroups = new Set();
+    filteredData.forEach(record => {
+        const lineId = record['Production Line ID'];
+        const baseProduct = record['Base Product'];
+        if (lineId && baseProduct) {
+            uniqueGroups.add(`${lineId}-${baseProduct}`);
+        }
+    });
+    
+    // Log what we found for debugging
+    Logger.info(`Found unique line-product combinations: ${Array.from(uniqueGroups).join(', ')}`);
+    
+    // Now process all records
     filteredData.forEach(record => {
         const lineId = record['Production Line ID'];
         
@@ -1888,30 +1920,27 @@
             return;
         }
         
-        // For special lines, also include the base product in the key
+        // Default group key is just the line ID
         let groupKey = lineId;
         
-        // Special handling for Scalpel
+        // Special handling for Scalpel - ALWAYS use base product to differentiate
         if (lineId === 'nosi-scalpel') {
             const baseProduct = record['Base Product'];
-            if (baseProduct === 'Scalpel Packaging') {
-                groupKey = `${lineId}-Scalpel Packaging`;
-            } else if (baseProduct === 'Scalpel Assembly') {
-                groupKey = `${lineId}-Scalpel Assembly`;
-            } else {
-                // Fallback to variant name
-                if (record.Variant && record.Variant.toLowerCase().includes('packaging')) {
-                    groupKey = `${lineId}-Scalpel Packaging`;
-                } else {
-                    groupKey = `${lineId}-Scalpel Assembly`;
-                }
+            if (baseProduct) {
+                groupKey = `${lineId}-${baseProduct}`;
+                Logger.info(`Grouped Scalpel record into: ${groupKey}`);
             }
         }
-        // Check if this is another special line that needs base product separation
-        else if (CONFIG.specialLinesBaseProducts[lineId] && record['Base Product']) {
-            groupKey = `${lineId}-${record['Base Product']}`;
+        // Special handling for 3rd line - ALWAYS use base product
+        else if (lineId === 'mvokwe-3rd line') {
+            const baseProduct = record['Base Product'];
+            if (baseProduct) {
+                groupKey = `${lineId}-${baseProduct}`;
+                Logger.info(`Grouped 3rd line record into: ${groupKey}`);
+            }
         }
         
+        // Create group if it doesn't exist
         if (!lineGroups[groupKey]) {
             lineGroups[groupKey] = {
                 id: lineId,
@@ -1921,12 +1950,33 @@
                 baseProduct: record['Base Product'] || null,
                 records: []
             };
+            
+            // For Scalpel, adjust the name based on base product
+            if (lineId === 'nosi-scalpel') {
+                if (record['Base Product'] === 'Scalpel Packaging') {
+                    lineGroups[groupKey].name = 'Scalpel: Packaging';
+                } else if (record['Base Product'] === 'Scalpel Assembly') {
+                    lineGroups[groupKey].name = 'Scalpel: Assembly';
+                }
+            }
+            
+            // For 3rd line, adjust name based on base product
+            if (lineId === 'mvokwe-3rd line') {
+                if (record['Base Product']) {
+                    lineGroups[groupKey].name = `${record['Base Product']}: Mvokwe (3rd)`;
+                }
+            }
         }
         
+        // Add record to its group
         lineGroups[groupKey].records.push(record);
     });
     
     Logger.info(`Grouped data into ${Object.keys(lineGroups).length} production lines`);
+    Object.keys(lineGroups).forEach(key => {
+        Logger.info(`Group: ${key}, Records: ${lineGroups[key].records.length}`);
+    });
+    
     return lineGroups;
 }
 
@@ -2299,49 +2349,152 @@ function showDetailView(lineId) {
             document.getElementById('detailModal').classList.remove('show');
         }
 
+        function ensureCardPositioning() {
+    // Set special positions in the grid
+    const specialPositions = {
+        'nosi-scalpel-Scalpel Assembly': { row: 1, col: 3 },
+        'nosi-scalpel-Scalpel Packaging': { row: 2, col: 3 },
+        'mvokwe-3rd line-SCD': { row: 2, col: 4 }
+    };
+    
+    // Apply these to transformProductionLines
+    const originalTransformProductionLines = window.transformProductionLines;
+    
+    window.transformProductionLines = function(lineGroups) {
+        const lines = originalTransformProductionLines(lineGroups);
+        
+        // Apply special positioning
+        lines.forEach(line => {
+            // Check for special case
+            const key = `${line.id}-${line.baseProduct}`;
+            if (specialPositions[key]) {
+                line.row = specialPositions[key].row;
+                line.col = specialPositions[key].col;
+                Logger.info(`Applied special positioning for ${key}: row=${line.row}, col=${line.col}`);
+            }
+        });
+        
+        return lines;
+    };
+}
 
         function enhanceDetailViewLayout() {
     const modal = document.getElementById('detailModal');
     if (!modal) return;
     
-    // Get the modal body where all our content is
-    const modalBody = modal.querySelector('.modal-body');
-    if (!modalBody) return;
+    // Add a global style to the document head
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Fixed heights for chart containers */
+        #scheduleAttainmentChart, #labourCostChart {
+            height: 220px !important;
+            min-height: 220px !important;
+            overflow: visible !important;
+        }
+        
+        #scrapPercentageChart, #rejectPieChart, #downtimeChart {
+            height: 180px !important;
+            min-height: 180px !important;
+            overflow: visible !important;
+        }
+        
+        /* Ensure charts don't get stretched */
+        svg {
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 100% !important;
+        }
+        
+        /* Fix for Top Reject Reasons cutoff */
+        .detail-metric-footer {
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+            margin-top: 10px !important;
+        }
+        
+        /* Layout for chart grid */
+        .detail-metrics {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            grid-template-rows: auto auto auto !important;
+            gap: 15px !important;
+        }
+        
+        /* Card positioning */
+        .detail-metric-card:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .detail-metric-card:nth-child(2) { grid-column: 2; grid-row: 1; }
+        .detail-metric-card:nth-child(3) { grid-column: 1 / span 2; grid-row: 2; }
+        .detail-metric-card:nth-child(4) { grid-column: 1 / span 2; grid-row: 3; }
+        
+        /* Chart row layout */
+        .chart-row {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 15px !important;
+            height: 180px !important;
+        }
+        
+        .trend-chart-container {
+            flex: 3 !important;
+            height: 100% !important;
+        }
+        
+        .pie-chart-container {
+            flex: 2 !important;
+            height: 100% !important;
+        }
+        
+        /* List styling */
+        .top-item {
+            display: flex !important;
+            margin-bottom: 6px !important;
+            align-items: flex-start !important;
+        }
+        
+        .top-item-label {
+            flex: 1 !important;
+            font-size: 11px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            padding-right: 10px !important;
+        }
+        
+        .top-item-value {
+            flex-shrink: 0 !important;
+            font-size: 11px !important;
+            white-space: nowrap !important;
+        }
+    `;
     
-    // First, let's adjust the overall grid layout to use a 3-row layout instead of 2x2
-    const detailMetrics = modalBody.querySelector('.detail-metrics');
-    if (detailMetrics) {
-        // Change to a more flexible layout with dedicated rows
-        detailMetrics.style.display = 'grid';
-        detailMetrics.style.gridTemplateColumns = '1fr 1fr';
-        detailMetrics.style.gridTemplateRows = 'minmax(200px, 1fr) minmax(200px, 1fr) minmax(150px, auto)';
-        detailMetrics.style.gap = '15px';
+    document.head.appendChild(style);
+    
+    // Find and style top reject reasons list
+    const topScrapList = document.getElementById('topScrapList');
+    if (topScrapList) {
+        topScrapList.style.maxHeight = 'none';
+        topScrapList.style.overflowY = 'visible';
         
-        // Get all cards
-        const cards = detailMetrics.querySelectorAll('.detail-metric-card');
+        // Make sure the list is visible
+        const listItems = topScrapList.querySelectorAll('.top-item');
+        if (listItems.length === 0) {
+            // Force update the list again
+            updateTopScrapList(detailViewState.filteredData);
+        }
+    }
+    
+    // Find and style top downtime reasons list
+    const topDowntimeList = document.getElementById('topDowntimeList');
+    if (topDowntimeList) {
+        topDowntimeList.style.maxHeight = 'none';
+        topDowntimeList.style.overflowY = 'visible';
         
-        if (cards.length >= 4) {
-            // Schedule Attainment - stays in top left
-            cards[0].style.gridColumn = '1';
-            cards[0].style.gridRow = '1';
-            
-            // Labour Cost - stays in top right
-            cards[1].style.gridColumn = '2';
-            cards[1].style.gridRow = '1';
-            
-            // Scrap Analysis - goes full width in middle row
-            cards[2].style.gridColumn = '1 / span 2';
-            cards[2].style.gridRow = '2';
-            
-            // Downtime Analysis - goes full width in bottom row
-            cards[3].style.gridColumn = '1 / span 2';
-            cards[3].style.gridRow = '3';
-            
-            // Restructure the Scrap Analysis card internals for better layout
-            restructureScrapAnalysisCard(cards[2]);
-            
-            // Restructure the Downtime Analysis card internals
-            restructureDowntimeAnalysisCard(cards[3]);
+        // Make sure the list is visible
+        const listItems = topDowntimeList.querySelectorAll('.top-item');
+        if (listItems.length === 0) {
+            // Force update the list again
+            updateTopDowntimeList(detailViewState.filteredData);
         }
     }
 }
@@ -4962,46 +5115,43 @@ function updateTopDowntimeList(data) {
     }
 }
 
-        /**
-         * Add event listeners when the DOM is loaded
-         */
         document.addEventListener('DOMContentLoaded', () => {
-            // Load user preferences
-            loadUserPreferences();
-            
-            // Update cycle dropdown to match stored preference
-            document.getElementById('cycleStartDay').value = weekCycleStartDay.toString();
-            
-            // Add event listeners for buttons
-            document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
-            document.getElementById('refreshButton').addEventListener('click', handleRefresh);
-            document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
-            document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
-            document.getElementById('applyAndRememberCycle').addEventListener('click', handleApplyAndRememberCycle);
-            document.getElementById('prevPeriodButton').addEventListener('click', navigateToPreviousPeriod);
-            document.getElementById('nextPeriodButton').addEventListener('click', navigateToNextPeriod);
-            
-            // Add event listener for document click (to close dropdown)
-            document.addEventListener('click', handleDocumentClick);
-            
-            // Detail view event listeners
-            document.getElementById('modalClose').addEventListener('click', hideDetailView);
-            document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
-            document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
-            document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
-            document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
-            document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
-            document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
-            document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
-            document.getElementById('labourCostBtn').addEventListener('click', () => toggleCostView('labour'));
-            document.getElementById('unitCostBtn').addEventListener('click', () => toggleCostView('unit'));
-            
-            // Initialize the dashboard
-            initializeDashboard();
-            
-            // Set up auto-refresh interval
-            setInterval(initializeDashboard, CONFIG.refreshInterval);
-        });
+    // Load user preferences
+    loadUserPreferences();
+    
+    // Update cycle dropdown to match stored preference
+    document.getElementById('cycleStartDay').value = weekCycleStartDay.toString();
+    
+    // Add event listeners for buttons
+    document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
+    document.getElementById('refreshButton').addEventListener('click', handleRefresh);
+    document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
+    document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
+    document.getElementById('applyAndRememberCycle').addEventListener('click', handleApplyAndRememberCycle);
+    document.getElementById('prevPeriodButton').addEventListener('click', navigateToPreviousPeriod);
+    document.getElementById('nextPeriodButton').addEventListener('click', navigateToNextPeriod);
+    
+    // Add event listener for document click (to close dropdown)
+    document.addEventListener('click', handleDocumentClick);
+    
+    // Detail view event listeners
+    document.getElementById('modalClose').addEventListener('click', hideDetailView);
+    document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
+    document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
+    document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
+    document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
+    document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
+    document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
+    document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
+    document.getElementById('labourCostBtn').addEventListener('click', () => toggleCostView('labour'));
+    document.getElementById('unitCostBtn').addEventListener('click', () => toggleCostView('unit'));
+    
+    ensureCardPositioning();
+    initializeDashboard();
+    
+    // Set up auto-refresh interval
+    setInterval(initializeDashboard, CONFIG.refreshInterval);
+});
 
         // Make functions available in the global scope
         window.showDetailView = showDetailView;
