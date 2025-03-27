@@ -2069,6 +2069,48 @@
         function ensureDetailViewElementsExist() {
     const modal = document.getElementById('detailModal');
     
+    // Check for and create scrap chart container
+    let scrapChart = document.getElementById('scrapPercentageChart');
+    if (!scrapChart) {
+        Logger.warn("scrapPercentageChart container not found, creating it");
+        const scrapCard = modal.querySelector('.detail-metric-card:nth-child(3)');
+        if (scrapCard) {
+            const chartContainer = scrapCard.querySelector('.chart-container');
+            if (chartContainer) {
+                chartContainer.id = 'scrapPercentageChart';
+            }
+        }
+    }
+    
+    // Check for and create reject pie chart container
+    let rejectPie = document.getElementById('rejectPieChart');
+    if (!rejectPie) {
+        Logger.warn("rejectPieChart container not found, creating it");
+        const scrapCard = modal.querySelector('.detail-metric-card:nth-child(3)');
+        if (scrapCard) {
+            const pieContainer = scrapCard.querySelector('.pie-chart-container');
+            if (pieContainer) {
+                const chartDiv = pieContainer.querySelector('div');
+                if (chartDiv) {
+                    chartDiv.id = 'rejectPieChart';
+                }
+            }
+        }
+    }
+    
+    // Check for and create downtime chart container
+    let downtimeChart = document.getElementById('downtimeChart');
+    if (!downtimeChart) {
+        Logger.warn("downtimeChart container not found, creating it");
+        const downtimeCard = modal.querySelector('.detail-metric-card:nth-child(4)');
+        if (downtimeCard) {
+            const chartContainer = downtimeCard.querySelector('.chart-container');
+            if (chartContainer) {
+                chartContainer.id = 'downtimeChart';
+            }
+        }
+    }
+    
     // Check if topScrapList exists
     let topScrapList = document.getElementById('topScrapList');
     if (!topScrapList) {
@@ -2374,9 +2416,11 @@ function showDetailView(lineId) {
             }
         }
 
-        // Fix 5: Add debugging to loadDetailViewData
-function loadDetailViewData() {
+        function loadDetailViewData() {
     Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
+    
+    // First ensure all DOM elements exist
+    ensureDetailViewElementsExist();
     
     // Get the filtered data for the line and date range
     const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
@@ -2394,19 +2438,34 @@ function loadDetailViewData() {
     
     // Log a sample record to debug field names
     if (filteredData.length > 0) {
-        Logger.info(`Sample record fields: ${Object.keys(filteredData[0]).join(', ')}`);
+        const sample = filteredData[0];
+        Logger.info(`Sample record fields: ${Object.keys(sample).join(', ')}`);
+        
+        // Log sample scrap and downtime fields to debug
+        if (sample['Top Rejects by QTY (Reason - Station - QTY - Cost)']) {
+            Logger.info(`Sample reject data: ${sample['Top Rejects by QTY (Reason - Station - QTY - Cost)']}`);
+        }
+        
+        if (sample['Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)']) {
+            Logger.info(`Sample downtime data: ${sample['Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)']}`);
+        }
     }
     
-    // Render charts with actual data
-    renderScheduleAttainmentChart(filteredData);
-    renderLabourCostChart(filteredData);
-    renderScrapPercentageChart(filteredData);
-    renderDowntimeChart(filteredData);
-    renderRejectPieChart(filteredData);
-    
-    // Update lists with actual data
-    updateTopScrapList(filteredData);
-    updateTopDowntimeList(filteredData);
+    try {
+        // Render charts with actual data
+        renderScheduleAttainmentChart(filteredData);
+        renderLabourCostChart(filteredData);
+        renderScrapPercentageChart(filteredData);
+        renderDowntimeChart(filteredData);
+        renderRejectPieChart(filteredData);
+        
+        // Update lists with actual data
+        updateTopScrapList(filteredData);
+        updateTopDowntimeList(filteredData);
+    } catch (error) {
+        Logger.error(`Error rendering charts: ${error.message}`, error);
+        showNoDataMessage();
+    }
 }
 
         /**
@@ -4217,51 +4276,68 @@ function renderDowntimeChart(data) {
     chartContainer.innerHTML = html;
 }
 
-/**
- * Extracts reject reasons from data
- * @param {Array} data - Filtered data for the line
- * @param {string} view - View type ('qty' or 'cost')
- * @returns {Array} Array of reject reasons with values
- */
 function extractRejectReasons(data, view) {
     if (!data || data.length === 0) return [];
     
-    // Use a map to aggregate data
+    // Define which field to use based on view
+    const field = view === 'qty' ? 
+        'Top Rejects by QTY (Reason - Station - QTY - Cost)' : 
+        'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+    
     const reasonMap = new Map();
     
+    // Process each record
     data.forEach(record => {
-        // Extract reject reasons from record
-        let rejectField, valueField;
+        // Skip if no reject data or "No rejects"
+        if (!record[field] || record[field] === "No rejects") return;
         
-        if (view === 'qty') {
-            rejectField = 'Reject Reason';
-            valueField = 'Rejected Quantity';
-        } else {
-            rejectField = 'Reject Reason';
-            valueField = 'Reject Cost';
-        }
+        // Split by pipe character to get individual rejects
+        const rejects = record[field].split('|');
         
-        // Check if fields exist in the record
-        if (record[rejectField] && record[valueField]) {
-            const reason = record[rejectField];
-            const value = parseFloat(record[valueField]) || 0;
+        rejects.forEach(reject => {
+            // Parse reject data
+            // Format: "1. Broken hook - HNV Ass - QTY: 18 - Cost: 0"
+            const parts = reject.trim().split(' - ');
+            if (parts.length < 3) return;
             
-            // Sum up values for the same reason
-            if (reasonMap.has(reason)) {
-                reasonMap.set(reason, reasonMap.get(reason) + value);
-            } else {
-                reasonMap.set(reason, value);
+            // Extract reason (removing numbering)
+            let reason = parts[0].trim();
+            reason = reason.replace(/^\d+\.\s+/, '');
+            
+            // Extract station
+            const station = parts[1].trim();
+            
+            // Extract quantity and cost
+            let qty = 0;
+            let cost = 0;
+            
+            for (let i = 2; i < parts.length; i++) {
+                if (parts[i].includes('QTY:')) {
+                    qty = parseFloat(parts[i].replace('QTY:', '').trim()) || 0;
+                } else if (parts[i].includes('Cost:')) {
+                    cost = parseFloat(parts[i].replace('Cost:', '').trim()) || 0;
+                }
             }
-        }
+            
+            // Create combined reason
+            const fullReason = `${reason} (${station})`;
+            
+            // Add to map with appropriate value
+            const value = view === 'qty' ? qty : cost;
+            
+            if (reasonMap.has(fullReason)) {
+                reasonMap.set(fullReason, reasonMap.get(fullReason) + value);
+            } else {
+                reasonMap.set(fullReason, value);
+            }
+        });
     });
     
     // Convert map to array
-    const reasonsArray = Array.from(reasonMap.entries()).map(([reason, value]) => ({
-        reason,
-        value
-    }));
-    
-    return reasonsArray;
+    return Array.from(reasonMap.entries())
+        .map(([reason, value]) => ({ reason, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);  // Top 5 reasons
 }
 
         
@@ -4334,7 +4410,7 @@ function updateTopScrapList(data) {
     Logger.info(`Updated scrap list with ${topItems.length} items`);
 }
 
-    // Fix 1: Parse structured text fields for reject reasons
+    // Fixed function to properly extract top scrap items from formatted text fields
 function getTopScrapItems(data, view) {
     if (!data || data.length === 0) return [];
     
@@ -4410,14 +4486,34 @@ function getTopScrapItems(data, view) {
             .slice(0, 5);
     }
     
-    // If no structured data found, generate sample data
-    Logger.warn('No reject reason data found in records, generating sample data');
+    // If no structured data found, check if we have reject rate data
+    for (const record of data) {
+        if (record['Reject Rate by Station'] && record['Reject Rate by Station'] !== "No rejects") {
+            const rejectRates = record['Reject Rate by Station'].split(',');
+            const rejectItems = rejectRates.map(rate => {
+                const parts = rate.trim().split(':');
+                if (parts.length === 2) {
+                    const station = parts[0].trim();
+                    const percentage = parts[1].trim();
+                    return {
+                        reason: `${station}`,
+                        value: view === 'qty' ? `${percentage}` : `${percentage} value`
+                    };
+                }
+                return null;
+            }).filter(item => item !== null);
+            
+            if (rejectItems.length > 0) {
+                Logger.info(`Parsed ${rejectItems.length} reject items from Reject Rate by Station`);
+                return rejectItems.slice(0, 5);
+            }
+        }
+    }
+    
+    // If still no data, generate placeholder
+    Logger.warn('No reject reason data found in records, generating placeholder data');
     return [
-        { reason: 'Leaking (Seal)', value: view === 'qty' ? '68 units' : 'R 81.61' },
-        { reason: 'Cracking (Big Tap P-Test)', value: view === 'qty' ? '48 units' : 'R 29.19' },
-        { reason: 'Broken small taps (Bag & Tap Weld)', value: view === 'qty' ? '6 units' : 'R 43.07' },
-        { reason: 'Cut in Bag (Bag Cut)', value: view === 'qty' ? '5 units' : 'R 36.99' },
-        { reason: 'Misalignment (Click Station)', value: view === 'qty' ? '4 units' : 'R 12.50' }
+        { reason: 'No detailed reject data available', value: '-' }
     ];
 }
 
@@ -4491,7 +4587,7 @@ function updateTopDowntimeList(data) {
     Logger.info(`Updated downtime list with ${topItems.length} items`);
 }
         
-// Fix 2: Parse structured text fields for downtime data
+// Fixed function to properly extract top downtime items from formatted text fields
 function getTopDowntimeItems(data, view) {
     if (!data || data.length === 0) return [];
     
@@ -4515,7 +4611,7 @@ function getTopDowntimeItems(data, view) {
                 if (!trimmedEntry) continue;
                 
                 // Parse out reason, machine, cost, and duration
-                // Example: "1. Maintenance - Sealer - Cost: 420.00 - Downtime: 60 min"
+                // Example: "1. Maintenance - Sealer - Cost: 420.00 - Downtime Min: 60"
                 const parts = trimmedEntry.split(' - ');
                 if (parts.length >= 2) {
                     // Extract reason (remove numbering if present)
@@ -4534,8 +4630,10 @@ function getTopDowntimeItems(data, view) {
                     for (let i = 2; i < parts.length; i++) {
                         if (parts[i].includes("Cost:")) {
                             cost = parts[i].replace("Cost:", "").trim();
-                        } else if (parts[i].includes("Downtime:") || parts[i].includes("Downtime Min:")) {
-                            duration = parts[i].replace(/Downtime:?/i, "").replace(/Min:?/i, "").trim();
+                        } else if (parts[i].includes("Downtime Min:")) {
+                            duration = parts[i].replace("Downtime Min:", "").trim();
+                        } else if (parts[i].includes("Downtime:")) {
+                            duration = parts[i].replace("Downtime:", "").trim();
                             // Remove "min" if it's in the duration
                             duration = duration.replace("min", "").trim();
                         }
@@ -4587,14 +4685,10 @@ function getTopDowntimeItems(data, view) {
             { reason: 'No downtime recorded', value: view === 'duration' ? '0 min' : 'R 0' }
         ];
     } else {
-        // We have downtime but no structured data, generate sample data
-        Logger.warn('Downtime duration found but no structured downtime data, generating sample data');
+        // We have downtime but no structured data
+        Logger.warn('Downtime duration found but no structured downtime data, providing placeholder');
         return [
-            { reason: 'Equipment Maintenance', value: view === 'duration' ? '210 min' : 'R 4200' },
-            { reason: 'Material Changeover', value: view === 'duration' ? '145 min' : 'R 2850' },
-            { reason: 'Quality Inspection Delay', value: view === 'duration' ? '95 min' : 'R 1720' },
-            { reason: 'Tool Replacement', value: view === 'duration' ? '60 min' : 'R 1200' },
-            { reason: 'Operator Break', value: view === 'duration' ? '45 min' : 'R 950' }
+            { reason: 'Downtime details not available', value: view === 'duration' ? '- min' : 'R -' }
         ];
     }
 }
