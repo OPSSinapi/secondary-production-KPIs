@@ -2781,12 +2781,258 @@
             }
         }
 
-        // Stub function for transformProductionLines since it's missing in the provided code
         function transformProductionLines(lineGroups) {
-            // This would normally process line groups into a format expected by the UI
-            // For now, return an empty array as a placeholder
-            return [];
+    const lines = [];
+    Logger.info(`Transforming ${Object.keys(lineGroups).length} line groups into display format`);
+    
+    // Map with fixed positions for known lines
+    const positionMapping = {
+        'scd-line': { row: 1, col: 1 },
+        'levo-line': { row: 1, col: 2 },
+        'nosi-scalpel': { row: 1, col: 3 }, // This will be used for assembly
+        'nosi-scalpel-assembly': { row: 1, col: 3 },
+        'mvokwe-3rd line': { row: 1, col: 4 }, // This will be used for UBT
+        'mvokwe-3rd-line-ubt': { row: 1, col: 4 },
+        'sum-line': { row: 2, col: 1 },
+        'popup-line': { row: 2, col: 2 },
+        'nosi-scalpel-packaging': { row: 2, col: 3 },
+        'mvokwe-3rd-line-scd': { row: 2, col: 4 }
+    };
+    
+    // Process each line group
+    for (const [groupKey, group] of Object.entries(lineGroups)) {
+        Logger.info(`Processing line group: ${groupKey}`);
+        
+        // Skip if no records
+        if (!group.records || group.records.length === 0) {
+            Logger.warn(`No records for line group: ${groupKey}`);
+            continue;
         }
+        
+        // Start building the line object
+        const line = {
+            id: group.id,
+            name: group.name || 'Unknown Line',
+            color: getHeaderColorClass(group.color || 'blue'),
+            baseProduct: group.baseProduct,
+            variants: [],
+            isPopUpLine: (group.type === 'popup' || groupKey.includes('popup')),
+            timelineSegments: []
+        };
+        
+        // Handle special cases for Scalpel and 3rd line
+        if (groupKey.includes('nosi-scalpel')) {
+            if (groupKey.includes('packaging')) {
+                line.id = 'nosi-scalpel-packaging';
+                line.name = 'Scalpel: Packaging';
+            } else {
+                line.id = 'nosi-scalpel-assembly';
+                line.name = 'Scalpel: Assembly';
+            }
+        }
+        else if (groupKey.includes('mvokwe-3rd')) {
+            if (group.baseProduct === 'SCD') {
+                line.id = 'mvokwe-3rd-line-scd';
+                line.name = 'SCD: Mvokwe (3rd)';
+            } else {
+                line.id = 'mvokwe-3rd-line-ubt';
+                line.name = 'UBT: Mvokwe (3rd)';
+            }
+        }
+        
+        // Set position based on mapping
+        const position = positionMapping[line.id] || positionMapping[group.id];
+        if (position) {
+            line.row = position.row;
+            line.col = position.col;
+        } else {
+            // Use default position if not found in mapping
+            Logger.warn(`No position mapping found for ${line.id}, defaulting to 1-1`);
+            line.row = 1;
+            line.col = 1;
+        }
+        
+        // Group records by variant
+        const variantGroups = {};
+        group.records.forEach(record => {
+            const variant = record.Variant || 'Standard';
+            if (!variantGroups[variant]) {
+                variantGroups[variant] = [];
+            }
+            variantGroups[variant].push(record);
+        });
+        
+        // Extract latest variants
+        const variantNames = Object.keys(variantGroups);
+        
+        // Sort records by date to find the most recent variant
+        const latestRecords = {};
+        variantNames.forEach(variant => {
+            const records = variantGroups[variant];
+            records.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+            latestRecords[variant] = records[0];
+        });
+        
+        // Sort variants by recency
+        const sortedVariants = variantNames.sort((a, b) => {
+            return new Date(latestRecords[b].Date) - new Date(latestRecords[a].Date);
+        });
+        
+        // Create variant objects
+        sortedVariants.forEach((variantName, index) => {
+            const records = variantGroups[variantName];
+            
+            // Calculate metrics for this variant
+            const metrics = calculateVariantMetrics(records);
+            
+            // Calculate trends (comparing to previous periods)
+            const trends = calculateVariantTrends(records);
+            
+            // Determine variant status
+            let status = 'ENDED';
+            const latestDate = new Date(latestRecords[variantName].Date);
+            const today = new Date();
+            const daysSince = Math.floor((today - latestDate) / (1000 * 60 * 60 * 24));
+            
+            if (daysSince <= 7) {
+                status = 'ACTIVE';
+            } else if (daysSince <= 30) {
+                status = 'STANDBY';
+            }
+            
+            // Create variant object
+            const variant = {
+                name: variantName,
+                isCurrentVariant: index === 0, // First variant is current
+                status: status,
+                metrics: metrics,
+                trends: trends,
+                timeline: [] // Add timeline data if available
+            };
+            
+            line.variants.push(variant);
+        });
+        
+        // If this is a PopUp line, add recent runs
+        if (line.isPopUpLine) {
+            line.status = line.variants[0]?.status || 'ENDED';
+            line.statusText = line.status === 'ACTIVE' ? 'Currently Active' : 
+                             (line.status === 'STANDBY' ? 'Ready for Next Run' : 'No Active Run');
+            
+            line.recentRuns = group.records
+                .sort((a, b) => new Date(b.Date) - new Date(a.Date))
+                .slice(0, 5) // Take 5 most recent
+                .map(record => ({
+                    date: new Date(record.Date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    variant: record.Variant || 'Standard',
+                    attainment: parseFloat(record['Schedule Attainment'] || 0).toFixed(1),
+                    scrapPercentage: parseFloat(record['Scrap Cost as % of Production Value'] || 0).toFixed(1)
+                }));
+        }
+        
+        // Add the processed line to the array
+        lines.push(line);
+        Logger.info(`Added line: ${line.name} with ${line.variants.length} variants`);
+    }
+    
+    return lines;
+}
+
+/**
+ * Calculate metrics for a variant from its records
+ */
+function calculateVariantMetrics(records) {
+    if (!records || records.length === 0) {
+        return {
+            scheduleAttainment: 0,
+            labourCostPerUnit: 0,
+            scrapPercentage: 0,
+            downtimeHours: 0
+        };
+    }
+    
+    let totalScheduleAttainment = 0;
+    let totalLabourCost = 0;
+    let totalScrapPercentage = 0;
+    let totalDowntime = 0;
+    
+    records.forEach(record => {
+        totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+        totalLabourCost += parseFloat(record['Staff Cost'] || 0);
+        totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+        totalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
+    });
+    
+    const count = records.length;
+    
+    return {
+        scheduleAttainment: (totalScheduleAttainment / count).toFixed(1),
+        labourCostPerUnit: (totalLabourCost / count).toFixed(0),
+        scrapPercentage: (totalScrapPercentage / count).toFixed(1),
+        downtimeHours: (totalDowntime / 60).toFixed(1) // Convert minutes to hours
+    };
+}
+
+/**
+ * Calculate trends for a variant
+ */
+function calculateVariantTrends(records) {
+    // Default trends - used if there's not enough data
+    const defaultTrends = {
+        scheduleAttainment: { direction: 'up', value: 0 },
+        labourCostPerUnit: { direction: 'down', value: 0 },
+        scrapPercentage: { direction: 'down', value: 0 },
+        downtimeHours: { direction: 'down', value: 0 }
+    };
+    
+    if (!records || records.length < 2) {
+        return defaultTrends;
+    }
+    
+    // Sort by date, newest first
+    records.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+    
+    // Split into two halves for comparison
+    const midpoint = Math.floor(records.length / 2);
+    const recentRecords = records.slice(0, midpoint);
+    const olderRecords = records.slice(midpoint);
+    
+    // Calculate metrics for each period
+    const recentMetrics = calculateVariantMetrics(recentRecords);
+    const olderMetrics = calculateVariantMetrics(olderRecords);
+    
+    // Calculate percentage changes
+    const scheduleChange = olderMetrics.scheduleAttainment > 0 ? 
+        ((recentMetrics.scheduleAttainment - olderMetrics.scheduleAttainment) / olderMetrics.scheduleAttainment) * 100 : 0;
+    
+    const labourCostChange = olderMetrics.labourCostPerUnit > 0 ? 
+        ((recentMetrics.labourCostPerUnit - olderMetrics.labourCostPerUnit) / olderMetrics.labourCostPerUnit) * 100 : 0;
+    
+    const scrapChange = olderMetrics.scrapPercentage > 0 ? 
+        ((recentMetrics.scrapPercentage - olderMetrics.scrapPercentage) / olderMetrics.scrapPercentage) * 100 : 0;
+    
+    const downtimeChange = olderMetrics.downtimeHours > 0 ? 
+        ((recentMetrics.downtimeHours - olderMetrics.downtimeHours) / olderMetrics.downtimeHours) * 100 : 0;
+    
+    return {
+        scheduleAttainment: {
+            direction: scheduleChange >= 0 ? 'up' : 'down',
+            value: Math.abs(scheduleChange).toFixed(1)
+        },
+        labourCostPerUnit: {
+            direction: labourCostChange >= 0 ? 'up' : 'down',
+            value: Math.abs(labourCostChange).toFixed(1)
+        },
+        scrapPercentage: {
+            direction: scrapChange >= 0 ? 'up' : 'down',
+            value: Math.abs(scrapChange).toFixed(1)
+        },
+        downtimeHours: {
+            direction: downtimeChange >= 0 ? 'up' : 'down',
+            value: Math.abs(downtimeChange).toFixed(1)
+        }
+    };
+}
         /**
          * ======================================
          * CARD RENDERING
