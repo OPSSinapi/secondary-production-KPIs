@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-03-24T20:03:10.447Z",
+  "lastUpdated": "2025-03-27T06:45:16.800Z",
   "productionData": [
     {
       "Date": "2023-09-10T22:00:00.000Z",
@@ -69,7 +69,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-11T22:00:00.000Z",
@@ -174,7 +174,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-12T22:00:00.000Z",
@@ -209,7 +209,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-17T22:00:00.000Z",
@@ -244,7 +244,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-18T22:00:00.000Z",
@@ -279,7 +279,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-19T22:00:00.000Z",
@@ -314,7 +314,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-20T22:00:00.000Z",
@@ -349,7 +349,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-21T22:00:00.000Z",
@@ -384,7 +384,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-25T22:00:00.000Z",
@@ -419,7 +419,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-26T22:00:00.000Z",
@@ -489,7 +489,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-27T22:00:00.000Z",
@@ -524,7 +524,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-09-28T22:00:00.000Z",
@@ -594,7 +594,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-01T22:00:00.000Z",
@@ -664,7 +664,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-02T22:00:00.000Z",
@@ -734,7 +734,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-03T22:00:00.000Z",
@@ -804,7 +804,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-04T22:00:00.000Z",
@@ -944,7 +944,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-09T22:00:00.000Z",
@@ -1014,7 +1014,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-10T22:00:00.000Z",
@@ -1084,7 +1084,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-11T22:00:00.000Z",
@@ -1154,7 +1154,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-12T22:00:00.000Z",
@@ -1224,7 +1224,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-15T22:00:00.000Z",
@@ -1294,7 +1294,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-16T22:00:00.000Z",
@@ -1364,7 +1364,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-17T22:00:00.000Z",
@@ -1399,7 +1399,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-18T22:00:00.000Z",
@@ -1469,7 +1469,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-19T22:00:00.000Z",
@@ -1539,7 +1539,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-22T22:00:00.000Z",
@@ -1609,7 +1609,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-23T22:00:00.000Z",
@@ -1679,7 +1679,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-24T22:00:00.000Z",
@@ -1749,7 +1749,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-25T22:00:00.000Z",
@@ -1819,7 +1819,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-26T22:00:00.000Z",
@@ -1889,7 +1889,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-29T22:00:00.000Z",
@@ -1994,7 +1994,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-30T22:00:00.000Z",
@@ -2099,7 +2099,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-10-31T22:00:00.000Z",
@@ -2204,7 +2204,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-01T22:00:00.000Z",
@@ -2309,7 +2309,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-02T22:00:00.000Z",
@@ -2379,7 +2379,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-05T22:00:00.000Z",
@@ -2449,7 +2449,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-06T22:00:00.000Z",
@@ -2519,7 +2519,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-07T22:00:00.000Z",
@@ -2589,7 +2589,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-08T22:00:00.000Z",
@@ -2659,7 +2659,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-09T22:00:00.000Z",
@@ -2729,7 +2729,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-12T22:00:00.000Z",
@@ -2799,7 +2799,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-13T22:00:00.000Z",
@@ -2869,7 +2869,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-14T22:00:00.000Z",
@@ -2974,7 +2974,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-15T22:00:00.000Z",
@@ -3079,7 +3079,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-16T22:00:00.000Z",
@@ -3149,7 +3149,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-19T22:00:00.000Z",
@@ -3254,7 +3254,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-20T22:00:00.000Z",
@@ -3324,7 +3324,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-21T22:00:00.000Z",
@@ -3429,7 +3429,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-22T22:00:00.000Z",
@@ -3499,7 +3499,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-23T22:00:00.000Z",
@@ -3604,7 +3604,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-26T22:00:00.000Z",
@@ -3674,7 +3674,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-27T22:00:00.000Z",
@@ -3709,7 +3709,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-28T22:00:00.000Z",
@@ -3744,7 +3744,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-29T22:00:00.000Z",
@@ -3814,7 +3814,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-11-30T22:00:00.000Z",
@@ -3884,7 +3884,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-03T22:00:00.000Z",
@@ -3954,7 +3954,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-04T22:00:00.000Z",
@@ -4024,7 +4024,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-05T22:00:00.000Z",
@@ -4094,7 +4094,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-06T22:00:00.000Z",
@@ -4164,7 +4164,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-07T22:00:00.000Z",
@@ -4234,7 +4234,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-10T22:00:00.000Z",
@@ -4304,7 +4304,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-11T22:00:00.000Z",
@@ -4374,7 +4374,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2023-12-12T22:00:00.000Z",
@@ -4514,7 +4514,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-08T22:00:00.000Z",
@@ -4584,7 +4584,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-09T22:00:00.000Z",
@@ -4654,7 +4654,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-10T22:00:00.000Z",
@@ -4724,7 +4724,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-11T22:00:00.000Z",
@@ -4794,7 +4794,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-14T22:00:00.000Z",
@@ -4899,7 +4899,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-15T22:00:00.000Z",
@@ -4969,7 +4969,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-16T22:00:00.000Z",
@@ -5039,7 +5039,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-16T22:00:00.000Z",
@@ -5214,7 +5214,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-17T22:00:00.000Z",
@@ -5354,7 +5354,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-18T22:00:00.000Z",
@@ -5494,7 +5494,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-21T22:00:00.000Z",
@@ -5634,7 +5634,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-22T22:00:00.000Z",
@@ -5739,7 +5739,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-23T22:00:00.000Z",
@@ -5879,7 +5879,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-24T22:00:00.000Z",
@@ -6019,7 +6019,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-25T22:00:00.000Z",
@@ -6159,7 +6159,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-28T22:00:00.000Z",
@@ -6299,7 +6299,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-29T22:00:00.000Z",
@@ -6404,7 +6404,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-30T22:00:00.000Z",
@@ -6509,7 +6509,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-01-31T22:00:00.000Z",
@@ -6614,7 +6614,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-01T22:00:00.000Z",
@@ -6719,7 +6719,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-05T22:00:00.000Z",
@@ -6824,7 +6824,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-05T22:00:00.000Z",
@@ -6929,7 +6929,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-06T22:00:00.000Z",
@@ -7069,7 +7069,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-07T22:00:00.000Z",
@@ -7209,7 +7209,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-11T22:00:00.000Z",
@@ -7314,7 +7314,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-12T22:00:00.000Z",
@@ -7384,7 +7384,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-13T22:00:00.000Z",
@@ -7454,7 +7454,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-14T22:00:00.000Z",
@@ -7524,7 +7524,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-15T22:00:00.000Z",
@@ -7629,7 +7629,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-18T22:00:00.000Z",
@@ -7734,7 +7734,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-18T22:00:00.000Z",
@@ -7839,7 +7839,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-19T22:00:00.000Z",
@@ -7979,7 +7979,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-20T22:00:00.000Z",
@@ -8084,7 +8084,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-21T22:00:00.000Z",
@@ -8189,7 +8189,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-22T22:00:00.000Z",
@@ -8329,7 +8329,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-25T22:00:00.000Z",
@@ -8434,7 +8434,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-26T22:00:00.000Z",
@@ -8539,7 +8539,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-27T22:00:00.000Z",
@@ -8644,7 +8644,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-28T22:00:00.000Z",
@@ -8784,7 +8784,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-02-29T22:00:00.000Z",
@@ -8924,7 +8924,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-03T22:00:00.000Z",
@@ -9064,7 +9064,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-04T22:00:00.000Z",
@@ -9169,7 +9169,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-05T22:00:00.000Z",
@@ -9309,7 +9309,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-06T22:00:00.000Z",
@@ -9414,7 +9414,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-07T22:00:00.000Z",
@@ -9519,7 +9519,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-10T22:00:00.000Z",
@@ -9659,7 +9659,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-11T22:00:00.000Z",
@@ -9764,7 +9764,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-12T22:00:00.000Z",
@@ -9869,7 +9869,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-13T22:00:00.000Z",
@@ -9974,7 +9974,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-17T22:00:00.000Z",
@@ -10044,7 +10044,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-17T22:00:00.000Z",
@@ -10184,7 +10184,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-18T22:00:00.000Z",
@@ -10289,7 +10289,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-19T22:00:00.000Z",
@@ -10394,7 +10394,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-20T22:00:00.000Z",
@@ -10499,7 +10499,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-24T22:00:00.000Z",
@@ -10604,7 +10604,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-25T22:00:00.000Z",
@@ -10709,7 +10709,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-26T22:00:00.000Z",
@@ -10849,7 +10849,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-03-27T22:00:00.000Z",
@@ -10954,7 +10954,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-01T22:00:00.000Z",
@@ -11059,7 +11059,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-02T22:00:00.000Z",
@@ -11164,7 +11164,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-03T22:00:00.000Z",
@@ -11269,7 +11269,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-04T22:00:00.000Z",
@@ -11409,7 +11409,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-07T22:00:00.000Z",
@@ -11514,7 +11514,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-08T22:00:00.000Z",
@@ -11654,7 +11654,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-09T22:00:00.000Z",
@@ -11794,7 +11794,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-10T22:00:00.000Z",
@@ -11899,7 +11899,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-11T22:00:00.000Z",
@@ -12004,7 +12004,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-15T22:00:00.000Z",
@@ -12074,7 +12074,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-16T22:00:00.000Z",
@@ -12144,7 +12144,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-17T22:00:00.000Z",
@@ -12249,7 +12249,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-18T22:00:00.000Z",
@@ -12354,7 +12354,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-18T22:00:00.000Z",
@@ -12494,7 +12494,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-22T22:00:00.000Z",
@@ -12599,7 +12599,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-23T22:00:00.000Z",
@@ -12669,7 +12669,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-24T22:00:00.000Z",
@@ -12739,7 +12739,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-25T22:00:00.000Z",
@@ -12809,7 +12809,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-28T22:00:00.000Z",
@@ -12879,7 +12879,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-04-29T22:00:00.000Z",
@@ -12984,7 +12984,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-01T22:00:00.000Z",
@@ -13089,7 +13089,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-02T22:00:00.000Z",
@@ -13159,7 +13159,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-05T22:00:00.000Z",
@@ -13229,7 +13229,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-06T22:00:00.000Z",
@@ -13299,7 +13299,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-07T22:00:00.000Z",
@@ -13404,7 +13404,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-08T22:00:00.000Z",
@@ -13474,7 +13474,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-08T22:00:00.000Z",
@@ -13579,7 +13579,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-09T22:00:00.000Z",
@@ -13719,7 +13719,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-13T22:00:00.000Z",
@@ -13789,7 +13789,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-14T22:00:00.000Z",
@@ -13859,7 +13859,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-15T22:00:00.000Z",
@@ -13964,7 +13964,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-16T22:00:00.000Z",
@@ -14034,7 +14034,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-16T22:00:00.000Z",
@@ -14139,7 +14139,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-19T22:00:00.000Z",
@@ -14244,7 +14244,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-21T22:00:00.000Z",
@@ -14349,7 +14349,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-22T22:00:00.000Z",
@@ -14454,7 +14454,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-22T22:00:00.000Z",
@@ -14594,7 +14594,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-23T22:00:00.000Z",
@@ -14734,7 +14734,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-27T22:00:00.000Z",
@@ -14874,7 +14874,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-29T22:00:00.000Z",
@@ -14944,7 +14944,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-05-30T22:00:00.000Z",
@@ -15014,7 +15014,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-02T22:00:00.000Z",
@@ -15119,7 +15119,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-02T22:00:00.000Z",
@@ -15224,7 +15224,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-03T22:00:00.000Z",
@@ -15329,7 +15329,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-04T22:00:00.000Z",
@@ -15434,7 +15434,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-05T22:00:00.000Z",
@@ -15574,7 +15574,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-06T22:00:00.000Z",
@@ -15749,7 +15749,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-09T22:00:00.000Z",
@@ -15854,7 +15854,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-10T22:00:00.000Z",
@@ -16029,7 +16029,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-11T22:00:00.000Z",
@@ -16134,7 +16134,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-12T22:00:00.000Z",
@@ -16239,7 +16239,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-13T22:00:00.000Z",
@@ -16344,7 +16344,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-17T22:00:00.000Z",
@@ -16449,7 +16449,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-18T22:00:00.000Z",
@@ -16554,7 +16554,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-19T22:00:00.000Z",
@@ -16659,7 +16659,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-23T22:00:00.000Z",
@@ -16764,7 +16764,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-24T22:00:00.000Z",
@@ -16869,7 +16869,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-25T22:00:00.000Z",
@@ -16939,7 +16939,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-26T22:00:00.000Z",
@@ -17009,7 +17009,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-26T22:00:00.000Z",
@@ -17114,7 +17114,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-27T22:00:00.000Z",
@@ -17219,7 +17219,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-06-30T22:00:00.000Z",
@@ -17324,7 +17324,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-01T22:00:00.000Z",
@@ -17429,7 +17429,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-02T22:00:00.000Z",
@@ -17569,7 +17569,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-03T22:00:00.000Z",
@@ -17709,7 +17709,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-04T22:00:00.000Z",
@@ -17779,7 +17779,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-07T22:00:00.000Z",
@@ -17849,7 +17849,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-07T22:00:00.000Z",
@@ -17989,7 +17989,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-08T22:00:00.000Z",
@@ -18129,7 +18129,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-09T22:00:00.000Z",
@@ -18374,7 +18374,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-11T22:00:00.000Z",
@@ -18444,7 +18444,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-14T22:00:00.000Z",
@@ -18584,7 +18584,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-14T22:00:00.000Z",
@@ -18724,7 +18724,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-15T22:00:00.000Z",
@@ -18829,7 +18829,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-16T22:00:00.000Z",
@@ -18934,7 +18934,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-17T22:00:00.000Z",
@@ -19039,7 +19039,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-18T22:00:00.000Z",
@@ -19214,7 +19214,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-21T22:00:00.000Z",
@@ -19354,7 +19354,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-22T22:00:00.000Z",
@@ -19459,7 +19459,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-23T22:00:00.000Z",
@@ -19564,7 +19564,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-24T22:00:00.000Z",
@@ -19669,7 +19669,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-25T22:00:00.000Z",
@@ -19774,7 +19774,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-28T22:00:00.000Z",
@@ -19914,7 +19914,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-29T22:00:00.000Z",
@@ -20054,7 +20054,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-30T22:00:00.000Z",
@@ -20229,7 +20229,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-07-31T22:00:00.000Z",
@@ -20369,7 +20369,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-01T22:00:00.000Z",
@@ -20509,7 +20509,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-04T22:00:00.000Z",
@@ -20614,7 +20614,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-05T22:00:00.000Z",
@@ -20789,7 +20789,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-06T22:00:00.000Z",
@@ -20964,7 +20964,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-07T22:00:00.000Z",
@@ -21069,7 +21069,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-11T22:00:00.000Z",
@@ -21209,7 +21209,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-12T22:00:00.000Z",
@@ -21314,7 +21314,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-13T22:00:00.000Z",
@@ -21454,7 +21454,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-14T22:00:00.000Z",
@@ -21559,7 +21559,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-15T22:00:00.000Z",
@@ -21664,7 +21664,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-18T22:00:00.000Z",
@@ -21769,7 +21769,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-19T22:00:00.000Z",
@@ -21874,7 +21874,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-20T22:00:00.000Z",
@@ -22014,7 +22014,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-21T22:00:00.000Z",
@@ -22119,7 +22119,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-22T22:00:00.000Z",
@@ -22259,7 +22259,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-25T22:00:00.000Z",
@@ -22399,7 +22399,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-26T22:00:00.000Z",
@@ -22539,7 +22539,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-27T22:00:00.000Z",
@@ -22714,7 +22714,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-28T22:00:00.000Z",
@@ -22854,7 +22854,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-08-29T22:00:00.000Z",
@@ -22994,7 +22994,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-01T22:00:00.000Z",
@@ -23134,7 +23134,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-02T22:00:00.000Z",
@@ -23309,7 +23309,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-03T22:00:00.000Z",
@@ -23414,7 +23414,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-04T22:00:00.000Z",
@@ -23554,7 +23554,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-05T22:00:00.000Z",
@@ -23659,7 +23659,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-08T22:00:00.000Z",
@@ -23764,7 +23764,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-09T22:00:00.000Z",
@@ -23974,7 +23974,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-10T22:00:00.000Z",
@@ -24114,7 +24114,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-11T22:00:00.000Z",
@@ -24254,7 +24254,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-12T22:00:00.000Z",
@@ -24359,7 +24359,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-15T22:00:00.000Z",
@@ -24429,7 +24429,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-15T22:00:00.000Z",
@@ -24569,7 +24569,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-16T22:00:00.000Z",
@@ -24709,7 +24709,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-17T22:00:00.000Z",
@@ -24849,7 +24849,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-18T22:00:00.000Z",
@@ -24954,7 +24954,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-19T22:00:00.000Z",
@@ -25024,7 +25024,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-22T22:00:00.000Z",
@@ -25094,7 +25094,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-22T22:00:00.000Z",
@@ -25199,7 +25199,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-24T22:00:00.000Z",
@@ -25339,7 +25339,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-25T22:00:00.000Z",
@@ -25444,7 +25444,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-26T22:00:00.000Z",
@@ -25584,7 +25584,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-29T22:00:00.000Z",
@@ -25689,7 +25689,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-09-30T22:00:00.000Z",
@@ -25794,7 +25794,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-01T22:00:00.000Z",
@@ -25934,7 +25934,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-02T22:00:00.000Z",
@@ -26039,7 +26039,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-03T22:00:00.000Z",
@@ -26144,7 +26144,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-06T22:00:00.000Z",
@@ -26179,7 +26179,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-07T22:00:00.000Z",
@@ -26249,7 +26249,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-07T22:00:00.000Z",
@@ -26354,7 +26354,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-08T22:00:00.000Z",
@@ -26494,7 +26494,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-09T22:00:00.000Z",
@@ -26634,7 +26634,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-10T22:00:00.000Z",
@@ -26774,7 +26774,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-13T22:00:00.000Z",
@@ -26914,7 +26914,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-14T22:00:00.000Z",
@@ -27019,7 +27019,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-15T22:00:00.000Z",
@@ -27124,7 +27124,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-16T22:00:00.000Z",
@@ -27264,7 +27264,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-17T22:00:00.000Z",
@@ -27369,7 +27369,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-20T22:00:00.000Z",
@@ -27439,7 +27439,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-20T22:00:00.000Z",
@@ -27544,7 +27544,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-21T22:00:00.000Z",
@@ -27649,7 +27649,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-22T22:00:00.000Z",
@@ -27754,7 +27754,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-23T22:00:00.000Z",
@@ -27894,7 +27894,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-24T22:00:00.000Z",
@@ -28069,7 +28069,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-27T22:00:00.000Z",
@@ -28209,7 +28209,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-28T22:00:00.000Z",
@@ -28349,7 +28349,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-29T22:00:00.000Z",
@@ -28524,7 +28524,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-30T22:00:00.000Z",
@@ -28629,7 +28629,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-10-31T22:00:00.000Z",
@@ -28734,7 +28734,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-03T22:00:00.000Z",
@@ -28839,7 +28839,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-03T22:00:00.000Z",
@@ -29014,7 +29014,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-04T22:00:00.000Z",
@@ -29154,7 +29154,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-05T22:00:00.000Z",
@@ -29364,7 +29364,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-06T22:00:00.000Z",
@@ -29504,7 +29504,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-07T22:00:00.000Z",
@@ -29609,7 +29609,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-10T22:00:00.000Z",
@@ -29714,7 +29714,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-10T22:00:00.000Z",
@@ -29854,7 +29854,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-11T22:00:00.000Z",
@@ -29994,7 +29994,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-13T22:00:00.000Z",
@@ -30099,7 +30099,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-14T22:00:00.000Z",
@@ -30239,7 +30239,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-14T22:00:00.000Z",
@@ -30379,7 +30379,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-18T22:00:00.000Z",
@@ -30484,7 +30484,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-18T22:00:00.000Z",
@@ -30589,7 +30589,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-19T22:00:00.000Z",
@@ -30729,7 +30729,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-20T22:00:00.000Z",
@@ -30869,7 +30869,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-21T22:00:00.000Z",
@@ -31009,7 +31009,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-22T22:00:00.000Z",
@@ -31149,7 +31149,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-24T22:00:00.000Z",
@@ -31289,7 +31289,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-25T22:00:00.000Z",
@@ -31499,7 +31499,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-26T22:00:00.000Z",
@@ -31674,7 +31674,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-27T22:00:00.000Z",
@@ -31849,7 +31849,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-28T22:00:00.000Z",
@@ -31989,7 +31989,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-11-29T22:00:00.000Z",
@@ -32129,7 +32129,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-01T22:00:00.000Z",
@@ -32339,7 +32339,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-02T22:00:00.000Z",
@@ -32514,7 +32514,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-03T22:00:00.000Z",
@@ -32689,7 +32689,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-04T22:00:00.000Z",
@@ -32829,7 +32829,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-08T22:00:00.000Z",
@@ -32899,7 +32899,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-08T22:00:00.000Z",
@@ -33039,7 +33039,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-09T22:00:00.000Z",
@@ -33144,7 +33144,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-10T22:00:00.000Z",
@@ -33249,7 +33249,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2024-12-11T22:00:00.000Z",
@@ -33389,7 +33389,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-05T22:00:00.000Z",
@@ -33459,7 +33459,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-06T22:00:00.000Z",
@@ -33564,7 +33564,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-06T22:00:00.000Z",
@@ -33669,7 +33669,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-07T22:00:00.000Z",
@@ -33774,7 +33774,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-08T22:00:00.000Z",
@@ -33914,7 +33914,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-09T22:00:00.000Z",
@@ -34054,7 +34054,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-12T22:00:00.000Z",
@@ -34194,7 +34194,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-13T22:00:00.000Z",
@@ -34404,7 +34404,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-14T22:00:00.000Z",
@@ -34614,7 +34614,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-15T22:00:00.000Z",
@@ -34789,7 +34789,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-16T22:00:00.000Z",
@@ -34929,7 +34929,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-20T22:00:00.000Z",
@@ -35034,7 +35034,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-20T22:00:00.000Z",
@@ -35174,7 +35174,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-21T22:00:00.000Z",
@@ -35384,7 +35384,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-22T22:00:00.000Z",
@@ -35559,7 +35559,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-23T22:00:00.000Z",
@@ -35699,7 +35699,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-26T22:00:00.000Z",
@@ -35839,7 +35839,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-27T22:00:00.000Z",
@@ -35979,7 +35979,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-28T22:00:00.000Z",
@@ -36154,7 +36154,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-29T22:00:00.000Z",
@@ -36259,7 +36259,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-01-30T22:00:00.000Z",
@@ -36539,7 +36539,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-02T22:00:00.000Z",
@@ -36644,7 +36644,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-03T22:00:00.000Z",
@@ -36819,7 +36819,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-04T22:00:00.000Z",
@@ -36994,7 +36994,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-05T22:00:00.000Z",
@@ -37134,7 +37134,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-06T22:00:00.000Z",
@@ -37344,7 +37344,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-09T22:00:00.000Z",
@@ -37624,7 +37624,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-10T22:00:00.000Z",
@@ -37764,7 +37764,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-11T22:00:00.000Z",
@@ -37939,7 +37939,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-12T22:00:00.000Z",
@@ -38254,7 +38254,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-13T22:00:00.000Z",
@@ -38534,7 +38534,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-16T22:00:00.000Z",
@@ -38744,7 +38744,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-17T22:00:00.000Z",
@@ -38989,7 +38989,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-18T22:00:00.000Z",
@@ -39234,7 +39234,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-19T22:00:00.000Z",
@@ -39549,7 +39549,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-20T22:00:00.000Z",
@@ -39794,7 +39794,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-23T22:00:00.000Z",
@@ -40039,7 +40039,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-24T22:00:00.000Z",
@@ -40249,7 +40249,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-25T22:00:00.000Z",
@@ -40739,7 +40739,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-02-26T22:00:00.000Z",
@@ -41124,7 +41124,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-02T22:00:00.000Z",
@@ -41404,7 +41404,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-03T22:00:00.000Z",
@@ -41824,7 +41824,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-04T22:00:00.000Z",
@@ -42104,7 +42104,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-05T22:00:00.000Z",
@@ -42594,7 +42594,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-06T22:00:00.000Z",
@@ -42839,7 +42839,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-09T22:00:00.000Z",
@@ -43119,7 +43119,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-10T22:00:00.000Z",
@@ -43364,7 +43364,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-11T22:00:00.000Z",
@@ -43784,7 +43784,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-12T22:00:00.000Z",
@@ -44029,7 +44029,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-13T22:00:00.000Z",
@@ -44519,7 +44519,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-16T22:00:00.000Z",
@@ -44869,7 +44869,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-17T22:00:00.000Z",
@@ -44936,10 +44936,10 @@
       "Production Line Type": "standard",
       "Base Product": "SCD",
       "Base Variant": "XL1000SC",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-17T22:00:00.000Z",
@@ -45006,10 +45006,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Assembly",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-17T22:00:00.000Z",
@@ -45044,7 +45044,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
     },
     {
       "Date": "2025-03-18T22:00:00.000Z",
@@ -45076,10 +45076,10 @@
       "Production Line Type": "standard",
       "Base Product": "SCD",
       "Base Variant": "XL1000SC",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-18T22:00:00.000Z",
@@ -45114,7 +45114,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
     },
     {
       "Date": "2025-03-18T22:00:00.000Z",
@@ -45184,7 +45184,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-18T22:00:00.000Z",
@@ -45251,10 +45251,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Packaging",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-18T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-18T22:00:00.000Z",
@@ -45286,10 +45286,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Assembly",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-18T22:00:00.000Z",
@@ -45356,10 +45356,10 @@
       "Production Line Type": "standard",
       "Base Product": "SCD",
       "Base Variant": "XL1000SC",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-20T10:00:00.000Z",
@@ -45394,7 +45394,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-20T10:00:00.000Z",
@@ -45426,10 +45426,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Assembly",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-20T10:00:00.000Z",
@@ -45496,10 +45496,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Packaging",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-18T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-20T10:00:00.000Z",
@@ -45534,7 +45534,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
     },
     {
       "Date": "2025-03-21T10:00:00.000Z",
@@ -45566,10 +45566,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Assembly",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-21T10:00:00.000Z",
@@ -45601,10 +45601,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Packaging",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-18T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-22T10:00:00.000Z",
@@ -45636,10 +45636,10 @@
       "Production Line Type": "PopUp",
       "Base Product": "PopUp",
       "Base Variant": "XS50",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-21T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-22T10:00:00.000Z",
@@ -45671,10 +45671,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Assembly",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-22T10:00:00.000Z",
@@ -45706,10 +45706,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Packaging",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-18T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-23T22:00:00.000Z",
@@ -45741,10 +45741,10 @@
       "Production Line Type": "standard",
       "Base Product": "SCD",
       "Base Variant": "XL1000SC",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-23T22:00:00.000Z",
@@ -45776,10 +45776,10 @@
       "Production Line Type": "PopUp",
       "Base Product": "PopUp",
       "Base Variant": "XS50",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-21T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-23T22:00:00.000Z",
@@ -45811,10 +45811,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Packaging",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-18T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-23T22:00:00.000Z",
@@ -45849,7 +45849,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
     },
     {
       "Date": "2025-03-23T22:00:00.000Z",
@@ -45884,7 +45884,7 @@
       "Variant Status": "active",
       "Is Current Variant": true,
       "Variant Start Date": "2023-09-10T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     },
     {
       "Date": "2025-03-23T22:00:00.000Z",
@@ -45916,10 +45916,10 @@
       "Production Line Type": "standard",
       "Base Product": "Scalpel Assembly",
       "Base Variant": "PARC11S",
-      "Variant Status": "active",
-      "Is Current Variant": true,
-      "Variant Start Date": "2025-03-17T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
     },
     {
       "Date": "2025-03-23T22:00:00.000Z",
@@ -45951,10 +45951,745 @@
       "Production Line Type": "standard",
       "Base Product": "SCD",
       "Base Variant": "XL2000SP",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL2000SP",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 8.25,
+      "Theoretical Target (Devices)": 251,
+      "Theoretical Target (Boxes)": 41,
+      "Actual Devices Produced": 234,
+      "Actual Boxes Produced": 39,
+      "Units Per Labor Hour": 28.36,
+      "Schedule Attainment": 93.23,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 17.54,
+      "Cost Per Unit": 205.47,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "mvokwe-3rd line",
+      "Production Line Name": "3rd Line",
+      "Production Line Color": "pink",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL2000SP",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL1000SC",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 1224,
+      "Theoretical Target (Boxes)": 102,
+      "Actual Devices Produced": 312,
+      "Actual Boxes Produced": 26,
+      "Units Per Labor Hour": 31.2,
+      "Schedule Attainment": 25.49,
+      "Reject Rate by Station": "Divider & Red Chamber: 8.50%, Chamber-Lid Weld & P-Test: 1.58%, Weld Tub-Lid: 0.64%, Checkers: 1.27%, Tap Ass: 4.00%",
+      "Scrap Cost as % of Production Value": 4.47,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Hard - Elbow Ass - QTY: 157 - Cost: 59.32 | 2. Pimple - Tube Ass - QTY: 50 - Cost: 265.55 | 3. Acetone damage - Divider & Red Chamber, P-Test & Clips - QTY: 33 - Cost: 41.97",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Pimple - Tube Ass - QTY: 50 - Cost: 265.55 | 2. Pressure mark - Weld C-Ring, Chamber-Lid Weld & P-Test - QTY: 31 - Cost: 221 | 3. Mark - Weld C-Ring - QTY: 25 - Cost: 176.23",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 51.83,
+      "Cost Per Unit": 134.8,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "apelele-scd",
+      "Production Line Name": "SCD",
+      "Production Line Color": "black",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL1000SC",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "SUM",
+      "Variant": "SUM500V2",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 0,
+      "Theoretical Target (Devices)": 1280,
+      "Theoretical Target (Boxes)": 64,
+      "Actual Devices Produced": 860,
+      "Actual Boxes Produced": 43,
+      "Units Per Labor Hour": 0,
+      "Schedule Attainment": 67.19,
+      "Reject Rate by Station": "Connector Weld: 0.12%, Hanger Weld: 1.38%, Checkers: 3.59%, Big Tap P-Test: 4.97%, Bag Cut: 0.35%, Click Station: 0.23%, Bag & Tap Weld: 0.23%, Small Tap Assembly: 0.23%",
+      "Scrap Cost as % of Production Value": 3.1,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Delamination - Bag Cut, Checkers - QTY: 137 - Cost: 517.53 | 2. Crack tap - Big Tap P-Test - QTY: 30 - Cost: 26.11 | 3. Leaking big tap - Checkers - QTY: 25 - Cost: 176.26",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Delamination - Bag Cut, Checkers - QTY: 137 - Cost: 517.53 | 2. Leaking big tap - Checkers - QTY: 25 - Cost: 176.26 | 3. Dirty/oil - Small Tap-Tub Assembly - QTY: 10 - Cost: 81.43",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "1. No air - Electricity Outage & Air - Cost: 1444 - Duration: 722 min | 2. Not welding right - Hanger Weld - Cost: 84 - Duration: 42 min",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "1. No air - Electricity Outage & Air - Cost: 1444 - Duration: 722 min | 2. Not welding right - Hanger Weld - Cost: 84 - Duration: 42 min",
+      "Downtime Duration (min)": 764,
+      "Staff Cost": 0,
+      "Cost Per Unit": 42.16,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "luthando-sum",
+      "Production Line Name": "SUM",
+      "Production Line Color": "yellow",
+      "Production Line Type": "standard",
+      "Base Product": "SUM",
+      "Base Variant": "SUM500V2",
       "Variant Status": "active",
       "Is Current Variant": true,
-      "Variant Start Date": "2025-03-23T22:00:00.000Z",
-      "Variant End Date": "2025-03-23T22:00:00.000Z"
+      "Variant Start Date": "2023-09-10T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "LEVO",
+      "Variant": "XL1150SC",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 370,
+      "Theoretical Target (Boxes)": 20,
+      "Actual Devices Produced": 252,
+      "Actual Boxes Produced": 14,
+      "Units Per Labor Hour": 25.2,
+      "Schedule Attainment": 68.11,
+      "Reject Rate by Station": "P-Test: 7.35%, FV: 0.79%, FI: 1.18%",
+      "Scrap Cost as % of Production Value": 2.94,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Device failing on p-tester - P-Test - QTY: 18 - Cost: 272.36 | 2. Suction cap underfill - FV - QTY: 13 - Cost: 4.46 | 3. Tube pimples - Tube Assembly - QTY: 10 - Cost: 60.87",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Device failing on p-tester - P-Test - QTY: 18 - Cost: 272.36 | 2. Tube pimples - Tube Assembly - QTY: 10 - Cost: 60.87 | 3. Lids spots - HPW - QTY: 7 - Cost: 41.26",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 29.61,
+      "Cost Per Unit": 115.05,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "siyabonga-levo",
+      "Production Line Name": "LEVO",
+      "Production Line Color": "grey",
+      "Production Line Type": "standard",
+      "Base Product": "LEVO",
+      "Base Variant": "XL1150SC",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-17T22:00:00.000Z",
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "Scalpel Packaging",
+      "Variant": "PARC11S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 15789,
+      "Theoretical Target (Boxes)": 31,
+      "Actual Devices Produced": 16000,
+      "Actual Boxes Produced": 32,
+      "Units Per Labor Hour": 1600,
+      "Schedule Attainment": 101.34,
+      "Reject Rate by Station": "Multivac: 5.67%",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Start up - Multivac - QTY: 533 - Cost: 0 | 2. Strip - Multivac - QTY: 428 - Cost: 0",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Start up - Multivac - QTY: 533 - Cost: 0 | 2. Strip - Multivac - QTY: 428 - Cost: 0",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 0.49,
+      "Cost Per Unit": 50.49,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "nosi-scalpel",
+      "Production Line Name": "Scalpel",
+      "Production Line Color": "blue",
+      "Production Line Type": "standard",
+      "Base Product": "Scalpel Packaging",
+      "Base Variant": "PARC11S",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL1000S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 1224,
+      "Theoretical Target (Boxes)": 102,
+      "Actual Devices Produced": 516,
+      "Actual Boxes Produced": 43,
+      "Units Per Labor Hour": 51.6,
+      "Schedule Attainment": 42.16,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 31.34,
+      "Cost Per Unit": 106.65,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "apelele-scd",
+      "Production Line Name": "SCD",
+      "Production Line Color": "black",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL1000S",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "Scalpel Assembly",
+      "Variant": "PARC11S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 15789,
+      "Theoretical Target (Boxes)": 31,
+      "Actual Devices Produced": 12000,
+      "Actual Boxes Produced": 24,
+      "Units Per Labor Hour": 1200,
+      "Schedule Attainment": 76,
+      "Reject Rate by Station": "",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Broken blade holders - Welder - QTY: 394 - Cost: 0",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Broken blade holders - Welder - QTY: 394 - Cost: 0",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 0.66,
+      "Cost Per Unit": 50.66,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "nosi-scalpel",
+      "Production Line Name": "Scalpel",
+      "Production Line Color": "blue",
+      "Production Line Type": "standard",
+      "Base Product": "Scalpel Assembly",
+      "Base Variant": "PARC11S",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-24T22:00:00.000Z",
+      "Product": "PopUp",
+      "Variant": "CON021.2",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 8.25,
+      "Theoretical Target (Devices)": 600,
+      "Theoretical Target (Boxes)": 6,
+      "Actual Devices Produced": 200,
+      "Actual Boxes Produced": 2,
+      "Units Per Labor Hour": 24.24,
+      "Schedule Attainment": 33.33,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 5.13,
+      "Cost Per Unit": 11.46,
+      "Anomalies Detected": "Units Per Labor Hour: 24.24 is 500% higher than average",
+      "Production Line ID": "mvokwe-popup",
+      "Production Line Name": "PopUp",
+      "Production Line Color": "green",
+      "Production Line Type": "PopUp",
+      "Base Product": "PopUp",
+      "Base Variant": "CON021.2",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-24T22:00:00.000Z",
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL1000S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 1224,
+      "Theoretical Target (Boxes)": 102,
+      "Actual Devices Produced": 300,
+      "Actual Boxes Produced": 25,
+      "Units Per Labor Hour": 30,
+      "Schedule Attainment": 24.51,
+      "Reject Rate by Station": "Chamber-Lid Weld & P-Test: 2.60%, Checkers: 1.32%, P-Test & Clips: 0.66%, AT Port to Tub: 1.32%",
+      "Scrap Cost as % of Production Value": 1.01,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Broken - Flow test, Connectors, & Add Hooks - QTY: 6 - Cost: 3.28 | 2. Acetone damage - Sleeve Acetone to Tub - QTY: 5 - Cost: 0 | 3. Crack tap inlet - AT Port to Tub - QTY: 4 - Cost: 28.06",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Valve failing - Checkers - QTY: 2 - Cost: 41.8 | 2. Failing - Chamber-Lid Weld & P-Test - QTY: 4 - Cost: 36.3 | 3. Crack - Chamber-Lid Weld & P-Test, Checkers - QTY: 2 - Cost: 29.97",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 53.9,
+      "Cost Per Unit": 129.97,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "apelele-scd",
+      "Production Line Name": "SCD",
+      "Production Line Color": "black",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL1000S",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "SUM",
+      "Variant": "SUM500V2",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 8.15,
+      "Theoretical Target (Devices)": 1043,
+      "Theoretical Target (Boxes)": 52,
+      "Actual Devices Produced": 800,
+      "Actual Boxes Produced": 40,
+      "Units Per Labor Hour": 98.16,
+      "Schedule Attainment": 76.7,
+      "Reject Rate by Station": "Bag Cut: 0.99%, Hanger Weld: 0.50%, Checkers: 2.08%, Step Connector: 0.25%, Big Tap P-Test: 7.41%, Small Tap Assembly: 0.12%, Bag & Tap Weld: 0.12%",
+      "Scrap Cost as % of Production Value": 2.77,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Delamination - Bag Cut, Checkers, Hanger Weld - QTY: 142 - Cost: 544.29 | 2. Crack tap - Big Tap P-Test - QTY: 60 - Cost: 52.22 | 3. Spot on bag - Bag Cut, Hanger Weld - QTY: 14 - Cost: 68.86",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Delamination - Bag Cut, Checkers, Hanger Weld - QTY: 142 - Cost: 544.29 | 2. Spot on bag - Bag Cut, Hanger Weld - QTY: 14 - Cost: 68.86 | 3. Leaking big tap - Checkers - QTY: 9 - Cost: 63.45",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "1. Hanger weld didn't seal properly - Hanger Weld - Cost: 12 - Duration: 6 min",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "1. Hanger weld didn't seal properly - Hanger Weld - Cost: 12 - Duration: 6 min",
+      "Downtime Duration (min)": 6,
+      "Staff Cost": 10.56,
+      "Cost Per Unit": 52.59,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "luthando-sum",
+      "Production Line Name": "SUM",
+      "Production Line Color": "yellow",
+      "Production Line Type": "standard",
+      "Base Product": "SUM",
+      "Base Variant": "SUM500V2",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2023-09-10T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL2000SP",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 8.25,
+      "Theoretical Target (Devices)": 251,
+      "Theoretical Target (Boxes)": 41,
+      "Actual Devices Produced": 252,
+      "Actual Boxes Produced": 42,
+      "Units Per Labor Hour": 30.55,
+      "Schedule Attainment": 100.4,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 16.29,
+      "Cost Per Unit": 204.22,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "mvokwe-3rd line",
+      "Production Line Name": "3rd Line",
+      "Production Line Color": "pink",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL2000SP",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "LEVO",
+      "Variant": "XL1150SC",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 370,
+      "Theoretical Target (Boxes)": 20,
+      "Actual Devices Produced": 234,
+      "Actual Boxes Produced": 13,
+      "Units Per Labor Hour": 23.4,
+      "Schedule Attainment": 63.24,
+      "Reject Rate by Station": "Tube Assembly: 5.65%, P-Test: 4.10%, V-Test: 4.88%, FI: 2.50%, Tap P-Test: 7.87%",
+      "Scrap Cost as % of Production Value": 5.04,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Suction cup dirty - LPSR - QTY: 46 - Cost: 15.8 | 2. Bulb cover with black spots - Bulb Assembly - QTY: 34 - Cost: 31.62 | 3. Bulb with black spots - Bulb Assembly - QTY: 27 - Cost: 113.4",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Device leaking - P-Test - QTY: 9 - Cost: 136.18 | 2. Bulb with black spots - Bulb Assembly - QTY: 27 - Cost: 113.4 | 3. Device failing bcz of the ALC port - V-Test - QTY: 6 - Cost: 111.4",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 31.89,
+      "Cost Per Unit": 119.07,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "siyabonga-levo",
+      "Production Line Name": "LEVO",
+      "Production Line Color": "grey",
+      "Production Line Type": "standard",
+      "Base Product": "LEVO",
+      "Base Variant": "XL1150SC",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-17T22:00:00.000Z",
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "Scalpel Packaging",
+      "Variant": "PARC11S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 15789,
+      "Theoretical Target (Boxes)": 31,
+      "Actual Devices Produced": 2000,
+      "Actual Boxes Produced": 4,
+      "Units Per Labor Hour": 200,
+      "Schedule Attainment": 12.67,
+      "Reject Rate by Station": "Multivac: 36.35%",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Empty pouches - Multivac - QTY: 709 - Cost: 0 | 2. Strip - Multivac - QTY: 590 - Cost: 0 | 3. Startup - Multivac - QTY: 433 - Cost: 0",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Empty pouches - Multivac - QTY: 709 - Cost: 0 | 2. Strip - Multivac - QTY: 590 - Cost: 0 | 3. Startup - Multivac - QTY: 433 - Cost: 0",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 3.94,
+      "Cost Per Unit": 53.94,
+      "Anomalies Detected": "Cost Per Unit: 53.94 is 5.7% higher than average",
+      "Production Line ID": "nosi-scalpel",
+      "Production Line Name": "Scalpel",
+      "Production Line Color": "blue",
+      "Production Line Type": "standard",
+      "Base Product": "Scalpel Packaging",
+      "Base Variant": "PARC11S",
+      "Variant Status": "ended",
+      "Is Current Variant": false,
+      "Variant Start Date": "",
+      "Variant End Date": ""
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL1000+",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 1224,
+      "Theoretical Target (Boxes)": 102,
+      "Actual Devices Produced": 516,
+      "Actual Boxes Produced": 43,
+      "Units Per Labor Hour": 51.6,
+      "Schedule Attainment": 42.16,
+      "Reject Rate by Station": "Checkers: 3.55%, Chamber-Lid Weld & P-Test: 4.80%, P-Test & Clips: 11.03%",
+      "Scrap Cost as % of Production Value": 4.97,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "1. Failing after rework - P-Test & Clips - QTY: 51 - Cost: 979.51 | 2. Open - Chamber-Lid Weld & P-Test - QTY: 26 - Cost: 200.59 | 3. Valve failing - P-Test & Clips - QTY: 10 - Cost: 171.53",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "1. Failing after rework - P-Test & Clips - QTY: 51 - Cost: 979.51 | 2. Open - Chamber-Lid Weld & P-Test - QTY: 26 - Cost: 200.59 | 3. Valve failing - P-Test & Clips - QTY: 10 - Cost: 171.53",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 31.34,
+      "Cost Per Unit": 104.34,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "apelele-scd",
+      "Production Line Name": "SCD",
+      "Production Line Color": "black",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL1000+",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-25T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "PopUp",
+      "Variant": "CON021.2",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 8.25,
+      "Theoretical Target (Devices)": 600,
+      "Theoretical Target (Boxes)": 6,
+      "Actual Devices Produced": 300,
+      "Actual Boxes Produced": 3,
+      "Units Per Labor Hour": 36.36,
+      "Schedule Attainment": 50,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 3.42,
+      "Cost Per Unit": 9.75,
+      "Anomalies Detected": "Units Per Labor Hour: 36.36 is 800% higher than average",
+      "Production Line ID": "mvokwe-popup",
+      "Production Line Name": "PopUp",
+      "Production Line Color": "green",
+      "Production Line Type": "PopUp",
+      "Base Product": "PopUp",
+      "Base Variant": "CON021.2",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-24T22:00:00.000Z",
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "Scalpel Packaging",
+      "Variant": "PARC12S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 15789,
+      "Theoretical Target (Boxes)": 31,
+      "Actual Devices Produced": 3500,
+      "Actual Boxes Produced": 7,
+      "Units Per Labor Hour": 350,
+      "Schedule Attainment": 22.17,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 2.25,
+      "Cost Per Unit": 52.25,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "nosi-scalpel",
+      "Production Line Name": "Scalpel",
+      "Production Line Color": "blue",
+      "Production Line Type": "standard",
+      "Base Product": "Scalpel Packaging",
+      "Base Variant": "PARC12S",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-25T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-25T22:00:00.000Z",
+      "Product": "Scalpel Assembly",
+      "Variant": "PARC15S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 15789,
+      "Theoretical Target (Boxes)": 31,
+      "Actual Devices Produced": 2000,
+      "Actual Boxes Produced": 4,
+      "Units Per Labor Hour": 200,
+      "Schedule Attainment": 12.67,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 3.94,
+      "Cost Per Unit": 53.94,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "nosi-scalpel",
+      "Production Line Name": "Scalpel",
+      "Production Line Color": "blue",
+      "Production Line Type": "standard",
+      "Base Product": "Scalpel Assembly",
+      "Base Variant": "PARC15S",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-25T22:00:00.000Z",
+      "Variant End Date": "2025-03-25T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-26T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL2000S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 8.25,
+      "Theoretical Target (Devices)": 495,
+      "Theoretical Target (Boxes)": 495,
+      "Actual Devices Produced": 0,
+      "Actual Boxes Produced": 2,
+      "Units Per Labor Hour": 0,
+      "Schedule Attainment": 0,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 0,
+      "Cost Per Unit": 0,
+      "Anomalies Detected": "Units Per Labor Hour: 0 is 100% lower than average | Cost Per Unit: 0 is 100% lower than average",
+      "Production Line ID": "mvokwe-3rd line",
+      "Production Line Name": "3rd Line",
+      "Production Line Color": "pink",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL2000S",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-26T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-26T22:00:00.000Z",
+      "Product": "SCD",
+      "Variant": "XL1000+",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 1224,
+      "Theoretical Target (Boxes)": 102,
+      "Actual Devices Produced": 72,
+      "Actual Boxes Produced": 6,
+      "Units Per Labor Hour": 7.2,
+      "Schedule Attainment": 5.88,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 224.58,
+      "Cost Per Unit": 294.13,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "apelele-scd",
+      "Production Line Name": "SCD",
+      "Production Line Color": "black",
+      "Production Line Type": "standard",
+      "Base Product": "SCD",
+      "Base Variant": "XL1000+",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-25T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-26T22:00:00.000Z",
+      "Product": "SUM",
+      "Variant": "SUM500V2",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 8.25,
+      "Theoretical Target (Devices)": 1055,
+      "Theoretical Target (Boxes)": 52,
+      "Actual Devices Produced": 60,
+      "Actual Boxes Produced": 3,
+      "Units Per Labor Hour": 7.27,
+      "Schedule Attainment": 5.69,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 142.52,
+      "Cost Per Unit": 183.42,
+      "Anomalies Detected": "Cost Per Unit: 183.42 is 249.4% higher than average",
+      "Production Line ID": "luthando-sum",
+      "Production Line Name": "SUM",
+      "Production Line Color": "yellow",
+      "Production Line Type": "standard",
+      "Base Product": "SUM",
+      "Base Variant": "SUM500V2",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2023-09-10T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
+    },
+    {
+      "Date": "2025-03-26T22:00:00.000Z",
+      "Product": "Scalpel Packaging",
+      "Variant": "PARC12S",
+      "Week": "Week 13",
+      "Month": "March",
+      "Year": 2025,
+      "Total Worked Hours": 10,
+      "Theoretical Target (Devices)": 15789,
+      "Theoretical Target (Boxes)": 31,
+      "Actual Devices Produced": 3500,
+      "Actual Boxes Produced": 7,
+      "Units Per Labor Hour": 350,
+      "Schedule Attainment": 22.17,
+      "Reject Rate by Station": "No rejects",
+      "Scrap Cost as % of Production Value": 0,
+      "Top Rejects by QTY (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Rejects by Cost (Reason - Station - QTY - Cost)": "No rejects",
+      "Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)": "No downtime",
+      "Downtime Duration (min)": 0,
+      "Staff Cost": 2.25,
+      "Cost Per Unit": 52.25,
+      "Anomalies Detected": "None detected",
+      "Production Line ID": "nosi-scalpel",
+      "Production Line Name": "Scalpel",
+      "Production Line Color": "blue",
+      "Production Line Type": "standard",
+      "Base Product": "Scalpel Packaging",
+      "Base Variant": "PARC12S",
+      "Variant Status": "active",
+      "Is Current Variant": true,
+      "Variant Start Date": "2025-03-25T22:00:00.000Z",
+      "Variant End Date": "2025-03-26T22:00:00.000Z"
     }
   ]
 }
