@@ -1,3 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinapi Biomedical Operations Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+    :root {
+        --primary-blue: #3498db;
+        --primary-dark-blue: #2980b9;
+        --primary-orange: #f39c12;
+        --primary-purple: #9b59b6;
+        --text-dark: #2c3e50;
+        --text-light: #7f8c8d;
+        --border-color: #ecf0f1;
+        --timeline-blue: #3498db;
+        --timeline-orange: #e67e22;
+        --timeline-red: #e74c3c;
+        --timeline-purple: #9b59b6;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #c0392b;
+        --active-bg: #eafaf1;
+        --standby-bg: #fef9e7;
+        --error-bg: #fdeaea;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: var(--text-dark);
+    }
+
+    /* Header styles */
+    .header {
+        background-color: var(--primary-dark-blue);
+        color: white;
+        padding: 0 20px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .date-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .date-filter {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .date-range-btn, .period-btn, .refresh-btn {
+        background-color: var(--primary-blue);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .refresh-btn {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Date picker dropdown */
+    .date-picker-dropdown {
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: white;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        padding: 15px;
+        z-index: 999;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        display: none;
+        width: 320px;
+    }
+
+    .date-picker-dropdown.show {
+        display: block;
+    }
+
+    .date-picker-dropdown label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .date-picker-dropdown input[type="date"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 3px;
+    }
+
+    .date-picker-dropdown button {
+        background-color: var(--primary-blue);
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 8px 15px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .cycle-selection {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .cycle-selection select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid var(--border-color);
+        border-radius: 3px;
+    }
+
+    /* KPI Summary */
+    .kpi-summary {
+        background-color: white;
+        border-radius: 5px;
+        margin: 15px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .kpi-summary-label {
+        padding: 10px 15px;
+        font-size: 16px;
+        font-weight: bold;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .kpi-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .kpi-card {
+        flex: 1;
+        min-width: 180px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .kpi-title {
+        font-size: 14px;
+        color: var(--text-light);
+        margin-bottom: 10px;
+    }
+
+    .kpi-value {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .kpi-value-number {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .kpi-trend {
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .trend-up {
+        color: var(--success-color);
+    }
+
+    .trend-down {
+        color: var(--danger-color);
+    }
+
+    /* Loading spinner */
+    .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        height: 200px;
+        width: 100%;
+    }
+
+    .loading-spinner {
+        border: 5px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 5px solid var(--primary-blue);
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 /* 
         ======================================
         MAIN DASHBOARD GRID
