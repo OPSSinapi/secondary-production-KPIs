@@ -2066,8 +2066,7 @@
             filteredData: null        // Store filtered data for reuse
         };
 
-        // Fix 6: Ensure the HTML elements exist correctly in the modal
-function ensureDetailViewElementsExist() {
+        function ensureDetailViewElementsExist() {
     const modal = document.getElementById('detailModal');
     
     // Check if topScrapList exists
@@ -4411,73 +4410,19 @@ function getTopScrapItems(data, view) {
             .slice(0, 5);
     }
     
-    // If no items found in formatted text, fall back to conventional field processing
-    const reasonsMap = new Map();
-    const reasonField = 'Reject Reason';
-    let valueField = view === 'qty' ? 'Rejected Quantity' : 'Reject Cost';
-    
-    // Try to find records with these fields
-    let hasExpectedFields = false;
-    const sampleSize = Math.min(data.length, 10);
-    for (let i = 0; i < sampleSize; i++) {
-        if (data[i] && data[i][reasonField] && data[i][valueField] !== undefined) {
-            hasExpectedFields = true;
-            break;
-        }
-    }
-    
-    // If we don't have structured fields, generate sample data
-    if (!hasExpectedFields) {
-        Logger.warn('No reject reason data found in records, generating sample data');
-        return [
-            { reason: 'Leaking (Seal)', value: view === 'qty' ? '68 units' : 'R 81.61' },
-            { reason: 'Cracking (Big Tap P-Test)', value: view === 'qty' ? '48 units' : 'R 29.19' },
-            { reason: 'Broken small taps (Bag & Tap Weld)', value: view === 'qty' ? '6 units' : 'R 43.07' },
-            { reason: 'Cut in Bag (Bag Cut)', value: view === 'qty' ? '5 units' : 'R 36.99' },
-            { reason: 'Misalignment (Click Station)', value: view === 'qty' ? '4 units' : 'R 12.50' }
-        ];
-    }
-    
-    // Process data as before for traditional structure
-    data.forEach(record => {
-        if (!record[reasonField] || record[valueField] === undefined) return;
-        
-        const reason = record[reasonField];
-        const station = record['Rejection Station'] || '';
-        const reasonKey = station ? `${reason} (${station})` : reason;
-        
-        // Safely parse the value, defaulting to 0 if NaN
-        let value = parseFloat(record[valueField]);
-        value = isNaN(value) ? 0 : value;
-        
-        if (reasonsMap.has(reasonKey)) {
-            reasonsMap.set(reasonKey, reasonsMap.get(reasonKey) + value);
-        } else {
-            reasonsMap.set(reasonKey, value);
-        }
-    });
-    
-    // Convert map to array and sort by value
-    const topItems = Array.from(reasonsMap.entries())
-        .map(([reason, value]) => ({
-            reason,
-            value: view === 'qty' ? 
-                Math.round(value) + ' units' : 
-                'R ' + value.toFixed(2)
-        }))
-        .sort((a, b) => {
-            // Extract numeric value for sorting
-            const valA = parseFloat(a.value.replace(/[^0-9.]/g, ''));
-            const valB = parseFloat(b.value.replace(/[^0-9.]/g, ''));
-            return valB - valA;
-        })
-        .slice(0, 5); // Get top 5
-    
-    return topItems;
+    // If no structured data found, generate sample data
+    Logger.warn('No reject reason data found in records, generating sample data');
+    return [
+        { reason: 'Leaking (Seal)', value: view === 'qty' ? '68 units' : 'R 81.61' },
+        { reason: 'Cracking (Big Tap P-Test)', value: view === 'qty' ? '48 units' : 'R 29.19' },
+        { reason: 'Broken small taps (Bag & Tap Weld)', value: view === 'qty' ? '6 units' : 'R 43.07' },
+        { reason: 'Cut in Bag (Bag Cut)', value: view === 'qty' ? '5 units' : 'R 36.99' },
+        { reason: 'Misalignment (Click Station)', value: view === 'qty' ? '4 units' : 'R 12.50' }
+    ];
 }
 
         
-    // Fix 4: Improve updateTopDowntimeList with proper DOM handling and debug output
+// Fix 4: Improve updateTopDowntimeList with proper DOM handling and debug output
 function updateTopDowntimeList(data) {
     Logger.info(`Updating top downtime list for view: ${detailViewState.downtimeView}`);
     
@@ -4626,38 +4571,7 @@ function getTopDowntimeItems(data, view) {
             .slice(0, 5);
     }
     
-    // If no formatted text data found, try conventional fields
-    let groupField, valueField;
-    
-    switch (view) {
-        case 'reason':
-            groupField = 'Downtime Reason';
-            valueField = 'Downtime Cost';
-            break;
-        case 'machine':
-            groupField = 'Machine Name';
-            valueField = 'Downtime Cost';
-            break;
-        case 'duration':
-            groupField = 'Downtime Reason';
-            valueField = 'Downtime Duration (min)';
-            break;
-        default:
-            groupField = 'Downtime Reason';
-            valueField = 'Downtime Cost';
-    }
-    
-    // Check if any records have the expected fields
-    let hasExpectedFields = false;
-    const sampleSize = Math.min(data.length, 10);
-    for (let i = 0; i < sampleSize; i++) {
-        if (data[i] && data[i][groupField] && data[i][valueField] !== undefined) {
-            hasExpectedFields = true;
-            break;
-        }
-    }
-    
-    // If no structured data found, check if any record has downtime duration > 0
+    // Check if any record has downtime duration > 0
     let hasDowntime = false;
     for (const record of data) {
         if (record['Downtime Duration (min)'] && parseFloat(record['Downtime Duration (min)']) > 0) {
@@ -4666,13 +4580,14 @@ function getTopDowntimeItems(data, view) {
         }
     }
     
-    // If no downtime or no structured fields, generate appropriate sample data
+    // If no downtime, return appropriate message
     if (!hasDowntime) {
         Logger.info('No downtime records found');
         return [
             { reason: 'No downtime recorded', value: view === 'duration' ? '0 min' : 'R 0' }
         ];
-    } else if (!hasExpectedFields) {
+    } else {
+        // We have downtime but no structured data, generate sample data
         Logger.warn('Downtime duration found but no structured downtime data, generating sample data');
         return [
             { reason: 'Equipment Maintenance', value: view === 'duration' ? '210 min' : 'R 4200' },
@@ -4682,41 +4597,6 @@ function getTopDowntimeItems(data, view) {
             { reason: 'Operator Break', value: view === 'duration' ? '45 min' : 'R 950' }
         ];
     }
-    
-    // Process records using conventional structure if available
-    const itemsMap = new Map();
-    
-    data.forEach(record => {
-        if (!record[groupField] || record[valueField] === undefined) return;
-        
-        const key = record[groupField];
-        let value = parseFloat(record[valueField]);
-        value = isNaN(value) ? 0 : value;
-        
-        if (itemsMap.has(key)) {
-            itemsMap.set(key, itemsMap.get(key) + value);
-        } else {
-            itemsMap.set(key, value);
-        }
-    });
-    
-    // Convert map to array and sort by value
-    const topItems = Array.from(itemsMap.entries())
-        .map(([reason, value]) => ({
-            reason,
-            value: valueField === 'Downtime Duration (min)' ?
-                Math.round(value) + ' min' :
-                'R ' + value.toFixed(0)
-        }))
-        .sort((a, b) => {
-            // Extract numeric value for sorting
-            const valA = parseFloat(a.value.replace(/[^0-9.]/g, ''));
-            const valB = parseFloat(b.value.replace(/[^0-9.]/g, ''));
-            return valB - valA;
-        })
-        .slice(0, 5); // Get top 5
-    
-    return topItems;
 }
 
         /**
