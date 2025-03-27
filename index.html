@@ -1351,6 +1351,33 @@
             updateDateRangeDisplay(currentDateRange);
             loadDetailViewData();
         }
+
+        /**
+         * Navigates to the next week
+         */
+        function navigateToNextWeek() {
+            Logger.info('Navigating to next week');
+            
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Move both dates forward by 7 days
+            start.setDate(start.getDate() + 7);
+            end.setDate(end.getDate() + 7);
+            
+            // Update both the detail view state and the main page state
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
+            
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
+            updateModalDateRange();
+            updateDateRangeDisplay(currentDateRange);
+            loadDetailViewData();
+        }
         
         /**
          * Navigates to the previous period
