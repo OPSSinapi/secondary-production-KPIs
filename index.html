@@ -1872,52 +1872,63 @@
             return transformedData;
         }
 
-        /**
-         * Groups filtered data by production line and base product for special cases
-         * @param {Array} filteredData - The filtered production data records
-         * @returns {Object} Data grouped by production line ID and base product
-         */
         function groupDataByProductionLineAndBaseProduct(filteredData) {
-            if (!filteredData || filteredData.length === 0) {
-                Logger.warn('No filtered data available to group');
-                return {};
-            }
-            
-            const lineGroups = {};
-            
-            filteredData.forEach(record => {
-                const lineId = record['Production Line ID'];
-                
-                if (!lineId) {
-                    Logger.warn(`Record missing Production Line ID: ${JSON.stringify(record)}`);
-                    return;
-                }
-                
-                // For special lines, also include the base product in the key
-                let groupKey = lineId;
-                
-                // Check if this is a special line that needs base product separation
-                if (CONFIG.specialLinesBaseProducts[lineId] && record['Base Product']) {
-                    groupKey = `${lineId}-${record['Base Product']}`;
-                }
-                
-                if (!lineGroups[groupKey]) {
-                    lineGroups[groupKey] = {
-                        id: lineId,
-                        name: record['Production Line Name'],
-                        color: record['Production Line Color'],
-                        type: record['Production Line Type'],
-                        baseProduct: record['Base Product'] || null,
-                        records: []
-                    };
-                }
-                
-                lineGroups[groupKey].records.push(record);
-            });
-            
-            Logger.info(`Grouped data into ${Object.keys(lineGroups).length} production lines`);
-            return lineGroups;
+    if (!filteredData || filteredData.length === 0) {
+        Logger.warn('No filtered data available to group');
+        return {};
+    }
+    
+    const lineGroups = {};
+    
+    filteredData.forEach(record => {
+        const lineId = record['Production Line ID'];
+        
+        if (!lineId) {
+            Logger.warn(`Record missing Production Line ID: ${JSON.stringify(record)}`);
+            return;
         }
+        
+        // For special lines, also include the base product in the key
+        let groupKey = lineId;
+        
+        // Special handling for Scalpel
+        if (lineId === 'nosi-scalpel') {
+            const baseProduct = record['Base Product'];
+            if (baseProduct === 'Scalpel Packaging') {
+                groupKey = `${lineId}-Scalpel Packaging`;
+            } else if (baseProduct === 'Scalpel Assembly') {
+                groupKey = `${lineId}-Scalpel Assembly`;
+            } else {
+                // Fallback to variant name
+                if (record.Variant && record.Variant.toLowerCase().includes('packaging')) {
+                    groupKey = `${lineId}-Scalpel Packaging`;
+                } else {
+                    groupKey = `${lineId}-Scalpel Assembly`;
+                }
+            }
+        }
+        // Check if this is another special line that needs base product separation
+        else if (CONFIG.specialLinesBaseProducts[lineId] && record['Base Product']) {
+            groupKey = `${lineId}-${record['Base Product']}`;
+        }
+        
+        if (!lineGroups[groupKey]) {
+            lineGroups[groupKey] = {
+                id: lineId,
+                name: record['Production Line Name'],
+                color: record['Production Line Color'],
+                type: record['Production Line Type'],
+                baseProduct: record['Base Product'] || null,
+                records: []
+            };
+        }
+        
+        lineGroups[groupKey].records.push(record);
+    });
+    
+    Logger.info(`Grouped data into ${Object.keys(lineGroups).length} production lines`);
+    return lineGroups;
+}
 
         /**
          * Calculates plant-wide metrics from filtered data
@@ -2288,6 +2299,266 @@ function showDetailView(lineId) {
             document.getElementById('detailModal').classList.remove('show');
         }
 
+
+        function enhanceDetailViewLayout() {
+    const modal = document.getElementById('detailModal');
+    if (!modal) return;
+    
+    // Get the modal body where all our content is
+    const modalBody = modal.querySelector('.modal-body');
+    if (!modalBody) return;
+    
+    // First, let's adjust the overall grid layout to use a 3-row layout instead of 2x2
+    const detailMetrics = modalBody.querySelector('.detail-metrics');
+    if (detailMetrics) {
+        // Change to a more flexible layout with dedicated rows
+        detailMetrics.style.display = 'grid';
+        detailMetrics.style.gridTemplateColumns = '1fr 1fr';
+        detailMetrics.style.gridTemplateRows = 'minmax(200px, 1fr) minmax(200px, 1fr) minmax(150px, auto)';
+        detailMetrics.style.gap = '15px';
+        
+        // Get all cards
+        const cards = detailMetrics.querySelectorAll('.detail-metric-card');
+        
+        if (cards.length >= 4) {
+            // Schedule Attainment - stays in top left
+            cards[0].style.gridColumn = '1';
+            cards[0].style.gridRow = '1';
+            
+            // Labour Cost - stays in top right
+            cards[1].style.gridColumn = '2';
+            cards[1].style.gridRow = '1';
+            
+            // Scrap Analysis - goes full width in middle row
+            cards[2].style.gridColumn = '1 / span 2';
+            cards[2].style.gridRow = '2';
+            
+            // Downtime Analysis - goes full width in bottom row
+            cards[3].style.gridColumn = '1 / span 2';
+            cards[3].style.gridRow = '3';
+            
+            // Restructure the Scrap Analysis card internals for better layout
+            restructureScrapAnalysisCard(cards[2]);
+            
+            // Restructure the Downtime Analysis card internals
+            restructureDowntimeAnalysisCard(cards[3]);
+        }
+    }
+}
+
+function restructureScrapAnalysisCard(scrapCard) {
+    if (!scrapCard) return;
+    
+    // Get chart row which contains pie chart and trend
+    const chartRow = scrapCard.querySelector('.chart-row');
+    if (!chartRow) return;
+    
+    // Make the chart row use flexbox with better proportions
+    chartRow.style.display = 'flex';
+    chartRow.style.flexDirection = 'row';
+    chartRow.style.gap = '15px';
+    chartRow.style.height = '150px';
+    
+    // Find trend chart container and pie container
+    const trendContainer = chartRow.querySelector('.trend-chart-container');
+    const pieContainer = chartRow.querySelector('.pie-chart-container');
+    
+    if (trendContainer && pieContainer) {
+        // Set the width to 60/40 split
+        trendContainer.style.flex = '3'; // 60%
+        pieContainer.style.flex = '2';   // 40%
+        
+        // Give the trend chart more vertical space
+        trendContainer.style.height = '100%';
+        pieContainer.style.height = '100%';
+    }
+    
+    // Now adjust the footer which contains the Top Reject Reasons
+    const footer = scrapCard.querySelector('.detail-metric-footer');
+    if (footer) {
+        footer.style.maxHeight = '120px';
+        footer.style.marginTop = '10px';
+        
+        // Style the list title to ensure it's fully visible
+        const listTitle = footer.querySelector('.list-title');
+        if (listTitle) {
+            listTitle.style.fontSize = '12px';
+            listTitle.style.fontWeight = 'bold';
+            listTitle.style.marginBottom = '8px';
+            listTitle.style.color = 'var(--text-dark)';
+        }
+        
+        // Style the list to ensure it has space
+        const topList = footer.querySelector('#topScrapList');
+        if (topList) {
+            topList.style.height = '90px'; // Explicit height
+            topList.style.overflow = 'visible';
+        }
+    }
+}
+
+function restructureDowntimeAnalysisCard(downtimeCard) {
+    if (!downtimeCard) return;
+    
+    // Find the chart container
+    const chartContainer = downtimeCard.querySelector('.chart-container');
+    if (chartContainer) {
+        chartContainer.style.flex = '0 0 150px'; // Fixed height
+    }
+    
+    // Adjust the footer with Top Downtime Reasons
+    const footer = downtimeCard.querySelector('.detail-metric-footer');
+    if (footer) {
+        footer.style.maxHeight = '120px';
+        footer.style.marginTop = '10px';
+        
+        // Style the list title to ensure it's visible
+        const listTitle = footer.querySelector('.list-title');
+        if (listTitle) {
+            listTitle.style.fontSize = '12px';
+            listTitle.style.fontWeight = 'bold';
+            listTitle.style.marginBottom = '8px';
+            listTitle.style.color = 'var(--text-dark)';
+        }
+        
+        // Style the list to ensure it has space
+        const topList = footer.querySelector('#topDowntimeList');
+        if (topList) {
+            topList.style.height = '90px'; // Explicit height
+            topList.style.overflow = 'visible';
+        }
+    }
+}
+
+// Then modify the Top Reject Reasons rendering function:
+function updateTopScrapList(data) {
+    const listElement = document.getElementById('topScrapList');
+    if (!listElement) {
+        Logger.error("Element 'topScrapList' not found in DOM");
+        return;
+    }
+    
+    // Extract all top rejects
+    const view = detailViewState.scrapView || 'qty';
+    const topItems = getTopScrapItems(data, view);
+    
+    if (topItems.length === 0) {
+        listElement.innerHTML = '<div style="text-align: center; padding: 5px; color: var(--text-light);">No scrap data available.</div>';
+        return;
+    }
+    
+    // Generate HTML with clearer formatting
+    let html = '';
+    topItems.slice(0, 5).forEach((item, index) => {
+        // Create a cleaner display format for each reason
+        html += `
+            <div style="display: flex; margin-bottom: 6px; align-items: flex-start;">
+                <div style="flex-shrink: 0; width: 20px; font-weight: bold; font-size: 11px; color: var(--text-dark);">
+                    ${index + 1}.
+                </div>
+                <div style="flex: 1; display: flex; justify-content: space-between;">
+                    <div style="font-size: 11px; overflow: hidden; text-overflow: ellipsis; padding-right: 10px;" title="${item.reason}">
+                        ${item.reason}
+                    </div>
+                    <div style="font-size: 11px; flex-shrink: 0; color: var(--text-light); white-space: nowrap;">
+                        ${item.value}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    listElement.innerHTML = html;
+}
+
+// Similarly for downtime list:
+function updateTopDowntimeList(data) {
+    const listElement = document.getElementById('topDowntimeList');
+    if (!listElement) {
+        Logger.error("Element 'topDowntimeList' not found in DOM");
+        return;
+    }
+    
+    // Extract top downtime reasons
+    const view = detailViewState.downtimeView || 'reason';
+    const topItems = getTopDowntimeItems(data, view);
+    
+    if (topItems.length === 0 || (topItems.length === 1 && topItems[0].reason === 'No downtime recorded')) {
+        listElement.innerHTML = '<div style="text-align: center; padding: 5px; color: var(--text-light);">No downtime recorded.</div>';
+        return;
+    }
+    
+    // Generate HTML with clearer formatting
+    let html = '';
+    topItems.slice(0, 5).forEach((item, index) => {
+        html += `
+            <div style="display: flex; margin-bottom: 6px; align-items: flex-start;">
+                <div style="flex-shrink: 0; width: 20px; font-weight: bold; font-size: 11px; color: var(--text-dark);">
+                    ${index + 1}.
+                </div>
+                <div style="flex: 1; display: flex; justify-content: space-between;">
+                    <div style="font-size: 11px; overflow: hidden; text-overflow: ellipsis; padding-right: 10px;" title="${item.reason}">
+                        ${item.reason}
+                    </div>
+                    <div style="font-size: 11px; flex-shrink: 0; color: var(--text-light); white-space: nowrap;">
+                        ${item.value}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    listElement.innerHTML = html;
+}
+
+// Finally, modify showDetailView to call our layout enhancement:
+function showDetailView(lineId) {
+    console.log("Opening detail view for:", lineId);
+    const processedLineId = processLineId(lineId);
+    
+    // Store the current line ID
+    detailViewState.lineId = processedLineId;
+    
+    // Use the date range from the main page
+    detailViewState.dateRange.start = currentDateRange.start;
+    detailViewState.dateRange.end = currentDateRange.end;
+    
+    // Update modal title
+    const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
+    if (lineElement) {
+        const headerElement = lineElement.querySelector('.card-title');
+        if (headerElement) {
+            document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+        } else {
+            const supervisor = extractSupervisorName(processedLineId);
+            let productName = getProductNameFromId(processedLineId);
+            document.getElementById('modalTitle').textContent = `${productName}: ${supervisor} Details`;
+        }
+    }
+    
+    // Update date range display
+    updateModalDateRange();
+    
+    // Load and render the charts
+    loadDetailViewData();
+    
+    // Show the modal
+    document.getElementById('detailModal').classList.add('show');
+    
+    // Apply our enhanced layout after a brief delay to ensure elements are created
+    setTimeout(enhanceDetailViewLayout, 100);
+}
+
+// Helper function to get product name from ID
+function getProductNameFromId(id) {
+    if (id.includes('scd')) return 'SCD';
+    if (id.includes('sum')) return 'SUM';
+    if (id.includes('levo')) return 'LEVO';
+    if (id.includes('popup')) return 'PopUp';
+    if (id.includes('scalpel')) return 'Scalpel';
+    return 'Production Line';
+}
+
         /**
          * Updates the date range display in the modal
          */
@@ -2470,55 +2741,63 @@ function showDetailView(lineId) {
     }
 }
 
-        /**
-         * Gets filtered data for a specific line and date range
-         * @param {string} lineId - The ID of the line
-         * @param {string} startDate - Start date in ISO format
-         * @param {string} endDate - End date in ISO format
-         * @returns {Array} Filtered production data records
-         */
         function getFilteredLineData(lineId, startDate, endDate) {
-            // Check if we have data available
-            if (!window.dashboardData || !window.dashboardData.productionData) {
-                Logger.warn('No production data available');
-                return [];
+    // Check if we have data available
+    if (!window.dashboardData || !window.dashboardData.productionData) {
+        Logger.warn('No production data available');
+        return [];
+    }
+    
+    // Convert string dates to Date objects and set time to include entire days
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+    
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    
+    Logger.info(`Filtering data for line ${lineId} from ${start.toISOString()} to ${end.toISOString()}`);
+    
+    // Filter by line ID and date range
+    return window.dashboardData.productionData.filter(record => {
+        const recordDate = new Date(record.Date);
+        
+        // Explicitly log date comparison for debugging
+        const isInDateRange = recordDate >= start && recordDate <= end;
+        
+        // Base ID matching
+        let matchesLineId = record['Production Line ID'] === lineId;
+        
+        // Mapping for special cases
+        if (lineId === 'nosi-scalpel-packaging' && record['Production Line ID'] === 'nosi-scalpel') {
+            // Check Base Product first (more reliable)
+            if (record['Base Product'] === 'Scalpel Packaging') {
+                matchesLineId = true;
+            } else {
+                // Fallback to variant name check
+                matchesLineId = record.Variant && 
+                    (record.Variant.toLowerCase().includes('packaging') || 
+                     record['Base Product'] === 'Scalpel Packaging');
             }
-            
-            const start = new Date(startDate);
-            start.setHours(0, 0, 0, 0); // Set to beginning of day to include all start date data
-            
-            const end = new Date(endDate);
-            end.setHours(23, 59, 59, 999); // Include the entire end day
-            
-            // Filter by line ID and date range
-            return window.dashboardData.productionData.filter(record => {
-                const recordDate = new Date(record.Date);
-                
-                // Proper comparison ensuring start date is included
-                const isInDateRange = recordDate >= start && recordDate <= end;
-                
-                // Mapping for special cases
-                let matchesLineId = record['Production Line ID'] === lineId;
-                
-                // Special case for Scalpel packaging vs assembly
-                if (lineId === 'nosi-scalpel-packaging' && record['Production Line ID'] === 'nosi-scalpel') {
-                    matchesLineId = record.Variant && record.Variant.toLowerCase().includes('packaging');
-                } 
-                else if (lineId === 'nosi-scalpel-assembly' && record['Production Line ID'] === 'nosi-scalpel') {
-                    matchesLineId = !record.Variant || !record.Variant.toLowerCase().includes('packaging');
-                }
-                // Special case for 3rd line UBT vs SCD
-                else if (lineId === 'mvokwe-3rd-line-ubt' && record['Production Line ID'] === 'mvokwe-3rd line') {
-                    matchesLineId = record['Base Product'] === 'UBT';
-                }
-                else if (lineId === 'mvokwe-3rd-line-scd' && record['Production Line ID'] === 'mvokwe-3rd line') {
-                    matchesLineId = record['Base Product'] === 'SCD';
-                }
-                
-                return matchesLineId && isInDateRange;
-            });
+        } 
+        else if (lineId === 'nosi-scalpel-assembly' && record['Production Line ID'] === 'nosi-scalpel') {
+            // Check Base Product first (more reliable)
+            if (record['Base Product'] === 'Scalpel Assembly') {
+                matchesLineId = true;
+            } else {
+                // Fallback to variant name check
+                matchesLineId = !record.Variant || 
+                    (!record.Variant.toLowerCase().includes('packaging') && 
+                     record['Base Product'] !== 'Scalpel Packaging');
+            }
         }
-
+        // Special case for 3rd line SCD
+        else if (lineId === 'mvokwe-3rd-line-scd' && record['Production Line ID'] === 'mvokwe-3rd line') {
+            matchesLineId = record['Base Product'] === 'SCD';
+        }
+        
+        return matchesLineId && isInDateRange;
+    });
+}
         /**
          * Shows a message when no data is available
          */
@@ -2598,6 +2877,8 @@ function showDetailView(lineId) {
                 // Add the grid cell to the dashboard
                 dashboardGrid.appendChild(gridCell);
             }
+
+            setTimeout(ensureCardsHaveContent, 100);
         }
 
         /**
@@ -3039,9 +3320,6 @@ function showDetailView(lineId) {
     return lines;
 }
 
-/**
- * Calculate metrics for a variant from its records
- */
 function calculateVariantMetrics(records) {
     if (!records || records.length === 0) {
         return {
@@ -3052,19 +3330,36 @@ function calculateVariantMetrics(records) {
         };
     }
     
+    Logger.info(`Calculating metrics for ${records.length} records`);
+    
     let totalScheduleAttainment = 0;
     let totalLabourCost = 0;
     let totalScrapPercentage = 0;
     let totalDowntime = 0;
+    let validMetricCount = 0;
     
     records.forEach(record => {
-        totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+        // Check if we have valid schedule attainment
+        if (record['Schedule Attainment'] !== undefined && !isNaN(parseFloat(record['Schedule Attainment']))) {
+            totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+            validMetricCount++;
+        }
+        
+        // Add labor cost even if zero
         totalLabourCost += parseFloat(record['Staff Cost'] || 0);
+        
+        // Add scrap percentage
         totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+        
+        // Add downtime
         totalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
     });
     
-    const count = records.length;
+    // Prevent division by zero
+    const count = validMetricCount || 1;
+    
+    // Log the calculated metrics for debugging
+    Logger.info(`Calculated metrics: SA=${(totalScheduleAttainment / count).toFixed(1)}, LC=${(totalLabourCost / count).toFixed(0)}`);
     
     return {
         scheduleAttainment: (totalScheduleAttainment / count).toFixed(1),
@@ -4527,6 +4822,41 @@ function updateTopDowntimeList(data) {
     
     retryListElement.innerHTML = html;
     Logger.info(`Updated downtime list with ${topItems.length} items`);
+}
+
+        function ensureCardsHaveContent() {
+    // Find all line cards
+    const cards = document.querySelectorAll('.line-card');
+    
+    cards.forEach(card => {
+        // Check if card has content
+        const content = card.querySelector('.line-card-content');
+        if (content && content.innerHTML.trim() === '') {
+            Logger.warn(`Empty card detected: ${card.getAttribute('data-line-id')}`);
+            
+            // Add fallback content
+            content.innerHTML = `
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-title">Schedule Attainment</div>
+                        <div class="metric-value">No data</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Labour Cost/Unit</div>
+                        <div class="metric-value">No data</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">% Scrap</div>
+                        <div class="metric-value">No data</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Downtime</div>
+                        <div class="metric-value">No data</div>
+                    </div>
+                </div>
+            `;
+        }
+    });
 }
         function getTopDowntimeItems(data, view) {
     if (!data || data.length === 0) return [];
