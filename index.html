@@ -3945,6 +3945,286 @@ function calculateVariantTrends(records) {
             
             chartContainer.innerHTML = html;
         }
+        /**
+ * Renders a pie chart showing distribution of reject reasons
+ * @param {Array} data - Filtered data for the line
+ */
+function renderRejectPieChart(data) {
+    const chartContainer = document.getElementById('rejectPieChart');
+    
+    // Extract reject reasons and quantities
+    const rejectData = extractRejectReasons(data, detailViewState.scrapView);
+    
+    if (rejectData.length === 0) {
+        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No reject data available.</div>';
+        return;
+    }
+    
+    // Sort by value descending
+    rejectData.sort((a, b) => b.value - a.value);
+    
+    // Take top 5 and group the rest as "Other"
+    let pieData = rejectData.slice(0, 5);
+    
+    // Calculate total
+    const total = rejectData.reduce((sum, item) => sum + item.value, 0);
+    
+    // Calculate "Other" if needed
+    if (rejectData.length > 5) {
+        const otherValue = rejectData.slice(5).reduce((sum, item) => sum + item.value, 0);
+        if (otherValue > 0) {
+            pieData.push({
+                reason: 'Other',
+                value: otherValue
+            });
+        }
+    }
+    
+    // Calculate percentages and angles for the pie segments
+    let startAngle = 0;
+    const segments = pieData.map(item => {
+        const percentage = (item.value / total) * 100;
+        const angle = (percentage / 100) * 360;
+        const segment = {
+            reason: item.reason,
+            percentage: percentage.toFixed(1),
+            startAngle: startAngle,
+            endAngle: startAngle + angle
+        };
+        startAngle += angle;
+        return segment;
+    });
+    
+    // Define colors for pie segments
+    const colors = [
+        'var(--primary-blue)',
+        'var(--timeline-orange)',
+        'var(--timeline-purple)',
+        'var(--timeline-red)',
+        'var(--success-color)',
+        'var(--text-light)'
+    ];
+    
+    // Create SVG for pie chart
+    let html = `
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+            <svg width="100%" height="100%" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="#f5f7fa" />
+    `;
+    
+    // Add pie segments
+    segments.forEach((segment, index) => {
+        const startRad = (segment.startAngle - 90) * (Math.PI / 180);
+        const endRad = (segment.endAngle - 90) * (Math.PI / 180);
+        
+        const x1 = 50 + 40 * Math.cos(startRad);
+        const y1 = 50 + 40 * Math.sin(startRad);
+        const x2 = 50 + 40 * Math.cos(endRad);
+        const y2 = 50 + 40 * Math.sin(endRad);
+        
+        // Determine if it's a large arc
+        const largeArcFlag = segment.endAngle - segment.startAngle > 180 ? 1 : 0;
+        
+        // Create path for the segment
+        const path = `M 50 50 L ${x1} ${y1} A 40 40 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+        
+        html += `<path d="${path}" fill="${colors[index % colors.length]}" />`;
+    });
+    
+    html += `</svg>`;
+    
+    // Add legend
+    html += `<div style="margin-top: 10px;">`;
+    segments.forEach((segment, index) => {
+        html += `
+            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+                <div style="width: 10px; height: 10px; background-color: ${colors[index % colors.length]}; margin-right: 5px;"></div>
+                <div style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${segment.reason} (${segment.percentage}%)</div>
+            </div>
+        `;
+    });
+    html += `</div>`;
+    
+    html += `</div>`;
+    
+    chartContainer.innerHTML = html;
+}
+        /**
+ * Renders the downtime chart
+ * @param {Array} data - Filtered data for the line
+ */
+function renderDowntimeChart(data) {
+    const chartContainer = document.getElementById('downtimeChart');
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Group data by date
+    const groupedData = {};
+    
+    sortedData.forEach(record => {
+        const date = new Date(record.Date);
+        const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        
+        if (!groupedData[dateKey]) {
+            groupedData[dateKey] = {
+                downtimeMinutes: 0,
+                downtimeCost: 0,
+                reasonCounts: {}
+            };
+        }
+        
+        // Add downtime minutes
+        groupedData[dateKey].downtimeMinutes += parseFloat(record['Downtime Duration (min)'] || 0);
+        
+        // Add downtime cost
+        groupedData[dateKey].downtimeCost += parseFloat(record['Downtime Cost'] || 0);
+        
+        // Count reasons
+        const reason = record['Downtime Reason'];
+        if (reason) {
+            if (!groupedData[dateKey].reasonCounts[reason]) {
+                groupedData[dateKey].reasonCounts[reason] = 0;
+            }
+            groupedData[dateKey].reasonCounts[reason]++;
+        }
+    });
+    
+    // Get date keys in order
+    const dateKeys = Object.keys(groupedData).sort((a, b) => {
+        const dateA = new Date(a);
+        const dateB = new Date(b);
+        return dateA - dateB;
+    });
+    
+    // Find max value for scaling
+    let maxDowntime = 0;
+    Object.values(groupedData).forEach(data => {
+        maxDowntime = Math.max(maxDowntime, data.downtimeMinutes);
+    });
+    
+    // Create chart HTML
+    let html = '<div style="width: 100%; height: 100%;">';
+    
+    // Create axes and labels
+    html += '<div style="display: flex; height: 100%;">';
+    
+    // Y-axis
+    html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+    const yMax = Math.ceil(maxDowntime / 60); // Convert to hours and round up
+    html += '<div>' + yMax + ' hrs</div>';
+    html += '<div>' + Math.round(yMax * 0.75) + ' hrs</div>';
+    html += '<div>' + Math.round(yMax * 0.5) + ' hrs</div>';
+    html += '<div>' + Math.round(yMax * 0.25) + ' hrs</div>';
+    html += '<div>0 hrs</div>';
+    html += '</div>';
+    
+    // Chart content
+    html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
+    
+    // Chart area
+    html += '<div style="flex-grow: 1; position: relative;">';
+    
+    // Background grid lines
+    html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '</div>';
+    
+    // Add bars
+    html += '<div style="display: flex; height: 100%; padding-top: 10px;">';
+    
+    dateKeys.forEach(dateKey => {
+        const data = groupedData[dateKey];
+        const downtimeHours = data.downtimeMinutes / 60;
+        const height = (downtimeHours / yMax) * 100;
+        
+        // Determine bar color based on downtime - adjust thresholds as needed
+        let barColor = 'var(--primary-blue)';
+        if (downtimeHours > CONFIG.thresholds.downtimeHours.warning) {
+            barColor = 'var(--danger-color)';
+        } else if (downtimeHours > CONFIG.thresholds.downtimeHours.good) {
+            barColor = 'var(--warning-color)';
+        }
+        
+        // Count number of reasons for tooltip
+        const reasonCount = Object.keys(data.reasonCounts).length;
+        
+        html += '<div style="flex: 1; display: flex; justify-content: center; align-items: flex-end; height: 100%;">';
+        html += '<div style="width: 70%; height: ' + height + '%; background-color: ' + barColor + ';" ';
+        html += 'title="' + dateKey + ': ' + downtimeHours.toFixed(1) + ' hrs, ' + reasonCount + ' reasons"></div>';
+        html += '</div>';
+    });
+    
+    html += '</div>'; // End bars
+    
+    html += '</div>'; // End chart area
+    
+    // X-axis labels
+    html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
+    dateKeys.forEach(dateKey => {
+        html += '<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">' + dateKey + '</div>';
+    });
+    html += '</div>';
+    
+    html += '</div>'; // End chart content
+    html += '</div>'; // End axes and labels
+    html += '</div>'; // End chart container
+    
+    chartContainer.innerHTML = html;
+}
+
+/**
+ * Extracts reject reasons from data
+ * @param {Array} data - Filtered data for the line
+ * @param {string} view - View type ('qty' or 'cost')
+ * @returns {Array} Array of reject reasons with values
+ */
+function extractRejectReasons(data, view) {
+    if (!data || data.length === 0) return [];
+    
+    // Use a map to aggregate data
+    const reasonMap = new Map();
+    
+    data.forEach(record => {
+        // Extract reject reasons from record
+        let rejectField, valueField;
+        
+        if (view === 'qty') {
+            rejectField = 'Reject Reason';
+            valueField = 'Rejected Quantity';
+        } else {
+            rejectField = 'Reject Reason';
+            valueField = 'Reject Cost';
+        }
+        
+        // Check if fields exist in the record
+        if (record[rejectField] && record[valueField]) {
+            const reason = record[rejectField];
+            const value = parseFloat(record[valueField]) || 0;
+            
+            // Sum up values for the same reason
+            if (reasonMap.has(reason)) {
+                reasonMap.set(reason, reasonMap.get(reason) + value);
+            } else {
+                reasonMap.set(reason, value);
+            }
+        }
+    });
+    
+    // Convert map to array
+    const reasonsArray = Array.from(reasonMap.entries()).map(([reason, value]) => ({
+        reason,
+        value
+    }));
+    
+    return reasonsArray;
+}
+
+        
 
         /**
          * Updates the top scrap list based on the current view
@@ -3976,23 +4256,151 @@ function calculateVariantTrends(records) {
         }
 
         /**
-         * Extracts top scrap items from data
-         * @param {Array} data - Filtered data for the line
-         * @param {string} view - The view to extract ('qty' or 'cost')
-         * @returns {Array} Top scrap items
-         */
-        function getTopScrapItems(data, view) {
-            // Placeholder implementation since parseRejectData is missing
-            return [];
+ * Extracts top scrap items from data
+ * @param {Array} data - Filtered data for the line
+ * @param {string} view - The view to extract ('qty' or 'cost')
+ * @returns {Array} Top scrap items
+ */
+function getTopScrapItems(data, view) {
+    if (!data || data.length === 0) return [];
+    
+    // Create a map to aggregate data by reason
+    const reasonsMap = new Map();
+    
+    // Field names based on view
+    const valueField = view === 'qty' ? 'Rejected Quantity' : 'Reject Cost';
+    
+    data.forEach(record => {
+        // Skip if no reject reason or value
+        if (!record['Reject Reason'] || !record[valueField]) return;
+        
+        const reason = record['Reject Reason'];
+        const station = record['Rejection Station'] || '';
+        const reasonKey = station ? `${reason} (${station})` : reason;
+        const value = parseFloat(record[valueField]) || 0;
+        
+        // Add to map or update existing value
+        if (reasonsMap.has(reasonKey)) {
+            reasonsMap.set(reasonKey, reasonsMap.get(reasonKey) + value);
+        } else {
+            reasonsMap.set(reasonKey, value);
         }
+    });
+    
+    // Convert map to array and sort by value
+    const topItems = Array.from(reasonsMap.entries())
+        .map(([reason, value]) => ({
+            reason,
+            value: view === 'qty' ? 
+                Math.round(value) + ' units' : 
+                'R ' + value.toFixed(2)
+        }))
+        .sort((a, b) => {
+            // Extract numeric value for sorting
+            const valA = parseFloat(a.value);
+            const valB = parseFloat(b.value);
+            return valB - valA;
+        })
+        .slice(0, 5); // Get top 5
+    
+    return topItems;
+}
 
         /**
-         * Updates the top downtime list based on the current view
-         * @param {Array} data - Filtered data for the line
-         */
-        function updateTopDowntimeList(data) {
-            // Placeholder implementation
+ * Updates the top downtime list based on the current view
+ * @param {Array} data - Filtered data for the line
+ */
+function updateTopDowntimeList(data) {
+    const listElement = document.getElementById('topDowntimeList');
+    
+    // Extract top downtime data based on current view
+    const topItems = getTopDowntimeItems(data, detailViewState.downtimeView);
+    
+    if (topItems.length === 0) {
+        listElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No downtime data available.</div>';
+        return;
+    }
+    
+    // Generate HTML
+    let html = '';
+    topItems.forEach((item, index) => {
+        html += `
+            <div class="top-item">
+                <div class="top-item-label">${index + 1}. ${item.reason}</div>
+                <div class="top-item-value">${item.value}</div>
+            </div>
+        `;
+    });
+    
+    listElement.innerHTML = html;
+}
+
+/**
+ * Extracts top downtime items from data
+ * @param {Array} data - Filtered data for the line
+ * @param {string} view - The view to extract ('reason', 'machine', or 'duration')
+ * @returns {Array} Top downtime items
+ */
+function getTopDowntimeItems(data, view) {
+    if (!data || data.length === 0) return [];
+    
+    // Create a map to aggregate data
+    const itemsMap = new Map();
+    
+    // Determine which field to group by based on view
+    let groupField, valueField;
+    
+    switch (view) {
+        case 'reason':
+            groupField = 'Downtime Reason';
+            valueField = 'Downtime Cost';
+            break;
+        case 'machine':
+            groupField = 'Machine Name';
+            valueField = 'Downtime Cost';
+            break;
+        case 'duration':
+            groupField = 'Downtime Reason';
+            valueField = 'Downtime Duration (min)';
+            break;
+        default:
+            groupField = 'Downtime Reason';
+            valueField = 'Downtime Cost';
+    }
+    
+    data.forEach(record => {
+        // Skip if no group field or value field
+        if (!record[groupField] || !record[valueField]) return;
+        
+        const key = record[groupField];
+        const value = parseFloat(record[valueField]) || 0;
+        
+        // Add to map or update existing value
+        if (itemsMap.has(key)) {
+            itemsMap.set(key, itemsMap.get(key) + value);
+        } else {
+            itemsMap.set(key, value);
         }
+    });
+    
+    // Convert map to array and sort by value
+    const topItems = Array.from(itemsMap.entries())
+        .map(([reason, value]) => ({
+            reason,
+            value: valueField === 'Downtime Duration (min)' ?
+                Math.round(value) + ' min' :
+                'R ' + value.toFixed(0)
+        }))
+        .sort((a, b) => {
+            // Extract numeric value for sorting
+            const valA = parseFloat(a.value);
+            const valB = parseFloat(b.value);
+            return valB - valA;
+        })
+        .slice(0, 5); // Get top 5
+    
+    return topItems;
+}
 
         /**
          * Add event listeners when the DOM is loaded
