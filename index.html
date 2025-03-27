@@ -1893,6 +1893,38 @@
             
             return reasons;
         }
+        // First, define these functions at the top of your script section
+function showDetailView(lineId) {
+    // Store the current line ID
+    detailViewState.lineId = lineId;
+    
+    // Use the date range from the main page
+    detailViewState.dateRange.start = currentDateRange.start;
+    detailViewState.dateRange.end = currentDateRange.end;
+    
+    // Update modal title
+    const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
+    if (lineElement) {
+        const headerElement = lineElement.querySelector('.card-title');
+        if (headerElement) {
+            document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+        }
+    }
+    
+    // Update date range display
+    updateModalDateRange();
+    
+    // Load and render the charts
+    loadDetailViewData();
+    
+    // Show the modal
+    document.getElementById('detailModal').classList.add('show');
+}
+
+function hideDetailView() {
+    document.getElementById('detailModal').classList.remove('show');
+}
+
 
         /**
          * NEW IMPLEMENTATION: Downtime Analysis Chart with reason/machine labels
