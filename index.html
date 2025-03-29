@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sinapi Biomedical Operations Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -2217,6 +2217,256 @@ function hideDetailView() {
         window.toggleScrapView = toggleScrapView;
         window.toggleDowntimeView = toggleDowntimeView;
         window.toggleCostView = toggleCostView;
+
+        /**
+         * ======================================
+         * DASHBOARD INITIALIZATION
+         * ======================================
+         */
+
+        /**
+         * Initialize the dashboard by loading and displaying data
+         */
+        async function initializeDashboard() {
+            Logger.info('Initializing dashboard');
+            
+            try {
+                // Show loading state
+                document.getElementById('kpiSummary').innerHTML = `
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                    </div>
+                `;
+                
+                // Load data
+                const response = await fetch(CONFIG.dataUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // Update date range display
+                updateDateRangeDisplay(currentDateRange);
+                
+                // Render KPI summary
+                renderKPISummary(data);
+                
+                // Render dashboard grid
+                renderDashboardGrid(data);
+                
+            } catch (error) {
+                Logger.error('Error initializing dashboard', error);
+                showError('Failed to load dashboard data. Please try again.');
+            }
+        }
+
+        /**
+         * Update the date range display
+         * @param {Object} dateRange - Object containing start and end dates
+         */
+        function updateDateRangeDisplay(dateRange) {
+            const display = document.getElementById('dateRangeDisplay');
+            if (!display) return;
+            
+            const startDate = new Date(dateRange.start);
+            const endDate = new Date(dateRange.end);
+            
+            const formatDate = (date) => {
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+            };
+            
+            display.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+        }
+
+        /**
+         * Render the KPI summary section
+         * @param {Array} data - The dashboard data
+         */
+        function renderKPISummary(data) {
+            const container = document.getElementById('kpiSummary');
+            if (!container) return;
+            
+            // Filter data for current date range
+            const filteredData = filterDataByDateRange(data, currentDateRange.start, currentDateRange.end);
+            
+            // Calculate KPIs
+            const kpis = calculateKPIs(filteredData);
+            
+            // Render KPI cards
+            container.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-title">Schedule Attainment</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">${kpis.scheduleAttainment.toFixed(1)}%</div>
+                        <div class="kpi-trend ${kpis.scheduleAttainmentTrend >= 0 ? 'trend-up' : 'trend-down'}">
+                            <i class="fas fa-${kpis.scheduleAttainmentTrend >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+                            ${Math.abs(kpis.scheduleAttainmentTrend).toFixed(1)}%
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Labour Cost per Unit</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">R ${kpis.labourCostPerUnit.toFixed(2)}</div>
+                        <div class="kpi-trend ${kpis.labourCostTrend <= 0 ? 'trend-up' : 'trend-down'}">
+                            <i class="fas fa-${kpis.labourCostTrend <= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+                            ${Math.abs(kpis.labourCostTrend).toFixed(1)}%
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Scrap Percentage</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">${kpis.scrapPercentage.toFixed(1)}%</div>
+                        <div class="kpi-trend ${kpis.scrapTrend <= 0 ? 'trend-up' : 'trend-down'}">
+                            <i class="fas fa-${kpis.scrapTrend <= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+                            ${Math.abs(kpis.scrapTrend).toFixed(1)}%
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Downtime Hours</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">${kpis.downtimeHours.toFixed(1)}h</div>
+                        <div class="kpi-trend ${kpis.downtimeTrend <= 0 ? 'trend-up' : 'trend-down'}">
+                            <i class="fas fa-${kpis.downtimeTrend <= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+                            ${Math.abs(kpis.downtimeTrend).toFixed(1)}%
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Calculate KPIs from filtered data
+         * @param {Array} data - Filtered data for the current date range
+         * @returns {Object} Object containing calculated KPIs
+         */
+        function calculateKPIs(data) {
+            if (!data || data.length === 0) {
+                return {
+                    scheduleAttainment: 0,
+                    scheduleAttainmentTrend: 0,
+                    labourCostPerUnit: 0,
+                    labourCostTrend: 0,
+                    scrapPercentage: 0,
+                    scrapTrend: 0,
+                    downtimeHours: 0,
+                    downtimeTrend: 0
+                };
+            }
+            
+            // Calculate current period KPIs
+            const currentKPIs = {
+                scheduleAttainment: calculateAverage(data, 'Schedule Attainment'),
+                labourCostPerUnit: calculateAverage(data, 'Labour Cost per Unit'),
+                scrapPercentage: calculateAverage(data, 'Scrap Cost as % of Production Value'),
+                downtimeHours: calculateAverage(data, 'Downtime Duration (min)') / 60
+            };
+            
+            // Calculate previous period KPIs for trends
+            const previousData = getPreviousPeriodData(data);
+            const previousKPIs = {
+                scheduleAttainment: calculateAverage(previousData, 'Schedule Attainment'),
+                labourCostPerUnit: calculateAverage(previousData, 'Labour Cost per Unit'),
+                scrapPercentage: calculateAverage(previousData, 'Scrap Cost as % of Production Value'),
+                downtimeHours: calculateAverage(previousData, 'Downtime Duration (min)') / 60
+            };
+            
+            // Calculate trends
+            return {
+                ...currentKPIs,
+                scheduleAttainmentTrend: calculateTrend(currentKPIs.scheduleAttainment, previousKPIs.scheduleAttainment),
+                labourCostTrend: calculateTrend(currentKPIs.labourCostPerUnit, previousKPIs.labourCostPerUnit),
+                scrapTrend: calculateTrend(currentKPIs.scrapPercentage, previousKPIs.scrapPercentage),
+                downtimeTrend: calculateTrend(currentKPIs.downtimeHours, previousKPIs.downtimeHours)
+            };
+        }
+
+        /**
+         * Calculate average value for a field in the data
+         * @param {Array} data - Array of data records
+         * @param {string} field - Field name to calculate average for
+         * @returns {number} Average value
+         */
+        function calculateAverage(data, field) {
+            if (!data || data.length === 0) return 0;
+            const sum = data.reduce((acc, record) => acc + (parseFloat(record[field]) || 0), 0);
+            return sum / data.length;
+        }
+
+        /**
+         * Calculate trend percentage between current and previous values
+         * @param {number} current - Current value
+         * @param {number} previous - Previous value
+         * @returns {number} Trend percentage
+         */
+        function calculateTrend(current, previous) {
+            if (!previous) return 0;
+            return ((current - previous) / previous) * 100;
+        }
+
+        /**
+         * Get data for the previous period
+         * @param {Array} currentData - Current period data
+         * @returns {Array} Previous period data
+         */
+        function getPreviousPeriodData(currentData) {
+            if (!currentData || currentData.length === 0) return [];
+            
+            const startDate = new Date(currentData[0].Date);
+            const endDate = new Date(currentData[currentData.length - 1].Date);
+            
+            // Calculate previous period dates
+            const daysDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            const previousStartDate = new Date(startDate);
+            previousStartDate.setDate(previousStartDate.getDate() - daysDiff - 1);
+            const previousEndDate = new Date(startDate);
+            previousEndDate.setDate(previousEndDate.getDate() - 1);
+            
+            // Filter data for previous period
+            return data.filter(record => {
+                const recordDate = new Date(record.Date);
+                return recordDate >= previousStartDate && recordDate <= previousEndDate;
+            });
+        }
+
+        /**
+         * Filter data by date range
+         * @param {Array} data - Full dataset
+         * @param {string} startDate - Start date string
+         * @param {string} endDate - End date string
+         * @returns {Array} Filtered data
+         */
+        function filterDataByDateRange(data, startDate, endDate) {
+            if (!data || !startDate || !endDate) return [];
+            
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            return data.filter(record => {
+                const recordDate = new Date(record.Date);
+                return recordDate >= start && recordDate <= end;
+            });
+        }
+
+        /**
+         * Show error message
+         * @param {string} message - Error message to display
+         */
+        function showError(message) {
+            const container = document.getElementById('kpiSummary');
+            if (container) {
+                container.innerHTML = `
+                    <div class="error-message">
+                        ${message}
+                    </div>
+                `;
+            }
+        }
     </script>
 </body>
 </html>
