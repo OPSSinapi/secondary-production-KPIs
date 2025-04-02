@@ -453,6 +453,11 @@
         color: var(--text-dark);
     }
     
+    .debug-log-entry.debug {
+        color: var(--text-light);
+        font-size: 0.9em;
+    }
+    
     /* Modal / Detail View */
     .modal-overlay {
         position: fixed;
@@ -1049,6 +1054,14 @@
         },
         
         /**
+         * Log a debug message
+         * @param {string} message - The message to log
+         */
+        debug: function(message) {
+            this._log(message, 'debug');
+        },
+        
+        /**
          * Log a warning message
          * @param {string} message - The message to log
          */
@@ -1075,7 +1088,7 @@
         /**
          * Internal method to add a log entry
          * @param {string} message - The message to log
-         * @param {string} level - The log level ('info', 'warning', 'error')
+         * @param {string} level - The log level ('debug', 'info', 'warning', 'error')
          * @private
          */
         _log: function(message, level) {
@@ -1091,6 +1104,9 @@
             
             // Also log to console
             switch(level) {
+                case 'debug':
+                    console.debug(message);
+                    break;
                 case 'info':
                     console.log(message);
                     break;
