@@ -1864,15 +1864,74 @@
         container.innerHTML = '';
         
         // Log how many line cards we're creating
-        Logger.info(`Creating ${Object.keys(lineGroups).length} line cards`);
+        Logger.info(`Creating cards for ${Object.keys(lineGroups).length} production lines`);
         
         // Create a card for each production line
         let positionIndex = 1;
+        const cardsByBaseProduct = {}; // Track cards by base product for special handling
+
+        // Special handling for nosi-scalpel line - split by base product
+        if (lineGroups['nosi-scalpel']) {
+            const scalpelData = lineGroups['nosi-scalpel'];
+            
+            // Group scalpel data by base product
+            const scalpelProductGroups = {};
+            scalpelData.forEach(record => {
+                const baseProduct = record['Base Product'] || record['Product'] || 'Unknown';
+                if (!scalpelProductGroups[baseProduct]) {
+                    scalpelProductGroups[baseProduct] = [];
+                }
+                scalpelProductGroups[baseProduct].push(record);
+            });
+            
+            Logger.info(`Splitting nosi-scalpel into ${Object.keys(scalpelProductGroups).length} base products`);
+            
+            // Create a card for each base product within nosi-scalpel
+            Object.entries(scalpelProductGroups).forEach(([baseProduct, productData]) => {
+                if (productData.length === 0) return;
+                
+                // Use the first record as line details
+                const lineDetails = { ...productData[0] };
+                
+                // Create a modified line ID to make it unique per base product
+                const compositeLineId = `nosi-scalpel-${baseProduct.replace(/\s+/g, '-').toLowerCase()}`;
+                lineDetails['Production Line ID'] = compositeLineId; // Override with composite ID
+                
+                Logger.debug(`Creating card for ${compositeLineId} with ${productData.length} records`);
+                
+                // Get previous period data
+                const previousPeriodData = getPreviousPeriodData(productData, fullData)
+                    .filter(record => {
+                        const recordBaseProduct = record['Base Product'] || record['Product'] || '';
+                        return record['Production Line ID'] === 'nosi-scalpel' && 
+                               recordBaseProduct === baseProduct;
+                    });
+                
+                // Create the line card
+                const lineCard = createLineCard(compositeLineId, lineDetails, productData, previousPeriodData, positionIndex);
+                
+                // Add to container
+                container.appendChild(lineCard);
+                
+                // Store for tracking
+                cardsByBaseProduct[compositeLineId] = {
+                    lineId: 'nosi-scalpel',
+                    baseProduct: baseProduct,
+                    element: lineCard
+                };
+                
+                // Update position index
+                positionIndex = (positionIndex % 6) + 1;
+            });
+            
+            // Remove the original nosi-scalpel group as we've handled it specially
+            delete lineGroups['nosi-scalpel'];
+        }
         
-        // Get all line IDs and sort them for consistent ordering
+        // Get all remaining line IDs and sort them for consistent ordering
         const lineIds = Object.keys(lineGroups).sort();
         
-        // Create cards for each line ID
+        // Create cards for remaining production lines
         lineIds.forEach(lineId => {
             const lineData = lineGroups[lineId];
             
@@ -1908,7 +1967,7 @@
             Logger.error('No line cards were created despite having data!');
         }
         
-        // Fix grid layout styling to accommodate 6 cards
+        // Fix grid layout styling to accommodate all cards
         document.querySelector('.dashboard-grid').style.gridTemplateColumns = 'repeat(3, 1fr)';
     }
 
@@ -1918,7 +1977,7 @@
      * @param {Object} lineDetails - Details for the production line
      * @param {Array} lineData - Data records for this line
      * @param {Array} previousPeriodData - Previous period data for trend calculations
-     * @param {number} positionIndex - Position in the grid (1-4)
+     * @param {number} positionIndex - Position in the grid (1-6)
      * @returns {HTMLElement} Line card element
      */
     function createLineCard(lineId, lineDetails, lineData, previousPeriodData, positionIndex) {
@@ -1970,10 +2029,23 @@
         card.className = `line-card grid-position-1-${positionIndex}`;
         card.setAttribute('data-line-id', lineId);
         
-        // Create a formatted title that shows product and line name
-        const formattedTitle = baseProduct ? `${baseProduct}: ${lineName}` : lineName;
+        // Determine if this is a scalpel product line
+        const isScalpelProduct = lineId.startsWith('nosi-scalpel-') || baseProduct.includes('Scalpel');
         
-        // Create card content
+        // Create a formatted title that shows product and line name
+        let formattedTitle = '';
+        if (isScalpelProduct) {
+            // For scalpel products, show "Base Product: Line Name" or just the base product
+            const scalpelBaseProduct = baseProduct || lineId.replace('nosi-scalpel-', '').replace(/-/g, ' ');
+            formattedTitle = scalpelBaseProduct.includes('Scalpel') ? 
+                            scalpelBaseProduct : 
+                            `${scalpelBaseProduct}: ${lineName}`;
+        } else {
+            // For other products, show "Base Product: Line Name" or just the line name
+            formattedTitle = baseProduct ? `${baseProduct}: ${lineName}` : lineName;
+        }
+        
+        // Create card content with expand button for all cards
         card.innerHTML = `
             <div class="line-card-header" style="background-color: var(--primary-${lineColor})">
                 <span class="card-title">${formattedTitle}</span>
@@ -2056,6 +2128,16 @@
         // Store the current line ID
         detailViewState.lineId = lineId;
         
+        // Check if this is a composite ID for Scalpel products (nosi-scalpel-*)
+        let actualLineId = lineId;
+        let baseProductFilter = null;
+        
+        if (lineId.startsWith('nosi-scalpel-')) {
+            actualLineId = 'nosi-scalpel'; // The actual production line ID
+            baseProductFilter = lineId.replace('nosi-scalpel-', '').replace(/-/g, ' ');
+            Logger.info(`Using composite ID: actual=${actualLineId}, baseProduct=${baseProductFilter}`);
+        }
+        
         // Use the date range from the main page
         detailViewState.dateRange.start = currentDateRange.start;
         detailViewState.dateRange.end = currentDateRange.end;
@@ -2095,9 +2177,12 @@
         document.getElementById('dailyScrapGrid').innerHTML = '<div class="loading-spinner"></div>';
         document.getElementById('downtimeChart').innerHTML = '<div class="loading-spinner"></div>';
         
+        // Store base product filter for scalpel products
+        detailViewState.baseProductFilter = baseProductFilter;
+        
         // Load and render the charts
         try {
-            loadDetailViewData();
+            loadDetailViewData(actualLineId);
         } catch (error) {
             Logger.error('Error loading detail view data', error);
             // Show error message in modal
@@ -2236,24 +2321,36 @@
 
     /**
      * Load detail view data and render charts
+     * @param {string} [overrideLineId] - Optional line ID to override detailViewState.lineId
      */
-    function loadDetailViewData() {
-        Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
+    function loadDetailViewData(overrideLineId) {
+        const lineId = overrideLineId || detailViewState.lineId;
+        Logger.info(`Loading detail view data for line: ${lineId}`);
         
         // Get the filtered data for the line and date range
         const filteredData = getFilteredLineData(
-            detailViewState.lineId, 
+            lineId, 
             detailViewState.dateRange.start, 
             detailViewState.dateRange.end
         );
         
-        Logger.info(`Retrieved ${filteredData.length} records for line ${detailViewState.lineId}`);
+        // Apply base product filter if needed (for scalpel products)
+        let displayData = filteredData;
+        if (detailViewState.baseProductFilter) {
+            displayData = filteredData.filter(record => {
+                const recordBaseProduct = record['Base Product'] || record['Product'] || '';
+                return recordBaseProduct.toLowerCase().includes(detailViewState.baseProductFilter.toLowerCase());
+            });
+            Logger.info(`Applied base product filter "${detailViewState.baseProductFilter}": ${displayData.length}/${filteredData.length} records`);
+        }
+        
+        Logger.info(`Retrieved ${displayData.length} records for display`);
         
         // Store the filtered data for reuse
-        detailViewState.filteredData = filteredData;
+        detailViewState.filteredData = displayData;
         
-        if (filteredData.length === 0) {
-            Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
+        if (displayData.length === 0) {
+            Logger.warn(`No data available for line ${lineId} in selected date range`);
             showNoDataMessage();
             return;
         }
@@ -2266,10 +2363,10 @@
             detailViewState.downtimeView = detailViewState.downtimeView || 'reason';
             
             // Render all sections with current views
-            renderScheduleAttainmentChart(filteredData, detailViewState.attainmentView);
-            renderLabourCostChart(filteredData, detailViewState.costView);
-            renderScrapAnalysis(filteredData, detailViewState.scrapView);
-            renderDowntimeChart(filteredData, detailViewState.downtimeView);
+            renderScheduleAttainmentChart(displayData, detailViewState.attainmentView);
+            renderLabourCostChart(displayData, detailViewState.costView);
+            renderScrapAnalysis(displayData, detailViewState.scrapView);
+            renderDowntimeChart(displayData, detailViewState.downtimeView);
             
         } catch (error) {
             Logger.error(`Error rendering charts: ${error.message}`, error);
