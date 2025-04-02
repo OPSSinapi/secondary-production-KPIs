@@ -473,7 +473,7 @@
     }
 
     .modal-overlay.show {
-        display: flex;
+        display: flex !important;
     }
 
     .modal-content {
@@ -724,13 +724,15 @@
     }
 
     .no-data-message {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
         color: var(--text-light);
+        text-align: center;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
         font-size: 14px;
-        font-style: italic;
     }
 
     /* Responsive layouts */
@@ -836,6 +838,91 @@
     .grid-position-1-4 { grid-column: 1; grid-row: 2; }
     .grid-position-1-5 { grid-column: 2; grid-row: 2; }
     .grid-position-1-6 { grid-column: 3; grid-row: 2; }
+    
+    /* Tooltip */
+    .tooltip {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-size: 12px;
+        pointer-events: none;
+        z-index: 100;
+        max-width: 200px;
+        white-space: normal;
+    }
+    
+    /* Error message styling */
+    .error-message {
+        color: var(--danger-color);
+        text-align: center;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    /* Media queries for responsive design */
+    @media (max-width: 767px) {
+        .header {
+            flex-direction: column;
+            height: auto;
+            padding: 10px;
+        }
+        
+        .date-controls {
+            margin-top: 10px;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .kpi-cards {
+            flex-direction: column;
+            height: auto;
+            gap: 5px;
+        }
+        
+        .kpi-summary {
+            height: auto;
+        }
+        
+        .dashboard-grid {
+            grid-template-columns: 1fr !important;
+        }
+        
+        /* Reset grid positioning for mobile */
+        .grid-position-1-1, .grid-position-1-2, .grid-position-1-3,
+        .grid-position-1-4, .grid-position-1-5, .grid-position-1-6 {
+            grid-column: 1;
+        }
+        .grid-position-1-1 { grid-row: 1; }
+        .grid-position-1-2 { grid-row: 2; }
+        .grid-position-1-3 { grid-row: 3; }
+        .grid-position-1-4 { grid-row: 4; }
+        .grid-position-1-5 { grid-row: 5; }
+        .grid-position-1-6 { grid-row: 6; }
+        
+        .modal-content {
+            width: 95%;
+            max-height: 95vh;
+        }
+        
+        .modal-title {
+            font-size: 16px;
+        }
+        
+        .chart-container {
+            height: 200px;
+        }
+        
+        .daily-scrap-grid {
+            grid-template-columns: 1fr;
+        }
+    }
     </style>
 </head>
 
@@ -1988,8 +2075,25 @@
             document.getElementById('modalTitle').textContent = 'Production Line Details';
         }
         
+        // Make sure the modal elements exist
+        const modalElements = ['modalTitle', 'modalDateRange', 'scheduleAttainmentChart', 
+                              'labourCostChart', 'scrapPercentageChart', 'dailyScrapGrid', 'downtimeChart'];
+        
+        for (const id of modalElements) {
+            if (!document.getElementById(id)) {
+                Logger.error(`Required modal element missing: #${id}`);
+            }
+        }
+        
         // Update date range display
         updateModalDateRange();
+        
+        // Clear previous content to avoid stale data display
+        document.getElementById('scheduleAttainmentChart').innerHTML = '<div class="loading-spinner"></div>';
+        document.getElementById('labourCostChart').innerHTML = '<div class="loading-spinner"></div>';
+        document.getElementById('scrapPercentageChart').innerHTML = '<div class="loading-spinner"></div>';
+        document.getElementById('dailyScrapGrid').innerHTML = '<div class="loading-spinner"></div>';
+        document.getElementById('downtimeChart').innerHTML = '<div class="loading-spinner"></div>';
         
         // Load and render the charts
         try {
@@ -1997,24 +2101,21 @@
         } catch (error) {
             Logger.error('Error loading detail view data', error);
             // Show error message in modal
-            document.getElementById('detailCharts').innerHTML = `
-                <div class="error-message">
-                    Failed to load detail view: ${error.message}
-                </div>
-            `;
+            showErrorInDetailView(error.message);
         }
+        
+        // Show the modal immediately with display:flex to make it visible
+        const modal = document.getElementById('detailModal');
+        modal.style.display = 'flex';
+        modal.classList.add('show');
         
         // Force layout recalculation to avoid rendering issues
         document.body.offsetHeight;
         
-        // Show the modal
-        const modal = document.getElementById('detailModal');
-        modal.classList.add('show');
-        
-        // Ensure modal is visible
+        // Add a fallback to ensure visibility
         setTimeout(() => {
-            if (modal.classList.contains('show') && window.getComputedStyle(modal).display === 'none') {
-                Logger.warn('Modal has show class but is not visible, forcing display');
+            if (!modal.style.display || modal.style.display === 'none') {
+                Logger.warn('Modal not displaying properly, forcing display');
                 modal.style.display = 'flex';
             }
         }, 100);
@@ -2024,7 +2125,26 @@
      * Hide the detail view modal
      */
     function hideDetailView() {
-        document.getElementById('detailModal').classList.remove('show');
+        const modal = document.getElementById('detailModal');
+        modal.classList.remove('show');
+        // Use a timeout to provide a nice fade-out effect
+        setTimeout(() => {
+            if (!modal.classList.contains('show')) {
+                modal.style.display = 'none';
+            }
+        }, 300);
+    }
+
+    /**
+     * Show error message in all detail view charts
+     */
+    function showErrorInDetailView(message) {
+        const errorHtml = `<div class="error-message">${message || 'Failed to load data'}</div>`;
+        document.getElementById('scheduleAttainmentChart').innerHTML = errorHtml;
+        document.getElementById('labourCostChart').innerHTML = errorHtml;
+        document.getElementById('scrapPercentageChart').innerHTML = errorHtml;
+        document.getElementById('dailyScrapGrid').innerHTML = errorHtml;
+        document.getElementById('downtimeChart').innerHTML = errorHtml;
     }
 
     /**
@@ -2035,29 +2155,52 @@
      * @returns {Array} Filtered data
      */
     function getFilteredLineData(lineId, startDate, endDate) {
+        Logger.info(`Getting data for line ${lineId} from ${startDate} to ${endDate}`);
+        
+        // Ensure dates are in the correct format
         const start = new Date(startDate);
         start.setHours(0, 0, 0, 0);
         
         const end = new Date(endDate);
         end.setHours(23, 59, 59, 999);
         
+        // Extract date strings for comparison
+        const startDateStr = start.toISOString().split('T')[0];
+        const endDateStr = end.toISOString().split('T')[0];
+        
         // Get the global data
         const cachedData = window.dashboardData || [];
         
-        // More flexible field matching
-        return cachedData.filter(record => {
-            const recordDate = new Date(record.Date);
+        // Filter data with better date comparison
+        const filteredData = cachedData.filter(record => {
+            if (!record.Date) return false;
             
-            // Match lineId more flexibly
-            const recordLineId = record['Production Line ID'] || 
-                                 record['ProductionLineID'] || 
-                                 record['Line ID'] || 
-                                 record['LineID'];
-                                 
-            return recordLineId === lineId && 
-                   recordDate >= start && 
-                   recordDate <= end;
+            try {
+                const recordDate = new Date(record.Date);
+                const recordDateStr = recordDate.toISOString().split('T')[0];
+                
+                // Match lineId more flexibly
+                const recordLineId = record['Production Line ID'] || 
+                                    record['ProductionLineID'] || 
+                                    record['Line ID'] || 
+                                    record['LineID'];
+                
+                const lineMatches = recordLineId === lineId;
+                const dateInRange = recordDateStr >= startDateStr && recordDateStr <= endDateStr;
+                
+                if (lineMatches && !dateInRange) {
+                    Logger.debug(`Record for ${lineId} on ${recordDateStr} excluded: outside date range`);
+                }
+                
+                return lineMatches && dateInRange;
+            } catch (error) {
+                Logger.error(`Error filtering record: ${error.message}`);
+                return false;
+            }
         });
+        
+        Logger.info(`Found ${filteredData.length} records for line ${lineId} in date range`);
+        return filteredData;
     }
 
     /**
