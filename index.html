@@ -2151,6 +2151,15 @@
         // Show the modal immediately with display:flex to make it visible
         const modal = document.getElementById('detailModal');
         modal.classList.add('show');
+        
+        // Load and render the charts
+        try {
+            loadDetailViewData(actualLineId);
+        } catch (error) {
+            Logger.error('Error loading detail view data', error);
+            // Show error message in modal
+            showErrorInDetailView(error.message);
+        }
     }
 
     /**
@@ -2569,30 +2578,56 @@
         const lineId = overrideLineId || detailViewState.lineId;
         Logger.info(`Loading detail view data for line: ${lineId}`);
         
-        // Get the filtered data for the line and date range
-        const filteredData = getFilteredLineData(
-            lineId, 
-            detailViewState.dateRange.start, 
-            detailViewState.dateRange.end
-        );
+        // Get the filtered data for the line and date range from window.dashboardData
+        if (!window.dashboardData) {
+            Logger.error("No dashboard data available");
+            showErrorInDetailView("No dashboard data available. Please reload the page.");
+            return;
+        }
         
-        // Log the filtered data for debugging
-        Logger.info(`Found ${filteredData.length} records for detail view`);
+        const filteredData = window.dashboardData.filter(record => {
+            // Match by line ID
+            if (record['Production Line ID'] !== lineId) {
+                return false;
+            }
+            
+            // Check date is in range
+            const recordDate = new Date(record.Date);
+            const startDate = new Date(detailViewState.dateRange.start);
+            const endDate = new Date(detailViewState.dateRange.end);
+            
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(23, 59, 59, 999);
+            
+            return recordDate >= startDate && recordDate <= endDate;
+        });
         
-        // Store the filtered data for reuse
-        detailViewState.filteredData = filteredData;
+        // Apply base product filter if needed
+        let displayData = filteredData;
+        if (detailViewState.baseProductFilter) {
+            displayData = filteredData.filter(record => {
+                const recordBaseProduct = record['Base Product'] || record['Product'] || '';
+                return recordBaseProduct.toLowerCase().includes(detailViewState.baseProductFilter.toLowerCase());
+            });
+        }
         
-        if (filteredData.length === 0) {
-            Logger.warn(`No data available for line ${lineId} in selected date range`);
+        Logger.info(`Found ${displayData.length} records for detail view display`);
+        
+        // Save the filtered data for use by chart rendering functions
+        detailViewState.filteredData = displayData;
+        
+        // Check if we have any data
+        if (!displayData || displayData.length === 0) {
+            Logger.warn(`No data available for line ${lineId} in date range ${detailViewState.dateRange.start} to ${detailViewState.dateRange.end}`);
             showNoDataMessage();
             return;
         }
         
-        // Render all sections with the data we have
-        renderScheduleAttainmentChart(filteredData, detailViewState.attainmentView);
-        renderLabourCostChart(filteredData, detailViewState.costView);
-        renderScrapAnalysis(filteredData, detailViewState.scrapView);
-        renderDowntimeChart(filteredData, detailViewState.downtimeView);
+        // Otherwise, render all the charts with the data we have
+        renderScheduleAttainmentChart(displayData, detailViewState.attainmentView || 'percent');
+        renderLabourCostChart(displayData, detailViewState.costView || 'labour');
+        renderScrapAnalysis(displayData, detailViewState.scrapView || 'qty');
+        renderDowntimeChart(displayData, detailViewState.downtimeView || 'reason');
     }
     
     /**
