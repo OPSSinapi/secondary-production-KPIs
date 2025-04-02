@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"> 
@@ -1296,16 +1296,46 @@
     function filterDataByDateRange(data, startDate, endDate) {
         if (!data || !startDate || !endDate) return [];
         
+        Logger.info(`Filtering data from ${startDate} to ${endDate}`);
+        
+        // Ensure dates are in the correct format
         const start = new Date(startDate);
         start.setHours(0, 0, 0, 0);  // Start of day
         
         const end = new Date(endDate);
         end.setHours(23, 59, 59, 999);  // End of day
         
-        return data.filter(record => {
-            const recordDate = new Date(record.Date);
-            return recordDate >= start && recordDate <= end;
+        // Log the time range for debugging
+        Logger.info(`Date range: ${start.toISOString()} to ${end.toISOString()}`);
+        
+        const filteredData = data.filter(record => {
+            if (!record.Date) {
+                Logger.warn('Record missing Date field');
+                return false;
+            }
+            
+            try {
+                const recordDate = new Date(record.Date);
+                const isInRange = recordDate >= start && recordDate <= end;
+                
+                // For edge dates, log the comparison results
+                const dateStr = recordDate.toISOString().split('T')[0];
+                if (dateStr === start.toISOString().split('T')[0] || dateStr === end.toISOString().split('T')[0]) {
+                    Logger.info(`Date comparison for ${dateStr}: ${isInRange ? 'IN RANGE' : 'OUT OF RANGE'}`);
+                }
+                
+                return isInRange;
+            } catch (error) {
+                Logger.error(`Error parsing date: ${record.Date}`, error);
+                return false;
+            }
         });
+        
+        // Log production lines found
+        const uniqueLines = [...new Set(filteredData.map(r => r['Production Line ID']).filter(Boolean))];
+        Logger.info(`Found ${uniqueLines.length} production lines in filtered data: ${uniqueLines.join(', ')}`);
+        
+        return filteredData;
     }
 
     /**
@@ -1327,10 +1357,25 @@
     function calculateAverage(data, field) {
         if (!data || data.length === 0) return 0;
         
-        const values = data.map(record => parseFloat(record[field] || 0))
-                          .filter(value => !isNaN(value));
+        // Validate that field exists in at least some records
+        const hasField = data.some(record => record && record[field] !== undefined);
+        if (!hasField) {
+            Logger.warn(`Field '${field}' not found in any records for average calculation`);
+            return 0;
+        }
         
-        if (values.length === 0) return 0;
+        const values = data.map(record => {
+            if (!record || record[field] === undefined) {
+                Logger.debug(`Missing field '${field}' in record`);
+                return NaN;
+            }
+            return parseFloat(record[field] || 0);
+        }).filter(value => !isNaN(value));
+        
+        if (values.length === 0) {
+            Logger.warn(`No valid values found for field '${field}'`);
+            return 0;
+        }
         
         const sum = values.reduce((total, value) => total + value, 0);
         return sum / values.length;
@@ -1462,17 +1507,33 @@
      */
     function groupDataByProductionLine(data) {
         const groups = {};
+        let missingLineCount = 0;
+        
+        Logger.info(`Grouping ${data.length} records by production line`);
         
         data.forEach(record => {
+            // Validate production line ID
             const lineId = record['Production Line ID'];
-            if (!lineId) return;
+            if (!lineId) {
+                missingLineCount++;
+                return;
+            }
             
+            // Initialize array if this is the first record for this line
             if (!groups[lineId]) {
                 groups[lineId] = [];
             }
             
             groups[lineId].push(record);
         });
+        
+        // Log results for debugging
+        if (missingLineCount > 0) {
+            Logger.warn(`${missingLineCount} records had missing Production Line ID`);
+        }
+        
+        const lineIds = Object.keys(groups);
+        Logger.info(`Grouped data into ${lineIds.length} production lines: ${lineIds.join(', ')}`);
         
         return groups;
     }
@@ -1672,6 +1733,9 @@
         // Clear container
         container.innerHTML = '';
         
+        // Log how many line cards we're creating
+        Logger.info(`Creating ${Object.keys(lineGroups).length} line cards`);
+        
         // Create a card for each production line
         let positionIndex = 1;
         
@@ -1681,7 +1745,12 @@
             
             // Ensure we have at least one record with line details
             const lineDetails = lineData.find(record => record['Production Line ID'] === lineId);
-            if (!lineDetails) return;
+            if (!lineDetails) {
+                Logger.warn(`Could not find details for line ${lineId}`);
+                return;
+            }
+            
+            Logger.debug(`Creating card for ${lineId} with ${lineData.length} records`);
             
             // Get previous period data for this line
             const previousPeriodData = getPreviousPeriodData(lineData, fullData)
@@ -1696,6 +1765,12 @@
             // Update position index (cycle through grid positions)
             positionIndex = (positionIndex % 4) + 1;
         });
+        
+        // Verify container has content
+        Logger.info(`Dashboard grid now contains ${container.childElementCount} line cards`);
+        if (container.childElementCount === 0) {
+            Logger.error('No line cards were created despite having data!');
+        }
     }
 
     /**
@@ -1708,7 +1783,13 @@
      * @returns {HTMLElement} Line card element
      */
     function createLineCard(lineId, lineDetails, lineData, previousPeriodData, positionIndex) {
-        // Extract line information
+        // Validate input data
+        if (!lineDetails) {
+            Logger.error(`Missing lineDetails for ${lineId}`);
+            return document.createElement('div'); // Return empty div
+        }
+        
+        // Extract line information with validation
         const lineName = lineDetails['Production Line Name'] || 'Unknown Line';
         const baseProduct = lineDetails['Base Product'] || '';
         const lineColor = lineDetails['Production Line Color'] || 'blue';
@@ -1716,8 +1797,26 @@
         // Calculate metrics for this line
         const metrics = calculateLineMetrics(lineData, previousPeriodData);
         
-        // Get current variant info
-        const currentVariantData = lineData.find(record => record['Is Current Variant'] === true) || lineData[0];
+        // Get current variant info with better fallback handling
+        // First look for records marked as current variant
+        let currentVariantData = lineData.find(record => record['Is Current Variant'] === true);
+        
+        // If none found, try to find the most recent record
+        if (!currentVariantData) {
+            // Sort by date descending
+            const sortedData = [...lineData].sort((a, b) => 
+                new Date(b.Date || 0) - new Date(a.Date || 0)
+            );
+            currentVariantData = sortedData[0];
+            Logger.debug(`No current variant found for ${lineId}, using most recent: ${currentVariantData?.Variant || 'unknown'}`);
+        }
+        
+        // Final fallback
+        if (!currentVariantData) {
+            currentVariantData = lineData[0];
+            Logger.warn(`Could not determine current variant for ${lineId}, using first available record`);
+        }
+        
         const variantName = currentVariantData['Variant'] || 'Unknown';
         const variantStatus = currentVariantData['Variant Status'] || 'unknown';
         
@@ -1748,7 +1847,7 @@
             <div class="line-card-content">
                 <div class="variant-info">
                     <span class="variant-label">Current Variant: <span class="variant-name">${variantName}</span></span>
-                    <span class="status-badge status-${variantStatus}">${capitalize(variantStatus)}</span>
+                    <span class="status-badge status-${variantStatus.toLowerCase()}">${capitalize(variantStatus)}</span>
                 </div>
                 <div class="metrics-grid">
                     <div class="metric-card">
@@ -1813,6 +1912,8 @@
      * @param {string} lineId - Production line ID
      */
     function showDetailView(lineId) {
+        Logger.info(`Opening detail view for line: ${lineId}`);
+        
         // Store the current line ID
         detailViewState.lineId = lineId;
         
@@ -1826,17 +1927,45 @@
             const headerElement = lineElement.querySelector('.card-title');
             if (headerElement) {
                 document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+            } else {
+                Logger.warn('Could not find header element in line card');
+                document.getElementById('modalTitle').textContent = 'Production Line Details';
             }
+        } else {
+            Logger.warn(`Could not find line element with ID: ${lineId}`);
+            document.getElementById('modalTitle').textContent = 'Production Line Details';
         }
         
         // Update date range display
         updateModalDateRange();
         
         // Load and render the charts
-        loadDetailViewData();
+        try {
+            loadDetailViewData();
+        } catch (error) {
+            Logger.error('Error loading detail view data', error);
+            // Show error message in modal
+            document.getElementById('detailCharts').innerHTML = `
+                <div class="error-message">
+                    Failed to load detail view: ${error.message}
+                </div>
+            `;
+        }
+        
+        // Force layout recalculation to avoid rendering issues
+        document.body.offsetHeight;
         
         // Show the modal
-        document.getElementById('detailModal').classList.add('show');
+        const modal = document.getElementById('detailModal');
+        modal.classList.add('show');
+        
+        // Ensure modal is visible
+        setTimeout(() => {
+            if (modal.classList.contains('show') && window.getComputedStyle(modal).display === 'none') {
+                Logger.warn('Modal has show class but is not visible, forcing display');
+                modal.style.display = 'flex';
+            }
+        }, 100);
     }
 
     /**
@@ -2750,11 +2879,25 @@ async function initializeDashboard() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
         const jsonData = await response.json();
+        Logger.info(`Successfully loaded JSON data with lastUpdated: ${jsonData.lastUpdated}`);
         
         // Extract and store the full dataset
         // Using the proper structure from OpsData.json schema
         const fullData = jsonData.productionData || [];
+        
+        // Validate that critical fields exist
+        const validationSample = fullData.slice(0, 10);
+        const requiredFields = ['Date', 'Production Line ID', 'Variant', 'Schedule Attainment', 'Cost Per Unit'];
+        
+        for (const field of requiredFields) {
+            const hasField = validationSample.some(record => record && record[field] !== undefined);
+            if (!hasField) {
+                Logger.error(`Critical field missing in dataset: ${field}`);
+                throw new Error(`Data validation failed: field '${field}' not found in dataset`);
+            }
+        }
         
         // Store data globally for reuse in detail views
         window.dashboardData = fullData;
@@ -2778,6 +2921,14 @@ async function initializeDashboard() {
         // Filter data for current date range
         const filteredData = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
         Logger.info(`Filtered to ${filteredData.length} records in date range`);
+        
+        // Check for production lines before rendering
+        const uniqueLines = [...new Set(filteredData.map(r => r['Production Line ID']).filter(Boolean))];
+        if (uniqueLines.length === 0) {
+            Logger.warn(`No production lines found in date range ${currentDateRange.start} - ${currentDateRange.end}`);
+        } else {
+            Logger.info(`Found ${uniqueLines.length} production lines: ${uniqueLines.join(', ')}`);
+        }
         
         // Render KPI summary with both datasets
         renderKPISummary(filteredData, fullData);
