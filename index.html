@@ -234,88 +234,69 @@
 
     /* Main dashboard grid */
     .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-auto-rows: minmax(240px, auto);
-        gap: 10px;
-        padding: 0 15px;
-        margin-bottom: 15px;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        padding: 20px !important;
+        justify-content: flex-start !important;
     }
 
-    /* Line Cards */
+    /* Card styling for flexbox layout */
     .line-card {
         background-color: white;
         border: 1px solid var(--border-color);
         border-radius: 5px;
-        overflow: visible !important; /* Change from hidden to visible */
-        width: 100%;
-        height: 100%;
+        overflow: visible !important;
+        width: calc(33.333% - 20px) !important; /* Three cards per row with gap */
+        min-height: 250px !important;
+        display: flex !important;
+        flex-direction: column !important;
         position: relative;
-        display: flex;
-        flex-direction: column;
-        min-height: 240px;
-        z-index: 1;
-        margin-bottom: 5px; /* Add margin to prevent overlap */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+        margin-bottom: 10px !important;
+        flex-grow: 0 !important;
+        flex-shrink: 0 !important;
     }
 
-    .line-card-header {
-        padding: 10px 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: white;
-        font-weight: bold;
-        flex-shrink: 0;
-        position: relative;
-        z-index: 10; /* Ensure header stays on top */
-    }
-
-    .line-card-content {
-        padding: 12px;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-    .card-title {
-        font-size: 14px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 80%;
-        z-index: 10; /* Ensure title stays visible */
-        position: relative;
-    }
-
-    .card-actions {
-        display: flex;
-        gap: 5px;
-        z-index: 20; /* Higher z-index to ensure buttons stay on top */
-        position: relative;
-    }
-
+    /* Make the expand icon much more visible */
     .enlarge-icon {
-        cursor: pointer;
-        opacity: 1; /* Make fully visible */
-        transition: opacity 0.2s;
-        padding: 5px;
-        border-radius: 3px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(255, 255, 255, 0.3);
-        z-index: 20; /* Higher z-index to ensure buttons stay on top */
-        position: relative;
-        width: 24px;
-        height: 24px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Add shadow for better visibility */
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        color: white !important;
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        z-index: 1000 !important;
+        border: 2px solid white !important;
     }
 
     .enlarge-icon:hover {
-        opacity: 1;
-        background-color: rgba(255, 255, 255, 0.5);
-        transform: scale(1.1); /* Slightly enlarge on hover */
+        transform: scale(1.2) !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .enlarge-icon i.fas {
+        font-size: 16px !important;
+        color: white !important;
+    }
+
+    @media (max-width: 1200px) {
+        .line-card {
+            width: calc(50% - 15px) !important; /* Two cards per row */
+        }
+    }
+
+    @media (max-width: 767px) {
+        .line-card {
+            width: 100% !important; /* Full width on mobile */
+        }
     }
 
     .blue-header {
@@ -1936,8 +1917,12 @@
             return;
         }
         
-        // Clear container
+        // Clear container and set to flexbox
         container.innerHTML = '';
+        container.style.display = 'flex';
+        container.style.flexWrap = 'wrap';
+        container.style.gap = '20px';
+        container.style.padding = '20px';
         
         // Keep track of all created cards to log their state
         const createdCards = [];
@@ -1946,7 +1931,6 @@
         Logger.info(`Creating cards for ${Object.keys(lineGroups).length} production lines`);
         
         // Create a card for each production line
-        let positionIndex = 1;
         const cardsByBaseProduct = {}; // Track cards by base product for special handling
 
         // Special handling for nosi-scalpel line - split by base product
@@ -1987,12 +1971,11 @@
                     });
                 
                 // Create the line card
-                const lineCard = createLineCard(compositeLineId, lineDetails, productData, previousPeriodData, positionIndex);
+                const lineCard = createLineCard(compositeLineId, lineDetails, productData, previousPeriodData);
                 
                 // Log card creation
                 createdCards.push({
                     id: compositeLineId,
-                    position: positionIndex,
                     title: baseProduct
                 });
                 
@@ -2005,9 +1988,6 @@
                     baseProduct: baseProduct,
                     element: lineCard
                 };
-                
-                // Update position index
-                positionIndex = (positionIndex % 9) + 1;
             });
             
             // Remove the original nosi-scalpel group as we've handled it specially
@@ -2038,20 +2018,16 @@
                 .filter(record => record['Production Line ID'] === lineId);
             
             // Create the line card
-            const lineCard = createLineCard(lineId, lineDetails, lineData, previousPeriodData, positionIndex);
+            const lineCard = createLineCard(lineId, lineDetails, lineData, previousPeriodData);
             
             // Log card creation
             createdCards.push({
                 id: lineId,
-                position: positionIndex,
                 title: lineDetails['Production Line Name'] || lineId
             });
             
             // Add to container
             container.appendChild(lineCard);
-            
-            // Update position index (cycle through grid positions)
-            positionIndex = (positionIndex % 9) + 1;
         });
         
         // Verify container has content
@@ -2063,14 +2039,14 @@
             Logger.info(`Created cards: ${JSON.stringify(createdCards)}`);
         }
         
-        // Fix grid layout styling to accommodate all cards
-        document.querySelector('.dashboard-grid').style.gridTemplateColumns = 'repeat(3, 1fr)';
-        
         // Apply additional styling to ensure all cards are visible
         container.querySelectorAll('.line-card').forEach(card => {
-            card.style.minHeight = '240px';
+            card.style.width = 'calc(33.333% - 20px)';
+            card.style.minHeight = '250px';
             card.style.display = 'flex';
             card.style.flexDirection = 'column';
+            card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+            card.style.position = 'relative';
         });
     }
 
@@ -2080,10 +2056,9 @@
      * @param {Object} lineDetails - Details for the production line
      * @param {Array} lineData - Data records for this line
      * @param {Array} previousPeriodData - Previous period data for trend calculations
-     * @param {number} positionIndex - Position in the grid (1-6)
      * @returns {HTMLElement} Line card element
      */
-    function createLineCard(lineId, lineDetails, lineData, previousPeriodData, positionIndex) {
+    function createLineCard(lineId, lineDetails, lineData, previousPeriodData) {
         // Validate input data
         if (!lineDetails) {
             Logger.error(`Missing lineDetails for ${lineId}`);
@@ -2129,8 +2104,14 @@
         
         // Create card element
         const card = document.createElement('div');
-        card.className = `line-card grid-position-1-${positionIndex}`;
+        card.className = 'line-card';
         card.setAttribute('data-line-id', lineId);
+        card.style.width = 'calc(33.333% - 20px)';
+        card.style.minHeight = '250px';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+        card.style.position = 'relative';
         
         // Determine if this is a scalpel product line
         const isScalpelProduct = lineId.startsWith('nosi-scalpel-') || baseProduct.includes('Scalpel');
@@ -2151,45 +2132,42 @@
         // Create card content with expand button for all cards
         // Enhanced expand button with bolder styling
         card.innerHTML = `
-            <div class="line-card-header" style="background-color: var(--primary-${lineColor})">
-                <span class="card-title">${formattedTitle}</span>
-                <div class="card-actions">
-                    <span class="enlarge-icon" onclick="showDetailView('${lineId}')" 
-                          style="cursor:pointer; z-index:100;">
-                        <i class="fas fa-expand-alt"></i>
-                    </span>
-                </div>
+            <div class="line-card-header" style="background-color: var(--primary-${lineColor}); padding:12px 15px; color:white; font-weight:bold;">
+                <span class="card-title" style="font-size:14px;">${formattedTitle}</span>
             </div>
-            <div class="line-card-content">
-                <div class="variant-info">
-                    <span class="variant-label">Current Variant: <span class="variant-name">${variantName}</span></span>
-                    <span class="status-badge status-${variantStatus.toLowerCase()}">${capitalize(variantStatus)}</span>
+            <a href="#" class="enlarge-icon" data-lineid="${lineId}" style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background-color:rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; z-index:1000; border:2px solid white;">
+                <i class="fas fa-expand-alt" style="color:white;"></i>
+            </a>
+            <div class="line-card-content" style="padding:12px; flex-grow:1; display:flex; flex-direction:column;">
+                <div class="variant-info" style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span class="variant-label" style="font-size:12px; color:var(--text-light);">Current Variant: <span class="variant-name" style="font-weight:bold; color:var(--text-dark);">${variantName}</span></span>
+                    <span class="status-badge status-${variantStatus.toLowerCase()}" style="font-size:10px; padding:2px 6px; border-radius:10px; display:inline-block; font-weight:bold; text-transform:uppercase;">${capitalize(variantStatus)}</span>
                 </div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-title">Schedule Attainment</div>
-                        <div class="metric-value ${getValueColorClass(metrics.scheduleAttainment, 'scheduleAttainment')}">
+                <div class="metrics-grid" style="display:grid; grid-template-columns:repeat(2, 1fr); grid-gap:8px; flex-grow:1;">
+                    <div class="metric-card" style="background-color:#f8f9fa; border-radius:4px; padding:8px; display:flex; flex-direction:column;">
+                        <div class="metric-title" style="font-size:11px; color:var(--text-light); margin-bottom:5px;">Schedule Attainment</div>
+                        <div class="metric-value ${getValueColorClass(metrics.scheduleAttainment, 'scheduleAttainment')}" style="display:flex; justify-content:space-between; align-items:center; font-weight:bold;">
                             ${metrics.scheduleAttainment.toFixed(1)}%
                             ${scheduleAttainmentTrend.html}
                         </div>
                     </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Labour Cost</div>
-                        <div class="metric-value ${getValueColorClass(metrics.labourCost, 'labourCostPerUnit', true)}">
+                    <div class="metric-card" style="background-color:#f8f9fa; border-radius:4px; padding:8px; display:flex; flex-direction:column;">
+                        <div class="metric-title" style="font-size:11px; color:var(--text-light); margin-bottom:5px;">Labour Cost</div>
+                        <div class="metric-value ${getValueColorClass(metrics.labourCost, 'labourCostPerUnit', true)}" style="display:flex; justify-content:space-between; align-items:center; font-weight:bold;">
                             R${metrics.labourCost.toFixed(2)}
                             ${labourCostTrend.html}
                         </div>
                     </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Downtime</div>
-                        <div class="metric-value ${getValueColorClass(metrics.downtimeHours, 'downtimeHours', true)}">
+                    <div class="metric-card" style="background-color:#f8f9fa; border-radius:4px; padding:8px; display:flex; flex-direction:column;">
+                        <div class="metric-title" style="font-size:11px; color:var(--text-light); margin-bottom:5px;">Downtime</div>
+                        <div class="metric-value ${getValueColorClass(metrics.downtimeHours, 'downtimeHours', true)}" style="display:flex; justify-content:space-between; align-items:center; font-weight:bold;">
                             ${metrics.downtimeHours.toFixed(1)}h
                             ${downtimeHoursTrend.html}
                         </div>
                     </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Scrap %</div>
-                        <div class="metric-value ${getValueColorClass(metrics.scrapPercentage, 'scrapPercentage', true)}">
+                    <div class="metric-card" style="background-color:#f8f9fa; border-radius:4px; padding:8px; display:flex; flex-direction:column;">
+                        <div class="metric-title" style="font-size:11px; color:var(--text-light); margin-bottom:5px;">Scrap %</div>
+                        <div class="metric-value ${getValueColorClass(metrics.scrapPercentage, 'scrapPercentage', true)}" style="display:flex; justify-content:space-between; align-items:center; font-weight:bold;">
                             ${metrics.scrapPercentage.toFixed(1)}%
                             ${scrapPercentageTrend.html}
                         </div>
@@ -2205,6 +2183,7 @@
                 event.preventDefault();
                 event.stopPropagation();
                 showDetailView(lineId);
+                return false;
             });
         }
         
