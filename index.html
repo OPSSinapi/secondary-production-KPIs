@@ -141,7 +141,8 @@
         border: 1px solid var(--border-color);
         border-radius: 3px;
     }
-        /* KPI Summary */
+
+    /* KPI Summary */
     .kpi-summary {
         background-color: white;
         border-radius: 5px;
@@ -307,6 +308,7 @@
         .line-card-content {
             padding: 10px 15px;
         }
+
         .variant-info {
             background-color: #f5f7fa;
             border-radius: 3px;
@@ -486,6 +488,7 @@
         .value-danger {
             color: var(--danger-color);
         }
+
         /* 
         ======================================
         DIVIDER
@@ -587,7 +590,6 @@
         .debug-log-entry.info {
             color: var(--text-dark);
         }
-        
         /* 
         ======================================
         MODAL / DETAIL VIEW
@@ -656,173 +658,69 @@
             overflow: hidden;
             padding: 15px 20px;
         }
-        /* REDESIGNED DETAIL VIEW STYLES */
-        
-        /* Main detail metrics layout */
+
+        /* Improved compact charts */
         .detail-metrics {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: auto auto auto;
+            grid-template-rows: repeat(2, 1fr);
             gap: 15px;
             height: calc(100% - 60px); /* Subtract date nav height */
         }
-        
-        /* Card positioning and sizing for redesigned layout */
-        .schedule-card { 
-            grid-column: 1; 
-            grid-row: 1; 
-            height: 140px; 
-        }
-        
-        .labour-card { 
-            grid-column: 2; 
-            grid-row: 1; 
-            height: 140px; 
-        }
-        
-        .scrap-card { 
-            grid-column: 1 / span 2; 
-            grid-row: 2; 
-            height: 200px; 
-        }
-        
-        .downtime-card { 
-            grid-column: 1 / span 2; 
-            grid-row: 3; 
-            height: 110px; 
-        }
-        
-        /* Detail-specific card styling */
+
         .detail-metric-card {
             background-color: white;
             border-radius: 6px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            height: 100%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             padding: 12px;
         }
-        
-        .detail-metric-header {
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--text-dark);
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 10px;
-        }
-        
-        /* Toggle buttons styling */
-        .toggle-container {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .toggle-btn {
-            background-color: #e8e8e8;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-        
-        .toggle-btn.active {
-            background-color: var(--primary-blue);
-            color: white;
-        }
-        
-        /* Chart containers with consistent heights */
+
         .chart-container {
             flex: 1;
             position: relative;
             min-height: 0;
             background-color: #ffffff;
             border-radius: 4px;
+            padding: 10px;
+            margin-top: 5px;
         }
-        
-        .schedule-card .chart-container,
-        .labour-card .chart-container {
-            height: 80px !important;
-            min-height: 80px !important;
+
+        .detail-metric-footer {
+            margin-top: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 10px;
         }
-        
-        .downtime-card .chart-container {
-            height: 60px !important;
-            min-height: 60px !important;
-        }
-        
-        /* Scrap Analysis Layout */
-        .scrap-analysis-layout {
+
+        .chart-row {
             display: flex;
-            flex-direction: column;
-            height: calc(100% - 45px); /* Subtract header and toggle height */
+            gap: 15px;
+            height: 100%;
         }
-        
-        .scrap-trend-chart {
-            flex: 0 0 50px;
-            margin-bottom: 10px;
-            background-color: #f5f7fa;
+
+        .pie-chart-container {
+            flex: 1;
+            height: 100%;
+            position: relative;
+            background-color: #ffffff;
             border-radius: 4px;
             padding: 5px;
         }
-        
-        .chart-subtitle {
-            font-size: 11px;
-            color: var(--text-dark);
-            margin-bottom: 2px;
-        }
-        
-        .daily-scrap-container {
-            flex: 1;
-            overflow-y: auto;
-        }
-        
-        .daily-scrap-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        
-        /* Scrap daily card styling */
-        .daily-scrap-card {
-            background-color: #f5f7fa;
-            border-radius: 4px;
-            padding: 8px;
-            min-height: 70px;
-        }
-        
-        .daily-scrap-header {
-            font-size: 10px;
+
+        .detail-metric-header {
+            font-size: 14px;
             font-weight: bold;
             color: var(--text-dark);
-            margin-bottom: 4px;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 2px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
         }
-        
-        .scrap-reason {
-            font-size: 8px;
-            line-height: 1.3;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        /* Downtime styling */
-        .downtime-label {
-            font-size: 8px;
-            color: var(--text-light);
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            text-align: center;
-            margin-bottom: 2px;
-        }
+
         /* 
         ======================================
         DATE NAVIGATION
@@ -872,6 +770,77 @@
 
         /* 
         ======================================
+        TOGGLE BUTTONS
+        ======================================
+        */
+        .toggle-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap; /* Allow wrapping for multiple buttons */
+        }
+
+        .toggle-btn {
+            background-color: #e8e8e8;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .toggle-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .top-items-list {
+            background-color: white;
+            border-radius: 4px;
+            overflow-y: visible; /* Ensure all items are visible */
+            max-height: none; /* No height limit in the list container */
+        }
+
+        .top-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .top-item:last-child {
+            border-bottom: none;
+        }
+
+        .top-item-label {
+            font-weight: bold;
+            font-size: 11px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 8px;
+        }
+
+        .top-item-value {
+            color: var(--text-light);
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        /* Specific adjustment for scrap/downtime detail sections */
+        .detail-metric-card:nth-child(3) .chart-container,
+        .detail-metric-card:nth-child(4) .chart-container {
+            flex: 0.4; /* Even smaller charts for scrap and downtime sections */
+        }
+
+        .detail-metric-card:nth-child(3) .detail-metric-footer,
+        .detail-metric-card:nth-child(4) .detail-metric-footer {
+            max-height: 200px; /* Taller footers for scrap and downtime sections */
+        }
+
+        /* 
+        ======================================
         RESPONSIVE LAYOUTS
         ======================================
         */
@@ -900,30 +869,6 @@
             
             .detail-metrics {
                 grid-template-columns: 1fr;
-            }
-            
-            .schedule-card, .labour-card {
-                grid-column: 1;
-            }
-            
-            .scrap-card, .downtime-card {
-                grid-column: 1;
-            }
-            
-            .labour-card {
-                grid-row: 2;
-            }
-            
-            .scrap-card {
-                grid-row: 3;
-            }
-            
-            .downtime-card {
-                grid-row: 4;
-            }
-            
-            .daily-scrap-grid {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -966,10 +911,102 @@
             .chart-container {
                 height: 200px;
             }
-            
-            .daily-scrap-grid {
-                grid-template-columns: 1fr;
-            }
+        }
+
+        /* 
+        ======================================
+        CHART PLACEHOLDERS
+        ======================================
+        */
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bar-container {
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 10px 0;
+        }
+
+        .chart-bar {
+            width: 30px;
+            background-color: var(--primary-blue);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .downtime-bar.high {
+            background-color: var(--danger-color);
+        }
+
+        .downtime-bar.medium {
+            background-color: var(--warning-color);
+        }
+
+        .x-axis-labels {
+            display: flex;
+            justify-content: space-around;
+            font-size: 10px;
+            color: var(--text-light);
+            padding: 5px 0;
+        }
+
+        .line-chart-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .line-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        .line-path {
+            fill: none;
+            stroke: var(--primary-blue);
+            stroke-width: 2;
+        }
+
+        .scrap-line {
+            stroke: var(--danger-color);
+        }
+
+        .data-point {
+            fill: var(--primary-blue);
+        }
+
+        .scrap-point {
+            fill: var(--danger-color);
+        }
+
+        .chart-subtitle {
+            font-size: 12px;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .trend-chart-container {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pie-chart-placeholder {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .list-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -987,6 +1024,7 @@
             <button class="refresh-btn" id="refreshButton"><i class="fas fa-sync-alt"></i></button>
         </div>
     </header>
+
     <!-- Date Range Picker Dropdown -->
     <div class="date-picker-dropdown" id="datePickerDropdown">
         <label for="startDate">Start Date:</label>
@@ -1036,7 +1074,7 @@
         <div class="debug-log-entry info">Debug log initialized.</div>
     </div>
 
-    <!-- Detail View Modal with Redesigned Layout -->
+    <!-- Detail View Modal -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1053,61 +1091,179 @@
                     </div>
                 </div>
                 
-                <!-- Redesigned Detail Metrics Grid -->
+                <!-- Detail Metrics Grid -->
                 <div class="detail-metrics">
-                    <!-- Schedule Attainment Card (Smaller) -->
-                    <div class="detail-metric-card schedule-card">
+                    <!-- Schedule Attainment -->
+                    <div class="detail-metric-card">
                         <div class="detail-metric-header">Schedule Attainment</div>
-                        <div class="toggle-container">
-                            <button class="toggle-btn active" id="attainmentPercentBtn">% View</button>
-                            <button class="toggle-btn" id="attainmentBoxesBtn">Boxes</button>
-                            <button class="toggle-btn" id="attainmentDevicesBtn">Devices</button>
-                        </div>
-                        <div class="chart-container" id="scheduleAttainmentChart"></div>
-                    </div>
-                    
-                    <!-- Labour Cost Card (Smaller) -->
-                    <div class="detail-metric-card labour-card">
-                        <div class="detail-metric-header">Labour Cost per Unit</div>
-                        <div class="toggle-container">
-                            <button class="toggle-btn active" id="labourCostBtn">Labour Cost</button>
-                            <button class="toggle-btn" id="unitCostBtn">Cost Per Unit</button>
-                        </div>
-                        <div class="chart-container" id="labourCostChart"></div>
-                    </div>
-                    <!-- Scrap Analysis Card (Larger) -->
-                    <div class="detail-metric-card scrap-card">
-                        <div class="detail-metric-header">Scrap Analysis</div>
-                        <div class="toggle-container">
-                            <button class="toggle-btn active" id="scrapQtyBtn">By Quantity</button>
-                            <button class="toggle-btn" id="scrapCostBtn">By Cost</button>
-                        </div>
-                        <div class="scrap-analysis-layout">
-                            <!-- Trend line chart (smaller) -->
-                            <div class="scrap-trend-chart">
-                                <div class="chart-subtitle">Scrap % Trend</div>
-                                <div id="scrapPercentageChart"></div>
-                            </div>
-                            
-                            <!-- Daily scrap details grid -->
-                            <div class="daily-scrap-container">
-                                <div id="dailyScrapGrid" class="daily-scrap-grid">
-                                    <!-- Daily scrap cards will be dynamically inserted here -->
+                        <div class="chart-container" id="scheduleAttainmentChart">
+                            <!-- Bar chart will be rendered here by JS -->
+                            <div class="chart-placeholder">
+                                <div class="bar-container">
+                                    <div class="chart-bar" style="height: 70%"></div>
+                                    <div class="chart-bar" style="height: 55%"></div>
+                                    <div class="chart-bar" style="height: 65%"></div>
+                                    <div class="chart-bar" style="height: 45%"></div>
+                                    <div class="chart-bar" style="height: 70%"></div>
+                                    <div class="chart-bar" style="height: 60%"></div>
+                                    <div class="chart-bar" style="height: 80%"></div>
+                                </div>
+                                <div class="x-axis-labels">
+                                    <span>Mar 18</span>
+                                    <span>Mar 19</span>
+                                    <span>Mar 20</span>
+                                    <span>Mar 21</span>
+                                    <span>Mar 22</span>
+                                    <span>Mar 23</span>
+                                    <span>Mar 24</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Downtime Analysis Card -->
-                    <div class="detail-metric-card downtime-card">
+                    <!-- Labour Cost per Unit -->
+                    <div class="detail-metric-card">
+                        <div class="detail-metric-header">Labour Cost per Unit</div>
+                        <div class="toggle-container">
+                            <button class="toggle-btn active" id="labourCostBtn">Labour Cost</button>
+                            <button class="toggle-btn" id="unitCostBtn">Cost Per Unit</button>
+                        </div>
+                        <div class="chart-container" id="labourCostChart">
+                            <!-- Line chart will be rendered here by JS -->
+                            <div class="chart-placeholder">
+                                <div class="line-chart-container">
+                                    <svg width="100%" height="80%" class="line-chart">
+                                        <polyline points="10,80 20,70 30,75 40,65 50,55 60,60 70,50" class="line-path"></polyline>
+                                        <circle cx="10" cy="80" r="4" class="data-point"></circle>
+                                        <circle cx="20" cy="70" r="4" class="data-point"></circle>
+                                        <circle cx="30" cy="75" r="4" class="data-point"></circle>
+                                        <circle cx="40" cy="65" r="4" class="data-point"></circle>
+                                        <circle cx="50" cy="55" r="4" class="data-point"></circle>
+                                        <circle cx="60" cy="60" r="4" class="data-point"></circle>
+                                        <circle cx="70" cy="50" r="4" class="data-point"></circle>
+                                    </svg>
+                                </div>
+                                <div class="x-axis-labels">
+                                    <span>Mar 18</span>
+                                    <span>Mar 19</span>
+                                    <span>Mar 20</span>
+                                    <span>Mar 21</span>
+                                    <span>Mar 22</span>
+                                    <span>Mar 23</span>
+                                    <span>Mar 24</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Scrap Percentage with Pie Chart -->
+                    <div class="detail-metric-card">
+                        <div class="detail-metric-header">Scrap Analysis</div>
+                        <div class="toggle-container">
+                            <button class="toggle-btn active" id="scrapQtyBtn">By Quantity</button>
+                            <button class="toggle-btn" id="scrapCostBtn">By Cost</button>
+                        </div>
+                        <div class="chart-row">
+                            <div class="trend-chart-container">
+                                <div class="chart-subtitle">Scrap Percentage Trend</div>
+                                <div class="chart-container" id="scrapPercentageChart">
+                                    <!-- Trend line chart will be rendered here by JS -->
+                                    <div class="chart-placeholder">
+                                        <svg width="100%" height="80%" class="line-chart">
+                                            <polyline points="10,70 20,65 30,75 40,60 50,65 60,58 70,55" class="line-path scrap-line"></polyline>
+                                            <circle cx="10" cy="70" r="4" class="data-point scrap-point"></circle>
+                                            <circle cx="20" cy="65" r="4" class="data-point scrap-point"></circle>
+                                            <circle cx="30" cy="75" r="4" class="data-point scrap-point"></circle>
+                                            <circle cx="40" cy="60" r="4" class="data-point scrap-point"></circle>
+                                            <circle cx="50" cy="65" r="4" class="data-point scrap-point"></circle>
+                                            <circle cx="60" cy="58" r="4" class="data-point scrap-point"></circle>
+                                            <circle cx="70" cy="55" r="4" class="data-point scrap-point"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pie-chart-container">
+                                <div class="chart-subtitle">Reject Distribution</div>
+                                <div id="rejectPieChart">
+                                    <!-- Pie chart will be rendered here by JS -->
+                                    <div class="pie-chart-placeholder">
+                                        <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" fill="#f5f7fa" />
+                                            <path d="M 50 50 L 50 10 A 40 40 0 0 1 85 35 Z" fill="#3498db" />
+                                            <path d="M 50 50 L 85 35 A 40 40 0 0 1 65 88 Z" fill="#f39c12" />
+                                            <path d="M 50 50 L 65 88 A 40 40 0 0 1 20 75 Z" fill="#9b59b6" />
+                                            <path d="M 50 50 L 20 75 A 40 40 0 0 1 50 10 Z" fill="#7f8c8d" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-metric-footer">
+                            <div class="list-title">Top Reject Reasons</div>
+                            <div class="top-items-list" id="topScrapList">
+                                <div class="top-item">
+                                    <div class="top-item-label">1. Misalignment (Station 3)</div>
+                                    <div class="top-item-value">32 units</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="top-item-label">2. Component Failure (Station 1)</div>
+                                    <div class="top-item-value">24 units</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="top-item-label">3. Calibration Error (Station 4)</div>
+                                    <div class="top-item-value">15 units</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Downtime -->
+                    <div class="detail-metric-card">
                         <div class="detail-metric-header">Downtime Analysis</div>
                         <div class="toggle-container">
-                            <button class="toggle-btn active" id="downtimeReasonBtn">Reason</button>
-                            <button class="toggle-btn" id="downtimeMachineBtn">Machine</button>
-                            <button class="toggle-btn" id="downtimeDurationBtn">Duration</button>
+                            <button class="toggle-btn active" id="downtimeReasonBtn">By Reason</button>
+                            <button class="toggle-btn" id="downtimeMachineBtn">By Machine</button>
+                            <button class="toggle-btn" id="downtimeDurationBtn">By Duration</button>
                         </div>
                         <div class="chart-container" id="downtimeChart">
-                            <!-- Downtime chart will be dynamically inserted here -->
+                            <!-- Bar chart will be rendered here by JS -->
+                            <div class="chart-placeholder">
+                                <div class="bar-container">
+                                    <div class="chart-bar downtime-bar" style="height: 20%"></div>
+                                    <div class="chart-bar downtime-bar" style="height: 40%"></div>
+                                    <div class="chart-bar downtime-bar" style="height: 30%"></div>
+                                    <div class="chart-bar downtime-bar high" style="height: 45%"></div>
+                                    <div class="chart-bar downtime-bar" style="height: 25%"></div>
+                                    <div class="chart-bar downtime-bar" style="height: 10%"></div>
+                                    <div class="chart-bar downtime-bar medium" style="height: 35%"></div>
+                                </div>
+                                <div class="x-axis-labels">
+                                    <span>Mar 18</span>
+                                    <span>Mar 19</span>
+                                    <span>Mar 20</span>
+                                    <span>Mar 21</span>
+                                    <span>Mar 22</span>
+                                    <span>Mar 23</span>
+                                    <span>Mar 24</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-metric-footer">
+                            <div class="list-title">Top Downtime Reasons</div>
+                            <div class="top-items-list" id="topDowntimeList">
+                                <div class="top-item">
+                                    <div class="top-item-label">1. Equipment Maintenance</div>
+                                    <div class="top-item-value">R 4,200</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="top-item-label">2. Material Changeover</div>
+                                    <div class="top-item-value">R 2,850</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="top-item-label">3. Quality Inspection</div>
+                                    <div class="top-item-value">R 1,720</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1179,6 +1335,7 @@
                 }
             }
         };
+
         /**
          * ======================================
          * LOGGING UTILITIES
@@ -1327,57 +1484,6 @@
                 endDateInput.value = currentDateRange.end.split('T')[0];
             }
         }
-
-        function navigateToPreviousWeek() {
-            Logger.info('Navigating to previous week');
-            
-            const start = new Date(detailViewState.dateRange.start);
-            const end = new Date(detailViewState.dateRange.end);
-            
-            // Move both dates back by 7 days
-            start.setDate(start.getDate() - 7);
-            end.setDate(end.getDate() - 7);
-            
-            // Update both the detail view state and the main page state
-            detailViewState.dateRange.start = start.toISOString().split('T')[0];
-            detailViewState.dateRange.end = end.toISOString().split('T')[0];
-            
-            // Also update the main date range
-            currentDateRange.start = detailViewState.dateRange.start;
-            currentDateRange.end = detailViewState.dateRange.end;
-            
-            // Update displays and reload data
-            updateModalDateRange();
-            updateDateRangeDisplay(currentDateRange);
-            loadDetailViewData();
-        }
-
-        /**
-         * Navigates to the next week
-         */
-        function navigateToNextWeek() {
-            Logger.info('Navigating to next week');
-            
-            const start = new Date(detailViewState.dateRange.start);
-            const end = new Date(detailViewState.dateRange.end);
-            
-            // Move both dates forward by 7 days
-            start.setDate(start.getDate() + 7);
-            end.setDate(end.getDate() + 7);
-            
-            // Update both the detail view state and the main page state
-            detailViewState.dateRange.start = start.toISOString().split('T')[0];
-            detailViewState.dateRange.end = end.toISOString().split('T')[0];
-            
-            // Also update the main date range
-            currentDateRange.start = detailViewState.dateRange.start;
-            currentDateRange.end = detailViewState.dateRange.end;
-            
-            // Update displays and reload data
-            updateModalDateRange();
-            updateDateRangeDisplay(currentDateRange);
-            loadDetailViewData();
-        }
         
         /**
          * Navigates to the previous period
@@ -1448,6 +1554,7 @@
             // Reload dashboard
             initializeDashboard();
         }
+        
         /**
          * Stores user preferences in localStorage
          */
@@ -1629,6 +1736,322 @@
         }
 
         /**
+         * ======================================
+         * DATA FETCHING
+         * ======================================
+         */
+
+        /**
+         * Fetches operational data from the specified URL
+         * @returns {Promise<Object>} The parsed operational data
+         */
+        async function fetchOpsData() {
+            Logger.info(`Fetching operational data from: ${CONFIG.dataUrl}`);
+            
+            try {
+                const response = await fetch(CONFIG.dataUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                Logger.info('Operational data fetched successfully');
+                
+                return data;
+            } catch (error) {
+                Logger.error('Error fetching operational data', error);
+                throw error;
+            }
+        }
+
+        /**
+         * ======================================
+         * DATA TRANSFORMATION
+         * ======================================
+         */
+
+        /**
+         * Filters operational data based on selected date range
+         * @param {Object} opsData - The raw operational data
+         * @param {string} startDate - Start date in ISO format
+         * @param {string} endDate - End date in ISO format
+         * @returns {Array} Filtered production data records
+         */
+        function filterDataByDateRange(opsData, startDate, endDate) {
+            Logger.info(`Filtering data from ${startDate} to ${endDate}`);
+            
+            if (!opsData || !opsData.productionData || !Array.isArray(opsData.productionData)) {
+                Logger.warn('No production data available to filter');
+                return [];
+            }
+            
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999); // Include the entire end day
+            
+            return opsData.productionData.filter(record => {
+                const recordDate = new Date(record.Date);
+                return recordDate >= start && recordDate <= end;
+            });
+        }
+
+        /**
+         * Gets the last N production dates from the data
+         * @param {Object} opsData - The raw operational data
+         * @param {number} n - Number of dates to get
+         * @returns {Object} Object with start and end dates
+         */
+        function getLastNProductionDates(opsData, n) {
+            if (!opsData || !opsData.productionData || !Array.isArray(opsData.productionData)) {
+                Logger.warn('No production data available to get dates');
+                return getDefaultDateRange();
+            }
+            
+            // Sort dates in descending order
+            const sortedDates = [...opsData.productionData]
+                .map(record => record.Date)
+                .sort((a, b) => new Date(b) - new Date(a));
+            
+            // Remove duplicates
+            const uniqueDates = [...new Set(sortedDates)];
+            
+            if (uniqueDates.length === 0) {
+                Logger.warn('No dates found in production data');
+                return getDefaultDateRange();
+            }
+            
+            // Get the latest N dates
+            const latestDates = uniqueDates.slice(0, n);
+            
+            const end = latestDates[0];
+            const start = latestDates[latestDates.length - 1];
+            
+            Logger.info(`Got last ${n} production dates: ${start} to ${end}`);
+            
+            return {
+                start,
+                end
+            };
+        }
+
+        /**
+         * Transforms operational data to the format expected by the dashboard
+         * @param {Object} opsData - The raw operational data
+         * @param {Array} filteredData - The filtered production data records
+         * @returns {Object} Transformed data ready for UI rendering
+         */
+        function transformOpsData(opsData, filteredData) {
+            Logger.info(`Transforming operational data, lastUpdated: ${opsData.lastUpdated}`);
+            
+            // Group data by production line and base product for special cases
+            const lineGroups = groupDataByProductionLineAndBaseProduct(filteredData);
+            
+            // Calculate plant-wide metrics
+            const plantWideMetrics = calculatePlantWideMetrics(filteredData);
+            
+            // Get date range for display
+            const dateRange = {
+                start: currentDateRange.start,
+                end: currentDateRange.end
+            };
+            
+            // Transform production lines data
+            const productionLines = transformProductionLines(lineGroups);
+            
+            // Build the final transformed data structure
+            const transformedData = {
+                lastUpdated: opsData.lastUpdated,
+                dateRange: dateRange,
+                plantWideMetrics: plantWideMetrics,
+                lines: productionLines,
+                thresholds: CONFIG.thresholds
+            };
+            
+            Logger.info(`Transformed ${transformedData.lines.length} production lines`);
+            return transformedData;
+        }
+
+        /**
+         * Groups filtered data by production line and base product for special cases
+         * @param {Array} filteredData - The filtered production data records
+         * @returns {Object} Data grouped by production line ID and base product
+         */
+        function groupDataByProductionLineAndBaseProduct(filteredData) {
+            if (!filteredData || filteredData.length === 0) {
+                Logger.warn('No filtered data available to group');
+                return {};
+            }
+            
+            const lineGroups = {};
+            
+            filteredData.forEach(record => {
+                const lineId = record['Production Line ID'];
+                
+                if (!lineId) {
+                    Logger.warn(`Record missing Production Line ID: ${JSON.stringify(record)}`);
+                    return;
+                }
+                
+                // For special lines, also include the base product in the key
+                let groupKey = lineId;
+                
+                // Check if this is a special line that needs base product separation
+                if (CONFIG.specialLinesBaseProducts[lineId] && record['Base Product']) {
+                    groupKey = `${lineId}-${record['Base Product']}`;
+                }
+                
+                if (!lineGroups[groupKey]) {
+                    lineGroups[groupKey] = {
+                        id: lineId,
+                        name: record['Production Line Name'],
+                        color: record['Production Line Color'],
+                        type: record['Production Line Type'],
+                        baseProduct: record['Base Product'] || null,
+                        records: []
+                    };
+                }
+                
+                lineGroups[groupKey].records.push(record);
+            });
+            
+            Logger.info(`Grouped data into ${Object.keys(lineGroups).length} production lines`);
+            return lineGroups;
+        }
+
+        /**
+         * Calculates plant-wide metrics from filtered data
+         * @param {Array} filteredData - The filtered production data records
+         * @returns {Object} Calculated plant-wide metrics
+         */
+        function calculatePlantWideMetrics(filteredData) {
+            if (!filteredData || filteredData.length === 0) {
+                Logger.warn('No filtered data available to calculate plant-wide metrics');
+                return null;
+            }
+            
+            // Initialize metrics
+            let totalScheduleAttainment = 0;
+            let totalStaffCost = 0;
+            let totalUnits = 0;
+            let totalScrapPercentage = 0;
+            let totalDowntime = 0;
+            let recordCount = 0;
+            
+            // Previous period metrics for trend calculation
+            let prevTotalScheduleAttainment = 0;
+            let prevTotalStaffCost = 0;
+            let prevTotalUnits = 0;
+            let prevTotalScrapPercentage = 0;
+            let prevTotalDowntime = 0;
+            let prevRecordCount = 0;
+            
+            // Sort records by date
+            const sortedRecords = [...filteredData].sort((a, b) => 
+                new Date(a.Date) - new Date(b.Date)
+            );
+            
+            // Determine mid-point for trend calculation
+            const midPoint = Math.floor(sortedRecords.length / 2);
+            
+            sortedRecords.forEach((record, index) => {
+                // Skip records with missing data
+                if (record['Schedule Attainment'] === undefined || 
+                    record['Staff Cost'] === undefined ||
+                    record['Actual Devices Produced'] === undefined ||
+                    record['Scrap Cost as % of Production Value'] === undefined) {
+                    return;
+                }
+                
+                // For the first half of records (previous period)
+                if (index < midPoint) {
+                    prevTotalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+                    
+                    // Ensure Staff Cost is correctly parsed - always convert to number
+                    const staffCost = parseFloat(record['Staff Cost']);
+                    prevTotalStaffCost += !isNaN(staffCost) ? staffCost : 0;
+                    
+                    prevTotalUnits += parseInt(record['Actual Devices Produced'] || 0);
+                    prevTotalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+                    prevTotalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
+                    prevRecordCount++;
+                } 
+                // For the second half of records (current period)
+                else {
+                    totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+                    
+                    // Ensure Staff Cost is correctly parsed - always convert to number
+                    const staffCost = parseFloat(record['Staff Cost']);
+                    totalStaffCost += !isNaN(staffCost) ? staffCost : 0;
+                    
+                    totalUnits += parseInt(record['Actual Devices Produced'] || 0);
+                    totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+                    totalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
+                    recordCount++;
+                    
+                    // Debug log to see values
+                    Logger.info(`Record ${record.Date}: staffCost: ${staffCost}, totalStaffCost now: ${totalStaffCost}, units: ${record['Actual Devices Produced']}`);
+                }
+            });
+            
+            // Calculate current averages
+            const avgScheduleAttainment = recordCount > 0 ? totalScheduleAttainment / recordCount : 0;
+            const avgLabourCost = (totalUnits > 0) ? (totalStaffCost / recordCount) : 0;
+            const avgScrapPercentage = recordCount > 0 ? totalScrapPercentage / recordCount : 0;
+            // Convert downtime from minutes to hours
+            const downtimeHours = totalDowntime / 60;
+            
+            // Calculate previous period averages
+            const prevAvgScheduleAttainment = prevRecordCount > 0 ? prevTotalScheduleAttainment / prevRecordCount : 0;
+            const prevAvgLabourCost = (prevTotalUnits > 0) ? (prevTotalStaffCost / prevRecordCount) : 0;
+            const prevAvgScrapPercentage = prevRecordCount > 0 ? prevTotalScrapPercentage / prevRecordCount : 0;
+            
+            // Calculate trends (percentage change)
+            const scheduleAttainmentTrend = prevAvgScheduleAttainment > 0 ? 
+                ((avgScheduleAttainment - prevAvgScheduleAttainment) / prevAvgScheduleAttainment) * 100 : 0;
+            const labourCostTrend = prevAvgLabourCost > 0 ? 
+                ((avgLabourCost - prevAvgLabourCost) / prevAvgLabourCost) * 100 : 0;
+            const scrapPercentageTrend = prevAvgScrapPercentage > 0 ? 
+                ((avgScrapPercentage - prevAvgScrapPercentage) / prevAvgScrapPercentage) * 100 : 0;
+            
+            // Count downtime events
+            const downtimeEvents = sortedRecords.filter(record => 
+                (parseFloat(record['Downtime Duration (min)'] || 0)) > 0
+            ).length;
+            
+            // Calculate downtime events trend (not percentage)
+            const prevDowntimeEvents = prevRecordCount > 0 ? 
+                Math.round(downtimeEvents * (prevRecordCount / recordCount)) : 0;
+            const downtimeEventsTrend = downtimeEvents - prevDowntimeEvents;
+            
+            Logger.info(`Calculated plant-wide metrics: SA=${avgScheduleAttainment.toFixed(2)}, LC=${avgLabourCost.toFixed(2)} (from ${totalStaffCost}/${totalUnits}), SC=${avgScrapPercentage.toFixed(2)}, DE=${downtimeEvents}`);
+            
+            // Return structured metrics object
+            return {
+                scheduleAttainment: {
+                    value: Math.round(avgScheduleAttainment * 10) / 10,  // Round to 1 decimal place
+                    trend: Math.round(Math.abs(scheduleAttainmentTrend) * 10) / 10,  // Round to 1 decimal place,
+                    trendDirection: scheduleAttainmentTrend >= 0 ? 'up' : 'down'
+                },
+                labourCostPerUnit: {
+                    value: Math.round(avgLabourCost),  // Round to whole number
+                    trend: Math.round(Math.abs(labourCostTrend) * 10) / 10,  // Round to 1 decimal place
+                    trendDirection: labourCostTrend >= 0 ? 'up' : 'down'
+                },
+                scrapPercentage: {
+                    value: Math.round(avgScrapPercentage * 10) / 10,  // Round to 1 decimal place
+                    trend: Math.round(Math.abs(scrapPercentageTrend) * 10) / 10,  // Round to 1 decimal place
+                    trendDirection: scrapPercentageTrend >= 0 ? 'up' : 'down'
+                },
+                downtimeEvents: {
+                    value: downtimeEvents,
+                    trend: Math.abs(downtimeEventsTrend),
+                    trendDirection: downtimeEventsTrend >= 0 ? 'up' : 'down'
+                }
+            };
+        }
+
+        /**
          * Track current detail view state
          */
         const detailViewState = {
@@ -1637,147 +2060,302 @@
                 start: null,
                 end: null
             },
-            attainmentView: 'percent',  // New: 'percent', 'boxes', or 'devices'
-            scrapView: 'qty',           // 'qty' or 'cost'
-            downtimeView: 'reason',     // 'reason', 'machine', or 'duration'
-            costView: 'labour',         // 'labour' or 'unit'
-            filteredData: null          // Store filtered data for reuse
+            scrapView: 'qty',         // 'qty' or 'cost'
+            downtimeView: 'reason',   // 'reason', 'machine', or 'duration'
+            costView: 'labour',       // 'labour' or 'unit'
+            filteredData: null        // Store filtered data for reuse
         };
 
+        function ensureDetailViewElementsExist() {
+    const modal = document.getElementById('detailModal');
+    
+    // Check for schedule attainment chart container
+    let scheduleChart = document.getElementById('scheduleAttainmentChart');
+    if (scheduleChart) {
+        // Set explicit height
+        scheduleChart.style.height = '200px';
+        scheduleChart.style.minHeight = '200px';
+    }
+    
+    // Check for labour cost chart container
+    let labourChart = document.getElementById('labourCostChart');
+    if (labourChart) {
+        labourChart.style.height = '200px';
+        labourChart.style.minHeight = '200px';
+    }
+    
+    // Check for scrap chart container
+    let scrapChart = document.getElementById('scrapPercentageChart');
+    if (scrapChart) {
+        scrapChart.style.height = '150px';
+        scrapChart.style.minHeight = '150px';
+    }
+    
+    // Check for downtime chart container
+    let downtimeChart = document.getElementById('downtimeChart');
+    if (downtimeChart) {
+        downtimeChart.style.height = '150px';
+        downtimeChart.style.minHeight = '150px';
+    }
+    
+    // Check for reject pie chart container
+    let rejectPie = document.getElementById('rejectPieChart');
+    if (rejectPie) {
+        rejectPie.style.height = '150px';
+        rejectPie.style.minHeight = '150px';
+    }
+    
+    // Check if topScrapList exists
+    let topScrapList = document.getElementById('topScrapList');
+    if (!topScrapList) {
+        Logger.warn("Creating missing 'topScrapList' element");
+        const scrapFooter = modal.querySelector('.detail-metric-card:nth-child(3) .detail-metric-footer');
+        if (scrapFooter) {
+            scrapFooter.innerHTML = `
+                <div class="list-title">Top Reject Reasons</div>
+                <div class="top-items-list" id="topScrapList"></div>
+            `;
+        }
+    } else {
+        // Ensure list height is sufficient to show 3 items without scrolling
+        topScrapList.style.maxHeight = 'none';
+        topScrapList.style.overflowY = 'visible';
+    }
+    
+    // Check if topDowntimeList exists
+    let topDowntimeList = document.getElementById('topDowntimeList');
+    if (!topDowntimeList) {
+        Logger.warn("Creating missing 'topDowntimeList' element");
+        const downtimeFooter = modal.querySelector('.detail-metric-card:nth-child(4) .detail-metric-footer');
+        if (downtimeFooter) {
+            downtimeFooter.innerHTML = `
+                <div class="list-title">Top Downtime Reasons</div>
+                <div class="top-items-list" id="topDowntimeList"></div>
+            `;
+        }
+    } else {
+        // Ensure list height is sufficient
+        topDowntimeList.style.maxHeight = 'none';
+        topDowntimeList.style.overflowY = 'visible';
+    }
+}
+        
+// Fix 7: Enhance showDetailView to ensure elements exist
+function showDetailView(lineId) {
+    console.log("Original lineId:", lineId);
+    const processedLineId = processLineId(lineId);
+    console.log("Processed lineId:", processedLineId);
+    
+    // Store the current line ID
+    detailViewState.lineId = processedLineId;
+    
+    // Use the date range from the main page
+    detailViewState.dateRange.start = currentDateRange.start;
+    detailViewState.dateRange.end = currentDateRange.end;
+    
+    // Update modal title
+    const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
+    if (lineElement) {
+        const headerElement = lineElement.querySelector('.card-title');
+        if (headerElement) {
+            document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+        } else {
+            // Fallback if card-title is not found
+            const supervisor = extractSupervisorName(processedLineId);
+            let productName = '';
+            
+            // Try to determine product from line ID
+            if (processedLineId.includes('scd')) {
+                productName = 'SCD';
+            } else if (processedLineId.includes('sum')) {
+                productName = 'SUM';
+            } else if (processedLineId.includes('levo')) {
+                productName = 'LEVO';
+            } else if (processedLineId.includes('popup')) {
+                productName = 'PopUp';
+            } else if (processedLineId.includes('scalpel')) {
+                productName = 'Scalpel';
+            } else {
+                productName = 'Production Line';
+            }
+            
+            document.getElementById('modalTitle').textContent = `${productName}: ${supervisor} Details`;
+        }
+    }
+    
+    // Update date range display
+    updateModalDateRange();
+    
+    // Make sure the detail view elements exist before loading data
+    ensureDetailViewElementsExist();
+    
+    // Load and render the charts
+    loadDetailViewData();
+    
+    // Show the modal
+    document.getElementById('detailModal').classList.add('show');
+}
+
         /**
-         * NEW IMPLEMENTATION: Schedule Attainment Chart with toggle for % view, boxes actual vs target, or devices actual vs target
-         * @param {Array} data - Filtered data for the line
-         * @param {string} view - The view to display ('percent', 'boxes', or 'devices')
+         * Processes the line ID to handle special cases
+         * @param {string} lineId - The original line ID
+         * @returns {string} The processed line ID
          */
-        function renderScheduleAttainmentChart(data, view = 'percent') {
-            const chartContainer = document.getElementById('scheduleAttainmentChart');
-            if (!chartContainer) {
-                Logger.error("Schedule attainment chart container not found");
-                return;
+        function processLineId(lineId) {
+            // Look for card data attributes to get more accurate information
+            const lineCard = document.querySelector(`[data-line-id="${lineId}"]`);
+            if (!lineCard) return lineId;
+            
+            // Check for Scalpel cases
+            if (lineId === 'nosi-scalpel') {
+                // Check if card title contains "Packaging" explicitly
+                const cardTitle = lineCard.querySelector('.card-title');
+                if (cardTitle && cardTitle.textContent.toLowerCase().includes('packaging')) {
+                    return 'nosi-scalpel-packaging';
+                } else if (cardTitle && cardTitle.textContent.toLowerCase().includes('assembly')) {
+                    return 'nosi-scalpel-assembly';
+                }
+                
+                // Fallback to checking variant info if available
+                const variantInfo = lineCard.querySelector('.variant-label');
+                if (variantInfo && variantInfo.textContent.toLowerCase().includes('packaging')) {
+                    return 'nosi-scalpel-packaging';
+                } else {
+                    return 'nosi-scalpel-assembly';
+                }
             }
             
-            // Sort data by date
-            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            
-            let html = '<div style="width: 100%; height: 100%;">';
-            
-            // Create chart based on view type
-            if (view === 'percent') {
-                // Percentage view implementation
-                const chartData = sortedData.map(record => ({
-                    date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-                    value: parseFloat(record['Schedule Attainment'] || 0)
-                }));
+            // Check for 3rd line cases
+            if (lineId === 'mvokwe-3rd line' || lineId === 'mvokwe-3rd-line') {
+                // Check card title explicitly for UBT or SCD
+                const cardTitle = lineCard.querySelector('.card-title');
+                if (cardTitle) {
+                    if (cardTitle.textContent.toLowerCase().includes('ubt')) {
+                        return 'mvokwe-3rd-line-ubt';
+                    } else if (cardTitle.textContent.toLowerCase().includes('scd')) {
+                        return 'mvokwe-3rd-line-scd';
+                    }
+                }
                 
-                // Create container with Y-axis
-                html += '<div style="display: flex; height: 100%;">';
+                // Check variant info if title check fails
+                const variantInfo = lineCard.querySelector('.variant-info');
+                if (variantInfo) {
+                    const variantText = variantInfo.textContent.toLowerCase();
+                    if (variantText.includes('ubt')) {
+                        return 'mvokwe-3rd-line-ubt';
+                    } else if (variantText.includes('scd')) {
+                        return 'mvokwe-3rd-line-scd';
+                    }
+                }
                 
-                // Y-axis with scaled labels
-                html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
-                html += '<div>100%</div>';
-                html += '<div>50%</div>';
-                html += '<div>0%</div>';
-                html += '</div>';
-                
-                // Chart area
-                html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
-                
-                // Chart bars
-                html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
-                
-                // Create bars for each day
-                chartData.forEach(item => {
-                    const height = Math.min(item.value, 100);
-                    
-                    html += `
-                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.value.toFixed(1)}%</div>
-                        <div style="width: 60%; height: ${height}%; background-color: var(--primary-blue);"></div>
-                        <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-                    </div>
-                    `;
-                });
-                
-                html += '</div>'; // End chart bars
-                html += '</div>'; // End chart area
-                html += '</div>'; // End container with Y-axis
-            } 
-            else if (view === 'boxes' || view === 'devices') {
-                // Boxes or Devices view implementation (actual vs target)
-                const chartData = sortedData.map(record => {
-                    const field = view === 'boxes' ? 'Boxes' : 'Devices';
-                    const actual = parseInt(record[`Actual ${field} Produced`] || 0);
-                    const target = parseInt(record[`Theoretical Target (${field})`] || 0);
-                    
-                    return {
-                        date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-                        actual: actual,
-                        target: target
-                    };
-                });
-                
-                // Find max target value for scaling
-                const maxTarget = Math.max(...chartData.map(item => item.target), 1);
-                
-                // Create container with Y-axis
-                html += '<div style="display: flex; height: 100%;">';
-                
-                // Y-axis with scaled labels
-                html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
-                html += `<div>${maxTarget}</div>`;
-                html += `<div>${Math.round(maxTarget/2)}</div>`;
-                html += '<div>0</div>';
-                html += '</div>';
-                
-                // Chart area
-                html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
-                
-                // Chart bars
-                html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
-                
-                // Create bars for each day
-                chartData.forEach(item => {
-                    const heightPercentage = maxTarget > 0 ? (item.actual / maxTarget * 100) : 0;
-                    const targetHeightPercentage = maxTarget > 0 ? (item.target / maxTarget * 100) : 0;
-                    
-                    html += `
-                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.actual}/${item.target}</div>
-                        <div style="width: 60%; position: relative; height: ${Math.max(targetHeightPercentage, heightPercentage)}%;">
-                            <!-- Target line -->
-                            <div style="width: 100%; height: 2px; background-color: var(--danger-color); position: absolute; top: ${100 - targetHeightPercentage}%;"></div>
-                            <!-- Actual bar -->
-                            <div style="width: 100%; height: ${heightPercentage}%; background-color: var(--primary-blue); position: absolute; bottom: 0;"></div>
-                        </div>
-                        <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-                    </div>
-                    `;
-                });
-                
-                html += '</div>'; // End chart bars
-                html += '</div>'; // End chart area
-                html += '</div>'; // End container with Y-axis
+                // Check base product if both checks fail
+                const baseProductElement = lineCard.querySelector('.base-product');
+                if (baseProductElement) {
+                    const baseProduct = baseProductElement.textContent.trim();
+                    if (baseProduct === 'UBT') {
+                        return 'mvokwe-3rd-line-ubt';
+                    } else if (baseProduct === 'SCD') {
+                        return 'mvokwe-3rd-line-scd';
+                    }
+                }
             }
             
-            html += '</div>';
-            chartContainer.innerHTML = html;
+            return lineId;
         }
 
         /**
-         * Toggle function for schedule attainment view
-         * @param {string} view - The view to switch to ('percent', 'boxes', or 'devices')
+         * Extracts the supervisor name from the production line ID
+         * @param {string} lineId - The production line ID (e.g., "mvokwe-3rd line")
+         * @returns {string} The capitalized supervisor name
          */
-        function toggleAttainmentView(view) {
-            // Update active button state
-            document.getElementById('attainmentPercentBtn').classList.toggle('active', view === 'percent');
-            document.getElementById('attainmentBoxesBtn').classList.toggle('active', view === 'boxes');
-            document.getElementById('attainmentDevicesBtn').classList.toggle('active', view === 'devices');
+        function extractSupervisorName(lineId) {
+            if (!lineId) return '';
             
-            // Store the current view in the state
-            detailViewState.attainmentView = view;
+            // Split by hyphen and take the first part
+            const parts = lineId.split('-');
+            if (parts.length < 1) return '';
             
-            // Re-render the chart
-            renderScheduleAttainmentChart(detailViewState.filteredData, view);
+            // Capitalize the first letter
+            const supervisor = parts[0];
+            return supervisor.charAt(0).toUpperCase() + supervisor.slice(1);
+        }
+
+        /**
+         * Hides the detail view
+         */
+        function hideDetailView() {
+            Logger.info('Hiding detail view');
+            document.getElementById('detailModal').classList.remove('show');
+        }
+
+        /**
+         * Updates the date range display in the modal
+         */
+        function updateModalDateRange() {
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Format dates
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            const startFormatted = start.toLocaleDateString('en-US', options);
+            const endFormatted = end.toLocaleDateString('en-US', options);
+            
+            // Update the display
+            document.getElementById('modalDateRange').textContent = `${startFormatted} - ${endFormatted}`;
+        }
+
+        /**
+         * Navigates to the previous week
+         */
+        function navigateToPreviousWeek() {
+            Logger.info('Navigating to previous week');
+            
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Move both dates back by 7 days
+            start.setDate(start.getDate() - 7);
+            end.setDate(end.getDate() - 7);
+            
+            // Update both the detail view state and the main page state
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
+            
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
+            updateModalDateRange();
+            updateDateRangeDisplay(currentDateRange);
+            loadDetailViewData();
+        }
+
+        /**
+         * Navigates to the next week
+         */
+        function navigateToNextWeek() {
+            Logger.info('Navigating to next week');
+            
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Move both dates forward by 7 days
+            start.setDate(start.getDate() + 7);
+            end.setDate(end.getDate() + 7);
+            
+            // Update both the detail view state and the main page state
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
+            
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
+            updateModalDateRange();
+            updateDateRangeDisplay(currentDateRange);
+            loadDetailViewData();
         }
 
         /**
@@ -1799,369 +2377,2264 @@
                 renderLabourCostChart(detailViewState.filteredData);
             }
         }
-        
-        
-        /**
-         * NEW IMPLEMENTATION: Scrap Analysis with trend chart and daily details
-         * @param {Array} data - Filtered data for the line
-         * @param {string} view - The view to display ('qty' or 'cost')
-         */
-        function renderScrapAnalysis(data, view = 'qty') {
-            // 1. Render the trend chart
-            renderScrapTrendChart(data);
-            
-            // 2. Render the daily scrap details
-            renderDailyScrapDetails(data, view);
-        }
 
         /**
-         * Render the scrap percentage trend chart
-         * @param {Array} data - Filtered data for the line
-         */
-        function renderScrapTrendChart(data) {
-            const container = document.getElementById('scrapPercentageChart');
-            if (!container) return;
-            
-            // Sort data by date
-            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            
-            // Format data for the chart
-            const chartData = sortedData.map(record => ({
-                date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-                value: parseFloat(record['Scrap Cost as % of Production Value'] || 0)
-            }));
-            
-            // Find maximum value for scaling
-            const maxValue = Math.max(...chartData.map(item => item.value), 5); // At least 5% scale
-            
-            // Create SVG for the trend line
-            let html = `
-            <svg width="100%" height="100%" viewBox="0 0 300 50" preserveAspectRatio="none">
-                <!-- Y-axis labels -->
-                <text x="5" y="10" font-size="8" fill="#7f8c8d">${maxValue.toFixed(1)}%</text>
-                <text x="5" y="45" font-size="8" fill="#7f8c8d">0%</text>
-                
-                <!-- Grid lines -->
-                <line x1="25" y1="10" x2="295" y2="10" stroke="#eee" stroke-width="0.5" />
-                <line x1="25" y1="45" x2="295" y2="45" stroke="#eee" stroke-width="0.5" />
-                
-                <!-- Trend line -->
-                <polyline 
-                    points="${chartData.map((item, index) => {
-                        const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
-                        const y = 45 - ((item.value / maxValue) * 35);
-                        return `${x},${y}`;
-                    }).join(' ')}"
-                    fill="none"
-                    stroke="#e74c3c"
-                    stroke-width="1.5"
-                />
-                
-                <!-- Data points -->
-                ${chartData.map((item, index) => {
-                    const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
-                    const y = 45 - ((item.value / maxValue) * 35);
-                    return `<circle cx="${x}" cy="${y}" r="2" fill="#e74c3c" />`;
-                }).join('')}
-            </svg>
-            `;
-            
-            container.innerHTML = html;
-        }
-
-        /**
-         * Render the daily scrap details with top reject reasons
-         * @param {Array} data - Filtered data for the line
-         * @param {string} view - The view to display ('qty' or 'cost')
-         */
-        function renderDailyScrapDetails(data, view) {
-            const container = document.getElementById('dailyScrapGrid');
-            if (!container) return;
-            
-            // Sort data by date
-            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            
-            // Field selection based on view
-            const rejectsField = view === 'qty' 
-                ? 'Top Rejects by QTY (Reason - Station - QTY - Cost)'
-                : 'Top Rejects by Cost (Reason - Station - QTY - Cost)';
-            
-            let html = '';
-            
-            // Create a card for each day
-            sortedData.forEach(record => {
-                const date = new Date(record.Date);
-                const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-                const scrapPercent = parseFloat(record['Scrap Cost as % of Production Value'] || 0).toFixed(1);
-                
-                // Extract reject reasons
-                const rejectReasons = extractRejectReasons(record[rejectsField], view);
-                
-                // Create day card
-                html += `
-                <div class="daily-scrap-card">
-                    <div class="daily-scrap-header">${dateStr} (${scrapPercent}%)</div>
-                `;
-                
-                // Add top 3 reasons
-                if (rejectReasons.length > 0) {
-                    rejectReasons.slice(0, 3).forEach((reason, index) => {
-                        html += `<div class="scrap-reason" title="${reason}">${index + 1}. ${reason}</div>`;
-                    });
-                } else {
-                    html += `<div class="scrap-reason">No reject data</div>`;
-                }
-                
-                html += '</div>';
-            });
-            
-            container.innerHTML = html;
-        }
-
-        /**
-         * Helper to extract reject reasons
-         * @param {string} rejectsText - The text containing reject reasons
-         * @param {string} view - The view to display ('qty' or 'cost')
-         * @returns {Array} Array of formatted reject reason strings
-         */
-        function extractRejectReasons(rejectsText, view) {
-            if (!rejectsText || rejectsText.includes('No rejects')) return [];
-            
-            const reasons = [];
-            const entries = rejectsText.split('|');
-            
-            entries.forEach(entry => {
-                const parts = entry.trim().split(' - ');
-                if (parts.length >= 3) {
-                    // Extract reason (remove numbering)
-                    let reason = parts[0].trim().replace(/^\d+\.\s+/, '');
-                    
-                    // Extract station
-                    const station = parts[1].trim();
-                    
-                    // Extract value based on view (QTY or Cost)
-                    let value = '';
-                    if (view === 'qty') {
-                        // Find the QTY part
-                        for (let i = 2; i < parts.length; i++) {
-                            if (parts[i].includes('QTY:')) {
-                                value = parts[i].replace('QTY:', '').trim() + ' QTY';
-                                break;
-                            }
-                        }
-                    } else {
-                        // Find the Cost part
-                        for (let i = 2; i < parts.length; i++) {
-                            if (parts[i].includes('Cost:')) {
-                                value = 'R ' + parts[i].replace('Cost:', '').trim();
-                                break;
-                            }
-                        }
-                    }
-                    
-                    reasons.push(`${reason} - ${station} - ${value}`);
-                }
-            });
-            
-            return reasons;
-        }
-        // First, define these functions at the top of your script section
-function showDetailView(lineId) {
-    // Store the current line ID
-    detailViewState.lineId = lineId;
-    
-    // Use the date range from the main page
-    detailViewState.dateRange.start = currentDateRange.start;
-    detailViewState.dateRange.end = currentDateRange.end;
-    
-    // Update modal title
-    const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
-    if (lineElement) {
-        const headerElement = lineElement.querySelector('.card-title');
-        if (headerElement) {
-            document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
-        }
-    }
-    
-    // Update date range display
-    updateModalDateRange();
-    
-    // Load and render the charts
-    loadDetailViewData();
-    
-    // Show the modal
-    document.getElementById('detailModal').classList.add('show');
-}
-
-function hideDetailView() {
-    document.getElementById('detailModal').classList.remove('show');
-}
-
-
-        /**
-         * NEW IMPLEMENTATION: Downtime Analysis Chart with reason/machine labels
-         * @param {Array} data - Filtered data for the line
-         * @param {string} view - The view to display ('reason', 'machine', or 'duration')
-         */
-        function renderDowntimeChart(data, view = 'reason') {
-            const container = document.getElementById('downtimeChart');
-            if (!container) return;
-            
-            // Sort data by date
-            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            
-            // Extract downtime data
-            const downtimeData = sortedData.map(record => {
-                const date = new Date(record.Date);
-                const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-                const minutes = parseFloat(record['Downtime Duration (min)'] || 0);
-                const hours = minutes / 60;
-                
-                // Extract reason and machine
-                let reason = 'No downtime';
-                let machine = '';
-                
-                // Get from downtime field
-                const downtimeField = 'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
-                
-                if (record[downtimeField] && !record[downtimeField].includes('No downtime') && minutes > 0) {
-                    const entries = record[downtimeField].split('|');
-                    
-                    if (entries.length > 0) {
-                        const entry = entries[0].trim();
-                        const parts = entry.split(' - ');
-                        
-                        if (parts.length >= 2) {
-                            reason = parts[0].trim().replace(/^\d+\.\s+/, '');
-                            machine = parts[1].trim();
-                        }
-                    }
-                }
-                
-                return {
-                    date: dateStr,
-                    hours: hours,
-                    reason: reason,
-                    machine: machine
-                };
-            });
-            
-            // Find max for scaling
-            const maxHours = Math.max(...downtimeData.map(item => item.hours), 1); // At least 1 hour scale
-            
-            // Create the chart HTML
-            let html = '<div style="display: flex; height: 100%; align-items: flex-end;">';
-            
-            // Create a bar for each day
-            downtimeData.forEach(item => {
-                // Calculate height as percentage of max
-                const height = (item.hours / maxHours) * 80; // Max 80% of container height
-                
-                // Determine bar color based on duration
-                let barColor = 'var(--primary-blue)';
-                if (item.hours > 2) {
-                    barColor = 'var(--danger-color)';
-                } else if (item.hours > 1) {
-                    barColor = 'var(--warning-color)';
-                }
-                
-                // Determine label based on view
-                let label = '';
-                switch(view) {
-                    case 'reason':
-                        label = item.reason;
-                        break;
-                    case 'machine':
-                        label = item.machine;
-                        break;
-                    case 'duration':
-                        label = `${item.reason} - ${item.machine}`;
-                        break;
-                }
-                
-                html += `
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                    <div class="downtime-label" title="${label}">${label}</div>
-                    <div style="width: 70%; height: ${height}px; background-color: ${barColor}; display: flex; justify-content: center; align-items: center;">
-                        <span style="font-size: 9px; color: white;">${item.hours.toFixed(1)}h</span>
-                    </div>
-                    <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-                </div>
-                `;
-            });
-            
-            html += '</div>';
-            
-            container.innerHTML = html;
-        }
-
-        /**
-         * Updated toggle functions for detail view
+         * Toggles the scrap view between quantity and cost
+         * @param {string} view - The view to switch to ('qty' or 'cost')
          */
         function toggleScrapView(view) {
-            // Update active button states
+            Logger.info(`Toggling scrap view to: ${view}`);
+            
+            // Update the state
+            detailViewState.scrapView = view;
+            
+            // Update button active states
             document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
             document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
             
-            // Store the current view in the state
-            detailViewState.scrapView = view;
-            
-            // Re-render the scrap analysis (only the daily details change)
-            renderDailyScrapDetails(detailViewState.filteredData, view);
+            // Update the display using the stored filtered data
+            if (detailViewState.filteredData) {
+                updateTopScrapList(detailViewState.filteredData);
+            }
         }
-
+        /**
+         * Toggles the downtime view
+         * @param {string} view - The view to switch to ('reason', 'machine', or 'duration')
+         */
         function toggleDowntimeView(view) {
-            // Update active button states
+            Logger.info(`Toggling downtime view to: ${view}`);
+            
+            // Update the state
+            detailViewState.downtimeView = view;
+            
+            // Update button active states
             document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
             document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
             document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
             
-            // Store the current view in the state
-            detailViewState.downtimeView = view;
+            // Update the display using the stored filtered data
+            if (detailViewState.filteredData) {
+                updateTopDowntimeList(detailViewState.filteredData);
+            }
+        }
+
+        function loadDetailViewData() {
+    Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
+    
+    // First ensure all DOM elements exist
+    ensureDetailViewElementsExist();
+    
+    // Get the filtered data for the line and date range
+    const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
+    
+    Logger.info(`Retrieved ${filteredData.length} records for line ${detailViewState.lineId}`);
+    
+    // Store the filtered data for reuse
+    detailViewState.filteredData = filteredData;
+    
+    if (filteredData.length === 0) {
+        Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
+        showNoDataMessage();
+        return;
+    }
+    
+    // Log a sample record to debug field names
+    if (filteredData.length > 0) {
+        const sample = filteredData[0];
+        Logger.info(`Sample record fields: ${Object.keys(sample).join(', ')}`);
+        
+        // Log sample scrap and downtime fields to debug
+        if (sample['Top Rejects by QTY (Reason - Station - QTY - Cost)']) {
+            Logger.info(`Sample reject data: ${sample['Top Rejects by QTY (Reason - Station - QTY - Cost)']}`);
+        }
+        
+        if (sample['Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)']) {
+            Logger.info(`Sample downtime data: ${sample['Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)']}`);
+        }
+    }
+    
+    try {
+        // Render charts with actual data
+        renderScheduleAttainmentChart(filteredData);
+        renderLabourCostChart(filteredData);
+        renderScrapPercentageChart(filteredData);
+        renderDowntimeChart(filteredData);
+        renderRejectPieChart(filteredData);
+        
+        // Update lists with actual data
+        updateTopScrapList(filteredData);
+        updateTopDowntimeList(filteredData);
+    } catch (error) {
+        Logger.error(`Error rendering charts: ${error.message}`, error);
+        showNoDataMessage();
+    }
+}
+
+        /**
+         * Gets filtered data for a specific line and date range
+         * @param {string} lineId - The ID of the line
+         * @param {string} startDate - Start date in ISO format
+         * @param {string} endDate - End date in ISO format
+         * @returns {Array} Filtered production data records
+         */
+        function getFilteredLineData(lineId, startDate, endDate) {
+            // Check if we have data available
+            if (!window.dashboardData || !window.dashboardData.productionData) {
+                Logger.warn('No production data available');
+                return [];
+            }
             
-            // Re-render the chart
-            renderDowntimeChart(detailViewState.filteredData, view);
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0); // Set to beginning of day to include all start date data
+            
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999); // Include the entire end day
+            
+            // Filter by line ID and date range
+            return window.dashboardData.productionData.filter(record => {
+                const recordDate = new Date(record.Date);
+                
+                // Proper comparison ensuring start date is included
+                const isInDateRange = recordDate >= start && recordDate <= end;
+                
+                // Mapping for special cases
+                let matchesLineId = record['Production Line ID'] === lineId;
+                
+                // Special case for Scalpel packaging vs assembly
+                if (lineId === 'nosi-scalpel-packaging' && record['Production Line ID'] === 'nosi-scalpel') {
+                    matchesLineId = record.Variant && record.Variant.toLowerCase().includes('packaging');
+                } 
+                else if (lineId === 'nosi-scalpel-assembly' && record['Production Line ID'] === 'nosi-scalpel') {
+                    matchesLineId = !record.Variant || !record.Variant.toLowerCase().includes('packaging');
+                }
+                // Special case for 3rd line UBT vs SCD
+                else if (lineId === 'mvokwe-3rd-line-ubt' && record['Production Line ID'] === 'mvokwe-3rd line') {
+                    matchesLineId = record['Base Product'] === 'UBT';
+                }
+                else if (lineId === 'mvokwe-3rd-line-scd' && record['Production Line ID'] === 'mvokwe-3rd line') {
+                    matchesLineId = record['Base Product'] === 'SCD';
+                }
+                
+                return matchesLineId && isInDateRange;
+            });
         }
 
         /**
-         * Updated loadDetailViewData function to use the new rendering methods
+         * Shows a message when no data is available
          */
-        function loadDetailViewData() {
-            Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
+        function showNoDataMessage() {
+            const noDataMessage = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No data available for the selected period.</div>';
             
-            // Get the filtered data for the line and date range
-            const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
+            document.getElementById('scheduleAttainmentChart').innerHTML = noDataMessage;
+            document.getElementById('labourCostChart').innerHTML = noDataMessage;
+            document.getElementById('scrapPercentageChart').innerHTML = noDataMessage;
+            document.getElementById('downtimeChart').innerHTML = noDataMessage;
+            document.getElementById('rejectPieChart').innerHTML = noDataMessage;
             
-            Logger.info(`Retrieved ${filteredData.length} records for line ${detailViewState.lineId}`);
+            document.getElementById('topScrapList').innerHTML = noDataMessage;
+            document.getElementById('topDowntimeList').innerHTML = noDataMessage;
+        }
+
+        /**
+         * ======================================
+         * UI RENDERING
+         * ======================================
+         */
+
+        /**
+         * Renders the entire dashboard with the provided data
+         * @param {Object} data - The transformed dashboard data
+         */
+        function renderDashboard(data) {
+            Logger.info('Rendering dashboard with transformed data');
             
-            // Store the filtered data for reuse
-            detailViewState.filteredData = filteredData;
+            // Update date range display
+            updateDateRangeDisplay(data.dateRange);
             
-            if (filteredData.length === 0) {
-                Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
-                showNoDataMessage();
-                return;
-            }
+            // Render KPI summary
+            renderKpiSummary(data.plantWideMetrics);
             
-            try {
-                // Initialize views if not set
-                detailViewState.attainmentView = detailViewState.attainmentView || 'percent';
-                detailViewState.costView = detailViewState.costView || 'labour';
-                detailViewState.scrapView = detailViewState.scrapView || 'qty';
-                detailViewState.downtimeView = detailViewState.downtimeView || 'reason';
+            // Clear the dashboard grid
+            const dashboardGrid = document.getElementById('dashboardGrid');
+            dashboardGrid.innerHTML = '';
+            
+            // Create a position map for the grid cells
+            const positionMap = {
+                '1-1': null, // Row 1, Column 1 (SCD)
+                '1-2': null, // Row 1, Column 2 (LEVO)
+                '1-3': null, // Row 1, Column 3 (Scalpel Assembly)
+                '1-4': null, // Row 1, Column 4 (3rd Line UBT)
+                '2-1': null, // Row 2, Column 1 (SUM)
+                '2-2': null, // Row 2, Column 2 (PopUp)
+                '2-3': null, // Row 2, Column 3 (Scalpel Packaging)
+                '2-4': null  // Row 2, Column 4 (3rd Line SCD)
+            };
+            
+            // Assign the lines to their positions
+            data.lines.forEach(line => {
+                // Skip lines without position information
+                if (!line.row || !line.col) return;
                 
-                // Render all sections with current views
-                renderScheduleAttainmentChart(filteredData, detailViewState.attainmentView);
-                renderLabourCostChart(filteredData, detailViewState.costView);
-                renderScrapAnalysis(filteredData, detailViewState.scrapView);
-                renderDowntimeChart(filteredData, detailViewState.downtimeView);
+                const positionKey = `${line.row}-${line.col}`;
+                positionMap[positionKey] = line;
+                Logger.info(`Assigned ${line.name} to position ${positionKey}`);
+            });
+            
+            // Create and render the line cards in the grid
+            for (const [positionKey, line] of Object.entries(positionMap)) {
+                if (!line) continue;
                 
-            } catch (error) {
-                Logger.error(`Error rendering charts: ${error.message}`, error);
-                showNoDataMessage();
+                // Create a new grid cell div
+                const gridCell = document.createElement('div');
+                gridCell.className = `grid-position-${positionKey}`;
+                
+                // Render the appropriate card type
+                if (line.isPopUpLine) {
+                    gridCell.innerHTML = renderPopUpLineCard(line);
+                } else {
+                    gridCell.innerHTML = renderLineCard(line);
+                }
+                
+                // Add the grid cell to the dashboard
+                dashboardGrid.appendChild(gridCell);
             }
         }
 
+        /**
+         * Updates the date range display
+         * @param {Object} dateRange - The date range to display
+         */
+        function updateDateRangeDisplay(dateRange) {
+            if (!dateRange) {
+                Logger.warn('No date range provided');
+                return;
+            }
+            
+            const dateRangeElement = document.getElementById('dateRangeDisplay');
+            const formattedDateRange = formatDateRange(dateRange.start, dateRange.end);
+            dateRangeElement.textContent = `Period: ${formattedDateRange}`;
+            Logger.info(`Updated date range display: ${formattedDateRange}`);
+        }
+
+        /**
+         * Formats a date range for display
+         * @param {string} startDate - Start date in ISO format
+         * @param {string} endDate - End date in ISO format
+         * @returns {string} Formatted date range
+         */
+        function formatDateRange(startDate, endDate) {
+            try {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                
+                // Format to MMM d-d, yyyy pattern
+                const startMonth = start.toLocaleString('default', { month: 'short' });
+                const endMonth = end.toLocaleString('default', { month: 'short' });
+                const startDay = start.getDate();
+                const endDay = end.getDate();
+                const year = end.getFullYear();
+                
+                if (startMonth === endMonth) {
+                    return `${startMonth} ${startDay}-${endDay}, ${year}`;
+                } else {
+                    return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
+                }
+            } catch (error) {
+                Logger.error('Error formatting date range', error);
+                return `${startDate} to ${endDate}`;
+            }
+        }
+
+        /**
+         * Renders the KPI summary section
+         * @param {Object} metrics - The plant-wide metrics
+         */
+        function renderKpiSummary(metrics) {
+            if (!metrics) {
+                Logger.error('No plant-wide metrics available for rendering');
+                showKpiSummaryError();
+                return;
+            }
+            
+            const kpiSummaryElement = document.getElementById('kpiSummary');
+            
+            Logger.info('Rendering KPI summary');
+            kpiSummaryElement.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-title">Schedule Attainment</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">${metrics.scheduleAttainment.value}%</div>
+                        <div class="kpi-trend ${metrics.scheduleAttainment.trendDirection === 'up' ? 'trend-up' : 'trend-down'}">
+                            ${metrics.scheduleAttainment.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.scheduleAttainment.trend)}%
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Labour Cost per Unit</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">R${metrics.labourCostPerUnit.value}</div>
+                        <div class="kpi-trend ${metrics.labourCostPerUnit.trendDirection === 'down' ? 'trend-up' : 'trend-down'}">
+                            ${metrics.labourCostPerUnit.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.labourCostPerUnit.trend)}%
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Scrap Percentage</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">${metrics.scrapPercentage.value}%</div>
+                        <div class="kpi-trend ${metrics.scrapPercentage.trendDirection === 'down' ? 'trend-up' : 'trend-down'}">
+                            ${metrics.scrapPercentage.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.scrapPercentage.trend)}%
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Downtime Events</div>
+                    <div class="kpi-value">
+                        <div class="kpi-value-number">${metrics.downtimeEvents.value}</div>
+                        <div class="kpi-trend ${metrics.downtimeEvents.trendDirection === 'down' ? 'trend-up' : 'trend-down'}">
+                            ${metrics.downtimeEvents.trendDirection === 'up' ? '▲' : '▼'} ${Math.abs(metrics.downtimeEvents.trend)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Shows an error message in the KPI summary section
+         */
+        function showKpiSummaryError() {
+            const kpiSummaryElement = document.getElementById('kpiSummary');
+            kpiSummaryElement.innerHTML = `
+                <div class="error-message">
+                    Unable to load KPI summary data. Please refresh the page or try again later.
+                </div>
+            `;
+        }
+
+        /**
+         * Formats a complete display name for the card header
+         * @param {Object} line - The line object with name, id, baseProduct
+         * @returns {string} The formatted display name
+         */
+        function formatCardHeaderName(line) {
+            if (!line) return '';
+            
+            // Extract supervisor name
+            const supervisor = extractSupervisorName(line.id);
+            
+            // For PopUp lines, show "PopUp: Supervisor"
+            if (line.isPopUpLine) {
+                return supervisor ? `PopUp: ${supervisor}` : 'PopUp';
+            }
+            
+            // For regular lines, show "Product: Supervisor"
+            if (line.name) {
+                let productName = line.name;
+                
+                // If line name includes base product, just use the first part
+                if (productName.includes(':')) {
+                    productName = productName.split(':')[0].trim();
+                }
+                
+                // Use base product if available, otherwise use the line name
+                const displayProduct = line.baseProduct || productName;
+                
+                return supervisor ? `${displayProduct}: ${supervisor}` : displayProduct;
+            }
+            
+            return line.name || '';
+        }
+
+        /**
+         * Shows a loading state in the dashboard grid
+         */
+        function showLoading() {
+            Logger.info('Showing loading spinner');
+            const dashboardGrid = document.getElementById('dashboardGrid');
+            dashboardGrid.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                </div>
+            `;
+            
+            const kpiSummary = document.getElementById('kpiSummary');
+            kpiSummary.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                </div>
+            `;
+        }
+
+        /**
+         * Shows an error message for the entire dashboard
+         * @param {string} message - The error message to display
+         */
+        function showError(message) {
+            Logger.error(message);
+            const dashboardGrid = document.getElementById('dashboardGrid');
+            dashboardGrid.innerHTML = `
+                <div class="error-message">
+                    ${message}
+                    <br><button id="retryButton" style="margin-top: 10px; padding: 5px 10px;">Retry</button>
+                </div>
+            `;
+            
+            // Add event listener to retry button
+            document.getElementById('retryButton').addEventListener('click', initializeDashboard);
+        }
+
+        /**
+         * Format numeric values for display
+         * @param {number} value - The numeric value to format
+         * @param {string} type - The type of value ('scheduleAttainment', 'labourCostPerUnit', etc.)
+         * @returns {string} Formatted value for display
+         */
+        function formatNumericValue(value, type) {
+            if (value === null || value === undefined) return '0';
+            
+            switch(type) {
+                case 'scheduleAttainment':
+                case 'scrapPercentage':
+                    // Round percentage to 1 decimal place
+                    return parseFloat(value).toFixed(1);
+                case 'labourCostPerUnit':
+                    // Round cost to 2 decimal places
+                    return parseFloat(value).toFixed(2);
+                case 'downtimeHours':
+                    // Round hours to 1 decimal place
+                    return parseFloat(value).toFixed(1);
+                default:
+                    return value.toString();
+            }
+        }
+
+        /**
+         * Capitalizes the first letter of a string
+         * @param {string} str - The string to capitalize
+         * @returns {string} The string with first letter capitalized
+         */
+        function capitalizeFirstLetter(str) {
+            if (!str) return '';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        /**
+         * ======================================
+         * DASHBOARD INITIALIZATION
+         * ======================================
+         */
+
+        /**
+         * Initializes the dashboard by fetching and rendering data
+         */
+        async function initializeDashboard() {
+            // Initialize logger
+            Logger.init();
+            Logger.info('Initializing dashboard');
+            
+            // Show loading state
+            showLoading();
+            
+            try {
+                // Fetch operational data
+                const opsData = await fetchOpsData();
+                
+                // Store data globally for detail view
+                window.dashboardData = opsData;
+                
+                // If current date range is not set, get default based on user preferences
+                if (!currentDateRange.start || !currentDateRange.end) {
+                    // Get default range based on week cycle preference
+                    const defaultRange = getDefaultDateRange();
+                    currentDateRange.start = defaultRange.start;
+                    currentDateRange.end = defaultRange.end;
+                    Logger.info(`Using default date range based on cycle preference (${weekCycleStartDay}): ${currentDateRange.start} to ${currentDateRange.end}`);
+                }
+                
+                // Filter data by date range
+                const filteredData = filterDataByDateRange(opsData, currentDateRange.start, currentDateRange.end);
+                
+                if (filteredData.length === 0) {
+                    Logger.warn('No data available for selected date range');
+                    showError('No data available for the selected date range. Please try a different date range.');
+                    return;
+                }
+                
+                // Transform data for UI
+                const transformedData = transformOpsData(opsData, filteredData);
+                
+                // Render dashboard
+                renderDashboard(transformedData);
+                
+                // Update period button text to match current period
+                const periodToggle = document.getElementById('periodToggle');
+                periodToggle.textContent = currentPeriod.charAt(0).toUpperCase() + currentPeriod.slice(1);
+                
+                Logger.info('Dashboard initialization completed successfully');
+            } catch (error) {
+                Logger.error('Error initializing dashboard', error);
+                showError('Unable to load dashboard data. Please check your connection and try again.');
+            }
+        }
+
+        function transformProductionLines(lineGroups) {
+    const lines = [];
+    Logger.info(`Transforming ${Object.keys(lineGroups).length} line groups into display format`);
+    
+    // Map with fixed positions for known lines
+    const positionMapping = {
+        'scd-line': { row: 1, col: 1 },
+        'levo-line': { row: 1, col: 2 },
+        'nosi-scalpel': { row: 1, col: 3 }, // This will be used for assembly
+        'nosi-scalpel-assembly': { row: 1, col: 3 },
+        'mvokwe-3rd line': { row: 1, col: 4 }, // This will be used for UBT
+        'mvokwe-3rd-line-ubt': { row: 1, col: 4 },
+        'sum-line': { row: 2, col: 1 },
+        'popup-line': { row: 2, col: 2 },
+        'nosi-scalpel-packaging': { row: 2, col: 3 },
+        'mvokwe-3rd-line-scd': { row: 2, col: 4 },
+            // Add these mappings to match actual IDs
+    'apelele-scd': { row: 1, col: 1 },
+    'luthando-sum': { row: 2, col: 1 },
+    'siyabonga-levo': { row: 1, col: 2 },
+    'mvokwe-popup': { row: 2, col: 2 }
+    };
+    
+    // Process each line group
+    for (const [groupKey, group] of Object.entries(lineGroups)) {
+        Logger.info(`Processing line group: ${groupKey}`);
+        
+        // Skip if no records
+        if (!group.records || group.records.length === 0) {
+            Logger.warn(`No records for line group: ${groupKey}`);
+            continue;
+        }
+        
+        // Start building the line object
+        const line = {
+            id: group.id,
+            name: group.name || 'Unknown Line',
+            color: getHeaderColorClass(group.color || 'blue'),
+            baseProduct: group.baseProduct,
+            variants: [],
+            isPopUpLine: (group.type === 'popup' || groupKey.includes('popup')),
+            timelineSegments: []
+        };
+        
+        // Handle special cases for Scalpel and 3rd line
+        if (groupKey.includes('nosi-scalpel')) {
+            if (groupKey.includes('packaging')) {
+                line.id = 'nosi-scalpel-packaging';
+                line.name = 'Scalpel: Packaging';
+            } else {
+                line.id = 'nosi-scalpel-assembly';
+                line.name = 'Scalpel: Assembly';
+            }
+        }
+        else if (groupKey.includes('mvokwe-3rd')) {
+            if (group.baseProduct === 'SCD') {
+                line.id = 'mvokwe-3rd-line-scd';
+                line.name = 'SCD: Mvokwe (3rd)';
+            } else {
+                line.id = 'mvokwe-3rd-line-ubt';
+                line.name = 'UBT: Mvokwe (3rd)';
+            }
+        }
+        
+        // Set position based on mapping
+        const position = positionMapping[line.id] || positionMapping[group.id];
+        if (position) {
+            line.row = position.row;
+            line.col = position.col;
+        } else {
+            // Use default position if not found in mapping
+            Logger.warn(`No position mapping found for ${line.id}, defaulting to 1-1`);
+            line.row = 1;
+            line.col = 1;
+        }
+        
+        // Group records by variant
+        const variantGroups = {};
+        group.records.forEach(record => {
+            const variant = record.Variant || 'Standard';
+            if (!variantGroups[variant]) {
+                variantGroups[variant] = [];
+            }
+            variantGroups[variant].push(record);
+        });
+        
+        // Extract latest variants
+        const variantNames = Object.keys(variantGroups);
+        
+        // Sort records by date to find the most recent variant
+        const latestRecords = {};
+        variantNames.forEach(variant => {
+            const records = variantGroups[variant];
+            records.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+            latestRecords[variant] = records[0];
+        });
+        
+        // Sort variants by recency
+        const sortedVariants = variantNames.sort((a, b) => {
+            return new Date(latestRecords[b].Date) - new Date(latestRecords[a].Date);
+        });
+        
+        // Create variant objects
+        sortedVariants.forEach((variantName, index) => {
+            const records = variantGroups[variantName];
+            
+            // Calculate metrics for this variant
+            const metrics = calculateVariantMetrics(records);
+            
+            // Calculate trends (comparing to previous periods)
+            const trends = calculateVariantTrends(records);
+            
+            // Determine variant status
+            let status = 'ENDED';
+            const latestDate = new Date(latestRecords[variantName].Date);
+            const today = new Date();
+            const daysSince = Math.floor((today - latestDate) / (1000 * 60 * 60 * 24));
+            
+            if (daysSince <= 7) {
+                status = 'ACTIVE';
+            } else if (daysSince <= 30) {
+                status = 'STANDBY';
+            }
+            
+            // Create variant object
+            const variant = {
+                name: variantName,
+                isCurrentVariant: index === 0, // First variant is current
+                status: status,
+                metrics: metrics,
+                trends: trends,
+                timeline: [] // Add timeline data if available
+            };
+            
+            line.variants.push(variant);
+        });
+        
+        // If this is a PopUp line, add recent runs
+        if (line.isPopUpLine) {
+            line.status = line.variants[0]?.status || 'ENDED';
+            line.statusText = line.status === 'ACTIVE' ? 'Currently Active' : 
+                             (line.status === 'STANDBY' ? 'Ready for Next Run' : 'No Active Run');
+            
+            line.recentRuns = group.records
+                .sort((a, b) => new Date(b.Date) - new Date(a.Date))
+                .slice(0, 5) // Take 5 most recent
+                .map(record => ({
+                    date: new Date(record.Date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    variant: record.Variant || 'Standard',
+                    attainment: parseFloat(record['Schedule Attainment'] || 0).toFixed(1),
+                    scrapPercentage: parseFloat(record['Scrap Cost as % of Production Value'] || 0).toFixed(1)
+                }));
+        }
+        
+        // Add the processed line to the array
+        lines.push(line);
+        Logger.info(`Added line: ${line.name} with ${line.variants.length} variants`);
+    }
+    
+    return lines;
+}
+
+/**
+ * Calculate metrics for a variant from its records
+ */
+function calculateVariantMetrics(records) {
+    if (!records || records.length === 0) {
+        return {
+            scheduleAttainment: 0,
+            labourCostPerUnit: 0,
+            scrapPercentage: 0,
+            downtimeHours: 0
+        };
+    }
+    
+    let totalScheduleAttainment = 0;
+    let totalLabourCost = 0;
+    let totalScrapPercentage = 0;
+    let totalDowntime = 0;
+    
+    records.forEach(record => {
+        totalScheduleAttainment += parseFloat(record['Schedule Attainment'] || 0);
+        totalLabourCost += parseFloat(record['Staff Cost'] || 0);
+        totalScrapPercentage += parseFloat(record['Scrap Cost as % of Production Value'] || 0);
+        totalDowntime += parseFloat(record['Downtime Duration (min)'] || 0);
+    });
+    
+    const count = records.length;
+    
+    return {
+        scheduleAttainment: (totalScheduleAttainment / count).toFixed(1),
+        labourCostPerUnit: (totalLabourCost / count).toFixed(0),
+        scrapPercentage: (totalScrapPercentage / count).toFixed(1),
+        downtimeHours: (totalDowntime / 60).toFixed(1) // Convert minutes to hours
+    };
+}
+
+/**
+ * Calculate trends for a variant
+ */
+function calculateVariantTrends(records) {
+    // Default trends - used if there's not enough data
+    const defaultTrends = {
+        scheduleAttainment: { direction: 'up', value: 0 },
+        labourCostPerUnit: { direction: 'down', value: 0 },
+        scrapPercentage: { direction: 'down', value: 0 },
+        downtimeHours: { direction: 'down', value: 0 }
+    };
+    
+    if (!records || records.length < 2) {
+        return defaultTrends;
+    }
+    
+    // Sort by date, newest first
+    records.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+    
+    // Split into two halves for comparison
+    const midpoint = Math.floor(records.length / 2);
+    const recentRecords = records.slice(0, midpoint);
+    const olderRecords = records.slice(midpoint);
+    
+    // Calculate metrics for each period
+    const recentMetrics = calculateVariantMetrics(recentRecords);
+    const olderMetrics = calculateVariantMetrics(olderRecords);
+    
+    // Calculate percentage changes
+    const scheduleChange = olderMetrics.scheduleAttainment > 0 ? 
+        ((recentMetrics.scheduleAttainment - olderMetrics.scheduleAttainment) / olderMetrics.scheduleAttainment) * 100 : 0;
+    
+    const labourCostChange = olderMetrics.labourCostPerUnit > 0 ? 
+        ((recentMetrics.labourCostPerUnit - olderMetrics.labourCostPerUnit) / olderMetrics.labourCostPerUnit) * 100 : 0;
+    
+    const scrapChange = olderMetrics.scrapPercentage > 0 ? 
+        ((recentMetrics.scrapPercentage - olderMetrics.scrapPercentage) / olderMetrics.scrapPercentage) * 100 : 0;
+    
+    const downtimeChange = olderMetrics.downtimeHours > 0 ? 
+        ((recentMetrics.downtimeHours - olderMetrics.downtimeHours) / olderMetrics.downtimeHours) * 100 : 0;
+    
+    return {
+        scheduleAttainment: {
+            direction: scheduleChange >= 0 ? 'up' : 'down',
+            value: Math.abs(scheduleChange).toFixed(1)
+        },
+        labourCostPerUnit: {
+            direction: labourCostChange >= 0 ? 'up' : 'down',
+            value: Math.abs(labourCostChange).toFixed(1)
+        },
+        scrapPercentage: {
+            direction: scrapChange >= 0 ? 'up' : 'down',
+            value: Math.abs(scrapChange).toFixed(1)
+        },
+        downtimeHours: {
+            direction: downtimeChange >= 0 ? 'up' : 'down',
+            value: Math.abs(downtimeChange).toFixed(1)
+        }
+    };
+}
+        /**
+         * ======================================
+         * CARD RENDERING
+         * ======================================
+         */
+
+        /**
+         * Renders a production line card
+         * @param {Object} line - The production line data
+         * @returns {string} HTML for the line card
+         */
+        function renderLineCard(line) {
+            // Log the line details for debugging
+            Logger.info(`Rendering card for line: ${line.name}`);
+            
+            // Handle PopUp line card differently
+            if (line.isPopUpLine) {
+                return renderPopUpLineCard(line);
+            }
+            
+            // Format the display name for the card header
+            const displayName = formatCardHeaderName(line);
+            
+            // Check if the line has a variants array
+            if (!line.variants || !Array.isArray(line.variants) || line.variants.length === 0) {
+                Logger.warn(`No variants available for line: ${line.name}`);
+                return `
+                    <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}" data-line-id="${line.id}">
+                        <div class="line-card-header ${line.color}">
+                            <div class="card-title">${displayName}</div>
+                            <div class="card-actions">
+                                <div class="enlarge-icon" onclick="showDetailView('${line.id}')">
+                                    <i class="fas fa-expand-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-card-content">
+                            <div class="error-message">No variant data available for this line.</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Get current variant (first one that's marked as current)
+            const currentVariant = line.variants.find(v => v.isCurrentVariant);
+            
+            if (!currentVariant) {
+                Logger.warn(`No current variant found for line: ${line.name}`);
+            } else {
+                Logger.info(`Current variant for ${line.name}: ${currentVariant.name}`);
+            }
+            
+            // Get previous variant for special cases (double height card)
+            const previousVariant = line.isDoubleHeight ? 
+                line.variants.find(v => !v.isCurrentVariant) : null;
+            
+            if (line.isDoubleHeight && previousVariant) {
+                Logger.info(`Previous variant for ${line.name}: ${previousVariant.name}`);
+            }
+            
+            let variantSections = '';
+            
+            // Add current variant section if available
+            if (currentVariant) {
+                // Combined variant info and timeline in one element
+                variantSections += `
+                    <div class="variant-combined">
+                        <div class="variant-info" style="margin-bottom: 0;">
+                            <div class="variant-label">Variant: <span class="variant-name">${currentVariant.name}</span>
+                                <span class="status-badge status-${currentVariant.status.toLowerCase()}" style="display: inline-block; margin-left: 8px; height: 16px; font-size: 9px; padding: 1px 6px;">${currentVariant.status}</span>
+                            </div>
+                            <div class="timeline-container" style="width: 120px; height: 20px; margin-left: auto; display: ${line.timelineSegments && line.timelineSegments.length > 0 ? 'block' : 'none'};">
+                                ${line.timelineSegments && line.timelineSegments.length > 0 ? 
+                                `<div style="font-size: 8px; text-align: center; color: var(--text-light);">Previous Variants</div>` + 
+                                renderTimelineSegments(line.timelineSegments) : 
+                                ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-title">Schedule Attainment</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">
+                                ${currentVariant.metrics.scheduleAttainment}%
+                                <div class="metric-trend ${currentVariant.trends.scheduleAttainment.direction === 'up' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.scheduleAttainment.value}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Labour Cost/Unit</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">
+                                R${currentVariant.metrics.labourCostPerUnit}
+                                <div class="metric-trend ${currentVariant.trends.labourCostPerUnit.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.labourCostPerUnit.value}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                        <div class="metric-title">% Scrap</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.scrapPercentage, 'scrapPercentage')}">
+                                ${currentVariant.metrics.scrapPercentage}%
+                                <div class="metric-trend ${currentVariant.trends.scrapPercentage.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.scrapPercentage.value}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Downtime</div>
+                            <div class="metric-value ${valueToCssClass(currentVariant.metrics.downtimeHours, 'downtimeHours')}">
+                                ${currentVariant.metrics.downtimeHours} hrs
+                                <div class="metric-trend ${currentVariant.trends.downtimeHours.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${currentVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'} ${currentVariant.trends.downtimeHours.value}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                variantSections += `
+                    <div class="error-message">No current variant data available for this line.</div>
+                `;
+            }
+            
+            // For double height card, add previous variant section
+            if (line.isDoubleHeight && previousVariant) {
+                variantSections += `
+                    <div class="divider"></div>
+                    
+                    <div class="variant-info">
+                        <div class="variant-label">Previous Variant: <span class="variant-name">${previousVariant.name}</span></div>
+                        <div class="status-badge status-${previousVariant.status.toLowerCase()}">${previousVariant.status}</div>
+                    </div>
+                    
+                    <div class="variant-history">
+                        <div class="history-label">Recent History:</div>
+                        <div class="timeline-container">
+                            ${renderTimeline(previousVariant.timeline)}
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-title">Schedule Attainment</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.scheduleAttainment, 'scheduleAttainment')}">
+                                ${previousVariant.metrics.scheduleAttainment}%
+                                <div class="metric-trend ${previousVariant.trends.scheduleAttainment.direction === 'up' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.scheduleAttainment.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.scheduleAttainment.value}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Labour Cost/Unit</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.labourCostPerUnit, 'labourCostPerUnit')}">
+                                R${previousVariant.metrics.labourCostPerUnit}
+                                <div class="metric-trend ${previousVariant.trends.labourCostPerUnit.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.labourCostPerUnit.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.labourCostPerUnit.value}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">% Scrap</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.scrapPercentage, 'scrapPercentage')}">
+                                ${previousVariant.metrics.scrapPercentage}%
+                                <div class="metric-trend ${previousVariant.trends.scrapPercentage.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.scrapPercentage.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.scrapPercentage.value}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Downtime</div>
+                            <div class="metric-value ${valueToCssClass(previousVariant.metrics.downtimeHours, 'downtimeHours')}">
+                                ${previousVariant.metrics.downtimeHours} hrs
+                                <div class="metric-trend ${previousVariant.trends.downtimeHours.direction === 'down' ? 'trend-up' : 'trend-down'}">
+                                    ${previousVariant.trends.downtimeHours.direction === 'up' ? '▲' : '▼'} ${previousVariant.trends.downtimeHours.value}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="line-card ${line.isDoubleHeight ? 'card-double-height' : ''} ${line.cssClass || ''}" style="${line.customStyle || ''}" data-line-id="${line.id}">
+                    <div class="line-card-header ${line.color}">
+                        <div class="card-title">${displayName}</div>
+                        <div class="card-actions">
+                            <div class="enlarge-icon" onclick="showDetailView('${line.id}')">
+                                <i class="fas fa-expand-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-card-content">
+                        ${variantSections}
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders a PopUp line card with recent runs table
+         * @param {Object} line - The PopUp line data
+         * @returns {string} HTML for the PopUp line card
+         */
+        function renderPopUpLineCard(line) {
+            Logger.info(`Rendering PopUp line card: ${line.name}`);
+            
+            // Format the display name for the card header
+            const displayName = formatCardHeaderName({...line, isPopUpLine: true});
+            
+            // Create table rows for recent runs
+            let tableRows = '';
+            
+            if (line.recentRuns && line.recentRuns.length > 0) {
+                line.recentRuns.forEach(run => {
+                    tableRows += `
+                        <tr>
+                            <td>${run.date}</td>
+                            <td>${run.variant}</td>
+                            <td class="${valueToCssClass(run.attainment, 'scheduleAttainment')}">${run.attainment}%</td>
+                            <td class="${valueToCssClass(run.scrapPercentage, 'scrapPercentage')}">${run.scrapPercentage}%</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                Logger.warn('No recent runs available for PopUp line');
+                tableRows = `
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No recent runs data available</td>
+                    </tr>
+                `;
+            }
+            
+            return `
+                <div class="line-card" data-line-id="${line.id}">
+                    <div class="line-card-header ${line.color}">
+                        <div class="card-title">${displayName}</div>
+                        <div class="card-actions">
+                            <div class="enlarge-icon" onclick="showDetailView('${line.id}')">
+                                <i class="fas fa-expand-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-card-content">
+                        <div class="variant-combined">
+                            <div class="variant-info" style="margin-bottom: 0;">
+                                <div class="variant-label">Status: <span class="variant-name">${line.statusText}</span>
+                                    <span class="status-badge status-${line.status.toLowerCase()}" style="display: inline-block; margin-left: 8px; height: 16px; font-size: 9px; padding: 1px 6px;">${line.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="runs-table-container">
+                            <div class="runs-table-title">Recent PopUp Runs</div>
+                            <table class="runs-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Variant</th>
+                                        <th>Attainment</th>
+                                        <th>Scrap %</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tableRows}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders timeline segments
+         * @param {Object} timeline - Timeline data for a variant
+         * @returns {string} HTML for the timeline segments
+         */
+        function renderTimeline(timeline) {
+            if (!timeline) {
+                Logger.warn('No timeline data to render');
+                return '';
+            }
+            
+            // If timeline is already in segment format, use it directly
+            if (Array.isArray(timeline)) {
+                return renderTimelineSegments(timeline);
+            }
+            
+            // Get color based on variant name
+            const color = getVariantColor(timeline.label);
+            
+            // Custom label if provided, otherwise use variant name
+            const label = timeline.label || '';
+            
+            // Default to a reasonable percentage if not specified or zero
+            const percentage = timeline.percentage > 0 ? timeline.percentage : 100;
+            
+            // Create segment object
+            const segment = {
+                variant: label,
+                displayText: label,
+                width: `${percentage}%`,
+                position: `${(100 - percentage) / 2}%`,
+                color: color
+            };
+            
+            return renderTimelineSegments([segment]);
+        }
+
+        /**
+         * Renders timeline segments from array
+         * @param {Array} segments - Timeline segments for a variant
+         * @returns {string} HTML for the timeline segments
+         */
+        function renderTimelineSegments(segments) {
+            if (!segments || segments.length === 0) {
+                Logger.warn('No timeline segments to render');
+                return '';
+            }
+            
+            let timelineHtml = '';
+            
+            segments.forEach(segment => {
+                // Default values if properties are missing
+                const position = segment.position || '0';
+                const width = segment.width || '100%';
+                const color = segment.color || 'var(--timeline-blue)';
+                const displayText = segment.displayText || '';
+                
+                timelineHtml += '<div class="timeline-segment" ' + 
+                                'style="left: ' + position + '; ' + 
+                                'width: ' + width + '; ' + 
+                                'background-color: ' + color + ';">' +
+                                displayText +
+                                '</div>';
+            });
+            
+            return timelineHtml;
+        }
+
+        /**
+         * Gets a header color class from a line color
+         * @param {string} lineColor - The line color from data
+         * @returns {string} Header CSS class
+         */
+        function getHeaderColorClass(lineColor) {
+            // If the color is already a header class, use it directly
+            if (lineColor && lineColor.includes('header')) {
+                return lineColor;
+            }
+            
+            // Map common colors to header classes for CSS compatibility
+            switch(lineColor && lineColor.toLowerCase()) {
+                case 'blue': return 'blue-header';
+                case 'orange': return 'orange-header';
+                case 'purple': return 'purple-header';
+                case 'black': return 'blue-header';
+                case 'yellow': return 'orange-header';
+                case 'grey': 
+                case 'gray': 
+                    return 'blue-header';
+                case 'green': return 'orange-header';
+                case 'pink': return 'purple-header';
+                default: return 'blue-header'; // Default fallback
+            }
+        }
+
+        /**
+         * Gets color for a variant based on its name
+         * @param {string} variantName - The variant name
+         * @returns {string} CSS color value for the variant
+         */
+        function getVariantColor(variantName) {
+            if (!variantName) return CONFIG.timelineColors.default;
+            
+            // Check for specific variant patterns in the name
+            for (const [key, color] of Object.entries(CONFIG.timelineColors)) {
+                if (variantName.includes(key)) {
+                    return color;
+                }
+            }
+            
+            return CONFIG.timelineColors.default;
+        }
+
+        /**
+         * Determines CSS class for a value based on its type and thresholds
+         * @param {number} value - The value to evaluate
+         * @param {string} type - The type of value ('scheduleAttainment', 'labourCostPerUnit', etc.)
+         * @returns {string} CSS class name for the value
+         */
+        function valueToCssClass(value, type) {
+            if (value === null || value === undefined) return '';
+            
+            // Default thresholds
+            let goodThreshold, warningThreshold;
+            let higherIsBetter = true;
+            
+            switch (type) {
+                case 'scheduleAttainment':
+                    goodThreshold = CONFIG.thresholds.scheduleAttainment.good;
+                    warningThreshold = CONFIG.thresholds.scheduleAttainment.warning;
+                    higherIsBetter = true;
+                    break;
+                    
+                case 'labourCostPerUnit':
+                    goodThreshold = CONFIG.thresholds.labourCostPerUnit.good;
+                    warningThreshold = CONFIG.thresholds.labourCostPerUnit.warning;
+                    higherIsBetter = false; // Lower is better for cost
+                    break;
+                    
+                case 'scrapPercentage':
+                    goodThreshold = CONFIG.thresholds.scrapPercentage.good;
+                    warningThreshold = CONFIG.thresholds.scrapPercentage.warning;
+                    higherIsBetter = false; // Lower is better for scrap percentage
+                    break;
+                    
+                case 'downtimeHours':
+                    goodThreshold = CONFIG.thresholds.downtimeHours.good;
+                    warningThreshold = CONFIG.thresholds.downtimeHours.warning;
+                    higherIsBetter = false; // Lower is better for downtime
+                    break;
+                    
+                default:
+                    return '';
+            }
+            
+            // Determine color based on value compared to thresholds
+            if (higherIsBetter) {
+                if (value >= goodThreshold) return 'value-good';
+                if (value >= warningThreshold) return 'value-warning';
+                return 'value-danger';
+            } else {
+                if (value <= goodThreshold) return 'value-good';
+                if (value <= warningThreshold) return 'value-warning';
+                return 'value-danger';
+            }
+        }
+
+        /**
+         * Renders the schedule attainment chart with stacked bars for multiple variants
+         * @param {Array} data - Filtered data for the line
+         */
+        function renderScheduleAttainmentChart(data) {
+            const chartContainer = document.getElementById('scheduleAttainmentChart');
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Group data by date and variant
+            const groupedData = {};
+            
+            sortedData.forEach(record => {
+                const date = new Date(record.Date);
+                const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const variant = record.Variant || 'Unknown';
+                
+                if (!groupedData[dateKey]) {
+                    groupedData[dateKey] = {};
+                }
+                
+                if (!groupedData[dateKey][variant]) {
+                    groupedData[dateKey][variant] = {
+                        attainment: parseFloat(record['Schedule Attainment'] || 0),
+                        count: 1
+                    };
+                } else {
+                    // Average if we have multiple records for same date/variant
+                    const current = groupedData[dateKey][variant];
+                    current.attainment = (current.attainment * current.count + parseFloat(record['Schedule Attainment'] || 0)) / (current.count + 1);
+                    current.count++;
+                }
+            });
+            
+            // Get unique date keys and variants
+            const dateKeys = Object.keys(groupedData).sort((a, b) => {
+                const dateA = new Date(a);
+                const dateB = new Date(b);
+                return dateA - dateB;
+            });
+            
+            const allVariants = new Set();
+            Object.values(groupedData).forEach(variants => {
+                Object.keys(variants).forEach(variant => allVariants.add(variant));
+            });
+            const uniqueVariants = Array.from(allVariants);
+            
+            // Create chart HTML
+            let html = '<div style="width: 100%; height: 100%;">';
+            
+            // Create axes and labels
+            html += '<div style="display: flex; height: 100%;">';
+            
+            // Y-axis with better styling
+            html += '<div style="width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 8px; color: var(--text-light); font-size: 11px; border-right: 1px solid #eee;">';
+            html += '<div>100%</div>';
+            html += '<div>75%</div>';
+            html += '<div>50%</div>';
+            html += '<div>25%</div>';
+            html += '<div>0%</div>';
+            html += '</div>';
+            
+            // Chart content
+            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+            
+            // Background grid lines
+            html += '<div style="position: absolute; left: 40px; right: 0; height: calc(100% - 50px); display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;">';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.05);"></div>';
+            html += '</div>';
+            
+            // Chart area
+            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
+            
+            // Define variant colors
+            const variantColors = {
+                'XL': 'var(--timeline-orange)',
+                'S10': 'var(--timeline-red)',
+                'S20': 'var(--timeline-blue)',
+                'Plus': 'var(--timeline-purple)',
+                'Regular': 'var(--timeline-blue)',
+                'Deluxe': 'var(--timeline-purple)',
+                'Standard': 'var(--timeline-blue)'
+            };
+            
+            // Function to get color for variant
+            const getVariantColor = (variant) => {
+                // Check if variant name contains any of our color keys
+                for (const [key, color] of Object.entries(variantColors)) {
+                    if (variant.includes(key)) {
+                        return color;
+                    }
+                }
+                return 'var(--primary-blue)'; // Default color
+            };
+            
+            // Render stacked bars
+            dateKeys.forEach(dateKey => {
+                const variants = groupedData[dateKey];
+                
+                html += '<div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">';
+                
+                // Target line (100%)
+                html += '<div style="width: 100%; height: 2px; background-color: var(--danger-color); position: relative; bottom: 100%; z-index: 2;"></div>';
+                
+                // Stack bars for each variant
+                let totalHeight = 0;
+                Object.entries(variants).forEach(([variant, data]) => {
+                    const variantColor = getVariantColor(variant);
+                    const attainment = Math.round(data.attainment);
+                    const barHeight = Math.min(attainment, 100 - totalHeight); // Cap at 100%
+                    
+                    if (barHeight > 0) {
+                        html += '<div style="width: 60%; height: ' + barHeight + '%; background-color: ' + variantColor + '; position: relative;" ' + 
+                                'title="' + variant + ': ' + attainment + '%">' +
+                                '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 9px; color: white;">' + attainment + '%</div>' +
+                                '</div>';
+                        totalHeight += barHeight;
+                    }
+                });
+                
+                html += '</div>';
+            });
+            
+            html += '</div>'; // End chart area
+            
+            // X-axis labels
+            html += '<div style="height: 30px; display: flex; gap: 2px;">';
+            dateKeys.forEach(dateKey => {
+                html += '<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">' + dateKey + '</div>';
+            });
+            html += '</div>';
+            
+            // Legend for variants
+            html += '<div style="height: 30px; display: flex; justify-content: center; gap: 15px; margin-top: 5px;">';
+            uniqueVariants.forEach(variant => {
+                const variantColor = getVariantColor(variant);
+                html += '<div style="display: flex; align-items: center; gap: 5px;">' +
+                        '<div style="width: 10px; height: 10px; background-color: ' + variantColor + ';"></div>' +
+                        '<div style="font-size: 10px;">' + variant + '</div>' +
+                        '</div>';
+            });
+            html += '</div>';
+            
+            html += '</div>'; // End chart content
+            html += '</div>'; // End axes and labels
+            html += '</div>'; // End chart container
+            
+            chartContainer.innerHTML = html;
+        }
+
+        function renderLabourCostChart(data) {
+    const chartContainer = document.getElementById('labourCostChart');
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Group data by date - simpler approach
+    const dateData = {};
+    
+    // Use the appropriate cost field based on current view
+    const costType = detailViewState.costView || 'labour';
+    
+    sortedData.forEach(record => {
+        const date = new Date(record.Date);
+        const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        
+        // Get cost value based on the view
+        const cost = costType === 'unit' ? 
+            parseFloat(record['Cost Per Unit'] || 0) : 
+            parseFloat(record['Staff Cost'] || 0);
+            
+        if (!dateData[dateKey]) {
+            dateData[dateKey] = {
+                date: dateKey,
+                cost: cost,
+                variant: record.Variant || 'Unknown'
+            };
+        }
+    });
+    
+    // Convert to array and sort by date
+    const chartData = Object.values(dateData).sort((a, b) => 
+        new Date(a.date) - new Date(b.date)
+    );
+    
+    // Find min and max for scaling
+    const values = chartData.map(d => d.cost);
+    const min = Math.max(0, Math.min(...values) * 0.9);
+    const max = Math.max(...values) * 1.1;
+    
+    // Create a pure SVG implementation for perfect alignment
+    const html = `
+    <div style="width: 100%; height: 100%;">
+        <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
+            <!-- Y-axis labels -->
+            <text x="10" y="25" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(max)}</text>
+            <text x="10" y="100" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min + (max - min) * 0.75)}</text>
+            <text x="10" y="175" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min + (max - min) * 0.5)}</text>
+            <text x="10" y="250" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min + (max - min) * 0.25)}</text>
+            <text x="10" y="290" text-anchor="start" font-size="12" fill="#7f8c8d">R${Math.round(min)}</text>
+            
+            <!-- Grid lines -->
+            <line x1="50" y1="25" x2="390" y2="25" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="100" x2="390" y2="100" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="175" x2="390" y2="175" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="250" x2="390" y2="250" stroke-opacity="0.1" stroke="#000" />
+            
+            <!-- X-axis -->
+            <line x1="50" y1="290" x2="390" y2="290" stroke="#ccc" />
+            
+            <!-- Draw the line and points in a single path -->
+            <polyline 
+                points="${chartData.map((d, i) => {
+                    const x = 50 + (i * (340 / (chartData.length - 1 || 1)));
+                    const y = 25 + ((max - d.cost) / (max - min)) * 250;
+                    return `${x},${y}`;
+                }).join(' ')}"
+                fill="none"
+                stroke="#3498db"
+                stroke-width="2"
+            />
+            
+            <!-- Data points -->
+            ${chartData.map((d, i) => {
+                const x = 50 + (i * (340 / (chartData.length - 1 || 1)));
+                const y = 25 + ((max - d.cost) / (max - min)) * 250;
+                return `<circle cx="${x}" cy="${y}" r="4" fill="#3498db" />
+                        <title>${d.date}: R${d.cost.toFixed(2)}</title>`;
+            }).join('')}
+            
+            <!-- X-axis labels -->
+            ${chartData.map((d, i) => {
+                const x = 50 + (i * (340 / (chartData.length - 1 || 1)));
+                return `<text x="${x}" y="310" text-anchor="middle" font-size="10" fill="#7f8c8d">${d.date}</text>`;
+            }).join('')}
+        </svg>
+    </div>
+    `;
+    
+    chartContainer.innerHTML = html;
+}
+        
+// Fix for Scrap Percentage Trend chart
+function renderScrapPercentageChart(data) {
+    const chartContainer = document.getElementById('scrapPercentageChart');
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Format data for chart
+    const chartData = sortedData.map(record => {
+        const date = new Date(record.Date);
+        return {
+            date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            scrap: parseFloat(record['Scrap Cost as % of Production Value'] || 0)
+        };
+    });
+    
+    // Find max for scaling (minimum 5% to have a reasonable scale)
+    const maxScrap = Math.max(...chartData.map(d => d.scrap), 5);
+    const yMax = Math.ceil(maxScrap * 1.1); // 10% padding
+    
+    // Create SVG for precise positioning and consistent sizing
+    const html = `
+    <div style="width: 100%; height: 100%;">
+        <svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
+            <!-- Y-axis labels - positioned for visibility -->
+            <text x="5" y="15" text-anchor="start" font-size="12" fill="#7f8c8d">${yMax}%</text>
+            <text x="5" y="65" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.75)}%</text>
+            <text x="5" y="115" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.5)}%</text>
+            <text x="5" y="165" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.25)}%</text>
+            <text x="5" y="190" text-anchor="start" font-size="12" fill="#7f8c8d">0%</text>
+            
+            <!-- Grid lines -->
+            <line x1="40" y1="15" x2="390" y2="15" stroke-opacity="0.1" stroke="#000" />
+            <line x1="40" y1="65" x2="390" y2="65" stroke-opacity="0.1" stroke="#000" />
+            <line x1="40" y1="115" x2="390" y2="115" stroke-opacity="0.1" stroke="#000" />
+            <line x1="40" y1="165" x2="390" y2="165" stroke-opacity="0.1" stroke="#000" />
+            
+            <!-- Scrap percentage line chart -->
+            <polyline 
+                points="${chartData.map((d, i) => {
+                    const x = 40 + (i * (350 / (chartData.length - 1 || 1)));
+                    const y = 15 + ((yMax - d.scrap) / yMax) * 150;
+                    return `${x},${y}`;
+                }).join(' ')}"
+                fill="none"
+                stroke="#e74c3c"
+                stroke-width="2"
+            />
+            
+            <!-- Data points -->
+            ${chartData.map((d, i) => {
+                const x = 40 + (i * (350 / (chartData.length - 1 || 1)));
+                const y = 15 + ((yMax - d.scrap) / yMax) * 150;
+                return `<circle cx="${x}" cy="${y}" r="4" fill="#e74c3c" />
+                        <title>${d.date}: ${d.scrap.toFixed(2)}%</title>`;
+            }).join('')}
+            
+            <!-- X-axis labels -->
+            ${chartData.map((d, i) => {
+                const x = 40 + (i * (350 / (chartData.length - 1 || 1)));
+                return `<text x="${x}" y="195" text-anchor="middle" font-size="10" fill="#7f8c8d">${d.date}</text>`;
+            }).join('')}
+        </svg>
+    </div>
+    `;
+    
+    chartContainer.innerHTML = html;
+}
+
+// Fix for Downtime Chart
+function renderDowntimeChart(data) {
+    const chartContainer = document.getElementById('downtimeChart');
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Extract downtime data 
+    const downtimeData = sortedData.map(record => {
+        const date = new Date(record.Date);
+        return {
+            date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            minutes: parseFloat(record['Downtime Duration (min)'] || 0),
+            hours: parseFloat(record['Downtime Duration (min)'] || 0) / 60
+        };
+    });
+    
+    // Find max value for scaling (ensure at least 1 hour)
+    const maxHours = Math.max(...downtimeData.map(d => d.hours), 1);
+    const yMax = Math.ceil(maxHours * 1.1); // Add 10% padding and round up
+    
+    // Create SVG for precise positioning
+    const html = `
+    <div style="width: 100%; height: 100%;">
+        <svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
+            <!-- Y-axis labels - positioned for visibility -->
+            <text x="5" y="15" text-anchor="start" font-size="12" fill="#7f8c8d">${yMax} hrs</text>
+            <text x="5" y="65" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.75)} hrs</text>
+            <text x="5" y="115" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.5)} hrs</text>
+            <text x="5" y="165" text-anchor="start" font-size="12" fill="#7f8c8d">${Math.round(yMax * 0.25)} hrs</text>
+            <text x="5" y="190" text-anchor="start" font-size="12" fill="#7f8c8d">0 hrs</text>
+            
+            <!-- Grid lines -->
+            <line x1="50" y1="15" x2="390" y2="15" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="65" x2="390" y2="65" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="115" x2="390" y2="115" stroke-opacity="0.1" stroke="#000" />
+            <line x1="50" y1="165" x2="390" y2="165" stroke-opacity="0.1" stroke="#000" />
+            
+            <!-- Bar chart for downtime -->
+            ${downtimeData.map((d, i) => {
+                const x = 50 + (i * (340 / (downtimeData.length || 1)));
+                const barWidth = 340 / (downtimeData.length * 2);
+                const barHeight = (d.hours / yMax) * 150;
+                const y = 165 - barHeight;
+                
+                // Determine color based on downtime
+                let color = '#3498db'; // default
+                if (d.hours > 6) color = '#e74c3c'; // high
+                else if (d.hours > 3) color = '#f39c12'; // medium
+                
+                return `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" fill="${color}">
+                        <title>${d.date}: ${d.hours.toFixed(1)} hrs</title>
+                       </rect>`;
+            }).join('')}
+            
+            <!-- X-axis labels -->
+            ${downtimeData.map((d, i) => {
+                const x = 50 + (i * (340 / (downtimeData.length || 1))) + (340 / (downtimeData.length * 2)) / 2;
+                return `<text x="${x}" y="195" text-anchor="middle" font-size="10" fill="#7f8c8d">${d.date}</text>`;
+            }).join('')}
+        </svg>
+    </div>
+    `;
+    
+    chartContainer.innerHTML = html;
+}
+        
+        function renderRejectPieChart(data) {
+    const chartContainer = document.getElementById('rejectPieChart');
+    if (!chartContainer) {
+        Logger.error("rejectPieChart container not found in DOM");
+        return;
+    }
+    
+    // Extract reject reasons based on current view (qty or cost)
+    const view = detailViewState.scrapView || 'qty';
+    
+    // Get field based on view
+    const field = view === 'qty' ? 
+        'Top Rejects by QTY (Reason - Station - QTY - Cost)' : 
+        'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+    
+    // Process data to get reject reasons
+    const rejectMap = new Map();
+    
+    data.forEach(record => {
+        if (record[field] && record[field] !== "No rejects" && !record[field].includes("No rejects")) {
+            const entries = record[field].split('|');
+            
+            entries.forEach(entry => {
+                const trimmed = entry.trim();
+                if (!trimmed) return;
+                
+                const parts = trimmed.split(' - ');
+                if (parts.length < 3) return;
+                
+                let reason = parts[0].trim().replace(/^\d+\.\s+/, '');
+                const station = parts[1].trim();
+                const reasonKey = `${reason} (${station})`;
+                
+                let qty = 0, cost = 0;
+                
+                for (let i = 2; i < parts.length; i++) {
+                    if (parts[i].includes('QTY:')) {
+                        qty = parseFloat(parts[i].replace('QTY:', '').trim()) || 0;
+                    } else if (parts[i].includes('Cost:')) {
+                        cost = parseFloat(parts[i].replace('Cost:', '').trim()) || 0;
+                    }
+                }
+                
+                const value = view === 'qty' ? qty : cost;
+                
+                if (rejectMap.has(reasonKey)) {
+                    rejectMap.set(reasonKey, rejectMap.get(reasonKey) + value);
+                } else {
+                    rejectMap.set(reasonKey, value);
+                }
+            });
+        }
+    });
+    
+    // Convert to array and sort
+    const rejectData = Array.from(rejectMap.entries())
+        .map(([reason, value]) => ({ reason, value }))
+        .sort((a, b) => b.value - a.value);
+    
+    if (rejectData.length === 0) {
+        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No reject data available.</div>';
+        return;
+    }
+    
+    // Take top 5 for the pie chart
+    const pieData = rejectData.slice(0, 5);
+    const total = rejectData.reduce((sum, item) => sum + item.value, 0);
+    
+    // Create side-by-side layout (chart + legend)
+    let html = `<div style="display: flex; width: 100%; height: 100%;">`;
+    
+    // Left side: Pie chart (make smaller width to fix cutoff)
+    html += `<div style="width: 40%; height: 100%;">
+        <svg viewBox="0 0 100 100" width="100%" height="100%">
+            <circle cx="50" cy="50" r="45" fill="#f5f7fa" />`;
+    
+    // Define colors
+    const colors = [
+        'var(--primary-blue)', 
+        'var(--timeline-orange)', 
+        'var(--timeline-purple)',
+        'var(--timeline-red)', 
+        'var(--success-color)'
+    ];
+    
+    // Draw pie segments
+    let startAngle = 0;
+    pieData.forEach((item, index) => {
+        const percentage = (item.value / total) * 100;
+        const angle = (percentage / 100) * 360;
+        
+        const startRad = (startAngle - 90) * (Math.PI / 180);
+        const endRad = (startAngle + angle - 90) * (Math.PI / 180);
+        
+        const x1 = 50 + 45 * Math.cos(startRad);
+        const y1 = 50 + 45 * Math.sin(startRad);
+        const x2 = 50 + 45 * Math.cos(endRad);
+        const y2 = 50 + 45 * Math.sin(endRad);
+        
+        const largeArcFlag = angle > 180 ? 1 : 0;
+        
+        html += `<path d="M 50 50 L ${x1} ${y1} A 45 45 0 ${largeArcFlag} 1 ${x2} ${y2} Z" 
+                    fill="${colors[index % colors.length]}" />`;
+        
+        startAngle += angle;
+    });
+    
+    html += `</svg></div>`;
+    
+    // Right side: Legend with scrollable area
+    html += `<div style="width: 60%; height: 100%; overflow-y: auto; padding-left: 10px;">
+        <div style="font-weight: bold; margin-bottom: 5px; font-size: 11px;">Top Reject Reasons</div>`;
+    
+    // Add items to legend
+    pieData.forEach((item, index) => {
+        const percentage = ((item.value / total) * 100).toFixed(1);
+        
+        html += `<div style="display: flex; align-items: center; margin-bottom: 4px;">
+            <div style="width: 10px; height: 10px; background-color: ${colors[index % colors.length]}; margin-right: 5px;"></div>
+            <div style="flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10px;" 
+                title="${item.reason} (${percentage}%)">
+                ${item.reason.length > 20 ? item.reason.substring(0, 20) + '...' : item.reason} (${percentage}%)
+            </div>
+        </div>`;
+    });
+    
+    html += `</div></div>`;
+    
+    chartContainer.innerHTML = html;
+}
+        
+        function renderDowntimeChart(data) {
+    const chartContainer = document.getElementById('downtimeChart');
+    if (!chartContainer) {
+        Logger.error("downtimeChart container not found in DOM");
+        return;
+    }
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Extract downtime data
+    const downtimeData = sortedData.map(record => {
+        const date = new Date(record.Date);
+        const dateKey = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        
+        // Parse the top downtime reasons if they exist
+        let reasons = [];
+        const downtimeField = 'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
+        
+        if (record[downtimeField] && 
+            record[downtimeField] !== "No downtime" && 
+            !record[downtimeField].includes("No downtime")) {
+            
+            // Split by pipe to get individual entries
+            const entries = record[downtimeField].split('|');
+            
+            entries.forEach(entry => {
+                const trimmed = entry.trim();
+                if (!trimmed) return;
+                
+                // Parse entry - format: "1. Reason - Machine - Cost: X - Duration: Y min"
+                const parts = trimmed.split(' - ');
+                if (parts.length < 3) return;
+                
+                // Extract reason and machine
+                let reason = parts[0].trim().replace(/^\d+\.\s+/, '');
+                let machine = parts[1].trim();
+                
+                // Extract cost and duration
+                let cost = 0;
+                let duration = 0;
+                
+                for (let i = 2; i < parts.length; i++) {
+                    if (parts[i].includes('Cost:')) {
+                        cost = parseFloat(parts[i].replace('Cost:', '').trim()) || 0;
+                    } else if (parts[i].includes('Duration:')) {
+                        duration = parseFloat(parts[i].replace('Duration:', '').replace('min', '').trim()) || 0;
+                    }
+                }
+                
+                reasons.push({ reason, machine, cost, duration });
+            });
+        }
+        
+        // Get total downtime minutes
+        const downtimeMins = parseFloat(record['Downtime Duration (min)'] || 0);
+        
+        return {
+            date: dateKey,
+            downtimeMinutes: downtimeMins,
+            downtimeHours: downtimeMins / 60,
+            reasons: reasons
+        };
+    });
+    
+    Logger.info(`Extracted downtime data for ${downtimeData.length} dates`);
+    
+    // If all entries have zero downtime, show a message
+    if (downtimeData.every(item => item.downtimeMinutes === 0)) {
+        chartContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No downtime data available.</div>';
+        return;
+    }
+    
+    // Find max downtime for scaling
+    const maxDowntimeHours = Math.max(...downtimeData.map(item => item.downtimeHours));
+    const yMax = Math.ceil(Math.max(maxDowntimeHours, 1)); // At least 1 hour scale, round up
+    
+    // Create chart HTML
+    let html = '<div style="width: 100%; height: 100%;">';
+    
+    // Create axes and labels
+    html += '<div style="display: flex; height: 100%;">';
+    
+    // Y-axis
+    html += '<div style="width: 50px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 10px; color: var(--text-light); font-size: 12px;">';
+    html += '<div>' + yMax + ' hrs</div>';
+    html += '<div>' + Math.round(yMax * 0.75) + ' hrs</div>';
+    html += '<div>' + Math.round(yMax * 0.5) + ' hrs</div>';
+    html += '<div>' + Math.round(yMax * 0.25) + ' hrs</div>';
+    html += '<div>0 hrs</div>';
+    html += '</div>';
+    
+    // Chart content
+    html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column; position: relative;">';
+    
+    // Chart area
+    html += '<div style="flex-grow: 1; position: relative;">';
+    
+    // Background grid lines
+    html += '<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '<div style="width: 100%; height: 1px; background-color: rgba(0,0,0,0.1);"></div>';
+    html += '</div>';
+    
+    // Add bars
+    html += '<div style="display: flex; height: 100%; padding-top: 10px;">';
+    
+    // Create a bar for each date
+    downtimeData.forEach(item => {
+        const height = (item.downtimeHours / yMax) * 100;
+        
+        // Determine bar color based on downtime hours
+        let barColor = 'var(--primary-blue)';
+        if (item.downtimeHours > CONFIG.thresholds.downtimeHours.warning) {
+            barColor = 'var(--danger-color)';
+        } else if (item.downtimeHours > CONFIG.thresholds.downtimeHours.good) {
+            barColor = 'var(--warning-color)';
+        }
+        
+        // Create tooltip text with reasons
+        let tooltipText = `${item.date}: ${item.downtimeHours.toFixed(1)} hrs`;
+        if (item.reasons.length > 0) {
+            tooltipText += '\n\nReasons:';
+            item.reasons.forEach(reason => {
+                tooltipText += `\n• ${reason.reason} (${reason.machine}): ${reason.duration} min`;
+            });
+        }
+        
+        html += '<div style="flex: 1; display: flex; justify-content: center; align-items: flex-end; height: 100%;">';
+        if (height > 0) {
+            html += `<div style="width: 70%; height: ${height}%; background-color: ${barColor};" title="${tooltipText}"></div>`;
+        }
+        html += '</div>';
+    });
+    
+    html += '</div>'; // End bars
+    
+    html += '</div>'; // End chart area
+    
+    // X-axis labels
+    html += '<div style="height: 30px; display: flex; justify-content: space-between;">';
+    downtimeData.forEach(item => {
+        html += '<div style="flex: 1; text-align: center; font-size: 10px; color: var(--text-light);">' + item.date + '</div>';
+    });
+    html += '</div>';
+    
+    html += '</div>'; // End chart content
+    html += '</div>'; // End axes and labels
+    html += '</div>'; // End chart container
+    
+    chartContainer.innerHTML = html;
+}
+        
+function extractRejectReasons(data, view) {
+    if (!data || data.length === 0) return [];
+    
+    // Define which field to use based on view
+    const field = view === 'qty' ? 
+        'Top Rejects by QTY (Reason - Station - QTY - Cost)' : 
+        'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+    
+    const reasonMap = new Map();
+    
+    // Process each record
+    data.forEach(record => {
+        // Skip if no reject data or "No rejects"
+        if (!record[field] || record[field] === "No rejects") return;
+        
+        // Split by pipe character to get individual rejects
+        const rejects = record[field].split('|');
+        
+        rejects.forEach(reject => {
+            // Parse reject data
+            // Format: "1. Broken hook - HNV Ass - QTY: 18 - Cost: 0"
+            const parts = reject.trim().split(' - ');
+            if (parts.length < 3) return;
+            
+            // Extract reason (removing numbering)
+            let reason = parts[0].trim();
+            reason = reason.replace(/^\d+\.\s+/, '');
+            
+            // Extract station
+            const station = parts[1].trim();
+            
+            // Extract quantity and cost
+            let qty = 0;
+            let cost = 0;
+            
+            for (let i = 2; i < parts.length; i++) {
+                if (parts[i].includes('QTY:')) {
+                    qty = parseFloat(parts[i].replace('QTY:', '').trim()) || 0;
+                } else if (parts[i].includes('Cost:')) {
+                    cost = parseFloat(parts[i].replace('Cost:', '').trim()) || 0;
+                }
+            }
+            
+            // Create combined reason
+            const fullReason = `${reason} (${station})`;
+            
+            // Add to map with appropriate value
+            const value = view === 'qty' ? qty : cost;
+            
+            if (reasonMap.has(fullReason)) {
+                reasonMap.set(fullReason, reasonMap.get(fullReason) + value);
+            } else {
+                reasonMap.set(fullReason, value);
+            }
+        });
+    });
+    
+    // Convert map to array
+    return Array.from(reasonMap.entries())
+        .map(([reason, value]) => ({ reason, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);  // Top 5 reasons
+}
+
+        
+function updateTopScrapList(data) {
+    const listElement = document.getElementById('topScrapList');
+    if (!listElement) {
+        Logger.error("Element 'topScrapList' not found in DOM");
+        return;
+    }
+    
+    // Extract top rejects - limit to 3 for fitting without scrolling
+    const view = detailViewState.scrapView || 'qty';
+    const allItems = getTopScrapItems(data, view);
+    
+    // Only show top 3 reasons to ensure they fit without scrolling
+    const topItems = allItems.slice(0, 3);
+    
+    if (topItems.length === 0) {
+        listElement.innerHTML = '<div style="text-align: center; padding: 5px; color: var(--text-light);">No scrap data available.</div>';
+        return;
+    }
+    
+    // Generate HTML with compact height
+    let html = '';
+    topItems.forEach((item, index) => {
+        html += `
+            <div class="top-item" style="display: flex; justify-content: space-between; padding: 2px 0; margin: 2px 0;">
+                <div class="top-item-label" style="font-size: 11px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 5px;" title="${index + 1}. ${item.reason}">
+                    ${index + 1}. ${item.reason}
+                </div>
+                <div class="top-item-value" style="font-size: 11px; color: var(--text-light); white-space: nowrap;">
+                    ${item.value}
+                </div>
+            </div>
+        `;
+    });
+    
+    listElement.innerHTML = html;
+}
+
+    function getTopScrapItems(data, view) {
+    if (!data || data.length === 0) return [];
+    
+    // First try to extract data from formatted text strings
+    const formattedField = view === 'qty' ? 
+        'Top Rejects by QTY (Reason - Station - QTY - Cost)' :
+        'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+    
+    const parsedItems = [];
+    
+    // Process each record
+    for (const record of data) {
+        if (record[formattedField] && record[formattedField] !== "No rejects" && !record[formattedField].includes("No rejects")) {
+            const rejectsText = record[formattedField];
+            
+            // Split by pipe character to get individual reject entries
+            const rejectEntries = rejectsText.split('|');
+            
+            for (const entry of rejectEntries) {
+                const trimmedEntry = entry.trim();
+                if (!trimmedEntry) continue;
+                
+                // Parse out reason, station, quantity, and cost
+                // Example: "1. Leaking - Seal - QTY: 68 - Cost: 81.61"
+                const parts = trimmedEntry.split(' - ');
+                if (parts.length >= 3) {  // Need at least reason, station, and some quantity/cost
+                    // Extract reason (remove numbering if present)
+                    let reason = parts[0].trim();
+                    if (reason.match(/^\d+\.\s/)) {
+                        reason = reason.replace(/^\d+\.\s/, '');
+                    }
+                    
+                    // Extract station
+                    const station = parts[1].trim();
+                    
+                    // Extract quantity and cost
+                    let quantity = "0";
+                    let cost = "0";
+                    
+                    for (let i = 2; i < parts.length; i++) {
+                        if (parts[i].includes("QTY:")) {
+                            quantity = parts[i].replace("QTY:", "").trim();
+                        } else if (parts[i].includes("Cost:")) {
+                            cost = parts[i].replace("Cost:", "").trim();
+                        }
+                    }
+                    
+                    // Add to parsed items with appropriate value format
+                    parsedItems.push({
+                        reason: `${reason} (${station})`,
+                        value: view === 'qty' ? `${quantity} units` : `R ${cost}`
+                    });
+                }
+            }
+        }
+    }
+    
+    // If we found items from formatted text, return them
+    if (parsedItems.length > 0) {
+        Logger.info(`Parsed ${parsedItems.length} reject items from formatted text field`);
+        
+        // Sort the items and take top 5
+        return parsedItems
+            .sort((a, b) => {
+                // Extract numeric values for comparison
+                const valA = parseFloat(a.value.replace(/[^0-9.]/g, ''));
+                const valB = parseFloat(b.value.replace(/[^0-9.]/g, ''));
+                return valB - valA;
+            })
+            .slice(0, 5);
+    }
+    
+    // If no structured data found, check if we have reject rate data
+    for (const record of data) {
+        if (record['Reject Rate by Station'] && 
+            record['Reject Rate by Station'] !== "No rejects" && 
+            !record['Reject Rate by Station'].includes("No rejects")) {
+            
+            // Parse reject rates - format: "HNV Ass: 14.29%, Add Tube: 33.33%, Chamber-Lid Weld & P-Test: 42.86%, Tap Ass: 45.45%"
+            const rejectRates = record['Reject Rate by Station'].split(',');
+            const rejectItems = [];
+            
+            rejectRates.forEach(rate => {
+                const parts = rate.trim().split(':');
+                if (parts.length === 2) {
+                    const station = parts[0].trim();
+                    const percentage = parts[1].trim();
+                    rejectItems.push({
+                        reason: `${station}`,
+                        value: view === 'qty' ? `${percentage}` : `${percentage}`
+                    });
+                }
+            });
+            
+            if (rejectItems.length > 0) {
+                Logger.info(`Parsed ${rejectItems.length} reject items from Reject Rate by Station`);
+                return rejectItems
+                    .sort((a, b) => {
+                        const valA = parseFloat(a.value.replace(/[^0-9.]/g, ''));
+                        const valB = parseFloat(b.value.replace(/[^0-9.]/g, ''));
+                        return valB - valA;
+                    })
+                    .slice(0, 5);
+            }
+        }
+    }
+    
+    // If still no data, return placeholder
+    Logger.warn('No reject data found in records');
+    return [{ reason: 'No reject data available', value: '-' }];
+}
+
+        
+// Fix 4: Improve updateTopDowntimeList with proper DOM handling and debug output
+function updateTopDowntimeList(data) {
+    Logger.info(`Updating top downtime list for view: ${detailViewState.downtimeView}`);
+    
+    // First ensure the container exists
+    const downtimeFooter = document.querySelector('.detail-metric-card:nth-child(4) .detail-metric-footer');
+    if (!downtimeFooter) {
+        Logger.error("Downtime metric footer not found in DOM");
+        return;
+    }
+    
+    // Ensure the list title and container exist
+    if (!downtimeFooter.querySelector('.list-title')) {
+        downtimeFooter.innerHTML = `
+            <div class="list-title">Top Downtime Reasons</div>
+            <div class="top-items-list" id="topDowntimeList"></div>
+        `;
+    }
+    
+    // Get the list element
+    const listElement = document.getElementById('topDowntimeList');
+    if (!listElement) {
+        Logger.error("Element 'topDowntimeList' not found in DOM even after creation attempt");
+        // Try to create it directly in the footer
+        downtimeFooter.innerHTML += '<div class="top-items-list" id="topDowntimeList"></div>';
+    }
+    
+    // Try again with the newly created element
+    const retryListElement = document.getElementById('topDowntimeList');
+    if (!retryListElement) {
+        Logger.error("Failed to create 'topDowntimeList' element");
+        return;
+    }
+    
+    // Sample some data to debug
+    if (data && data.length > 0) {
+        const sampleRecord = data[0];
+        Logger.info(`Sample record downtime fields: ${Object.keys(sampleRecord).filter(k => k.includes('Downtime')).join(', ')}`);
+        
+        if (sampleRecord['Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)']) {
+            Logger.info(`Sample downtime data: ${sampleRecord['Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)'].substring(0, 100)}...`);
+        }
+    }
+    
+    // Extract top downtime data based on current view
+    const topItems = getTopDowntimeItems(data, detailViewState.downtimeView);
+    
+    Logger.info(`Generated ${topItems.length} top downtime items for view: ${detailViewState.downtimeView}`);
+    
+    if (topItems.length === 0) {
+        retryListElement.innerHTML = '<div style="text-align: center; padding: 10px; color: var(--text-light);">No downtime data available.</div>';
+        return;
+    }
+    
+    // Generate HTML
+    let html = '';
+    topItems.forEach((item, index) => {
+        html += `
+            <div class="top-item">
+                <div class="top-item-label">${index + 1}. ${item.reason}</div>
+                <div class="top-item-value">${item.value}</div>
+            </div>
+        `;
+    });
+    
+    retryListElement.innerHTML = html;
+    Logger.info(`Updated downtime list with ${topItems.length} items`);
+}
+        function getTopDowntimeItems(data, view) {
+    if (!data || data.length === 0) return [];
+    
+    // First try to extract data from formatted text strings
+    const formattedField = view === 'duration' ? 
+        'Top Downtime by Downtime Min (Reason - Machine - Cost - Downtime Min)' :
+        'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
+    
+    const parsedItems = [];
+    
+    // Process each record
+    for (const record of data) {
+        if (record[formattedField] && 
+            record[formattedField] !== "No downtime" && 
+            !record[formattedField].includes("No downtime")) {
+            
+            const downtimeText = record[formattedField];
+            
+            // Split by pipe character to get individual downtime entries
+            const downtimeEntries = downtimeText.split('|');
+            
+            for (const entry of downtimeEntries) {
+                const trimmedEntry = entry.trim();
+                if (!trimmedEntry) continue;
+                
+                // Parse out reason, machine, cost, and duration
+                // Format: "1. Equipment Failure - Machine A - Cost: 420.00 - Downtime Min: 60"
+                const parts = trimmedEntry.split(' - ');
+                if (parts.length >= 3) {  // Need at least reason, machine, and some cost/duration
+                    // Extract reason (remove numbering if present)
+                    let reason = parts[0].trim();
+                    if (reason.match(/^\d+\.\s/)) {
+                        reason = reason.replace(/^\d+\.\s/, '');
+                    }
+                    
+                    // Extract machine
+                    const machine = parts.length > 1 ? parts[1].trim() : '';
+                    
+                    // Extract cost and duration
+                    let cost = "0";
+                    let duration = "0";
+                    
+                    for (let i = 2; i < parts.length; i++) {
+                        if (parts[i].includes("Cost:")) {
+                            cost = parts[i].replace("Cost:", "").trim();
+                        } else if (parts[i].includes("Downtime Min:")) {
+                            duration = parts[i].replace("Downtime Min:", "").trim();
+                        } else if (parts[i].includes("Downtime:")) {
+                            duration = parts[i].replace("Downtime:", "").trim();
+                            // Remove "min" if it's in the duration
+                            duration = duration.replace("min", "").trim();
+                        }
+                    }
+                    
+                    // Create consistent reason format based on view
+                    const displayReason = view === 'machine' ? 
+                        machine : 
+                        (view === 'reason' ? `${reason} (${machine})` : `${reason} (${machine})`);
+                    
+                    // Add to parsed items with appropriate value format
+                    parsedItems.push({
+                        reason: displayReason,
+                        value: view === 'duration' ? `${duration} min` : `R ${cost}`
+                    });
+                }
+            }
+        }
+    }
+    
+    // If we found items from formatted text, return them
+    if (parsedItems.length > 0) {
+        Logger.info(`Parsed ${parsedItems.length} downtime items from formatted text field`);
+        
+        // Sort the items and take top 5
+        return parsedItems
+            .sort((a, b) => {
+                // Extract numeric values for comparison
+                const valA = parseFloat(a.value.replace(/[^0-9.]/g, '')) || 0;
+                const valB = parseFloat(b.value.replace(/[^0-9.]/g, '')) || 0;
+                return valB - valA;
+            })
+            .slice(0, 5);
+    }
+    
+    // Check for downtime duration values
+    let hasDowntime = false;
+    for (const record of data) {
+        const downtimeDuration = parseFloat(record['Downtime Duration (min)'] || 0);
+        if (downtimeDuration > 0) {
+            hasDowntime = true;
+            break;
+        }
+    }
+    
+    // Return appropriate message based on whether downtime exists
+    if (!hasDowntime) {
+        Logger.info('No downtime records found');
+        return [{ reason: 'No downtime recorded', value: '0 min' }];
+    } else {
+        Logger.warn('Downtime duration found but no structured downtime data');
+        return [{ reason: 'Total downtime', value: 'Details not available' }];
+    }
+}
+
+        /**
+         * Add event listeners when the DOM is loaded
+         */
         document.addEventListener('DOMContentLoaded', () => {
             // Load user preferences
             loadUserPreferences();
@@ -2169,7 +4642,7 @@ function hideDetailView() {
             // Update cycle dropdown to match stored preference
             document.getElementById('cycleStartDay').value = weekCycleStartDay.toString();
             
-            // Add event listeners for main dashboard buttons
+            // Add event listeners for buttons
             document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
             document.getElementById('refreshButton').addEventListener('click', handleRefresh);
             document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
@@ -2185,25 +4658,15 @@ function hideDetailView() {
             document.getElementById('modalClose').addEventListener('click', hideDetailView);
             document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
             document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
-            
-            // Schedule Attainment toggle buttons
-            document.getElementById('attainmentPercentBtn').addEventListener('click', () => toggleAttainmentView('percent'));
-            document.getElementById('attainmentBoxesBtn').addEventListener('click', () => toggleAttainmentView('boxes'));
-            document.getElementById('attainmentDevicesBtn').addEventListener('click', () => toggleAttainmentView('devices'));
-            
-            // Scrap Analysis toggle buttons
             document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
             document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
-            
-            // Downtime Analysis toggle buttons
             document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
             document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
             document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
-            
-            // Labour Cost toggle buttons
             document.getElementById('labourCostBtn').addEventListener('click', () => toggleCostView('labour'));
             document.getElementById('unitCostBtn').addEventListener('click', () => toggleCostView('unit'));
             
+            // Initialize the dashboard
             initializeDashboard();
             
             // Set up auto-refresh interval
@@ -2212,8 +4675,8 @@ function hideDetailView() {
 
         // Make functions available in the global scope
         window.showDetailView = showDetailView;
-        window.hideDetailView = hideDetailView;
-        window.toggleAttainmentView = toggleAttainmentView;
+        window.navigateToPreviousWeek = navigateToPreviousWeek;
+        window.navigateToNextWeek = navigateToNextWeek;
         window.toggleScrapView = toggleScrapView;
         window.toggleDowntimeView = toggleDowntimeView;
         window.toggleCostView = toggleCostView;
