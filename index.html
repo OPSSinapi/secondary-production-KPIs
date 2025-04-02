@@ -2354,10 +2354,7 @@ function hideDetailView() {
         function renderKPISummary(filteredData, fullData) {
             const container = document.getElementById('kpiSummary');
             if (!container) return;
-            
-            // Filter data for current date range
-            const filteredData = filterDataByDateRange(data, currentDateRange.start, currentDateRange.end);
-            
+                        
             // Calculate KPIs
             const kpis = calculateKPIs(filteredData, fullData);
             
