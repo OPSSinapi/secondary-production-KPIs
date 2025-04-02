@@ -2228,37 +2228,38 @@ function hideDetailView() {
          * Initialize the dashboard by loading and displaying data
          */
         async function initializeDashboard() {
-            Logger.info('Initializing dashboard');
-            
-            try {
-                // Show loading state
-                document.getElementById('kpiSummary').innerHTML = `
-                    <div class="loading-container">
-                        <div class="loading-spinner"></div>
-                    </div>
-                `;
-                
-                // Load data
-                const response = await fetch(CONFIG.dataUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                
-                // Update date range display
-                updateDateRangeDisplay(currentDateRange);
-                
-                // Render KPI summary
-                renderKPISummary(data);
-                
-                // Render dashboard grid
-                renderDashboardGrid(data);
-                
-            } catch (error) {
-                Logger.error('Error initializing dashboard', error);
-                showError('Failed to load dashboard data. Please try again.');
-            }
+    Logger.info('Initializing dashboard');
+    
+    try {
+        // Show loading state
+        document.getElementById('kpiSummary').innerHTML = `
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+            </div>
+        `;
+        
+        // Load data
+        const response = await fetch(CONFIG.dataUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const jsonData = await response.json();
+        const data = jsonData.productionData;
+        
+        // Update date range display
+        updateDateRangeDisplay(currentDateRange);
+        
+        // Render KPI summary
+        renderKPISummary(data);
+        
+        // Render dashboard grid
+        renderDashboardGrid(data);
+        
+    } catch (error) {
+        Logger.error('Error initializing dashboard', error);
+        showError('Failed to load dashboard data. Please try again.');
+    }
+}
 
         /**
          * Update the date range display
@@ -2415,24 +2416,24 @@ function hideDetailView() {
          * @returns {Array} Previous period data
          */
         function getPreviousPeriodData(currentData) {
-            if (!currentData || currentData.length === 0) return [];
-            
-            const startDate = new Date(currentData[0].Date);
-            const endDate = new Date(currentData[currentData.length - 1].Date);
-            
-            // Calculate previous period dates
-            const daysDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
-            const previousStartDate = new Date(startDate);
-            previousStartDate.setDate(previousStartDate.getDate() - daysDiff - 1);
-            const previousEndDate = new Date(startDate);
-            previousEndDate.setDate(previousEndDate.getDate() - 1);
-            
-            // Filter data for previous period
-            return data.filter(record => {
-                const recordDate = new Date(record.Date);
-                return recordDate >= previousStartDate && recordDate <= previousEndDate;
-            });
-        }
+    if (!currentData || currentData.length === 0) return [];
+    
+    const startDate = new Date(currentData[0].Date);
+    const endDate = new Date(currentData[currentData.length - 1].Date);
+    
+    // Calculate previous period dates
+    const daysDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
+    const previousStartDate = new Date(startDate);
+    previousStartDate.setDate(previousStartDate.getDate() - daysDiff - 1);
+    const previousEndDate = new Date(startDate);
+    previousEndDate.setDate(previousEndDate.getDate() - 1);
+    
+    // If data is a global variable, make sure it's properly set elsewhere
+    return data.productionData.filter(record => {
+        const recordDate = new Date(record.Date);
+        return recordDate >= previousStartDate && recordDate <= previousEndDate;
+    });
+}
 
         /**
          * Filter data by date range
