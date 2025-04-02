@@ -1002,7 +1002,8 @@
      */
     const CONFIG = {
         // URL to fetch operational data from
-        dataUrl: 'OpsData.json',
+        dataUrl: 'data/production-data.json', // Primary data source
+        fallbackDataUrls: ['OpsData.json', 'data.json'], // Fallback data sources to try if primary fails
         
         // Refresh interval in milliseconds (5 minutes)
         refreshInterval: 5 * 60 * 1000,
@@ -1016,7 +1017,7 @@
         },
         
         // Debug mode to show the debug log
-        debugMode: false,
+        debugMode: true, // Set to true for troubleshooting, false for production
         
         // Thresholds for KPI color coding
         thresholds: {
@@ -2458,75 +2459,106 @@
             // Update date display
             updateDateRangeDisplay(currentDateRange);
             
-            // Generate mock data (in real implementation, this would fetch from CONFIG.dataUrl)
-            const mockData = generateMockData();
-            window.dashboardData = mockData;
+            // Load data from JSON file
+            let jsonData;
+            let dataUrl = CONFIG.dataUrl;
+            let fallbacksAttempted = 0;
+            let loadErrors = [];
+
+            try {
+                // Try primary data source first
+                Logger.info(`Attempting to load data from: ${dataUrl}`);
+                const response = await fetch(dataUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                jsonData = await response.json();
+                Logger.info(`Successfully loaded JSON data with ${jsonData.productionData?.length || 0} records`);
+            } catch (error) {
+                // Log the error
+                Logger.error(`Error loading data from ${dataUrl}`, error);
+                loadErrors.push(`Failed to load from ${dataUrl}: ${error.message}`);
+                
+                // Try fallback data sources
+                const fallbacks = CONFIG.fallbackDataUrls || [];
+                
+                // Iterate through fallbacks
+                for (const fallbackUrl of fallbacks) {
+                    fallbacksAttempted++;
+                    try {
+                        Logger.info(`Attempting fallback data source ${fallbacksAttempted}: ${fallbackUrl}`);
+                        const fallbackResponse = await fetch(fallbackUrl);
+                        if (!fallbackResponse.ok) {
+                            throw new Error(`HTTP error! status: ${fallbackResponse.status}`);
+                        }
+                        jsonData = await fallbackResponse.json();
+                        Logger.info(`Successfully loaded JSON data from fallback ${fallbackUrl}`);
+                        dataUrl = fallbackUrl; // Update which URL succeeded
+                        break; // Exit loop if successful
+                    } catch (fallbackError) {
+                        Logger.error(`Fallback ${fallbackUrl} failed`, fallbackError);
+                        loadErrors.push(`Failed to load from ${fallbackUrl}: ${fallbackError.message}`);
+                    }
+                }
+                
+                // If we still don't have data after trying all sources
+                if (!jsonData) {
+                    const errorMessage = `All data sources failed. Attempted ${fallbacksAttempted + 1} sources.`;
+                    Logger.error(errorMessage);
+                    throw new Error(`Failed to load dashboard data: ${errorMessage}`);
+                }
+            }
+            
+            // Extract and store the full dataset
+            const fullData = jsonData.productionData || [];
+            
+            // Store data globally for reuse in detail views
+            window.dashboardData = fullData;
+            
+            // Make sure fullData exists
+            if (!fullData || !Array.isArray(fullData) || fullData.length === 0) {
+                throw new Error('Invalid data format: productionData array not found or empty');
+            }
+            
+            Logger.info(`Loaded ${fullData.length} records from ${dataUrl}`);
+            
+            // Check if we need to adjust date range based on available data
+            if (currentDateRange.start && currentDateRange.end) {
+                // Find any data in the current date range
+                const dataInCurrentRange = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
+                
+                // If no data in the current range, find latest dates in the data
+                if (!dataInCurrentRange || dataInCurrentRange.length === 0) {
+                    Logger.warn(`No data found in current date range, finding available dates in data`);
+                    const availableDates = findLatestDatesInData(fullData);
+                    currentDateRange.start = availableDates.start;
+                    currentDateRange.end = availableDates.end;
+                    
+                    // Update the date display
+                    updateDateRangeDisplay(currentDateRange);
+                    Logger.info(`Updated date range to match available data: ${currentDateRange.start} to ${currentDateRange.end}`);
+                }
+            }
             
             // Filter data by date range
-            const filteredData = filterDataByDateRange(mockData, currentDateRange.start, currentDateRange.end);
+            const filteredData = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
+            
+            // Check if we have data after filtering
+            if (!filteredData || filteredData.length === 0) {
+                Logger.warn(`No data found for the selected date range: ${currentDateRange.start} to ${currentDateRange.end}`);
+                showError(`No data available for the selected date range. Please try a different date range.`);
+                return;
+            }
             
             // Render dashboard components
-            renderKPISummary(filteredData, mockData);
-            renderDashboardGrid(filteredData, mockData);
+            renderKPISummary(filteredData, fullData);
+            renderDashboardGrid(filteredData, fullData);
             
             Logger.info('Dashboard initialization completed successfully');
         } catch (error) {
             Logger.error('Error initializing dashboard', error);
             showError('Failed to load dashboard data: ' + error.message);
         }
-    }
-
-    /**
-     * Generate mock data for testing
-     * @returns {Array} Array of mock data records
-     */
-    function generateMockData() {
-        const data = [];
-        const startDate = new Date('2023-01-01');
-        const endDate = new Date('2023-03-31');
-        const lineIds = ['nosi-scalpel', 'line-a', 'line-b', 'line-c'];
-        const variants = ['XL', 'S10', 'S20', 'Regular', 'Deluxe'];
-        const products = ['Surgical Instrument', 'IV Drip', 'Scalpel Assembly', 'Scalpel Package'];
-        
-        // Generate data for each day
-        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-            // For each line
-            lineIds.forEach(lineId => {
-                // Determine product based on line
-                const product = lineId === 'nosi-scalpel' ? 'Scalpel Package' : products[Math.floor(Math.random() * products.length)];
-                
-                // Determine variant
-                const variant = variants[Math.floor(Math.random() * variants.length)];
-                
-                // Create record
-                const record = {
-                    Date: new Date(date).toISOString(),
-                    Variant: variant,
-                    'Production Line ID': lineId,
-                    'Production Line Name': lineId === 'nosi-scalpel' ? 'Scalpel Line' : `Line ${lineId.slice(-1).toUpperCase()}`,
-                    'Production Line Color': lineId === 'line-a' ? 'blue' : (lineId === 'line-b' ? 'orange' : 'purple'),
-                    'Base Product': product,
-                    'Variant Status': Math.random() > 0.2 ? 'active' : 'ended',
-                    'Is Current Variant': Math.random() > 0.7,
-                    'Schedule Attainment': 50 + Math.random() * 50,
-                    'Staff Cost': 100 + Math.random() * 400,
-                    'Cost Per Unit': 200 + Math.random() * 300,
-                    'Downtime Duration (min)': Math.random() * 120,
-                    'Scrap Cost as % of Production Value': Math.random() * 10,
-                    'Actual Boxes Produced': Math.floor(50 + Math.random() * 150),
-                    'Theoretical Target (Boxes)': 200,
-                    'Actual Devices Produced': Math.floor(500 + Math.random() * 1500),
-                    'Theoretical Target (Devices)': 2000,
-                    'Top Rejects by QTY (Reason - Station - QTY - Cost)': 'No rejects',
-                    'Top Rejects by Cost (Reason - Station - QTY - Cost)': 'No rejects',
-                    'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)': 'No downtime'
-                };
-                
-                data.push(record);
-            });
-        }
-        
-        return data;
     }
     
     /**
@@ -2597,11 +2629,15 @@
         loadUserPreferences();
         
         // Initialize date range
-        const defaultRange = getDefaultDateRange();
-        currentDateRange = {
-            start: defaultRange.start,
-            end: defaultRange.end
-        };
+        // Ensure date range is properly initialized
+        if (!currentDateRange.start || !currentDateRange.end) {
+            const defaultRange = getDefaultDateRange();
+            currentDateRange = {
+                start: defaultRange.start,
+                end: defaultRange.end
+            };
+            Logger.info(`Initialized date range to default: ${currentDateRange.start} to ${currentDateRange.end}`);
+        }
         
         // Set date display
         updateDateRangeDisplay(currentDateRange);
