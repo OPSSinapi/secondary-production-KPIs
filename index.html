@@ -1312,6 +1312,45 @@
             };
         }
 
+
+        function findLatestDatesInData(data, numberOfDays = 5) {
+    // Return default range if no data
+    if (!data || data.length === 0) {
+        Logger.warn('No data found, using default date range');
+        return getDefaultDateRange();
+    }
+    
+    // Sort the data by date (descending)
+    const sortedData = [...data].sort((a, b) => 
+        new Date(b.Date) - new Date(a.Date)
+    );
+    
+    // Get unique dates
+    const uniqueDates = [];
+    const dateSet = new Set();
+    
+    for (const record of sortedData) {
+        const dateStr = record.Date.split('T')[0];
+        if (!dateSet.has(dateStr)) {
+            dateSet.add(dateStr);
+            uniqueDates.push(dateStr);
+            
+            if (uniqueDates.length >= numberOfDays) break;
+        }
+    }
+    
+    Logger.info(`Found ${uniqueDates.length} unique dates in data`);
+    
+    if (uniqueDates.length === 0) {
+        return getDefaultDateRange(); // Fallback to calendar calculation
+    }
+    
+    return {
+        start: uniqueDates[uniqueDates.length - 1], // Earliest of the latest days
+        end: uniqueDates[0] // Most recent date
+    };
+}
+        
         /**
          * Sets the date inputs to the current date range values
          */
@@ -2238,26 +2277,45 @@ function hideDetailView() {
             </div>
         `;
         
+        document.getElementById('dashboardGrid').innerHTML = `
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+            </div>
+        `;
+        
         // Load data
         const response = await fetch(CONFIG.dataUrl);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const jsonData = await response.json();
-        const data = jsonData.productionData;
+        
+        // Store the full dataset for later filtering
+        const fullData = jsonData.productionData;
+        
+        // On first load, find the latest dates with data
+        if (!currentDateRange.start || !currentDateRange.end) {
+            currentDateRange = findLatestDatesInData(fullData, 5); // Get latest 5 days
+            Logger.info(`Set initial date range to: ${currentDateRange.start} - ${currentDateRange.end}`);
+        }
         
         // Update date range display
         updateDateRangeDisplay(currentDateRange);
         
-        // Render KPI summary
-        renderKPISummary(data);
+        // Filter data for current date range
+        const filteredData = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
+        Logger.info(`Filtered to ${filteredData.length} records in date range`);
         
-        // Render dashboard grid
-        renderDashboardGrid(data);
+        // Render KPI summary with filtered data
+        renderKPISummary(filteredData);
+        
+        // Render dashboard grid with filtered data
+        renderDashboardGrid(filteredData);
         
     } catch (error) {
-        Logger.error('Error initializing dashboard', error);
-        showError('Failed to load dashboard data. Please try again.');
+        Logger.error('Error initializing dashboard: ' + error.message, error);
+        console.error('Dashboard initialization failed:', error);
+        showError('Failed to load dashboard data: ' + error.message);
     }
 }
 
