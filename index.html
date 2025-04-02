@@ -2351,7 +2351,7 @@ function hideDetailView() {
          * Render the KPI summary section
          * @param {Array} data - The dashboard data
          */
-        function renderKPISummary(data) {
+        function renderKPISummary(filteredData, fullData) {
             const container = document.getElementById('kpiSummary');
             if (!container) return;
             
