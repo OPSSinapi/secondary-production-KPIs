@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sinapi Biomedical Operations Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -24,9 +24,6 @@
         --active-bg: #eafaf1;
         --standby-bg: #fef9e7;
         --error-bg: #fdeaea;
-        --card-bg: #ffffff;
-        --text-primary: #333333;
-        --text-secondary: #666666;
     }
 
     * {
@@ -39,10 +36,6 @@
         font-family: Arial, sans-serif;
         background-color: #f8f9fa;
         color: var(--text-dark);
-        height: 100vh;
-        overflow: hidden; /* Prevent scrolling */
-        display: flex;
-        flex-direction: column;
     }
 
     /* Header styles */
@@ -54,7 +47,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex-shrink: 0;
     }
 
     .header h1 {
@@ -149,14 +141,12 @@
         border: 1px solid var(--border-color);
         border-radius: 3px;
     }
-    
-    /* KPI Summary */
+        /* KPI Summary */
     .kpi-summary {
         background-color: white;
         border-radius: 5px;
         margin: 15px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        flex-shrink: 0;
     }
 
     .kpi-summary-label {
@@ -240,803 +230,763 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
-
-    /* Main dashboard grid - fixed to use flexbox with set height */
-    .dashboard-container {
-        flex-grow: 1;
-        overflow: hidden;
-        padding: 0 15px 15px 15px;
-    }
-    
-    .dashboard-grid {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 15px !important;
-        height: 100%;
-        overflow-y: auto;
-    }
-
-    /* Card styling for flexbox layout */
-    .line-card {
-        background-color: white;
-        border: 1px solid var(--border-color);
-        border-radius: 5px;
-        width: calc(33.333% - 10px) !important;
-        height: 240px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        position: relative;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
-        margin-bottom: 0 !important;
-        flex-grow: 0 !important;
-        flex-shrink: 0 !important;
-    }
-
-    /* Make the expand icon much more visible */
-    .enlarge-icon {
-        background-color: rgba(0, 0, 0, 0.2) !important;
-        color: white !important;
-        width: 30px !important;
-        height: 30px !important;
-        border-radius: 50% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        position: absolute !important;
-        top: 10px !important;
-        right: 10px !important;
-        z-index: 1000 !important;
-        border: 2px solid white !important;
-    }
-
-    .enlarge-icon:hover {
-        transform: scale(1.2) !important;
-        background-color: rgba(0, 0, 0, 0.5) !important;
-    }
-
-    .enlarge-icon i.fas {
-        font-size: 16px !important;
-        color: white !important;
-    }
-
-    /* FIX: Card header colors */
-    .line-card-header {
-        padding: 12px 15px !important;
-        color: white !important;
-        font-weight: bold !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-    }
-
-    .blue-header {
-        background-color: var(--primary-blue) !important;
-    }
-
-    .orange-header {
-        background-color: var(--primary-orange) !important;
-    }
-
-    .purple-header {
-        background-color: var(--primary-purple) !important;
-    }
-
-    .line-card-content {
-        padding: 10px 15px;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .variant-info {
-        background-color: #f5f7fa;
-        border-radius: 3px;
-        padding: 5px 10px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 30px;
-    }
-
-    .variant-label {
-        font-size: 12px;
-        color: var(--text-dark);
-    }
-
-    .variant-name {
-        font-weight: bold;
-        margin-left: 5px;
-    }
-
-    .status-badge {
-        border-radius: 5px;
-        padding: 2px 10px;
-        font-size: 11px;
-        font-weight: bold;
-        text-align: center;
-        width: 70px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .status-active {
-        background-color: var(--active-bg);
-        color: var(--success-color);
-    }
-
-    .status-standby {
-        background-color: var(--standby-bg);
-        color: var(--warning-color);
-    }
-
-    .status-ended {
-        background-color: var(--standby-bg);
-        color: var(--warning-color);
-    }
-
-    /* Metrics grid */
-    .metrics-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto auto;
-        gap: 8px;
-        flex-grow: 1;
-    }
-
-    .metric-card {
-        background-color: #f8f9fa;
-        border-radius: 4px;
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .metric-title {
-        font-size: 11px;
-        color: var(--text-light);
-        margin-bottom: 5px;
-    }
-
-    .metric-value {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-weight: bold;
-    }
-
-    .metric-trend {
-        font-size: 11px;
-        display: flex;
-        align-items: center;
-        gap: 2px;
-    }
-
-    .value-good {
-        color: var(--success-color);
-    }
-
-    .value-warning {
-        color: var(--warning-color);
-    }
-
-    .value-danger {
-        color: var(--danger-color);
-    }
-
-    /* Error message */
-    .error-message {
-        background-color: var(--error-bg);
-        color: var(--danger-color);
-        padding: 15px;
-        margin: 10px 15px;
-        border-radius: 5px;
-        text-align: center;
-    }
-
-    /* Debug log */
-    .debug-log {
-        background-color: #f8f9fa;
-        border: 1px solid var(--border-color);
-        border-radius: 5px;
-        margin: 10px 15px;
-        padding: 10px;
-        max-height: 200px;
-        overflow-y: auto;
-        font-family: monospace;
-        font-size: 12px;
-    }
-
-    .debug-log-entry {
-        margin-bottom: 5px;
-        padding: 3px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .debug-log-entry.error {
-        color: var(--danger-color);
-        font-weight: bold;
-    }
-
-    .debug-log-entry.warning {
-        color: var(--warning-color);
-    }
-
-    .debug-log-entry.info {
-        color: var(--text-dark);
-    }
-    
-    .debug-log-entry.debug {
-        color: var(--text-light);
-        font-size: 0.9em;
-    }
-    
-    /* FIX: Modal / Detail View */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: 9999;
-        display: none;
-    }
-    
-    .modal-overlay[style*="display: block"] {
-        display: flex !important;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-content {
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-        width: 90%;
-        max-width: 1200px;
-        max-height: 90vh;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        animation: modalFadeIn 0.2s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
+/* 
+        ======================================
+        MAIN DASHBOARD GRID
+        ======================================
+        */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto;
+            gap: 10px;
+            padding: 0 15px;
+            margin-bottom: 15px;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: var(--primary-blue);
-        color: white;
-        padding: 15px 20px;
-    }
 
-    .modal-title {
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .modal-close {
-        font-size: 22px;
-        color: white;
-        background: none;
-        border: none;
-        cursor: pointer;
-        opacity: 0.8;
-        transition: opacity 0.2s;
-    }
-
-    .modal-close:hover {
-        opacity: 1;
-    }
-
-    .modal-body {
-        flex: 1;
-        overflow: hidden;
-        padding: 15px 20px;
-    }
-
-    /* Detail view styles */
-    .detail-metrics {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto auto auto;
-        gap: 15px;
-        height: calc(100% - 100px);
-        min-height: 500px;
-        overflow: visible;
-    }
-    
-    .schedule-card { 
-        grid-column: 1; 
-        grid-row: 1; 
-        height: auto;
-        min-height: 160px;
-    }
-    
-    .labour-card { 
-        grid-column: 2; 
-        grid-row: 1; 
-        height: auto;
-        min-height: 160px;
-    }
-    
-    .scrap-card { 
-        grid-column: 1 / span 2; 
-        grid-row: 2; 
-        height: auto;
-        min-height: 230px;
-    }
-    
-    .downtime-card { 
-        grid-column: 1 / span 2; 
-        grid-row: 3; 
-        height: auto;
-        min-height: 130px;
-    }
-    
-    .detail-metric-card {
-        background-color: white;
-        border-radius: 6px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        padding: 12px;
-        z-index: 1;
-    }
-    
-    .detail-metric-header {
-        font-size: 14px;
-        font-weight: bold;
-        color: var(--text-dark);
-        padding-bottom: 5px;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 10px;
-    }
-    
-    .toggle-container {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 8px;
-        flex-wrap: wrap;
-    }
-    
-    .toggle-btn {
-        background-color: #e8e8e8;
-        border: none;
-        border-radius: 4px;
-        padding: 4px 8px;
-        cursor: pointer;
-        font-size: 11px;
-    }
-    
-    .toggle-btn.active {
-        background-color: var(--primary-blue);
-        color: white;
-    }
-    
-    .chart-container {
-        flex: 1;
-        position: relative;
-        min-height: 0;
-        background-color: #ffffff;
-        border-radius: 4px;
-        overflow: visible;
-    }
-    
-    .schedule-card .chart-container,
-    .labour-card .chart-container {
-        height: 100px !important;
-        min-height: 100px !important;
-    }
-    
-    .downtime-card .chart-container {
-        height: 80px !important;
-        min-height: 80px !important;
-    }
-    
-    .scrap-analysis-layout {
-        display: flex;
-        flex-direction: column;
-        height: calc(100% - 50px);
-        min-height: 180px;
-    }
-    
-    .scrap-trend-chart {
-        flex: 0 0 60px;
-        margin-bottom: 10px;
-        background-color: #f5f7fa;
-        border-radius: 4px;
-        padding: 5px;
-    }
-    
-    .chart-subtitle {
-        font-size: 11px;
-        color: var(--text-dark);
-        margin-bottom: 2px;
-    }
-    
-    .daily-scrap-container {
-        flex: 1;
-        overflow-y: auto;
-        min-height: 100px;
-    }
-    
-    .daily-scrap-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-    
-    .daily-scrap-card {
-        background-color: #f5f7fa;
-        border-radius: 4px;
-        padding: 8px;
-        min-height: 85px;
-    }
-    
-    .daily-scrap-header {
-        font-size: 10px;
-        font-weight: bold;
-        color: var(--text-dark);
-        margin-bottom: 4px;
-        border-bottom: 1px solid #e0e0e0;
-        padding-bottom: 2px;
-    }
-    
-    .scrap-reason {
-        font-size: 10px;
-        line-height: 1.3;
-        margin-bottom: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .downtime-label {
-        font-size: 10px;
-        color: var(--text-light);
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        text-align: center;
-        margin-bottom: 2px;
-    }
-    
-    .date-nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        background-color: white;
-        border-radius: 6px;
-        padding: 10px 15px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    .date-range-display {
-        font-size: 15px;
-        font-weight: bold;
-        color: var(--text-dark);
-    }
-
-    .date-nav-controls {
-        display: flex;
-        gap: 10px;
-    }
-
-    .date-nav-btn {
-        background-color: var(--primary-blue);
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 6px 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 13px;
-        min-width: 150px;
-        justify-content: center;
-        white-space: nowrap;
-    }
-
-    .date-nav-btn:hover {
-        background-color: #2980b9;
-    }
-
-    .no-data-message {
-        color: var(--text-light);
-        text-align: center;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        width: 100%;
-        font-size: 14px;
-    }
-
-    /* Responsive layouts */
-    @media (max-width: 1279px) {
+        /* 
+        ======================================
+        LINE CARDS
+        ======================================
+        */
         .line-card {
-            width: calc(50% - 10px) !important;
-        }
-        
-        .detail-metrics {
-            grid-template-columns: 1fr;
-        }
-        
-        .schedule-card, .labour-card {
-            grid-column: 1;
-        }
-        
-        .scrap-card, .downtime-card {
-            grid-column: 1;
-        }
-        
-        .labour-card {
-            grid-row: 2;
-        }
-        
-        .scrap-card {
-            grid-row: 3;
-        }
-        
-        .downtime-card {
-            grid-row: 4;
-        }
-        
-        .daily-scrap-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 767px) {
-        .header {
-            flex-direction: column;
-            height: auto;
-            padding: 10px;
-        }
-        
-        .date-controls {
-            margin-top: 10px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
             width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .line-card-header {
+            padding: 5px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            height: 35px;
+            display: flex;
+            align-items: center;
             justify-content: space-between;
         }
-        
-        .kpi-cards {
+
+        .card-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .enlarge-icon {
+            cursor: pointer;
+            margin-left: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .enlarge-icon:hover {
+            opacity: 1;
+        }
+
+        .blue-header {
+            background-color: var(--primary-blue);
+        }
+
+        .orange-header {
+            background-color: var(--primary-orange);
+        }
+
+        .purple-header {
+            background-color: var(--primary-purple);
+        }
+
+        .line-card-content {
+            padding: 10px 15px;
+        }
+        .variant-info {
+            background-color: #f5f7fa;
+            border-radius: 3px;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 30px;
+        }
+
+        .variant-label {
+            font-size: 12px;
+            color: var(--text-dark);
+        }
+
+        .variant-name {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .status-badge {
+            border-radius: 5px;
+            padding: 2px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            width: 70px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-active {
+            background-color: var(--active-bg);
+            color: var(--success-color);
+        }
+
+        .status-standby {
+            background-color: var(--standby-bg);
+            color: var(--warning-color);
+        }
+
+        .status-ended {
+            background-color: var(--standby-bg);
+            color: var(--warning-color);
+        }
+
+        /* 
+        ======================================
+        VARIANT HISTORY
+        ======================================
+        */
+        .variant-history {
+            background-color: #f5f7fa;
+            border-radius: 3px;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            height: 60px;
+        }
+
+        .history-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .timeline-container {
+            background-color: white;
+            border-radius: 2px;
+            padding: 5px;
+            height: 25px;
+            position: relative;
+        }
+
+        /* 
+        ======================================
+        COMBINED VARIANT DISPLAY
+        ======================================
+        */
+        .variant-combined {
+            background-color: #f5f7fa;
+            border-radius: 3px;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+        }
+
+        .variant-combined .variant-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 30px;
+        }
+
+        .variant-combined .timeline-container {
+            height: 20px;
+            padding: 2px;
+        }
+
+        .timeline-segment {
+            position: absolute;
+            height: 15px;
+            top: 5px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+        }
+
+        /* 
+        ======================================
+        EXPLICIT GRID POSITIONING
+        ======================================
+        */
+        .grid-position-1-1 { grid-row: 1; grid-column: 1; }
+        .grid-position-1-2 { grid-row: 1; grid-column: 2; }
+        .grid-position-1-3 { grid-row: 1; grid-column: 3; }
+        .grid-position-1-4 { grid-row: 1; grid-column: 4; }
+        .grid-position-2-1 { grid-row: 2; grid-column: 1; }
+        .grid-position-2-2 { grid-row: 2; grid-column: 2; }
+        .grid-position-2-3 { grid-row: 2; grid-column: 3; }
+        .grid-position-2-4 { grid-row: 2; grid-column: 4; }
+
+        /* 
+        ======================================
+        KPI METRICS GRID
+        ======================================
+        */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .metric-card {
+            background-color: #f5f7fa;
+            border-radius: 3px;
+            padding: 10px;
+            height: 60px;
+            display: flex;
             flex-direction: column;
-            height: auto;
+            justify-content: space-between;
+        }
+
+        .metric-title {
+            font-size: 12px;
+            color: var(--text-dark);
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
             gap: 5px;
         }
-        
-        .kpi-summary {
-            height: auto;
+
+        .metric-trend {
+            font-size: 12px;
+        }
+
+        .value-good {
+            color: var(--success-color);
+        }
+
+        .value-warning {
+            color: var(--warning-color);
+        }
+
+        .value-danger {
+            color: var(--danger-color);
+        }
+        /* 
+        ======================================
+        DIVIDER
+        ======================================
+        */
+        .divider {
+            height: 2px;
+            background-color: var(--border-color);
+            margin: 10px 0;
+        }
+
+        /* 
+        ======================================
+        TABLE FOR POPUP LINE
+        ======================================
+        */
+        .runs-table-container {
+            background-color: #f5f7fa;
+            border-radius: 3px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .runs-table-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .runs-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 5px;
+        }
+
+        .runs-table th {
+            background-color: #ecf0f1;
+            padding: 5px;
+            text-align: left;
+            font-size: 10px;
+            color: var(--text-light);
+            border-radius: 2px;
+        }
+
+        .runs-table td {
+            background-color: white;
+            padding: 5px;
+            font-size: 10px;
+            border-radius: 2px;
+        }
+
+        /* 
+        ======================================
+        ERROR MESSAGE
+        ======================================
+        */
+        .error-message {
+            background-color: var(--error-bg);
+            color: var(--danger-color);
+            padding: 15px;
+            margin: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* 
+        ======================================
+        DEBUG LOG
+        ======================================
+        */
+        .debug-log {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin: 10px 15px;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .debug-log-entry {
+            margin-bottom: 5px;
+            padding: 3px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .debug-log-entry.error {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .debug-log-entry.warning {
+            color: var(--warning-color);
+        }
+
+        .debug-log-entry.info {
+            color: var(--text-dark);
         }
         
-        .line-card {
-            width: 100% !important;
+        /* 
+        ======================================
+        MODAL / DETAIL VIEW
+        ======================================
+        */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
         }
-        
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        /* Improved Modal Styling */
         .modal-content {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
             width: 95%;
-            max-height: 95vh;
+            max-width: 1600px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        
+
+        .modal-header {
+            padding: 15px 20px;
+            background-color: var(--primary-dark-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .modal-title {
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .modal-close {
+            font-size: 22px;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: hidden;
+            padding: 15px 20px;
+        }
+        /* REDESIGNED DETAIL VIEW STYLES */
+        
+        /* Main detail metrics layout */
+        .detail-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto auto auto;
+            gap: 15px;
+            height: calc(100% - 60px); /* Subtract date nav height */
         }
         
+        /* Card positioning and sizing for redesigned layout */
+        .schedule-card { 
+            grid-column: 1; 
+            grid-row: 1; 
+            height: 140px; 
+        }
+        
+        .labour-card { 
+            grid-column: 2; 
+            grid-row: 1; 
+            height: 140px; 
+        }
+        
+        .scrap-card { 
+            grid-column: 1 / span 2; 
+            grid-row: 2; 
+            height: 200px; 
+        }
+        
+        .downtime-card { 
+            grid-column: 1 / span 2; 
+            grid-row: 3; 
+            height: 110px; 
+        }
+        
+        /* Detail-specific card styling */
+        .detail-metric-card {
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 12px;
+        }
+        
+        .detail-metric-header {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-dark);
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+        
+        /* Toggle buttons styling */
+        .toggle-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-btn {
+            background-color: #e8e8e8;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .toggle-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        
+        /* Chart containers with consistent heights */
         .chart-container {
-            height: 200px;
+            flex: 1;
+            position: relative;
+            min-height: 0;
+            background-color: #ffffff;
+            border-radius: 4px;
+        }
+        
+        .schedule-card .chart-container,
+        .labour-card .chart-container {
+            height: 80px !important;
+            min-height: 80px !important;
+        }
+        
+        .downtime-card .chart-container {
+            height: 60px !important;
+            min-height: 60px !important;
+        }
+        
+        /* Scrap Analysis Layout */
+        .scrap-analysis-layout {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 45px); /* Subtract header and toggle height */
+        }
+        
+        .scrap-trend-chart {
+            flex: 0 0 50px;
+            margin-bottom: 10px;
+            background-color: #f5f7fa;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        
+        .chart-subtitle {
+            font-size: 11px;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+        
+        .daily-scrap-container {
+            flex: 1;
+            overflow-y: auto;
         }
         
         .daily-scrap-grid {
-            grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
-    }
+        
+        /* Scrap daily card styling */
+        .daily-scrap-card {
+            background-color: #f5f7fa;
+            border-radius: 4px;
+            padding: 8px;
+            min-height: 70px;
+        }
+        
+        .daily-scrap-header {
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 2px;
+        }
+        
+        .scrap-reason {
+            font-size: 8px;
+            line-height: 1.3;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Downtime styling */
+        .downtime-label {
+            font-size: 8px;
+            color: var(--text-light);
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        /* 
+        ======================================
+        DATE NAVIGATION
+        ======================================
+        */
+        .date-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: 6px;
+            padding: 10px 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
 
-    /* Tooltip */
-    .tooltip {
-        position: absolute;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 3px;
-        font-size: 12px;
-        pointer-events: none;
-        z-index: 100;
-        max-width: 200px;
-        white-space: normal;
-    }
+        .date-range-display {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
 
-    /* CSS styles for detail view */
-    .detail-view-content {
-        height: calc(100% - 80px);
-        min-height: 600px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: repeat(2, minmax(300px, 1fr));
-        gap: 15px;
-        padding: 15px;
-    }
+        .date-nav-controls {
+            display: flex;
+            gap: 10px;
+        }
 
-    .detail-metric-card {
-        background-color: var(--card-bg);
-        border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        min-height: 280px;
-        overflow: visible;
-    }
+        .date-nav-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            min-width: 150px; /* Increased min-width to prevent text cutoff */
+            justify-content: center; /* Center content in button */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
 
-    .detail-metric-header {
-        font-size: 18px;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 10px;
-        height: 24px;
-    }
+        .date-nav-btn:hover {
+            background-color: #2980b9;
+        }
 
-    .schedule-card, .labour-card, .scrap-card, .downtime-card {
-        height: auto;
-        min-height: 280px;
-        display: flex;
-        flex-direction: column;
-    }
+        /* 
+        ======================================
+        RESPONSIVE LAYOUTS
+        ======================================
+        */
+        /* Special Cases */
+        .card-double-height {
+            grid-row: span 2;
+        }
 
-    .chart-container {
-        flex: 1 1 auto;
-        width: 100%;
-        height: auto;
-        min-height: 150px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: visible;
-    }
+        /* Base product line cards in same column */
+        .base-product-first {
+            grid-column-start: var(--column-start);
+        }
 
-    .daily-scrap-grid {
-        flex: 1 1 auto;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-        margin-top: 12px;
-        height: auto;
-        min-height: 150px;
-    }
+        .base-product-same-column {
+            grid-column-start: var(--column-start);
+        }
 
-    .daily-scrap-card {
-        background-color: rgba(0,0,0,0.03);
-        border-radius: 5px;
-        padding: 8px;
-        font-size: 12px;
-        min-height: 120px;
-        display: flex;
-        flex-direction: column;
-    }
+        @media (max-width: 1279px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-double-height {
+                grid-column: span 1;
+            }
+            
+            .detail-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .schedule-card, .labour-card {
+                grid-column: 1;
+            }
+            
+            .scrap-card, .downtime-card {
+                grid-column: 1;
+            }
+            
+            .labour-card {
+                grid-row: 2;
+            }
+            
+            .scrap-card {
+                grid-row: 3;
+            }
+            
+            .downtime-card {
+                grid-row: 4;
+            }
+            
+            .daily-scrap-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-    .daily-scrap-header {
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: var(--text-primary);
-        font-size: 11px;
-        height: 14px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .daily-scrap-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .scrap-reason {
-        color: var(--text-secondary);
-        font-size: 11px;
-        margin: 2px 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .scrap-reason-more {
-        color: var(--text-light);
-        font-size: 10px;
-        font-style: italic;
-        margin-top: 2px;
-    }
-
-    .toggle-button-group {
-        display: flex;
-        justify-content: center;
-        margin-top: 5px;
-        margin-bottom: 5px;
-    }
-
-    .detail-toggle-button {
-        border: none;
-        background-color: transparent;
-        color: var(--text-light);
-        padding: 2px 8px;
-        font-size: 11px;
-        cursor: pointer;
-        border-radius: 12px;
-    }
-
-    .detail-toggle-button.active {
-        background-color: var(--primary-blue);
-        color: white;
-    }
-    
-    .downtime-label {
-        font-size: 9px;
-        color: var(--text-secondary);
-        max-width: 60px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        height: 12px;
-        margin-bottom: 3px;
-    }
-
-    .loading-text {
-        font-size: 12px;
-        color: var(--text-light);
-        margin-top: 10px;
-    }
-    
-    .debug-info {
-        position: fixed;
-        bottom: 5px;
-        right: 5px;
-        background-color: rgba(0,0,0,0.05);
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 10px;
-        color: var(--text-light);
-        z-index: 100;
-    }
+        @media (max-width: 767px) {
+            .header {
+                flex-direction: column;
+                height: auto;
+                padding: 10px;
+            }
+            
+            .date-controls {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .kpi-cards {
+                flex-direction: column;
+                height: auto;
+                gap: 5px;
+            }
+            
+            .kpi-summary {
+                height: auto;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                max-height: 95vh;
+            }
+            
+            .modal-title {
+                font-size: 16px;
+            }
+            
+            .chart-container {
+                height: 200px;
+            }
+            
+            .daily-scrap-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
 <body>
-                <!-- Header Section -->
+    <!-- Header Section -->
     <header class="header">
         <h1>Sinapi Biomedical Operations Dashboard</h1>
         <div class="date-controls">
             <button class="date-nav-btn" id="prevPeriodButton"><i class="fas fa-chevron-left"></i></button>
-            <div class="date-filter" id="dateRangeDisplay">Mar 25 - Apr 2</div>
+            <div class="date-filter" id="dateRangeDisplay">Loading...</div>
             <button class="date-nav-btn" id="nextPeriodButton"><i class="fas fa-chevron-right"></i></button>
             <button class="date-range-btn" id="dateRangeButton">Select Dates</button>
             <button class="period-btn" id="periodToggle">Weekly</button>
             <button class="refresh-btn" id="refreshButton"><i class="fas fa-sync-alt"></i></button>
         </div>
     </header>
-    
     <!-- Date Range Picker Dropdown -->
     <div class="date-picker-dropdown" id="datePickerDropdown">
         <label for="startDate">Start Date:</label>
@@ -1073,13 +1023,11 @@
         </div>
     </div>
     
-    <!-- Main Dashboard Container with Fixed Height -->
-    <div class="dashboard-container">
-        <div class="dashboard-grid" id="dashboardGrid">
-            <!-- Loading spinner initially -->
-            <div class="loading-container">
-                <div class="loading-spinner"></div>
-            </div>
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid" id="dashboardGrid">
+        <!-- Loading spinner initially -->
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
         </div>
     </div>
 
@@ -1088,11 +1036,11 @@
         <div class="debug-log-entry info">Debug log initialized.</div>
     </div>
 
-    <!-- Detail View Modal -->
+    <!-- Detail View Modal with Redesigned Layout -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" id="detailTitle">Line Details</div>
+                <div class="modal-title" id="modalTitle">SCD: Apelele Details</div>
                 <button class="modal-close" id="modalClose">&times;</button>
             </div>
             <div class="modal-body">
@@ -1105,9 +1053,9 @@
                     </div>
                 </div>
                 
-                <!-- Detail Metrics Grid -->
+                <!-- Redesigned Detail Metrics Grid -->
                 <div class="detail-metrics">
-                    <!-- Schedule Attainment Card -->
+                    <!-- Schedule Attainment Card (Smaller) -->
                     <div class="detail-metric-card schedule-card">
                         <div class="detail-metric-header">Schedule Attainment</div>
                         <div class="toggle-container">
@@ -1115,20 +1063,19 @@
                             <button class="toggle-btn" id="attainmentBoxesBtn">Boxes</button>
                             <button class="toggle-btn" id="attainmentDevicesBtn">Devices</button>
                         </div>
-                        <div class="chart-container" id="scheduleChart"></div>
+                        <div class="chart-container" id="scheduleAttainmentChart"></div>
                     </div>
                     
-                    <!-- Labour Cost Card -->
+                    <!-- Labour Cost Card (Smaller) -->
                     <div class="detail-metric-card labour-card">
                         <div class="detail-metric-header">Labour Cost per Unit</div>
                         <div class="toggle-container">
                             <button class="toggle-btn active" id="labourCostBtn">Labour Cost</button>
                             <button class="toggle-btn" id="unitCostBtn">Cost Per Unit</button>
                         </div>
-                        <div class="chart-container" id="labourChart"></div>
+                        <div class="chart-container" id="labourCostChart"></div>
                     </div>
-                    
-                    <!-- Scrap Analysis Card -->
+                    <!-- Scrap Analysis Card (Larger) -->
                     <div class="detail-metric-card scrap-card">
                         <div class="detail-metric-header">Scrap Analysis</div>
                         <div class="toggle-container">
@@ -1136,15 +1083,15 @@
                             <button class="toggle-btn" id="scrapCostBtn">By Cost</button>
                         </div>
                         <div class="scrap-analysis-layout">
-                            <!-- Trend line chart -->
+                            <!-- Trend line chart (smaller) -->
                             <div class="scrap-trend-chart">
                                 <div class="chart-subtitle">Scrap % Trend</div>
-                                <div id="scrapChart"></div>
+                                <div id="scrapPercentageChart"></div>
                             </div>
                             
                             <!-- Daily scrap details grid -->
                             <div class="daily-scrap-container">
-                                <div id="dailyScrapDetails" class="daily-scrap-grid">
+                                <div id="dailyScrapGrid" class="daily-scrap-grid">
                                     <!-- Daily scrap cards will be dynamically inserted here -->
                                 </div>
                             </div>
@@ -1169,2380 +1116,1107 @@
     </div>
 
     <script>
-    /**
-     * ======================================
-     * CONFIGURATION
-     * ======================================
-     */
-
-    /**
-     * Main configuration object for the dashboard
-     */
-    const CONFIG = {
-        // URL to fetch operational data from
-        dataUrl: 'OpsData.json', // Primary data source
-        fallbackDataUrls: ['data/production-data.json', 'data.json'], // Fallback data sources to try if primary fails
+        /**
+         * ======================================
+         * CONFIGURATION
+         * ======================================
+         */
         
-        // Refresh interval in milliseconds (5 minutes)
-        refreshInterval: 5 * 60 * 1000,
-        
-        // Default period for data display
-        defaultPeriod: 'weekly',
-        
-        // Default date range (last 7 production dates)
-        defaultDateRange: {
-            days: 7
-        },
-        
-        // Debug mode to show the debug log
-        debugMode: true, // Set to true for troubleshooting, false for production
-        
-        // Thresholds for KPI color coding
-        thresholds: {
-            scheduleAttainment: { 
-                good: 95,      // >= 95% = green
-                warning: 85    // >= 85% = yellow, < 85% = red
+        // Main configuration object for the dashboard
+        const CONFIG = {
+            // URL to fetch operational data from
+            dataUrl: 'OpsData.json',
+            
+            // Refresh interval in milliseconds (5 minutes)
+            refreshInterval: 5 * 60 * 1000,
+            
+            // Default period for data display
+            defaultPeriod: 'weekly', // Changed from 'daily' to 'weekly'
+            
+            // Default date range (last 5 production dates)
+            defaultDateRange: {
+                days: 7  // Changed from 5 to 7 days (one week)
             },
-            labourCostPerUnit: { 
-                good: 300,     // <= 300 = green
-                warning: 400   // <= 400 = yellow, > 400 = red
+            
+            // Debug mode to show the debug log
+            debugMode: true,
+            
+            // Production lines that need special handling for Base Products
+            specialLinesBaseProducts: {
+                'nosi-scalpel': true,
+                'mvokwe-3rd line': true
             },
-            scrapPercentage: { 
-                good: 5,       // <= 5% = green
-                warning: 15    // <= 15% = yellow, > 15% = red
+            
+            // Variant timeline colors
+            timelineColors: {
+                'default': 'var(--timeline-blue)',
+                'XL': 'var(--timeline-orange)',
+                'S10': 'var(--timeline-red)',
+                'S20': 'var(--timeline-blue)',
+                'Plus': 'var(--timeline-purple)',
+                'Regular': 'var(--timeline-blue)',
+                'Deluxe': 'var(--timeline-purple)',
+                'Standard': 'var(--timeline-blue)'
             },
-            downtimeHours: { 
-                good: 3,       // <= 3 hours = green
-                warning: 6     // <= 6 hours = yellow, > 6 hours = red
-            }
-        },
-        
-        // Variant timeline colors
-        timelineColors: {
-            'default': 'var(--timeline-blue)',
-            'XL': 'var(--timeline-orange)',
-            'S10': 'var(--timeline-red)',
-            'S20': 'var(--timeline-blue)',
-            'Plus': 'var(--timeline-purple)',
-            'Regular': 'var(--timeline-blue)',
-            'Deluxe': 'var(--timeline-purple)',
-            'Standard': 'var(--timeline-blue)'
-        }
-    };
-
-    /**
-     * ======================================
-     * LOGGING UTILITIES
-     * ======================================
-     */
-
-    /**
-     * Debug logger for diagnostic information
-     */
-    const Logger = {
-        logElement: null,
-        
-        /**
-         * Initialize the logger
-         */
-        init: function() {
-            this.logElement = document.getElementById('debugLog');
-            if (CONFIG.debugMode) {
-                this.logElement.style.display = 'block';
-            }
-        },
-        
-        /**
-         * Log an information message
-         * @param {string} message - The message to log
-         */
-        info: function(message) {
-            this._log(message, 'info');
-        },
-        
-        /**
-         * Log a debug message
-         * @param {string} message - The message to log
-         */
-        debug: function(message) {
-            this._log(message, 'debug');
-        },
-        
-        /**
-         * Log a warning message
-         * @param {string} message - The message to log
-         */
-        warn: function(message) {
-            this._log(message, 'warning');
-        },
-        
-        /**
-         * Log an error message
-         * @param {string} message - The message to log
-         * @param {Error} [error] - Optional error object
-         */
-        error: function(message, error) {
-            let fullMessage = message;
-            if (error) {
-                fullMessage += `: ${error.message}`;
-            }
-            this._log(fullMessage, 'error');
-            if (error && error.stack) {
-                this._log(`Stack: ${error.stack}`, 'error');
-            }
-        },
-        
-        /**
-         * Internal method to add a log entry
-         * @param {string} message - The message to log
-         * @param {string} level - The log level ('debug', 'info', 'warning', 'error')
-         * @private
-         */
-        _log: function(message, level) {
-            if (!this.logElement) return;
             
-            const timestamp = new Date().toISOString();
-            const entry = document.createElement('div');
-            entry.className = `debug-log-entry ${level}`;
-            entry.textContent = `[${timestamp}] ${message}`;
-            
-            this.logElement.appendChild(entry);
-            this.logElement.scrollTop = this.logElement.scrollHeight;
-            
-            // Also log to console
-            switch(level) {
-                case 'debug':
-                    console.debug(message);
-                    break;
-                case 'info':
-                    console.log(message);
-                    break;
-                case 'warning':
-                    console.warn(message);
-                    break;
-                case 'error':
-                    console.error(message);
-                    break;
-            }
-        }
-    };
-
-    /**
-     * ======================================
-     * DATE UTILITIES
-     * ======================================
-     */
-
-    // Store current date range
-    let currentDateRange = {
-        start: null,
-        end: null
-    };
-
-    // Store current period type
-    let currentPeriod = CONFIG.defaultPeriod;
-
-    // Store week cycle preference (0-6, where 0 is Sunday, 1 is Monday, etc.)
-    let weekCycleStartDay = 1; // Default to Monday
-
-    /**
-     * Gets the default date range based on week cycle preference
-     * @returns {Object} Object with start and end dates
-     */
-    function getDefaultDateRange() {
-        const now = new Date();
-        
-        // Get current day of week (0-6, where 0 is Sunday)
-        const currentDay = now.getDay();
-        
-        // Calculate days to subtract to get to the start day
-        const daysToSubtract = (currentDay - weekCycleStartDay + 7) % 7;
-        
-        // Calculate start date (the selected start day of the current/most recent week)
-        const start = new Date(now);
-        start.setDate(start.getDate() - daysToSubtract);
-        start.setHours(0, 0, 0, 0);
-        
-        // Calculate end date (start + 6 days to complete the week)
-        const end = new Date(start);
-        end.setDate(end.getDate() + 6);
-        end.setHours(23, 59, 59, 999);
-        
-        return {
-            start: start.toISOString().split('T')[0],
-            end: end.toISOString().split('T')[0]
-        };
-    }
-
-    /**
-     * Finds latest dates in the data
-     * @param {Array} data - The data array
-     * @param {number} numberOfDays - Number of days to find
-     * @returns {Object} Object with start and end dates
-     */
-    function findLatestDatesInData(data, numberOfDays = 5) {
-        // Return default range if no data
-        if (!data || data.length === 0) {
-            Logger.warn('No data found, using default date range');
-            return getDefaultDateRange();
-        }
-        
-        // Sort the data by date (descending)
-        const sortedData = [...data].sort((a, b) => 
-            new Date(b.Date) - new Date(a.Date)
-        );
-        
-        // Get unique dates
-        const uniqueDates = [];
-        const dateSet = new Set();
-        
-        for (const record of sortedData) {
-            const dateStr = record.Date.split('T')[0];
-            if (!dateSet.has(dateStr)) {
-                dateSet.add(dateStr);
-                uniqueDates.push(dateStr);
-                
-                if (uniqueDates.length >= numberOfDays) break;
-            }
-        }
-        
-        Logger.info(`Found ${uniqueDates.length} unique dates in data`);
-        
-        if (uniqueDates.length === 0) {
-            return getDefaultDateRange(); // Fallback to calendar calculation
-        }
-        
-        return {
-            start: uniqueDates[uniqueDates.length - 1], // Earliest of the latest days
-            end: uniqueDates[0] // Most recent date
-        };
-    }
-
-    /**
-     * Sets the date inputs to the current date range values
-     */
-    function setDateInputs() {
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
-        
-        if (currentDateRange.start) {
-            startDateInput.value = currentDateRange.start.split('T')[0];
-        }
-        
-        if (currentDateRange.end) {
-            endDateInput.value = currentDateRange.end.split('T')[0];
-        }
-    }
-
-    /**
-     * Updates the date range display
-     * @param {Object} dateRange - Object containing start and end dates
-     */
-    function updateDateRangeDisplay(dateRange) {
-        const display = document.getElementById('dateRangeDisplay');
-        if (!display) return;
-        
-        const startDate = new Date(dateRange.start);
-        const endDate = new Date(dateRange.end);
-        
-        const formatDate = (date) => {
-            return date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric'
-            });
-        };
-        
-        display.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
-    }
-
-    /**
-     * Stores user preferences in localStorage
-     */
-    function storeUserPreferences() {
-        try {
-            const preferences = {
-                weekCycleStartDay: weekCycleStartDay,
-                period: currentPeriod
-            };
-            
-            localStorage.setItem('dashboardPreferences', JSON.stringify(preferences));
-            Logger.info('Stored user preferences: ' + JSON.stringify(preferences));
-        } catch (error) {
-            Logger.error('Error storing user preferences', error);
-        }
-    }
-
-    /**
-     * Loads user preferences from localStorage
-     */
-    function loadUserPreferences() {
-        try {
-            const preferencesString = localStorage.getItem('dashboardPreferences');
-            
-            if (preferencesString) {
-                const preferences = JSON.parse(preferencesString);
-                
-                // Set week cycle start day if defined
-                if (preferences.weekCycleStartDay !== undefined) {
-                    weekCycleStartDay = preferences.weekCycleStartDay;
-                    // Update dropdown
-                    const cycleStartSelect = document.getElementById('cycleStartDay');
-                    if (cycleStartSelect) {
-                        cycleStartSelect.value = weekCycleStartDay.toString();
-                    }
+            // Thresholds for KPI color coding
+            thresholds: {
+                scheduleAttainment: {
+                    good: 95,      // >= 95% = green
+                    warning: 85    // >= 85% = yellow, < 85% = red
+                },
+                labourCostPerUnit: {
+                    good: 300,     // <= 300 = green
+                    warning: 400   // <= 400 = yellow, > 400 = red
+                },
+                scrapPercentage: {
+                    good: 5,       // <= 5% = green
+                    warning: 15    // <= 15% = yellow, > 15% = red
+                },
+                downtimeHours: {
+                    good: 3,       // <= 3 hours = green
+                    warning: 6     // <= 6 hours = yellow, > 6 hours = red
                 }
-                
-                // Set period if defined
-                if (preferences.period) {
-                    currentPeriod = preferences.period;
-                    // Update button text
-                    const periodToggle = document.getElementById('periodToggle');
-                    if (periodToggle) {
-                        periodToggle.textContent = currentPeriod.charAt(0).toUpperCase() + currentPeriod.slice(1);
-                    }
+            }
+        };
+        /**
+         * ======================================
+         * LOGGING UTILITIES
+         * ======================================
+         */
+        
+        /**
+         * Debug logger for diagnostic information
+         */
+        const Logger = {
+            logElement: null,
+            
+            /**
+             * Initialize the logger
+             */
+            init: function() {
+                this.logElement = document.getElementById('debugLog');
+                if (CONFIG.debugMode) {
+                    this.logElement.style.display = 'block';
                 }
-                
-                Logger.info('Loaded user preferences: ' + JSON.stringify(preferences));
-            }
-        } catch (error) {
-            Logger.error('Error loading user preferences', error);
-        }
-    }
-
-    /**
-     * Filters data by date range
-     * @param {Array} data - Data to filter
-     * @param {string} startDate - Start date string
-     * @param {string} endDate - End date string
-     * @returns {Array} Filtered data
-     */
-    function filterDataByDateRange(data, startDate, endDate) {
-        if (!data || !startDate || !endDate) return [];
-        
-        Logger.info(`Filtering data from ${startDate} to ${endDate}`);
-        
-        // Ensure dates are in the correct format
-        const start = new Date(startDate);
-        start.setHours(0, 0, 0, 0);  // Start of day
-        
-        const end = new Date(endDate);
-        end.setHours(23, 59, 59, 999);  // End of day
-        
-        // Log the time range for debugging
-        Logger.info(`Date range: ${start.toISOString()} to ${end.toISOString()}`);
-        
-        const filteredData = data.filter(record => {
-            if (!record.Date) {
-                Logger.warn('Record missing Date field');
-                return false;
-            }
+            },
             
-            try {
-                // Fix date comparison by using date string comparison for exact matching
-                const recordDate = new Date(record.Date);
-                
-                // Extract only the date part for comparison (YYYY-MM-DD)
-                const recordDateStr = recordDate.toISOString().split('T')[0];
-                const startDateStr = start.toISOString().split('T')[0];
-                const endDateStr = end.toISOString().split('T')[0];
-                
-                // Include if the date is on or after startDate AND on or before endDate
-                const isInRange = recordDateStr >= startDateStr && recordDateStr <= endDateStr;
-                
-                // For edge dates, log the comparison results
-                if (recordDateStr === startDateStr || recordDateStr === endDateStr) {
-                    Logger.info(`Date comparison for ${recordDateStr}: ${isInRange ? 'IN RANGE' : 'OUT OF RANGE'}`);
+            /**
+             * Log an information message
+             * @param {string} message - The message to log
+             */
+            info: function(message) {
+                this._log(message, 'info');
+            },
+            
+            /**
+             * Log a warning message
+             * @param {string} message - The message to log
+             */
+            warn: function(message) {
+                this._log(message, 'warning');
+            },
+            
+            /**
+             * Log an error message
+             * @param {string} message - The message to log
+             * @param {Error} [error] - Optional error object
+             */
+            error: function(message, error) {
+                let fullMessage = message;
+                if (error) {
+                    fullMessage += `: ${error.message}`;
                 }
-                
-                return isInRange;
-            } catch (error) {
-                Logger.error(`Error parsing date: ${record.Date}`, error);
-                return false;
-            }
-        });
-        
-        // Log production lines found
-        const uniqueLines = [...new Set(filteredData.map(r => r['Production Line ID']).filter(Boolean))];
-        Logger.info(`Found ${uniqueLines.length} production lines in filtered data: ${uniqueLines.join(', ')}`);
-        
-        return filteredData;
-    }
-
-    /**
-     * Helper function to capitalize the first letter of a string
-     * @param {string} string - Input string
-     * @returns {string} Capitalized string
-     */
-    function capitalize(string) {
-        if (!string) return '';
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    /**
-     * Calculate average of a field in an array of objects
-     * @param {Array} data - Array of objects
-     * @param {string} field - Field name to average
-     * @returns {number} Average value
-     */
-    function calculateAverage(data, field) {
-        if (!data || data.length === 0) return 0;
-        
-        // Validate that field exists in at least some records
-        const hasField = data.some(record => record && record[field] !== undefined);
-        if (!hasField) {
-            Logger.warn(`Field '${field}' not found in any records for average calculation`);
-            return 0;
-        }
-        
-        const values = data.map(record => {
-            if (!record || record[field] === undefined) {
-                Logger.debug(`Missing field '${field}' in record`);
-                return NaN;
-            }
-            return parseFloat(record[field] || 0);
-        }).filter(value => !isNaN(value));
-        
-        if (values.length === 0) {
-            Logger.warn(`No valid values found for field '${field}'`);
-            return 0;
-        }
-        
-        const sum = values.reduce((total, value) => total + value, 0);
-        return sum / values.length;
-    }
-
-    /**
-     * Calculate trend percentage between current and previous values
-     * @param {number} current - Current value
-     * @param {number} previous - Previous value
-     * @returns {number} Trend percentage
-     */
-    function calculateTrend(current, previous) {
-        if (!previous || previous === 0) return 0;
-        return ((current - previous) / previous) * 100;
-    }
-
-    /**
-     * Show error message
-     * @param {string} message - Error message to display
-     */
-    function showError(message) {
-        const container = document.getElementById('kpiSummary');
-        if (container) {
-            container.innerHTML = `
-                <div class="error-message">
-                    ${message}
-                </div>
-            `;
-        }
-        
-        const dashboardGrid = document.getElementById('dashboardGrid');
-        if (dashboardGrid) {
-            dashboardGrid.innerHTML = `
-                <div class="error-message">
-                    ${message}
-                </div>
-            `;
-        }
-    }
-
-    /**
-     * Extract reject reasons from a formatted string
-     * @param {string} reasonsString - Formatted string with reject reasons
-     * @param {string} view - View type ('qty' or 'cost')
-     * @returns {Array} Array of reason strings
-     */
-    function extractRejectReasons(reasonsString, view) {
-        if (!reasonsString || reasonsString === 'No rejects') return [];
-        
-        // Split by vertical bar for multiple reasons
-        const reasons = reasonsString.split('|').map(reason => reason.trim());
-        
-        // Further format each reason if needed
-        return reasons.map(reason => {
-            const parts = reason.split(' - ');
-            if (parts.length >= 3) {
-                // Extract relevant parts based on view
-                const reasonName = parts[0].replace(/^\d+\.\s+/, ''); // Remove numbering
-                const station = parts[1];
-                
-                // Choose which value to include based on view
-                const value = view === 'qty' ? parts[2] : parts[3] || parts[2];
-                
-                return `${reasonName} (${station}): ${value}`;
-            }
-            return reason; // Return as is if not in expected format
-        });
-    }
-
-    /**
-     * ======================================
-     * DATA PROCESSING
-     * ======================================
-     */
-
-    /**
-     * Get previous period data for trend calculation
-     * @param {Array} currentData - Current period data
-     * @param {Array} fullData - Full dataset
-     * @returns {Array} Previous period data
-     */
-    function getPreviousPeriodData(currentData, fullData) {
-        if (!currentData || currentData.length === 0) return [];
-        
-        // Sort data by date
-        const sortedCurrentData = [...currentData].sort((a, b) => 
-            new Date(a.Date) - new Date(b.Date)
-        );
-        
-        const startDate = new Date(sortedCurrentData[0].Date);
-        const endDate = new Date(sortedCurrentData[sortedCurrentData.length - 1].Date);
-        
-        // Calculate previous period dates
-        const daysDiff = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
-        const previousStartDate = new Date(startDate);
-        previousStartDate.setDate(previousStartDate.getDate() - daysDiff - 1);
-        const previousEndDate = new Date(startDate);
-        previousEndDate.setDate(previousEndDate.getDate() - 1);
-        
-        // Filter fullData for previous period
-        return fullData.filter(record => {
-            const recordDate = new Date(record.Date);
-            return recordDate >= previousStartDate && recordDate <= previousEndDate;
-        });
-    }
-
-    /**
-     * Calculate KPIs from filtered data
-     * @param {Array} data - Filtered data for the current date range
-     * @param {Array} fullData - Complete dataset
-     * @returns {Object} Object containing calculated KPIs
-     */
-    function calculateKPIs(data, fullData) {
-        if (!data || data.length === 0) {
-            return {
-                scheduleAttainment: 0,
-                scheduleAttainmentTrend: 0,
-                labourCostPerUnit: 0,
-                labourCostTrend: 0,
-                scrapPercentage: 0,
-                scrapTrend: 0,
-                downtimeHours: 0,
-                downtimeTrend: 0
-            };
-        }
-        
-        // Calculate current period KPIs
-        const currentKPIs = {
-            scheduleAttainment: calculateAverage(data, 'Schedule Attainment'),
-            labourCostPerUnit: calculateAverage(data, 'Cost Per Unit'),
-            scrapPercentage: calculateAverage(data, 'Scrap Cost as % of Production Value'),
-            downtimeHours: calculateAverage(data, 'Downtime Duration (min)') / 60 // Convert to hours
-        };
-        
-        // Calculate previous period KPIs for trends
-        const previousData = getPreviousPeriodData(data, fullData);
-        const previousKPIs = {
-            scheduleAttainment: calculateAverage(previousData, 'Schedule Attainment'),
-            labourCostPerUnit: calculateAverage(previousData, 'Cost Per Unit'),
-            scrapPercentage: calculateAverage(previousData, 'Scrap Cost as % of Production Value'),
-            downtimeHours: calculateAverage(previousData, 'Downtime Duration (min)') / 60
-        };
-        
-        // Calculate trends
-        return {
-            ...currentKPIs,
-            scheduleAttainmentTrend: calculateTrend(currentKPIs.scheduleAttainment, previousKPIs.scheduleAttainment),
-            labourCostTrend: calculateTrend(currentKPIs.labourCostPerUnit, previousKPIs.labourCostPerUnit),
-            scrapTrend: calculateTrend(currentKPIs.scrapPercentage, previousKPIs.scrapPercentage),
-            downtimeTrend: calculateTrend(currentKPIs.downtimeHours, previousKPIs.downtimeHours)
-        };
-    }
-
-    /**
-     * Group data by production line ID
-     * @param {Array} data - Array of data records
-     * @returns {Object} Grouped data with line IDs as keys
-     */
-    function groupDataByProductionLine(data) {
-        const groups = {};
-        let missingLineCount = 0;
-        
-        Logger.info(`Grouping ${data.length} records by production line`);
-        
-        data.forEach(record => {
-            // Validate production line ID
-            const lineId = record['Production Line ID'];
-            if (!lineId) {
-                missingLineCount++;
-                return;
-            }
-            
-            // Initialize array if this is the first record for this line
-            if (!groups[lineId]) {
-                groups[lineId] = [];
-            }
-            
-            groups[lineId].push(record);
-        });
-        
-        // Log results for debugging
-        if (missingLineCount > 0) {
-            Logger.warn(`${missingLineCount} records had missing Production Line ID`);
-        }
-        
-        const lineIds = Object.keys(groups);
-        Logger.info(`Grouped data into ${lineIds.length} production lines: ${lineIds.join(', ')}`);
-        
-        return groups;
-    }
-
-    /**
-     * Calculate metrics for a production line
-     * @param {Array} lineData - Data records for a production line
-     * @param {Array} previousPeriodData - Previous period data for calculating trends
-     * @returns {Object} Calculated metrics
-     */
-    function calculateLineMetrics(lineData, previousPeriodData = []) {
-        if (!lineData || lineData.length === 0) {
-            return {
-                scheduleAttainment: 0,
-                scheduleAttainmentTrend: 0,
-                labourCost: 0,
-                labourCostTrend: 0,
-                downtimeHours: 0,
-                downtimeHoursTrend: 0,
-                scrapPercentage: 0,
-                scrapPercentageTrend: 0
-            };
-        }
-        
-        // Calculate current metrics
-        const currentMetrics = {
-            scheduleAttainment: calculateAverage(lineData, 'Schedule Attainment'),
-            labourCost: calculateAverage(lineData, 'Staff Cost'),
-            downtimeHours: calculateAverage(lineData, 'Downtime Duration (min)') / 60, // Convert to hours
-            scrapPercentage: calculateAverage(lineData, 'Scrap Cost as % of Production Value')
-        };
-        
-        // Calculate previous period metrics for trends
-        const previousMetrics = {
-            scheduleAttainment: calculateAverage(previousPeriodData, 'Schedule Attainment'),
-            labourCost: calculateAverage(previousPeriodData, 'Staff Cost'),
-            downtimeHours: calculateAverage(previousPeriodData, 'Downtime Duration (min)') / 60,
-            scrapPercentage: calculateAverage(previousPeriodData, 'Scrap Cost as % of Production Value')
-        };
-        
-        // Calculate trends
-        return {
-            ...currentMetrics,
-            scheduleAttainmentTrend: calculateTrend(currentMetrics.scheduleAttainment, previousMetrics.scheduleAttainment),
-            labourCostTrend: calculateTrend(currentMetrics.labourCost, previousMetrics.labourCost),
-            downtimeHoursTrend: calculateTrend(currentMetrics.downtimeHours, previousMetrics.downtimeHours),
-            scrapPercentageTrend: calculateTrend(currentMetrics.scrapPercentage, previousMetrics.scrapPercentage)
-        };
-    }
-
-    /**
-     * Get color class based on value and thresholds
-     * @param {number} value - Value to evaluate
-     * @param {string} metric - Metric name for threshold lookup
-     * @param {boolean} invertColors - Invert the color logic (lower is better)
-     * @returns {string} CSS class name
-     */
-    function getValueColorClass(value, metric, invertColors = false) {
-        // Default thresholds if not in CONFIG
-        const defaultThresholds = {
-            scheduleAttainment: { good: 85, warning: 70 },
-            labourCostPerUnit: { good: 50, warning: 100 },
-            downtimeHours: { good: 2, warning: 5 },
-            scrapPercentage: { good: 2, warning: 5 }
-        };
-        
-        // Get thresholds from CONFIG if available, otherwise use defaults
-        const thresholds = (CONFIG.thresholds && CONFIG.thresholds[metric]) 
-            ? CONFIG.thresholds[metric] 
-            : defaultThresholds[metric] || { good: 85, warning: 70 };
-        
-        if (invertColors) {
-            // Lower is better (costs, scrap %, downtime)
-            if (value <= thresholds.good) return 'value-good';
-            if (value <= thresholds.warning) return 'value-warning';
-            return 'value-danger';
-        } else {
-            // Higher is better (schedule attainment)
-            if (value >= thresholds.good) return 'value-good';
-            if (value >= thresholds.warning) return 'value-warning';
-            return 'value-danger';
-        }
-    }
-
-    /**
-     * Format a trend value for display
-     * @param {number} trendValue - The trend value to format
-     * @param {boolean} invertLogic - Whether to invert the up/down logic (for costs, lower is better)
-     * @returns {Object} Object with HTML and trend direction
-     */
-    function formatTrend(trendValue, invertLogic = false) {
-        if (isNaN(trendValue)) trendValue = 0;
-        
-        const absValue = Math.abs(trendValue);
-        const formatted = absValue.toFixed(1);
-        let trendDirection = trendValue >= 0 ? 'up' : 'down';
-        
-        // For metrics where lower is better, invert the color logic
-        if (invertLogic) {
-            trendDirection = trendValue >= 0 ? 'down' : 'up';
-        }
-        
-        const trendClass = trendDirection === 'up' ? 'trend-up' : 'trend-down';
-        const trendIcon = trendDirection === 'up' ? 'fa-arrow-up' : 'fa-arrow-down';
-        
-        return {
-            html: `<div class="metric-trend ${trendClass}"><i class="fas ${trendIcon}"></i> ${formatted}%</div>`,
-            direction: trendDirection
-        };
-    }
-
-    /**
-     * ======================================
-     * KPI RENDERING
-     * ======================================
-     */
-
-    /**
-     * Render the KPI summary section
-     * @param {Array} filteredData - Filtered data for the current period
-     * @param {Array} fullData - Full dataset for trend calculations
-     */
-    function renderKPISummary(filteredData, fullData) {
-        const container = document.getElementById('kpiSummary');
-        if (!container) return;
-                    
-        // Calculate KPIs
-        const kpis = calculateKPIs(filteredData, fullData);
-        
-        // Format trend values
-        const scheduleAttainmentTrend = formatTrend(kpis.scheduleAttainmentTrend);
-        const labourCostTrend = formatTrend(kpis.labourCostTrend, true); // Invert for cost
-        const scrapTrend = formatTrend(kpis.scrapTrend, true); // Invert for scrap
-        const downtimeTrend = formatTrend(kpis.downtimeTrend, true); // Invert for downtime
-        
-        // Render KPI cards
-        container.innerHTML = `
-            <div class="kpi-card">
-                <div class="kpi-title">Schedule Attainment</div>
-                <div class="kpi-value">
-                    <div class="kpi-value-number">${kpis.scheduleAttainment.toFixed(1)}%</div>
-                    ${scheduleAttainmentTrend.html}
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Labour Cost per Unit</div>
-                <div class="kpi-value">
-                    <div class="kpi-value-number">R ${kpis.labourCostPerUnit.toFixed(2)}</div>
-                    ${labourCostTrend.html}
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Scrap Percentage</div>
-                <div class="kpi-value">
-                    <div class="kpi-value-number">${kpis.scrapPercentage.toFixed(1)}%</div>
-                    ${scrapTrend.html}
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Downtime Hours</div>
-                <div class="kpi-value">
-                    <div class="kpi-value-number">${kpis.downtimeHours.toFixed(1)}h</div>
-                    ${downtimeTrend.html}
-                </div>
-            </div>
-        `;
-    }
-
-    /**
-     * ======================================
-     * DASHBOARD GRID RENDERING
-     * ======================================
-     */
-
-    /**
-     * Render the dashboard grid with production line cards
-     * @param {Array} data - Filtered data for the current date range
-     * @param {Array} fullData - Full dataset for trend calculations
-     */
-    function renderDashboardGrid(data, fullData) {
-        const container = document.getElementById('dashboardGrid');
-        if (!container) return;
-        
-        // Group data by production line
-        const lineGroups = groupDataByProductionLine(data);
-        
-        // Check if we have any data
-        if (Object.keys(lineGroups).length === 0) {
-            container.innerHTML = `
-                <div class="error-message">
-                    No production data available for the selected date range.
-                </div>
-            `;
-            return;
-        }
-        
-        // Clear container
-        container.innerHTML = '';
-        
-        // Keep track of all created cards to log their state
-        const createdCards = [];
-        
-        // Log how many line cards we're creating
-        Logger.info(`Creating cards for ${Object.keys(lineGroups).length} production lines`);
-        
-        // Create a card for each production line
-        const cardsByBaseProduct = {}; // Track cards by base product for special handling
-
-        // Special handling for nosi-scalpel line - split by base product
-        if (lineGroups['nosi-scalpel']) {
-            const scalpelData = lineGroups['nosi-scalpel'];
-            
-            // Group scalpel data by base product
-            const scalpelProductGroups = {};
-            scalpelData.forEach(record => {
-                const baseProduct = record['Base Product'] || record['Product'] || 'Unknown';
-                if (!scalpelProductGroups[baseProduct]) {
-                    scalpelProductGroups[baseProduct] = [];
+                this._log(fullMessage, 'error');
+                if (error && error.stack) {
+                    this._log(`Stack: ${error.stack}`, 'error');
                 }
-                scalpelProductGroups[baseProduct].push(record);
-            });
+            },
             
-            Logger.info(`Splitting nosi-scalpel into ${Object.keys(scalpelProductGroups).length} base products`);
-            
-            // Create a card for each base product within nosi-scalpel
-            Object.entries(scalpelProductGroups).forEach(([baseProduct, productData]) => {
-                if (productData.length === 0) return;
+            /**
+             * Internal method to add a log entry
+             * @param {string} message - The message to log
+             * @param {string} level - The log level ('info', 'warning', 'error')
+             * @private
+             */
+            _log: function(message, level) {
+                if (!this.logElement) return;
                 
-                // Use the first record as line details
-                const lineDetails = { ...productData[0] };
+                const timestamp = new Date().toISOString();
+                const entry = document.createElement('div');
+                entry.className = `debug-log-entry ${level}`;
+                entry.textContent = `[${timestamp}] ${message}`;
                 
-                // Create a modified line ID to make it unique per base product
-                const compositeLineId = `nosi-scalpel-${baseProduct.replace(/\s+/g, '-').toLowerCase()}`;
-                lineDetails['Production Line ID'] = compositeLineId; // Override with composite ID
+                this.logElement.appendChild(entry);
+                this.logElement.scrollTop = this.logElement.scrollHeight;
                 
-                Logger.debug(`Creating card for ${compositeLineId} with ${productData.length} records`);
-                
-                // Get previous period data
-                const previousPeriodData = getPreviousPeriodData(productData, fullData)
-                    .filter(record => {
-                        const recordBaseProduct = record['Base Product'] || record['Product'] || '';
-                        return record['Production Line ID'] === 'nosi-scalpel' && 
-                               recordBaseProduct === baseProduct;
-                    });
-                
-                // Create the line card
-                const lineCard = createLineCard(compositeLineId, lineDetails, productData, previousPeriodData);
-                
-                // Log card creation
-                createdCards.push({
-                    id: compositeLineId,
-                    title: baseProduct
-                });
-                
-                // Add to container
-                container.appendChild(lineCard);
-                
-                // Store for tracking
-                cardsByBaseProduct[compositeLineId] = {
-                    lineId: 'nosi-scalpel',
-                    baseProduct: baseProduct,
-                    element: lineCard
-                };
-            });
-            
-            // Remove the original nosi-scalpel group as we've handled it specially
-            delete lineGroups['nosi-scalpel'];
-        }
-        
-        // Get all remaining line IDs and sort them for consistent ordering
-        const lineIds = Object.keys(lineGroups).sort();
-        
-        // Create cards for remaining production lines
-        lineIds.forEach(lineId => {
-            const lineData = lineGroups[lineId];
-            
-            // Skip empty lines
-            if (lineData.length === 0) return;
-            
-            // Ensure we have at least one record with line details
-            const lineDetails = lineData.find(record => record['Production Line ID'] === lineId);
-            if (!lineDetails) {
-                Logger.warn(`Could not find details for line ${lineId}`);
-                return;
+                // Also log to console
+                switch(level) {
+                    case 'info':
+                        console.log(message);
+                        break;
+                    case 'warning':
+                        console.warn(message);
+                        break;
+                    case 'error':
+                        console.error(message);
+                        break;
+                }
             }
-            
-            Logger.debug(`Creating card for ${lineId} with ${lineData.length} records`);
-            
-            // Get previous period data for this line
-            const previousPeriodData = getPreviousPeriodData(lineData, fullData)
-                .filter(record => record['Production Line ID'] === lineId);
-            
-            // Create the line card
-            const lineCard = createLineCard(lineId, lineDetails, lineData, previousPeriodData);
-            
-            // Log card creation
-            createdCards.push({
-                id: lineId,
-                title: lineDetails['Production Line Name'] || lineId
-            });
-            
-            // Add to container
-            container.appendChild(lineCard);
-        });
-        
-        // Verify container has content
-        Logger.info(`Dashboard grid now contains ${container.childElementCount} line cards`);
-        if (container.childElementCount === 0) {
-            Logger.error('No line cards were created despite having data!');
-        } else {
-            // Log all created cards for debugging
-            Logger.info(`Created cards: ${JSON.stringify(createdCards)}`);
-        }
-    }
+        };
 
-    /**
-     * Create a production line card element
-     * @param {string} lineId - Production line ID
-     * @param {Object} lineDetails - Details for the production line
-     * @param {Array} lineData - Data records for this line
-     * @param {Array} previousPeriodData - Previous period data for trend calculations
-     * @returns {HTMLElement} Line card element
-     */
-    function createLineCard(lineId, lineDetails, lineData, previousPeriodData) {
-        // Validate input data
-        if (!lineDetails) {
-            Logger.error(`Missing lineDetails for ${lineId}`);
-            return document.createElement('div'); // Return empty div
-        }
+        /**
+         * ======================================
+         * DATE UTILITIES
+         * ======================================
+         */
         
-        // Extract line information with validation
-        const lineName = lineDetails['Production Line Name'] || 'Unknown Line';
-        const baseProduct = lineDetails['Base Product'] || '';
-        const lineColor = lineDetails['Production Line Color'] || 'blue';
-        
-        // Calculate metrics for this line
-        const metrics = calculateLineMetrics(lineData, previousPeriodData);
-        
-        // Get current variant info with better fallback handling
-        // First look for records marked as current variant
-        let currentVariantData = lineData.find(record => record['Is Current Variant'] === true);
-        
-        // If none found, try to find the most recent record
-        if (!currentVariantData) {
-            // Sort by date descending
-            const sortedData = [...lineData].sort((a, b) => 
-                new Date(b.Date || 0) - new Date(a.Date || 0)
-            );
-            currentVariantData = sortedData[0];
-            Logger.debug(`No current variant found for ${lineId}, using most recent: ${currentVariantData?.Variant || 'unknown'}`);
-        }
-        
-        // Final fallback
-        if (!currentVariantData) {
-            currentVariantData = lineData[0];
-            Logger.warn(`Could not determine current variant for ${lineId}, using first available record`);
-        }
-        
-        const variantName = currentVariantData['Variant'] || 'Unknown';
-        const variantStatus = currentVariantData['Variant Status'] || 'unknown';
-        
-        // Format the trend values
-        const scheduleAttainmentTrend = formatTrend(metrics.scheduleAttainmentTrend);
-        const labourCostTrend = formatTrend(metrics.labourCostTrend, true); // Invert for cost
-        const downtimeHoursTrend = formatTrend(metrics.downtimeHoursTrend, true); // Invert for downtime
-        const scrapPercentageTrend = formatTrend(metrics.scrapPercentageTrend, true); // Invert for scrap
-        
-        // Create card element
-        const card = document.createElement('div');
-        card.className = 'line-card';
-        card.setAttribute('data-line-id', lineId);
-        
-        // Determine if this is a scalpel product line
-        const isScalpelProduct = lineId.startsWith('nosi-scalpel-') || baseProduct.includes('Scalpel');
-        
-        // Create a formatted title that shows product and line name
-        let formattedTitle = '';
-        if (isScalpelProduct) {
-            // For scalpel products, show "Base Product: Line Name" or just the base product
-            const scalpelBaseProduct = baseProduct || lineId.replace('nosi-scalpel-', '').replace(/-/g, ' ');
-            formattedTitle = scalpelBaseProduct.includes('Scalpel') ? 
-                            scalpelBaseProduct : 
-                            `${scalpelBaseProduct}: ${lineName}`;
-        } else {
-            // For other products, show "Base Product: Line Name" or just the line name
-            formattedTitle = baseProduct ? `${baseProduct}: ${lineName}` : lineName;
-        }
-        
-        // Create card content with expand button for all cards
-        // FIX: Use proper class for header background color
-        card.innerHTML = `
-            <div class="line-card-header ${lineColor}-header">
-                <span class="card-title">${formattedTitle}</span>
-            </div>
-            <a href="#" class="enlarge-icon" data-lineid="${lineId}">
-                <i class="fas fa-expand-alt"></i>
-            </a>
-            <div class="line-card-content">
-                <div class="variant-info">
-                    <span class="variant-label">Current Variant: <span class="variant-name">${variantName}</span></span>
-                    <span class="status-badge status-${variantStatus.toLowerCase()}">${capitalize(variantStatus)}</span>
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-title">Schedule Attainment</div>
-                        <div class="metric-value ${getValueColorClass(metrics.scheduleAttainment, 'scheduleAttainment')}">
-                            ${metrics.scheduleAttainment.toFixed(1)}%
-                            ${scheduleAttainmentTrend.html}
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Labour Cost</div>
-                        <div class="metric-value ${getValueColorClass(metrics.labourCost, 'labourCostPerUnit', true)}">
-                            R${metrics.labourCost.toFixed(2)}
-                            ${labourCostTrend.html}
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Downtime</div>
-                        <div class="metric-value ${getValueColorClass(metrics.downtimeHours, 'downtimeHours', true)}">
-                            ${metrics.downtimeHours.toFixed(1)}h
-                            ${downtimeHoursTrend.html}
-                        </div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Scrap %</div>
-                        <div class="metric-value ${getValueColorClass(metrics.scrapPercentage, 'scrapPercentage', true)}">
-                            ${metrics.scrapPercentage.toFixed(1)}%
-                            ${scrapPercentageTrend.html}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // Add explicit event listener to ensure click works
-        const expandButton = card.querySelector('.enlarge-icon');
-        if (expandButton) {
-            expandButton.addEventListener('click', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                showDetailView(lineId);
-                return false;
-            });
-        }
-        
-        return card;
-    }
-    
-    /**
-     * ======================================
-     * DETAIL VIEW MODAL
-     * ======================================
-     */
-
-    /**
-     * Track current detail view state
-     */
-    const detailViewState = {
-        lineId: null,
-        dateRange: {
+        // Store current date range
+        let currentDateRange = {
             start: null,
             end: null
-        },
-        attainmentView: 'percent',  // 'percent', 'boxes', or 'devices'
-        scrapView: 'qty',           // 'qty' or 'cost'
-        downtimeView: 'reason',     // 'reason', 'machine', or 'duration'
-        costView: 'labour',         // 'labour' or 'unit'
-        filteredData: null          // Store filtered data for reuse
-    };
-
-    /**
-     * Show the detail view modal for a specific line
-     * @param {string} lineId - Production line ID
-     */
-    function showDetailView(lineId) {
-        Logger.info(`Opening detail view for line: ${lineId}`);
-        
-        // Store the current line ID
-        detailViewState.lineId = lineId;
-        
-        // Initialize date range if not set
-        if (!detailViewState.dateRange.start || !detailViewState.dateRange.end) {
-            detailViewState.dateRange = {
-                start: currentDateRange.start,
-                end: currentDateRange.end
-            };
-        }
-        
-        // Check for composite IDs for Scalpel products
-        if (lineId.includes('nosi-scalpel-')) {
-            // Extract base product from the composite ID
-            const baseProduct = lineId.replace('nosi-scalpel-', '').replace(/-/g, ' ');
-            document.getElementById('detailTitle').textContent = `${baseProduct} Details`;
-        } else {
-            // Get line name from data if available
-            const lineData = window.dashboardData ? window.dashboardData.find(record => record['Production Line ID'] === lineId) : null;
-            const lineName = lineData ? (lineData['Production Line Name'] || lineId) : lineId;
-            document.getElementById('detailTitle').textContent = `${lineName} Details`;
-        }
-        
-        // Set up debug logging for modal elements
-        if (CONFIG.debugMode) {
-            Logger.info(`Detail view HTML elements:`);
-            ['scheduleChart', 'labourChart', 'scrapChart', 'dailyScrapDetails', 'downtimeChart'].forEach(id => {
-                const element = document.getElementById(id);
-                Logger.info(`- ${id}: ${element ? 'Found' : 'NOT FOUND'}`);
-            });
-        }
-        
-        // Show the modal
-        document.getElementById('detailModal').style.display = 'block';
-        
-        // Update date range display in modal
-        updateModalDateRange();
-        
-        // Load data and render charts
-        loadDetailViewData();
-    }
-
-    /**
-     * Hides the detail view modal
-     */
-    function hideDetailView() {
-        document.getElementById('detailModal').style.display = 'none';
-    }
-
-    /**
-     * Show error message in detail view
-     * @param {string} message - Error message to display
-     */
-    function showErrorInDetailView(message) {
-        const errorHtml = `<div class="error-message">${message || 'Failed to load data'}</div>`;
-        document.getElementById('scheduleChart').innerHTML = errorHtml;
-        document.getElementById('labourChart').innerHTML = errorHtml;
-        document.getElementById('scrapChart').innerHTML = errorHtml;
-        document.getElementById('dailyScrapDetails').innerHTML = errorHtml;
-        document.getElementById('downtimeChart').innerHTML = errorHtml;
-    }
-
-    /**
-     * Updates the date range display in the modal
-     */
-    function updateModalDateRange() {
-        const display = document.getElementById('modalDateRange') || 
-                        document.querySelector('.date-range-display');
-                        
-        if (!display) {
-            Logger.error('Modal date range display element not found');
-            return;
-        }
-        
-        // Format dates for display
-        const startDate = new Date(detailViewState.dateRange.start);
-        const endDate = new Date(detailViewState.dateRange.end);
-        
-        const formatDate = (date) => {
-            return date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric'
-            });
         };
         
-        // Update display with formatted dates
-        display.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+        // Store current period type
+        let currentPeriod = CONFIG.defaultPeriod;
         
-        if (CONFIG.debugMode) {
-            Logger.info(`Modal date range updated: ${display.textContent}`);
-        }
-    }
-    
-    /**
-     * Renders the schedule attainment chart in the detail view
-     * @param {Array} data - Filtered data for the line
-     * @param {string} view - The view to display ('percent', 'boxes', or 'devices')
-     */
-    function renderScheduleAttainmentChart(data, view = 'percent') {
-        const chartContainer = document.getElementById('scheduleChart');
-        if (!chartContainer) {
-            Logger.error("Schedule chart container not found (ID: scheduleChart)");
-            return;
-        }
-        
-        // Safety check
-        if (!data || data.length === 0) {
-            chartContainer.innerHTML = '<div class="empty-state">No schedule data available</div>';
-            return;
-        }
-        
-        // Check for required fields in the first record
-        const firstRecord = data[0];
-        if (CONFIG.debugMode) {
-            Logger.info("First record field check for Schedule Attainment:");
-            Logger.info(`- Schedule Attainment: ${firstRecord['Schedule Attainment'] !== undefined ? 'Present' : 'Missing'}`);
-            Logger.info(`- Scheduled Boxes: ${firstRecord['Scheduled Boxes'] !== undefined ? 'Present' : 'Missing'}`);
-            Logger.info(`- Actual Boxes: ${firstRecord['Actual Boxes'] !== undefined ? 'Present' : 'Missing'}`);
-        }
-        
-        // Sort data by date
-        const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-        
-        // Create HTML for chart
-        let html = '<div style="width: 100%; height: 100%;">';
-        
-        if (view === 'percent') {
-            // Percentage view
-            // Define possible field names for schedule attainment
-            const scheduleFields = ['Schedule Attainment', 'Scheduled Attainment', 'Schedule Adherence'];
+        // Store week cycle preference (0-6, where 0 is Sunday, 1 is Monday, etc.)
+        let weekCycleStartDay = 1; // Default to Monday
+
+        /**
+         * Gets the default date range based on week cycle preference
+         * @returns {Object} Object with start and end dates
+         */
+        function getDefaultDateRange() {
+            const now = new Date();
             
-            const chartData = sortedData.map(record => ({
-                date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-                value: parseFloat(
-                    scheduleFields.find(field => record[field] !== undefined) 
-                    ? record[scheduleFields.find(field => record[field] !== undefined)]
-                    : 0
-                )
-            }));
+            // Get current day of week (0-6, where 0 is Sunday)
+            const currentDay = now.getDay();
             
-            if (CONFIG.debugMode) {
-                Logger.info(`Generated chart data for Schedule Attainment: ${chartData.length} points`);
-                if (chartData.length > 0) {
-                    Logger.info(`Sample point: ${JSON.stringify(chartData[0])}`);
-                }
+            // Calculate days to subtract to get to the start day
+            const daysToSubtract = (currentDay - weekCycleStartDay + 7) % 7;
+            
+            // Calculate start date (the selected start day of the current/most recent week)
+            const start = new Date(now);
+            start.setDate(start.getDate() - daysToSubtract);
+            start.setHours(0, 0, 0, 0);
+            
+            // Calculate end date (start + 6 days to complete the week)
+            const end = new Date(start);
+            end.setDate(end.getDate() + 6);
+            end.setHours(23, 59, 59, 999);
+            
+            return {
+                start: start.toISOString().split('T')[0],
+                end: end.toISOString().split('T')[0]
+            };
+        }
+
+        /**
+         * Sets the date inputs to the current date range values
+         */
+        function setDateInputs() {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            
+            if (currentDateRange.start) {
+                startDateInput.value = currentDateRange.start.split('T')[0];
             }
             
-            // Create container with Y-axis
-            html += '<div style="display: flex; height: 100%;">';
-            
-            // Y-axis with scaled labels
-            html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
-            html += '<div>100%</div>';
-            html += '<div>50%</div>';
-            html += '<div>0%</div>';
-            html += '</div>';
-            
-            // Chart area
-            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
-            
-            // Chart bars
-            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
-            
-            // Create bars for each day
-            chartData.forEach(item => {
-                const height = Math.min(Math.max(item.value, 0), 100);
-                
-                // Determine bar color based on attainment
-                let barColor = 'var(--danger-color)';
-                if (item.value >= 95) {
-                    barColor = 'var(--success-color)';
-                } else if (item.value >= 85) {
-                    barColor = 'var(--warning-color)';
-                }
-                
-                html += `
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                    <div style="font-size: 10px; font-weight: 500; color: var(--text-primary); height: 15px; overflow: visible;">${item.value.toFixed(1)}%</div>
-                    <div style="width: 60%; height: ${height}%; background-color: ${barColor}; min-height: ${height > 0 ? '5px' : '0'}"></div>
-                    <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-                </div>
-                `;
-            });
-            
-            html += '</div>'; // End chart bars
-            html += '</div>'; // End chart area
-            html += '</div>'; // End container with Y-axis
-        } 
-        else {
-            // Boxes or Devices view
-            // Define possible field names
-            const scheduledFields = {
-                boxes: ['Scheduled Boxes', 'Target Boxes', 'Planned Boxes'],
-                devices: ['Scheduled Devices', 'Target Devices', 'Planned Devices']
-            };
-            
-            const actualFields = {
-                boxes: ['Actual Boxes', 'Produced Boxes', 'Completed Boxes'],
-                devices: ['Actual Devices', 'Produced Devices', 'Completed Devices']
-            };
-            
-            const chartData = sortedData.map(record => {
-                const field = view === 'boxes' ? 'Boxes' : 'Devices';
-                
-                // Find the first field that exists in the record
-                const actualField = view === 'boxes' 
-                    ? actualFields.boxes.find(f => record[f] !== undefined) 
-                    : actualFields.devices.find(f => record[f] !== undefined);
-                
-                const scheduledField = view === 'boxes'
-                    ? scheduledFields.boxes.find(f => record[f] !== undefined)
-                    : scheduledFields.devices.find(f => record[f] !== undefined);
-                
-                // Get values with fallbacks
-                const actual = parseInt(actualField ? record[actualField] : 0);
-                const target = parseInt(scheduledField ? record[scheduledField] : 0);
-                
-                return {
-                    date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-                    actual: actual,
-                    target: target
-                };
-            });
-            
-            // Find max target value for scaling
-            const maxTarget = Math.max(...chartData.map(item => item.target), 1);
-            
-            // Create container with Y-axis
-            html += '<div style="display: flex; height: 100%;">';
-            
-            // Y-axis with scaled labels
-            html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
-            html += `<div>${maxTarget}</div>`;
-            html += `<div>${Math.round(maxTarget/2)}</div>`;
-            html += '<div>0</div>';
-            html += '</div>';
-            
-            // Chart area
-            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
-            
-            // Chart bars
-            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
-            
-            // Create bars for each day
-            chartData.forEach(item => {
-                const heightPercentage = maxTarget > 0 ? (item.actual / maxTarget * 100) : 0;
-                const targetHeightPercentage = maxTarget > 0 ? (item.target / maxTarget * 100) : 0;
-                
-                // Calculate attainment percentage for coloring
-                const attainmentPct = item.target > 0 ? (item.actual / item.target * 100) : 0;
-                
-                // Determine bar color based on attainment percentage
-                let barColor = 'var(--danger-color)';
-                if (attainmentPct >= 95) {
-                    barColor = 'var(--success-color)';
-                } else if (attainmentPct >= 85) {
-                    barColor = 'var(--warning-color)';
-                }
-                
-                html += `
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                    <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.actual}/${item.target}</div>
-                    <div style="width: 60%; position: relative; height: ${Math.max(targetHeightPercentage, heightPercentage)}%;">
-                        <!-- Target line -->
-                        <div style="width: 100%; height: 2px; background-color: var(--danger-color); position: absolute; top: ${100 - targetHeightPercentage}%;"></div>
-                        <!-- Actual bar -->
-                        <div style="width: 100%; height: ${heightPercentage}%; background-color: var(--primary-blue); position: absolute; bottom: 0;"></div>
-                    </div>
-                    <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-                </div>
-                `;
-            });
-            
-            html += '</div>'; // End chart bars
-            html += '</div>'; // End chart area
-            html += '</div>'; // End container with Y-axis
+            if (currentDateRange.end) {
+                endDateInput.value = currentDateRange.end.split('T')[0];
+            }
         }
-        
-        html += '</div>';
-        chartContainer.innerHTML = html;
-    }
 
-    /**
-     * ======================================
-     * EVENT HANDLERS
-     * ======================================
-     */
-
-    /**
-     * Handles period toggle button click
-     * @param {Event} e - The click event
-     */
-    function handlePeriodToggle(e) {
-        const btn = e.target;
-        // Toggle between Weekly/Monthly/Daily
-        if (btn.textContent === 'Weekly') {
-            btn.textContent = 'Monthly';
-            currentPeriod = 'monthly';
-            Logger.info('Switched to Monthly view');
-        } else if (btn.textContent === 'Monthly') {
-            btn.textContent = 'Daily';
-            currentPeriod = 'daily';
-            Logger.info('Switched to Daily view');
-        } else {
-            btn.textContent = 'Weekly';
-            currentPeriod = 'weekly';
-            Logger.info('Switched to Weekly view');
-        }
-        
-        // Store the user preference
-        storeUserPreferences();
-        
-        // Reload dashboard with new period setting
-        initializeDashboard();
-    }
-
-    /**
-     * Handles refresh button click
-     */
-    function handleRefresh() {
-        Logger.info('Manual refresh requested');
-        initializeDashboard();
-    }
-
-    /**
-     * Handles date range button click
-     */
-    function handleDateRangeButton() {
-        Logger.info('Date range button clicked');
-        const dropdown = document.getElementById('datePickerDropdown');
-        dropdown.classList.toggle('show');
-        
-        // Set date inputs to current values
-        setDateInputs();
-    }
-
-    /**
-     * Handles apply date range button click
-     */
-    function handleApplyDateRange() {
-        Logger.info('Apply date range button clicked');
-        
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
-        
-        // Validate inputs
-        if (!startDateInput.value || !endDateInput.value) {
-            Logger.warn('Invalid date range inputs');
-            return;
-        }
-        
-        const startDate = new Date(startDateInput.value);
-        const endDate = new Date(endDateInput.value);
-        
-        // Validate date range
-        if (startDate > endDate) {
-            Logger.warn('Start date cannot be after end date');
-            alert('Start date cannot be after end date');
-            return;
-        }
-        
-        // Update current date range
-        currentDateRange.start = startDateInput.value;
-        currentDateRange.end = endDateInput.value;
-        
-        // Hide dropdown
-        document.getElementById('datePickerDropdown').classList.remove('show');
-        
-        // Reload dashboard with new date range
-        initializeDashboard();
-    }
-
-    /**
-     * Handles 'Apply & Remember' button click
-     */
-    function handleApplyAndRememberCycle() {
-        Logger.info('Apply and remember cycle button clicked');
-        
-        // Get selected cycle
-        const cycleStartSelect = document.getElementById('cycleStartDay');
-        const selectedCycle = parseInt(cycleStartSelect.value);
-        
-        // Update cycle preference
-        weekCycleStartDay = selectedCycle;
-        
-        // Store preference in localStorage
-        storeUserPreferences();
-        
-        // Apply date range
-        handleApplyDateRange();
-    }
-
-    /**
-     * Handles document click to close date picker dropdown
-     * @param {Event} e - The click event
-     */
-    function handleDocumentClick(e) {
-        const dropdown = document.getElementById('datePickerDropdown');
-        const dateRangeButton = document.getElementById('dateRangeButton');
-        
-        // Close dropdown if click is outside the dropdown and button
-        if (dropdown.classList.contains('show') && 
-            !dropdown.contains(e.target) && 
-            e.target !== dateRangeButton) {
-            dropdown.classList.remove('show');
-        }
-    }
-
-    /**
-     * Navigates to the previous period
-     */
-    function navigateToPreviousPeriod() {
-        Logger.info('Navigating to previous period: ' + currentPeriod);
-        
-        const start = new Date(currentDateRange.start);
-        const end = new Date(currentDateRange.end);
-        
-        switch(currentPeriod) {
-            case 'daily':
-                // Move back one day
-                start.setDate(start.getDate() - 1);
-                end.setDate(end.getDate() - 1);
-                break;
-            case 'weekly':
-                // Move back one week
-                start.setDate(start.getDate() - 7);
-                end.setDate(end.getDate() - 7);
-                break;
-            case 'monthly':
-                // Move back one month
-                start.setMonth(start.getMonth() - 1);
-                end.setMonth(end.getMonth() - 1);
-                break;
-        }
-        
-        // Update date range
-        currentDateRange.start = start.toISOString().split('T')[0];
-        currentDateRange.end = end.toISOString().split('T')[0];
-        
-        // Reload dashboard
-        initializeDashboard();
-    }
-
-    /**
-     * ======================================
-     * DASHBOARD INITIALIZATION
-     * ======================================
-     */
-
-    async function initializeDashboard() {
-        Logger.info('Initializing dashboard');
-        
-        try {
-            // Show loading state
-            document.getElementById('kpiSummary').innerHTML = `
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                </div>
-            `;
+        function navigateToPreviousWeek() {
+            Logger.info('Navigating to previous week');
             
-            document.getElementById('dashboardGrid').innerHTML = `
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                </div>
-            `;
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
             
-            // Update date display
+            // Move both dates back by 7 days
+            start.setDate(start.getDate() - 7);
+            end.setDate(end.getDate() - 7);
+            
+            // Update both the detail view state and the main page state
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
+            
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
+            updateModalDateRange();
             updateDateRangeDisplay(currentDateRange);
-            
-            // Load data from JSON file
-            let jsonData;
-            let dataUrl = CONFIG.dataUrl;
-            let fallbacksAttempted = 0;
-            let loadErrors = [];
-            let dataSource = 'primary';
+            loadDetailViewData();
+        }
 
+        /**
+         * Navigates to the next week
+         */
+        function navigateToNextWeek() {
+            Logger.info('Navigating to next week');
+            
+            const start = new Date(detailViewState.dateRange.start);
+            const end = new Date(detailViewState.dateRange.end);
+            
+            // Move both dates forward by 7 days
+            start.setDate(start.getDate() + 7);
+            end.setDate(end.getDate() + 7);
+            
+            // Update both the detail view state and the main page state
+            detailViewState.dateRange.start = start.toISOString().split('T')[0];
+            detailViewState.dateRange.end = end.toISOString().split('T')[0];
+            
+            // Also update the main date range
+            currentDateRange.start = detailViewState.dateRange.start;
+            currentDateRange.end = detailViewState.dateRange.end;
+            
+            // Update displays and reload data
+            updateModalDateRange();
+            updateDateRangeDisplay(currentDateRange);
+            loadDetailViewData();
+        }
+        
+        /**
+         * Navigates to the previous period
+         */
+        function navigateToPreviousPeriod() {
+            Logger.info('Navigating to previous period: ' + currentPeriod);
+            
+            const start = new Date(currentDateRange.start);
+            const end = new Date(currentDateRange.end);
+            
+            switch(currentPeriod) {
+                case 'daily':
+                    // Move back one day
+                    start.setDate(start.getDate() - 1);
+                    end.setDate(end.getDate() - 1);
+                    break;
+                case 'weekly':
+                    // Move back one week
+                    start.setDate(start.getDate() - 7);
+                    end.setDate(end.getDate() - 7);
+                    break;
+                case 'monthly':
+                    // Move back one month
+                    start.setMonth(start.getMonth() - 1);
+                    end.setMonth(end.getMonth() - 1);
+                    break;
+            }
+            
+            // Update date range
+            currentDateRange.start = start.toISOString().split('T')[0];
+            currentDateRange.end = end.toISOString().split('T')[0];
+            
+            // Reload dashboard
+            initializeDashboard();
+        }
+        
+        /**
+         * Navigates to the next period
+         */
+        function navigateToNextPeriod() {
+            Logger.info('Navigating to next period: ' + currentPeriod);
+            
+            const start = new Date(currentDateRange.start);
+            const end = new Date(currentDateRange.end);
+            
+            switch(currentPeriod) {
+                case 'daily':
+                    // Move forward one day
+                    start.setDate(start.getDate() + 1);
+                    end.setDate(end.getDate() + 1);
+                    break;
+                case 'weekly':
+                    // Move forward one week
+                    start.setDate(start.getDate() + 7);
+                    end.setDate(end.getDate() + 7);
+                    break;
+                case 'monthly':
+                    // Move forward one month
+                    start.setMonth(start.getMonth() + 1);
+                    end.setMonth(end.getMonth() + 1);
+                    break;
+            }
+            
+            // Update date range
+            currentDateRange.start = start.toISOString().split('T')[0];
+            currentDateRange.end = end.toISOString().split('T')[0];
+            
+            // Reload dashboard
+            initializeDashboard();
+        }
+        /**
+         * Stores user preferences in localStorage
+         */
+        function storeUserPreferences() {
             try {
-                // Try primary data source first
-                Logger.info(`Attempting to load data from: ${dataUrl}`);
-                document.getElementById('kpiSummary').innerHTML = `
-                    <div class="loading-container">
-                        <div class="loading-spinner"></div>
-                        <div class="loading-text">Loading from ${dataUrl}...</div>
-                    </div>
-                `;
-                const response = await fetch(dataUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                jsonData = await response.json();
-                Logger.info(`Successfully loaded JSON data with ${jsonData.productionData?.length || 0} records`);
+                const preferences = {
+                    weekCycleStartDay: weekCycleStartDay,
+                    period: currentPeriod
+                };
+                
+                localStorage.setItem('dashboardPreferences', JSON.stringify(preferences));
+                Logger.info('Stored user preferences: ' + JSON.stringify(preferences));
             } catch (error) {
-                // Log the error
-                Logger.error(`Error loading data from ${dataUrl}`, error);
-                loadErrors.push(`Failed to load from ${dataUrl}: ${error.message}`);
-                
-                // Try fallback data sources
-                const fallbacks = CONFIG.fallbackDataUrls || [];
-                
-                // Iterate through fallbacks
-                for (const fallbackUrl of fallbacks) {
-                    fallbacksAttempted++;
-                    dataSource = `fallback ${fallbacksAttempted}`;
-                    try {
-                        Logger.info(`Attempting fallback data source ${fallbacksAttempted}: ${fallbackUrl}`);
-                        document.getElementById('kpiSummary').innerHTML = `
-                            <div class="loading-container">
-                                <div class="loading-spinner"></div>
-                                <div class="loading-text">Primary source failed. Trying ${fallbackUrl}...</div>
-                            </div>
-                        `;
-                        const fallbackResponse = await fetch(fallbackUrl);
-                        if (!fallbackResponse.ok) {
-                            throw new Error(`HTTP error! status: ${fallbackResponse.status}`);
-                        }
-                        jsonData = await fallbackResponse.json();
-                        Logger.info(`Successfully loaded JSON data from fallback ${fallbackUrl}`);
-                        dataUrl = fallbackUrl; // Update which URL succeeded
-                        break; // Exit loop if successful
-                    } catch (fallbackError) {
-                        Logger.error(`Fallback ${fallbackUrl} failed`, fallbackError);
-                        loadErrors.push(`Failed to load from ${fallbackUrl}: ${fallbackError.message}`);
-                    }
-                }
-                
-                // If we still don't have data after trying all sources
-                if (!jsonData) {
-                    const errorMessage = `All data sources failed. Attempted ${fallbacksAttempted + 1} sources.`;
-                    Logger.error(errorMessage);
-                    throw new Error(`Failed to load dashboard data: ${errorMessage}`);
-                }
+                Logger.error('Error storing user preferences', error);
             }
-            
-            // Extract and store the full dataset
-            const fullData = jsonData.productionData || [];
-            
-            // Store data globally for reuse in detail views
-            window.dashboardData = fullData;
-            window.dataSource = dataUrl; // Store the successful data source
-            
-            // Make sure fullData exists
-            if (!fullData || !Array.isArray(fullData) || fullData.length === 0) {
-                throw new Error('Invalid data format: productionData array not found or empty');
-            }
-            
-            Logger.info(`Loaded ${fullData.length} records from ${dataUrl} (${dataSource})`);
-            
-            // Show data source in debug mode
-            if (CONFIG.debugMode) {
-                const debugInfo = document.getElementById('debugInfo') || document.createElement('div');
-                debugInfo.id = 'debugInfo';
-                debugInfo.className = 'debug-info';
-                debugInfo.innerHTML = `<small>Data source: ${dataUrl} (${dataSource})</small>`;
+        }
+        
+        /**
+         * Loads user preferences from localStorage
+         */
+        function loadUserPreferences() {
+            try {
+                const preferencesString = localStorage.getItem('dashboardPreferences');
                 
-                // Add to page if not already there
-                if (!document.getElementById('debugInfo')) {
-                    const header = document.querySelector('header');
-                    if (header) {
-                        header.appendChild(debugInfo);
-                    } else {
-                        document.body.insertBefore(debugInfo, document.body.firstChild);
-                    }
-                }
-            }
-            
-            // Check if we need to adjust date range based on available data
-            if (currentDateRange.start && currentDateRange.end) {
-                // Find any data in the current date range
-                const dataInCurrentRange = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
-                
-                // If no data in the current range, find latest dates in the data
-                if (!dataInCurrentRange || dataInCurrentRange.length === 0) {
-                    Logger.warn(`No data found in current date range, finding available dates in data`);
-                    const availableDates = findLatestDatesInData(fullData);
-                    currentDateRange.start = availableDates.start;
-                    currentDateRange.end = availableDates.end;
+                if (preferencesString) {
+                    const preferences = JSON.parse(preferencesString);
                     
-                    // Update the date display
-                    updateDateRangeDisplay(currentDateRange);
-                    Logger.info(`Updated date range to match available data: ${currentDateRange.start} to ${currentDateRange.end}`);
+                    // Set week cycle start day if defined
+                    if (preferences.weekCycleStartDay !== undefined) {
+                        weekCycleStartDay = preferences.weekCycleStartDay;
+                        // Update dropdown
+                        const cycleStartSelect = document.getElementById('cycleStartDay');
+                        if (cycleStartSelect) {
+                            cycleStartSelect.value = weekCycleStartDay.toString();
+                        }
+                    }
+                    
+                    // Set period if defined
+                    if (preferences.period) {
+                        currentPeriod = preferences.period;
+                        // Update button text
+                        const periodToggle = document.getElementById('periodToggle');
+                        if (periodToggle) {
+                            periodToggle.textContent = currentPeriod.charAt(0).toUpperCase() + currentPeriod.slice(1);
+                        }
+                    }
+                    
+                    Logger.info('Loaded user preferences: ' + JSON.stringify(preferences));
                 }
+            } catch (error) {
+                Logger.error('Error loading user preferences', error);
+            }
+        }
+
+        /**
+         * ======================================
+         * EVENT HANDLERS
+         * ======================================
+         */
+
+        /**
+         * Handles period toggle button click
+         * @param {Event} e - The click event
+         */
+        function handlePeriodToggle(e) {
+            const btn = e.target;
+            // Toggle between Weekly/Monthly/Daily
+            if (btn.textContent === 'Weekly') {
+                btn.textContent = 'Monthly';
+                currentPeriod = 'monthly';
+                Logger.info('Switched to Monthly view');
+            } else if (btn.textContent === 'Monthly') {
+                btn.textContent = 'Daily';
+                currentPeriod = 'daily';
+                Logger.info('Switched to Daily view');
+            } else {
+                btn.textContent = 'Weekly';
+                currentPeriod = 'weekly';
+                Logger.info('Switched to Weekly view');
             }
             
-            // Filter data by date range
-            const filteredData = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
+            // Store the user preference
+            storeUserPreferences();
             
-            // Check if we have data after filtering
-            if (!filteredData || filteredData.length === 0) {
-                Logger.warn(`No data found for the selected date range: ${currentDateRange.start} to ${currentDateRange.end}`);
-                showError(`No data available for the selected date range. Please try a different date range.`);
+            // Reload dashboard with new period setting
+            initializeDashboard();
+        }
+
+        /**
+         * Handles refresh button click
+         */
+        function handleRefresh() {
+            Logger.info('Manual refresh requested');
+            initializeDashboard();
+        }
+
+        /**
+         * Handles date range button click
+         */
+        function handleDateRangeButton() {
+            Logger.info('Date range button clicked');
+            const dropdown = document.getElementById('datePickerDropdown');
+            dropdown.classList.toggle('show');
+            
+            // Set date inputs to current values
+            setDateInputs();
+        }
+
+        /**
+         * Handles apply date range button click
+         */
+        function handleApplyDateRange() {
+            Logger.info('Apply date range button clicked');
+            
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            
+            // Validate inputs
+            if (!startDateInput.value || !endDateInput.value) {
+                Logger.warn('Invalid date range inputs');
                 return;
             }
             
-            // Render dashboard components
-            renderKPISummary(filteredData, fullData);
-            renderDashboardGrid(filteredData, fullData);
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
             
-            Logger.info('Dashboard initialization completed successfully');
-        } catch (error) {
-            Logger.error('Error initializing dashboard', error);
-            showError('Failed to load dashboard data: ' + error.message);
-        }
-    }
-    
-    /**
-     * Load detail view data and initialize charts
-     * @param {string} [overrideLineId] - Optional line ID to override detailViewState.lineId
-     */
-    function loadDetailViewData(overrideLineId) {
-        const lineId = overrideLineId || detailViewState.lineId;
-        Logger.info(`Loading detail view data for line: ${lineId}`);
-        
-        // Get the filtered data for the line and date range from window.dashboardData
-        if (!window.dashboardData) {
-            Logger.error("No dashboard data available");
-            showErrorInDetailView("No dashboard data available. Please reload the page.");
-            return;
-        }
-        
-        // Log some sample data for debugging
-        if (CONFIG.debugMode) {
-            Logger.info("Sample data before filtering:");
-            Logger.info(JSON.stringify(window.dashboardData.slice(0, 2)));
-        }
-
-        const filteredData = window.dashboardData.filter(record => {
-            // Match by line ID
-            if (record['Production Line ID'] !== lineId) {
-                return false;
+            // Validate date range
+            if (startDate > endDate) {
+                Logger.warn('Start date cannot be after end date');
+                alert('Start date cannot be after end date');
+                return;
             }
             
-            // Check date is in range
-            const recordDate = new Date(record.Date);
-            const startDate = new Date(detailViewState.dateRange.start);
-            const endDate = new Date(detailViewState.dateRange.end);
+            // Update current date range
+            currentDateRange.start = startDateInput.value;
+            currentDateRange.end = endDateInput.value;
             
-            startDate.setHours(0, 0, 0, 0);
-            endDate.setHours(23, 59, 59, 999);
+            // Hide dropdown
+            document.getElementById('datePickerDropdown').classList.remove('show');
             
-            return recordDate >= startDate && recordDate <= endDate;
-        });
-        
-        // Check if we found any data for this line
-        if (filteredData.length === 0) {
-            Logger.warn(`No data found for line ID: ${lineId} in date range`);
+            // Reload dashboard with new date range
+            initializeDashboard();
+        }
+
+        /**
+         * Handles 'Apply & Remember' button click
+         */
+        function handleApplyAndRememberCycle() {
+            Logger.info('Apply and remember cycle button clicked');
             
-            // Check if line ID exists in data at all
-            const anyLineData = window.dashboardData.filter(record => record['Production Line ID'] === lineId);
-            if (anyLineData.length > 0) {
-                Logger.info(`Found ${anyLineData.length} records for this line in full dataset, but none in date range`);
-            } else {
-                Logger.error(`Line ID ${lineId} not found in data at all`);
+            // Get selected cycle
+            const cycleStartSelect = document.getElementById('cycleStartDay');
+            const selectedCycle = parseInt(cycleStartSelect.value);
+            
+            // Update cycle preference
+            weekCycleStartDay = selectedCycle;
+            
+            // Store preference in localStorage
+            storeUserPreferences();
+            
+            // Apply date range
+            handleApplyDateRange();
+        }
+
+        /**
+         * Handles document click to close date picker dropdown
+         * @param {Event} e - The click event
+         */
+        function handleDocumentClick(e) {
+            const dropdown = document.getElementById('datePickerDropdown');
+            const dateRangeButton = document.getElementById('dateRangeButton');
+            
+            // Close dropdown if click is outside the dropdown and button
+            if (dropdown.classList.contains('show') && 
+                !dropdown.contains(e.target) && 
+                e.target !== dateRangeButton) {
+                dropdown.classList.remove('show');
             }
-        } else {
-            // Log a sample of the fields we're looking for
-            const sampleRecord = filteredData[0];
-            Logger.info(`Sample record fields for debugging:`);
-            Logger.info(`- Schedule Attainment: ${sampleRecord['Schedule Attainment']}`);
-            Logger.info(`- Scheduled Boxes: ${sampleRecord['Scheduled Boxes']}`);
-            Logger.info(`- Actual Boxes: ${sampleRecord['Actual Boxes']}`);
-            Logger.info(`- Labour Cost per Unit: ${sampleRecord['Labour Cost per Unit']}`);
-            Logger.info(`- Scrap %: ${sampleRecord['Scrap %']}`);
         }
 
-        // Apply base product filter if needed
-        let displayData = filteredData;
-        if (detailViewState.baseProductFilter) {
-            displayData = filteredData.filter(record => {
-                const recordBaseProduct = record['Base Product'] || record['Product'] || '';
-                return recordBaseProduct.toLowerCase().includes(detailViewState.baseProductFilter.toLowerCase());
-            });
-        }
-        
-        Logger.info(`Found ${displayData.length} records for detail view display`);
-        
-        // Save the filtered data for use by chart rendering functions
-        detailViewState.filteredData = displayData;
-        
-        // Check if we have any data
-        if (!displayData || displayData.length === 0) {
-            Logger.warn(`No data available for line ${lineId} in date range ${detailViewState.dateRange.start} to ${detailViewState.dateRange.end}`);
-            showNoDataMessage();
-            return;
-        }
-        
-        // Otherwise, render all the charts with the data we have
-        try {
-            Logger.info("Rendering charts with filtered data");
-            if (CONFIG.debugMode) {
-                Logger.info(`Chart data count: ${displayData.length} records`);
+        /**
+         * Track current detail view state
+         */
+        const detailViewState = {
+            lineId: null,
+            dateRange: {
+                start: null,
+                end: null
+            },
+            attainmentView: 'percent',  // New: 'percent', 'boxes', or 'devices'
+            scrapView: 'qty',           // 'qty' or 'cost'
+            downtimeView: 'reason',     // 'reason', 'machine', or 'duration'
+            costView: 'labour',         // 'labour' or 'unit'
+            filteredData: null          // Store filtered data for reuse
+        };
+
+        /**
+         * NEW IMPLEMENTATION: Schedule Attainment Chart with toggle for % view, boxes actual vs target, or devices actual vs target
+         * @param {Array} data - Filtered data for the line
+         * @param {string} view - The view to display ('percent', 'boxes', or 'devices')
+         */
+        function renderScheduleAttainmentChart(data, view = 'percent') {
+            const chartContainer = document.getElementById('scheduleAttainmentChart');
+            if (!chartContainer) {
+                Logger.error("Schedule attainment chart container not found");
+                return;
             }
-            renderScheduleAttainmentChart(displayData, detailViewState.attainmentView || 'percent');
-            renderLabourCostChart(displayData, detailViewState.costView || 'labour');
-            renderScrapAnalysis(displayData, detailViewState.scrapView || 'qty');
-            renderDowntimeChart(displayData, detailViewState.downtimeView || 'reason');
-        } catch (error) {
-            Logger.error(`Error rendering charts: ${error.message}`, error);
-            showErrorInDetailView(`Failed to render charts: ${error.message}`);
-        }
-    }
-    
-    /**
-     * Show "no data available" message in detail view
-     */
-    function showNoDataMessage() {
-        // Get correct container IDs from detail view
-        const scheduleContainer = document.getElementById('scheduleChart') || document.getElementById('scheduleAttainmentChart');
-        const labourContainer = document.getElementById('labourChart') || document.getElementById('labourCostChart');
-        const scrapContainer = document.getElementById('scrapChart');
-        const dailyScrapContainer = document.getElementById('dailyScrapDetails') || document.getElementById('dailyScrapGrid');
-        const downtimeContainer = document.getElementById('downtimeChart');
-        
-        if (scheduleContainer) scheduleContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
-        if (labourContainer) labourContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
-        if (scrapContainer) scrapContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
-        if (dailyScrapContainer) dailyScrapContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
-        if (downtimeContainer) downtimeContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
-    }
-
-    /**
-     * Navigates to the next period
-     */
-    function navigateToNextPeriod() {
-        Logger.info('Navigating to next period: ' + currentPeriod);
-        
-        const start = new Date(currentDateRange.start);
-        const end = new Date(currentDateRange.end);
-        
-        switch(currentPeriod) {
-            case 'daily':
-                // Move forward one day
-                start.setDate(start.getDate() + 1);
-                end.setDate(end.getDate() + 1);
-                break;
-            case 'weekly':
-                // Move forward one week
-                start.setDate(start.getDate() + 7);
-                end.setDate(end.getDate() + 7);
-                break;
-            case 'monthly':
-                // Move forward one month
-                start.setMonth(start.getMonth() + 1);
-                end.setMonth(end.getMonth() + 1);
-                break;
-        }
-        
-        // Update date range
-        currentDateRange.start = start.toISOString().split('T')[0];
-        currentDateRange.end = end.toISOString().split('T')[0];
-        
-        // Reload dashboard
-        initializeDashboard();
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize logger
-        Logger.init();
-        Logger.info('Dashboard initialization started');
-        
-        // Load user preferences
-        loadUserPreferences();
-        
-        // Initialize date range
-        // Ensure date range is properly initialized
-        if (!currentDateRange.start || !currentDateRange.end) {
-            const defaultRange = getDefaultDateRange();
-            currentDateRange = {
-                start: defaultRange.start,
-                end: defaultRange.end
-            };
-            Logger.info(`Initialized date range to default: ${currentDateRange.start} to ${currentDateRange.end}`);
-        }
-        
-        // Set date display
-        updateDateRangeDisplay(currentDateRange);
-        
-        // Button event listeners
-        document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
-        document.getElementById('refreshButton').addEventListener('click', handleRefresh);
-        document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
-        document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
-        document.getElementById('applyAndRememberCycle').addEventListener('click', handleApplyAndRememberCycle);
-        document.getElementById('prevPeriodButton').addEventListener('click', navigateToPreviousPeriod);
-        document.getElementById('nextPeriodButton').addEventListener('click', navigateToNextPeriod);
-        
-        // Modal close button
-        document.getElementById('modalClose').addEventListener('click', hideDetailView);
-        
-        // Modal buttons
-        document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
-        document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
-        
-        // Toggle buttons
-        document.getElementById('attainmentPercentBtn').addEventListener('click', () => toggleAttainmentView('percent'));
-        document.getElementById('attainmentBoxesBtn').addEventListener('click', () => toggleAttainmentView('boxes'));
-        document.getElementById('attainmentDevicesBtn').addEventListener('click', () => toggleAttainmentView('devices'));
-        
-        document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
-        document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
-        
-        document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
-        document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
-        document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
-        
-        document.getElementById('labourCostBtn').addEventListener('click', () => toggleCostView('labour'));
-        document.getElementById('unitCostBtn').addEventListener('click', () => toggleCostView('unit'));
-        
-        // Handle clicks outside modal content to close
-        document.getElementById('detailModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideDetailView();
-            }
-        });
-        
-        // Handle clicks outside dropdown
-        document.addEventListener('click', handleDocumentClick);
-        
-        // Initialize dashboard
-        initializeDashboard();
-        
-        // Set up refresh interval
-        setInterval(handleRefresh, CONFIG.refreshInterval);
-    });
-
-    /**
-     * Navigates to the previous week
-     */
-    function navigateToPreviousWeek() {
-        Logger.info('Navigating to previous week');
-        
-        const start = new Date(detailViewState.dateRange.start);
-        const end = new Date(detailViewState.dateRange.end);
-        
-        // Move both dates back by 7 days
-        start.setDate(start.getDate() - 7);
-        end.setDate(end.getDate() - 7);
-        
-        // Update both the detail view state and the main page state
-        detailViewState.dateRange.start = start.toISOString().split('T')[0];
-        detailViewState.dateRange.end = end.toISOString().split('T')[0];
-        
-        // Also update the main date range
-        currentDateRange.start = detailViewState.dateRange.start;
-        currentDateRange.end = detailViewState.dateRange.end;
-        
-        // Update displays and reload data
-        updateModalDateRange();
-        updateDateRangeDisplay(currentDateRange);
-        loadDetailViewData();
-    }
-
-    /**
-     * Navigates to the next week
-     */
-    function navigateToNextWeek() {
-        Logger.info('Navigating to next week');
-        
-        const start = new Date(detailViewState.dateRange.start);
-        const end = new Date(detailViewState.dateRange.end);
-        
-        // Move both dates forward by 7 days
-        start.setDate(start.getDate() + 7);
-        end.setDate(end.getDate() + 7);
-        
-        // Update both the detail view state and the main page state
-        detailViewState.dateRange.start = start.toISOString().split('T')[0];
-        detailViewState.dateRange.end = end.toISOString().split('T')[0];
-        
-        // Also update the main date range
-        currentDateRange.start = detailViewState.dateRange.start;
-        currentDateRange.end = detailViewState.dateRange.end;
-        
-        // Update displays and reload data
-        updateModalDateRange();
-        updateDateRangeDisplay(currentDateRange);
-        loadDetailViewData();
-    }
-
-    // View toggle functions
-    function toggleAttainmentView(view) {
-        document.getElementById('attainmentPercentBtn').classList.toggle('active', view === 'percent');
-        document.getElementById('attainmentBoxesBtn').classList.toggle('active', view === 'boxes');
-        document.getElementById('attainmentDevicesBtn').classList.toggle('active', view === 'devices');
-        detailViewState.attainmentView = view;
-        renderScheduleAttainmentChart(detailViewState.filteredData, view);
-    }
-
-    function toggleScrapView(view) {
-        document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
-        document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
-        detailViewState.scrapView = view;
-        renderScrapAnalysis(detailViewState.filteredData, view);
-    }
-
-    function toggleDowntimeView(view) {
-        document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
-        document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
-        document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
-        detailViewState.downtimeView = view;
-        renderDowntimeChart(detailViewState.filteredData, view);
-    }
-
-    function toggleCostView(view) {
-        document.getElementById('labourCostBtn').classList.toggle('active', view === 'labour');
-        document.getElementById('unitCostBtn').classList.toggle('active', view === 'unit');
-        detailViewState.costView = view;
-        renderLabourCostChart(detailViewState.filteredData, view);
-    }
-    
-    /**
-     * Renders the labour cost chart in detail view
-     * @param {Array} data - Filtered data for the line
-     * @param {string} view - The view to display ('labour' or 'unit')
-     */
-    function renderLabourCostChart(data, view = 'labour') {
-        const container = document.getElementById('labourChart');
-        if (!container) return;
-        
-        // Sort data by date
-        const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-        
-        // Determine which values to display based on current view
-        const field = view === 'labour' ? 'Labour Cost per Unit' : 'Cost Per Unit';
-        
-        // Format data for the chart
-        const chartData = sortedData.map(record => ({
-            date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-            value: parseFloat(record[field] || 0)
-        }));
-        
-        // Find maximum value for scaling
-        const maxValue = Math.max(...chartData.map(item => item.value), 0.1);
-        // Handle case when all values are 0
-        if (maxValue <= 0.1) {
-            container.innerHTML = '<div class="empty-state">No labour cost data available</div>';
-            return;
-        }
-        
-        // Create HTML chart
-        let html = '<div style="width: 100%; height: 100%;">';
-        
-        // Create container with Y-axis
-        html += '<div style="display: flex; height: 100%;">';
-        
-        // Y-axis with scaled labels
-        html += '<div style="width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
-        html += `<div>R${maxValue.toFixed(2)}</div>`;
-        html += `<div>R${(maxValue/2).toFixed(2)}</div>`;
-        html += '<div>R0.00</div>';
-        html += '</div>';
-        
-        // Chart area
-        html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
-        
-        // Chart bars
-        html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
-        
-        // Create bars for each day
-        chartData.forEach(item => {
-            const heightPercentage = maxValue > 0 ? (item.value / maxValue * 100) : 0;
             
-            html += `
-            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <div style="font-size: 8px; color: var(--text-light); height: 15px;">R${item.value.toFixed(0)}</div>
-                <div style="width: 60%; height: ${heightPercentage}%; background-color: var(--primary-orange);"></div>
-                <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-            </div>
-            `;
-        });
-        
-        html += '</div>'; // End chart bars
-        html += '</div>'; // End chart area
-        html += '</div>'; // End container with Y-axis
-        html += '</div>';
-        
-        container.innerHTML = html;
-    }
-
-    /**
-     * Render the scrap analysis
-     * @param {Array} data - Filtered data for the line
-     * @param {string} view - The view to display ('trend', 'daily', or 'reasons')
-     */
-    function renderScrapAnalysis(data, view = 'trend') {
-        if (!data || data.length === 0) {
-            if (CONFIG.debugMode) console.warn('No data available for scrap analysis');
-            document.getElementById('scrapChart').innerHTML = '<div class="empty-state">No scrap data available</div>';
-            document.getElementById('dailyScrapDetails').innerHTML = '<div class="empty-state">No daily scrap data</div>';
-            return;
-        }
-        
-        try {
             // Sort data by date
             const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
             
-            // Extract scrap percentages for trend
-            const scrapData = sortedData.map(record => {
+            let html = '<div style="width: 100%; height: 100%;">';
+            
+            // Create chart based on view type
+            if (view === 'percent') {
+                // Percentage view implementation
+                const chartData = sortedData.map(record => ({
+                    date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+                    value: parseFloat(record['Schedule Attainment'] || 0)
+                }));
+                
+                // Create container with Y-axis
+                html += '<div style="display: flex; height: 100%;">';
+                
+                // Y-axis with scaled labels
+                html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
+                html += '<div>100%</div>';
+                html += '<div>50%</div>';
+                html += '<div>0%</div>';
+                html += '</div>';
+                
+                // Chart area
+                html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+                
+                // Chart bars
+                html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
+                
+                // Create bars for each day
+                chartData.forEach(item => {
+                    const height = Math.min(item.value, 100);
+                    
+                    html += `
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.value.toFixed(1)}%</div>
+                        <div style="width: 60%; height: ${height}%; background-color: var(--primary-blue);"></div>
+                        <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+                    </div>
+                    `;
+                });
+                
+                html += '</div>'; // End chart bars
+                html += '</div>'; // End chart area
+                html += '</div>'; // End container with Y-axis
+            } 
+            else if (view === 'boxes' || view === 'devices') {
+                // Boxes or Devices view implementation (actual vs target)
+                const chartData = sortedData.map(record => {
+                    const field = view === 'boxes' ? 'Boxes' : 'Devices';
+                    const actual = parseInt(record[`Actual ${field} Produced`] || 0);
+                    const target = parseInt(record[`Theoretical Target (${field})`] || 0);
+                    
+                    return {
+                        date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+                        actual: actual,
+                        target: target
+                    };
+                });
+                
+                // Find max target value for scaling
+                const maxTarget = Math.max(...chartData.map(item => item.target), 1);
+                
+                // Create container with Y-axis
+                html += '<div style="display: flex; height: 100%;">';
+                
+                // Y-axis with scaled labels
+                html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
+                html += `<div>${maxTarget}</div>`;
+                html += `<div>${Math.round(maxTarget/2)}</div>`;
+                html += '<div>0</div>';
+                html += '</div>';
+                
+                // Chart area
+                html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+                
+                // Chart bars
+                html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
+                
+                // Create bars for each day
+                chartData.forEach(item => {
+                    const heightPercentage = maxTarget > 0 ? (item.actual / maxTarget * 100) : 0;
+                    const targetHeightPercentage = maxTarget > 0 ? (item.target / maxTarget * 100) : 0;
+                    
+                    html += `
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.actual}/${item.target}</div>
+                        <div style="width: 60%; position: relative; height: ${Math.max(targetHeightPercentage, heightPercentage)}%;">
+                            <!-- Target line -->
+                            <div style="width: 100%; height: 2px; background-color: var(--danger-color); position: absolute; top: ${100 - targetHeightPercentage}%;"></div>
+                            <!-- Actual bar -->
+                            <div style="width: 100%; height: ${heightPercentage}%; background-color: var(--primary-blue); position: absolute; bottom: 0;"></div>
+                        </div>
+                        <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+                    </div>
+                    `;
+                });
+                
+                html += '</div>'; // End chart bars
+                html += '</div>'; // End chart area
+                html += '</div>'; // End container with Y-axis
+            }
+            
+            html += '</div>';
+            chartContainer.innerHTML = html;
+        }
+
+        /**
+         * Toggle function for schedule attainment view
+         * @param {string} view - The view to switch to ('percent', 'boxes', or 'devices')
+         */
+        function toggleAttainmentView(view) {
+            // Update active button state
+            document.getElementById('attainmentPercentBtn').classList.toggle('active', view === 'percent');
+            document.getElementById('attainmentBoxesBtn').classList.toggle('active', view === 'boxes');
+            document.getElementById('attainmentDevicesBtn').classList.toggle('active', view === 'devices');
+            
+            // Store the current view in the state
+            detailViewState.attainmentView = view;
+            
+            // Re-render the chart
+            renderScheduleAttainmentChart(detailViewState.filteredData, view);
+        }
+
+        /**
+         * Toggles the cost view
+         * @param {string} view - The view to switch to ('labour' or 'unit')
+         */
+        function toggleCostView(view) {
+            Logger.info(`Toggling cost view to: ${view}`);
+            
+            // Update the state
+            detailViewState.costView = view;
+            
+            // Update button active states
+            document.getElementById('labourCostBtn').classList.toggle('active', view === 'labour');
+            document.getElementById('unitCostBtn').classList.toggle('active', view === 'unit');
+            
+            // Update the chart with the stored filtered data
+            if (detailViewState.filteredData) {
+                renderLabourCostChart(detailViewState.filteredData);
+            }
+        }
+        
+        
+        /**
+         * NEW IMPLEMENTATION: Scrap Analysis with trend chart and daily details
+         * @param {Array} data - Filtered data for the line
+         * @param {string} view - The view to display ('qty' or 'cost')
+         */
+        function renderScrapAnalysis(data, view = 'qty') {
+            // 1. Render the trend chart
+            renderScrapTrendChart(data);
+            
+            // 2. Render the daily scrap details
+            renderDailyScrapDetails(data, view);
+        }
+
+        /**
+         * Render the scrap percentage trend chart
+         * @param {Array} data - Filtered data for the line
+         */
+        function renderScrapTrendChart(data) {
+            const container = document.getElementById('scrapPercentageChart');
+            if (!container) return;
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Format data for the chart
+            const chartData = sortedData.map(record => ({
+                date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+                value: parseFloat(record['Scrap Cost as % of Production Value'] || 0)
+            }));
+            
+            // Find maximum value for scaling
+            const maxValue = Math.max(...chartData.map(item => item.value), 5); // At least 5% scale
+            
+            // Create SVG for the trend line
+            let html = `
+            <svg width="100%" height="100%" viewBox="0 0 300 50" preserveAspectRatio="none">
+                <!-- Y-axis labels -->
+                <text x="5" y="10" font-size="8" fill="#7f8c8d">${maxValue.toFixed(1)}%</text>
+                <text x="5" y="45" font-size="8" fill="#7f8c8d">0%</text>
+                
+                <!-- Grid lines -->
+                <line x1="25" y1="10" x2="295" y2="10" stroke="#eee" stroke-width="0.5" />
+                <line x1="25" y1="45" x2="295" y2="45" stroke="#eee" stroke-width="0.5" />
+                
+                <!-- Trend line -->
+                <polyline 
+                    points="${chartData.map((item, index) => {
+                        const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
+                        const y = 45 - ((item.value / maxValue) * 35);
+                        return `${x},${y}`;
+                    }).join(' ')}"
+                    fill="none"
+                    stroke="#e74c3c"
+                    stroke-width="1.5"
+                />
+                
+                <!-- Data points -->
+                ${chartData.map((item, index) => {
+                    const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
+                    const y = 45 - ((item.value / maxValue) * 35);
+                    return `<circle cx="${x}" cy="${y}" r="2" fill="#e74c3c" />`;
+                }).join('')}
+            </svg>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        /**
+         * Render the daily scrap details with top reject reasons
+         * @param {Array} data - Filtered data for the line
+         * @param {string} view - The view to display ('qty' or 'cost')
+         */
+        function renderDailyScrapDetails(data, view) {
+            const container = document.getElementById('dailyScrapGrid');
+            if (!container) return;
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Field selection based on view
+            const rejectsField = view === 'qty' 
+                ? 'Top Rejects by QTY (Reason - Station - QTY - Cost)'
+                : 'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+            
+            let html = '';
+            
+            // Create a card for each day
+            sortedData.forEach(record => {
                 const date = new Date(record.Date);
                 const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-                const scrapPct = parseFloat(record['Scrap %'] || 0);
+                const scrapPercent = parseFloat(record['Scrap Cost as % of Production Value'] || 0).toFixed(1);
                 
-                // Extract reject reasons from the field
-                const rejectsField = 'Top 3 Rejects (Reason - Station - QTY - Cost)';
+                // Extract reject reasons
+                const rejectReasons = extractRejectReasons(record[rejectsField], view);
                 
-                // Get reasons using helper function
-                const reasons = record[rejectsField] ? 
-                    extractRejectReasons(record[rejectsField], view) : [];
+                // Create day card
+                html += `
+                <div class="daily-scrap-card">
+                    <div class="daily-scrap-header">${dateStr} (${scrapPercent}%)</div>
+                `;
+                
+                // Add top 3 reasons
+                if (rejectReasons.length > 0) {
+                    rejectReasons.slice(0, 3).forEach((reason, index) => {
+                        html += `<div class="scrap-reason" title="${reason}">${index + 1}. ${reason}</div>`;
+                    });
+                } else {
+                    html += `<div class="scrap-reason">No reject data</div>`;
+                }
+                
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+
+        /**
+         * Helper to extract reject reasons
+         * @param {string} rejectsText - The text containing reject reasons
+         * @param {string} view - The view to display ('qty' or 'cost')
+         * @returns {Array} Array of formatted reject reason strings
+         */
+        function extractRejectReasons(rejectsText, view) {
+            if (!rejectsText || rejectsText.includes('No rejects')) return [];
+            
+            const reasons = [];
+            const entries = rejectsText.split('|');
+            
+            entries.forEach(entry => {
+                const parts = entry.trim().split(' - ');
+                if (parts.length >= 3) {
+                    // Extract reason (remove numbering)
+                    let reason = parts[0].trim().replace(/^\d+\.\s+/, '');
+                    
+                    // Extract station
+                    const station = parts[1].trim();
+                    
+                    // Extract value based on view (QTY or Cost)
+                    let value = '';
+                    if (view === 'qty') {
+                        // Find the QTY part
+                        for (let i = 2; i < parts.length; i++) {
+                            if (parts[i].includes('QTY:')) {
+                                value = parts[i].replace('QTY:', '').trim() + ' QTY';
+                                break;
+                            }
+                        }
+                    } else {
+                        // Find the Cost part
+                        for (let i = 2; i < parts.length; i++) {
+                            if (parts[i].includes('Cost:')) {
+                                value = 'R ' + parts[i].replace('Cost:', '').trim();
+                                break;
+                            }
+                        }
+                    }
+                    
+                    reasons.push(`${reason} - ${station} - ${value}`);
+                }
+            });
+            
+            return reasons;
+        }
+        // First, define these functions at the top of your script section
+function showDetailView(lineId) {
+    // Store the current line ID
+    detailViewState.lineId = lineId;
+    
+    // Use the date range from the main page
+    detailViewState.dateRange.start = currentDateRange.start;
+    detailViewState.dateRange.end = currentDateRange.end;
+    
+    // Update modal title
+    const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
+    if (lineElement) {
+        const headerElement = lineElement.querySelector('.card-title');
+        if (headerElement) {
+            document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
+        }
+    }
+    
+    // Update date range display
+    updateModalDateRange();
+    
+    // Load and render the charts
+    loadDetailViewData();
+    
+    // Show the modal
+    document.getElementById('detailModal').classList.add('show');
+}
+
+function hideDetailView() {
+    document.getElementById('detailModal').classList.remove('show');
+}
+
+
+        /**
+         * NEW IMPLEMENTATION: Downtime Analysis Chart with reason/machine labels
+         * @param {Array} data - Filtered data for the line
+         * @param {string} view - The view to display ('reason', 'machine', or 'duration')
+         */
+        function renderDowntimeChart(data, view = 'reason') {
+            const container = document.getElementById('downtimeChart');
+            if (!container) return;
+            
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Extract downtime data
+            const downtimeData = sortedData.map(record => {
+                const date = new Date(record.Date);
+                const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+                const minutes = parseFloat(record['Downtime Duration (min)'] || 0);
+                const hours = minutes / 60;
+                
+                // Extract reason and machine
+                let reason = 'No downtime';
+                let machine = '';
+                
+                // Get from downtime field
+                const downtimeField = 'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
+                
+                if (record[downtimeField] && !record[downtimeField].includes('No downtime') && minutes > 0) {
+                    const entries = record[downtimeField].split('|');
+                    
+                    if (entries.length > 0) {
+                        const entry = entries[0].trim();
+                        const parts = entry.split(' - ');
+                        
+                        if (parts.length >= 2) {
+                            reason = parts[0].trim().replace(/^\d+\.\s+/, '');
+                            machine = parts[1].trim();
+                        }
+                    }
+                }
                 
                 return {
                     date: dateStr,
-                    scrapPct: scrapPct,
-                    rawDate: date,
-                    reasons: reasons,
-                    rejectsText: record[rejectsField] || 'No reject reasons available'
+                    hours: hours,
+                    reason: reason,
+                    machine: machine
                 };
             });
             
-            if (view === 'trend' || view === 'all') {
-                renderScrapTrendChart(scrapData);
-            }
+            // Find max for scaling
+            const maxHours = Math.max(...downtimeData.map(item => item.hours), 1); // At least 1 hour scale
             
-            if (view === 'daily' || view === 'all') {
-                renderDailyScrapDetails(scrapData);
-            }
+            // Create the chart HTML
+            let html = '<div style="display: flex; height: 100%; align-items: flex-end;">';
             
-            // Debug log
-            if (CONFIG.debugMode) {
-                console.log('Scrap data:', scrapData);
-            }
-            
-        } catch (error) {
-            console.error('Error rendering scrap analysis:', error);
-            document.getElementById('scrapChart').innerHTML = '<div class="error-state">Error rendering scrap chart</div>';
-            document.getElementById('dailyScrapDetails').innerHTML = '<div class="error-state">Error rendering daily scrap details</div>';
-        }
-    }
-    
-    /**
-     * Render the scrap trend chart
-     * @param {Array} scrapData - Processed scrap data
-     */
-    function renderScrapTrendChart(scrapData) {
-        const container = document.getElementById('scrapChart');
-        if (!container) return;
-        
-        // Find max for scaling (at least 5% for visibility)
-        const maxScrap = Math.max(...scrapData.map(item => item.scrapPct), 5);
-        
-        // Create the chart HTML
-        let html = '<div style="display: flex; height: 100%; align-items: flex-end;">';
-        
-        // Create a bar for each day
-        scrapData.forEach(item => {
-            // Calculate height as percentage of max (max 80% of container height)
-            const height = (item.scrapPct / maxScrap) * 80;
-            
-            // Determine bar color based on scrap percentage
-            let barColor = 'var(--success-color)';
-            if (item.scrapPct > 3) {
-                barColor = 'var(--danger-color)';
-            } else if (item.scrapPct > 1.5) {
-                barColor = 'var(--warning-color)';
-            }
-            
-            html += `
-            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <div style="font-size: 9px; margin-bottom: 2px;">${item.scrapPct.toFixed(1)}%</div>
-                <div style="width: 70%; height: ${height}px; background-color: ${barColor};"></div>
-                <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-            </div>
-            `;
-        });
-        
-        html += '</div>';
-        
-        container.innerHTML = html;
-    }
-    
-    /**
-     * Render the daily scrap details
-     * @param {Array} scrapData - Processed scrap data
-     */
-    function renderDailyScrapDetails(scrapData) {
-        const container = document.getElementById('dailyScrapDetails');
-        if (!container) {
-            if (CONFIG.debugMode) console.warn('Daily scrap details container not found');
-            return;
-        }
-        
-        // Generate HTML for daily scrap details
-        // Take only the latest 3 days with data
-        let latestDays = [...scrapData];
-        // Sort by date descending to get latest days first
-        latestDays.sort((a, b) => b.rawDate - a.rawDate);
-        // Take only the first 3
-        latestDays = latestDays.slice(0, 3);
-        // And sort back to chronological order
-        latestDays.sort((a, b) => a.rawDate - b.rawDate);
-        
-        let html = '';
-        
-        // Create a card for each day
-        latestDays.forEach(day => {
-            // Create a container for this day's data
-            html += `
-            <div class="daily-scrap-card">
-                <div class="daily-scrap-header">${day.date} - ${day.scrapPct.toFixed(1)}%</div>
-                <div class="daily-scrap-content">
-            `;
-            
-            // Handle case where we have direct text but no parsed reasons
-            if (day.rejectsText && day.rejectsText.toLowerCase().includes('no reject')) {
-                html += `<div class="scrap-reason">No reject reasons recorded</div>`;
-            }
-            // Handle case where we have parsed reasons
-            else if (day.reasons && day.reasons.length > 0) {
-                // Only show top 3 if we have more
-                const reasonsToShow = day.reasons.slice(0, 3);
-                reasonsToShow.forEach((reason, index) => {
-                    html += `<div class="scrap-reason">${index + 1}. ${reason}</div>`;
-                });
+            // Create a bar for each day
+            downtimeData.forEach(item => {
+                // Calculate height as percentage of max
+                const height = (item.hours / maxHours) * 80; // Max 80% of container height
                 
-                // If we have more than 3, add an ellipsis
-                if (day.reasons.length > 3) {
-                    html += `<div class="scrap-reason-more">+${day.reasons.length - 3} more reasons</div>`;
+                // Determine bar color based on duration
+                let barColor = 'var(--primary-blue)';
+                if (item.hours > 2) {
+                    barColor = 'var(--danger-color)';
+                } else if (item.hours > 1) {
+                    barColor = 'var(--warning-color)';
                 }
-            } else {
-                // For any other case, show the raw text if available
-                html += `<div class="scrap-reason">${day.rejectsText}</div>`;
-            }
-            
-            html += `
-                </div>
-            </div>
-            `;
-        });
-        
-        container.innerHTML = html;
-    }
-
-    /**
-     * Extract reject reasons from a formatted string
-     * Helper function for renderScrapAnalysis
-     * @param {string} rejectsString - Formatted string of reject reasons
-     * @param {string} view - The view being used
-     * @returns {Array} Array of extracted reasons
-     */
-    function extractRejectReasons(rejectsString, view) {
-        if (!rejectsString || rejectsString.includes('No reject')) {
-            return [];
-        }
-        
-        // Split by pipe for multiple reasons
-        let entries = [];
-        
-        // Handle entries separated by pipe or newline
-        if (rejectsString.includes('|')) {
-            entries = rejectsString.split('|');
-        } else {
-            entries = [rejectsString]; // Single entry
-        }
-        
-        // Process each entry to extract just the reason
-        return entries.map(entry => {
-            const trimmed = entry.trim();
-            // Extract just the reason part if it's in the format "Reason - Station - QTY - Cost"
-            const parts = trimmed.split(' - ');
-            if (parts.length > 1) {
-                return parts[0].trim(); // Return just the reason
-            }
-            return trimmed; // Return the whole entry if it can't be parsed
-        });
-    }
-
-    /**
-     * Render the downtime chart
-     * @param {Array} data - Filtered data for the line
-     * @param {string} view - The view to display ('reason', 'machine', or 'duration')
-     */
-    function renderDowntimeChart(data, view = 'reason') {
-        const container = document.getElementById('downtimeChart');
-        if (!container) return;
-        
-        // Sort data by date
-        const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-        
-        // Extract downtime data
-        const downtimeData = sortedData.map(record => {
-            const date = new Date(record.Date);
-            const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-            const minutes = parseFloat(record['Downtime Duration (min)'] || 0);
-            const hours = minutes / 60;
-            
-            // Extract reason and machine
-            let reason = 'No downtime';
-            let machine = '';
-            
-            // Get from downtime field
-            const downtimeField = 'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
-            
-            if (record[downtimeField] && !record[downtimeField].includes('No down') && minutes > 0) {
-                const entries = record[downtimeField].split('|');
                 
-                if (entries.length > 0) {
-                    const entry = entries[0].trim();
-                    const parts = entry.split(' - ');
-                    
-                    if (parts.length >= 2) {
-                        reason = parts[0].trim().replace(/^\d+\.\s+/, '');
-                        machine = parts[1].trim();
-                    }
+                // Determine label based on view
+                let label = '';
+                switch(view) {
+                    case 'reason':
+                        label = item.reason;
+                        break;
+                    case 'machine':
+                        label = item.machine;
+                        break;
+                    case 'duration':
+                        label = `${item.reason} - ${item.machine}`;
+                        break;
                 }
-            }
-            
-            return {
-                date: dateStr,
-                hours: hours,
-                reason: reason,
-                machine: machine
-            };
-        });
-        
-        // Find max for scaling
-        const maxHours = Math.max(...downtimeData.map(item => item.hours), 1); // At least 1 hour scale
-        
-        // Create the chart HTML
-        let html = '<div style="display: flex; height: 100%; align-items: flex-end;">';
-        
-        // Create a bar for each day
-        downtimeData.forEach(item => {
-            // Calculate height as percentage of max
-            // Ensure a minimum height for visibility even with tiny values
-            const height = item.hours > 0 ? 
-                Math.max((item.hours / maxHours) * 80, 10) : 0; // Min 10px height if non-zero
-            
-            // Determine bar color based on duration
-            let barColor = 'var(--primary-blue)';
-            if (item.hours > 2) {
-                barColor = 'var(--danger-color)';
-            } else if (item.hours > 1) {
-                barColor = 'var(--warning-color)';
-            }
-            
-            // Determine label based on view
-            let label = '';
-            switch(view) {
-                case 'reason':
-                    label = item.reason;
-                    break;
-                case 'machine':
-                    label = item.machine;
-                    break;
-                case 'duration':
-                    label = `${item.hours.toFixed(1)}h`;
-                    break;
-            }
-            
-            html += `
-            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <div class="downtime-label" title="${label}">${label}</div>
-                <div style="width: 70%; height: ${height}px; background-color: ${barColor}; display: flex; justify-content: center; align-items: center; min-height: ${height}px;">
-                    <span style="font-size: 9px; color: white;">${item.hours.toFixed(1)}h</span>
+                
+                html += `
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div class="downtime-label" title="${label}">${label}</div>
+                    <div style="width: 70%; height: ${height}px; background-color: ${barColor}; display: flex; justify-content: center; align-items: center;">
+                        <span style="font-size: 9px; color: white;">${item.hours.toFixed(1)}h</span>
+                    </div>
+                    <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
                 </div>
-                <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
-            </div>
-            `;
+                `;
+            });
+            
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        /**
+         * Updated toggle functions for detail view
+         */
+        function toggleScrapView(view) {
+            // Update active button states
+            document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
+            document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
+            
+            // Store the current view in the state
+            detailViewState.scrapView = view;
+            
+            // Re-render the scrap analysis (only the daily details change)
+            renderDailyScrapDetails(detailViewState.filteredData, view);
+        }
+
+        function toggleDowntimeView(view) {
+            // Update active button states
+            document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
+            document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
+            document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
+            
+            // Store the current view in the state
+            detailViewState.downtimeView = view;
+            
+            // Re-render the chart
+            renderDowntimeChart(detailViewState.filteredData, view);
+        }
+
+        /**
+         * Updated loadDetailViewData function to use the new rendering methods
+         */
+        function loadDetailViewData() {
+            Logger.info(`Loading detail view data for line: ${detailViewState.lineId}`);
+            
+            // Get the filtered data for the line and date range
+            const filteredData = getFilteredLineData(detailViewState.lineId, detailViewState.dateRange.start, detailViewState.dateRange.end);
+            
+            Logger.info(`Retrieved ${filteredData.length} records for line ${detailViewState.lineId}`);
+            
+            // Store the filtered data for reuse
+            detailViewState.filteredData = filteredData;
+            
+            if (filteredData.length === 0) {
+                Logger.warn(`No data available for line ${detailViewState.lineId} in selected date range`);
+                showNoDataMessage();
+                return;
+            }
+            
+            try {
+                // Initialize views if not set
+                detailViewState.attainmentView = detailViewState.attainmentView || 'percent';
+                detailViewState.costView = detailViewState.costView || 'labour';
+                detailViewState.scrapView = detailViewState.scrapView || 'qty';
+                detailViewState.downtimeView = detailViewState.downtimeView || 'reason';
+                
+                // Render all sections with current views
+                renderScheduleAttainmentChart(filteredData, detailViewState.attainmentView);
+                renderLabourCostChart(filteredData, detailViewState.costView);
+                renderScrapAnalysis(filteredData, detailViewState.scrapView);
+                renderDowntimeChart(filteredData, detailViewState.downtimeView);
+                
+            } catch (error) {
+                Logger.error(`Error rendering charts: ${error.message}`, error);
+                showNoDataMessage();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load user preferences
+            loadUserPreferences();
+            
+            // Update cycle dropdown to match stored preference
+            document.getElementById('cycleStartDay').value = weekCycleStartDay.toString();
+            
+            // Add event listeners for main dashboard buttons
+            document.getElementById('periodToggle').addEventListener('click', handlePeriodToggle);
+            document.getElementById('refreshButton').addEventListener('click', handleRefresh);
+            document.getElementById('dateRangeButton').addEventListener('click', handleDateRangeButton);
+            document.getElementById('applyDateRange').addEventListener('click', handleApplyDateRange);
+            document.getElementById('applyAndRememberCycle').addEventListener('click', handleApplyAndRememberCycle);
+            document.getElementById('prevPeriodButton').addEventListener('click', navigateToPreviousPeriod);
+            document.getElementById('nextPeriodButton').addEventListener('click', navigateToNextPeriod);
+            
+            // Add event listener for document click (to close dropdown)
+            document.addEventListener('click', handleDocumentClick);
+            
+            // Detail view event listeners
+            document.getElementById('modalClose').addEventListener('click', hideDetailView);
+            document.getElementById('prevWeekBtn').addEventListener('click', navigateToPreviousWeek);
+            document.getElementById('nextWeekBtn').addEventListener('click', navigateToNextWeek);
+            
+            // Schedule Attainment toggle buttons
+            document.getElementById('attainmentPercentBtn').addEventListener('click', () => toggleAttainmentView('percent'));
+            document.getElementById('attainmentBoxesBtn').addEventListener('click', () => toggleAttainmentView('boxes'));
+            document.getElementById('attainmentDevicesBtn').addEventListener('click', () => toggleAttainmentView('devices'));
+            
+            // Scrap Analysis toggle buttons
+            document.getElementById('scrapQtyBtn').addEventListener('click', () => toggleScrapView('qty'));
+            document.getElementById('scrapCostBtn').addEventListener('click', () => toggleScrapView('cost'));
+            
+            // Downtime Analysis toggle buttons
+            document.getElementById('downtimeReasonBtn').addEventListener('click', () => toggleDowntimeView('reason'));
+            document.getElementById('downtimeMachineBtn').addEventListener('click', () => toggleDowntimeView('machine'));
+            document.getElementById('downtimeDurationBtn').addEventListener('click', () => toggleDowntimeView('duration'));
+            
+            // Labour Cost toggle buttons
+            document.getElementById('labourCostBtn').addEventListener('click', () => toggleCostView('labour'));
+            document.getElementById('unitCostBtn').addEventListener('click', () => toggleCostView('unit'));
+            
+            initializeDashboard();
+            
+            // Set up auto-refresh interval
+            setInterval(initializeDashboard, CONFIG.refreshInterval);
         });
-        
-        html += '</div>';
-        
-        container.innerHTML = html;
-    }
+
+        // Make functions available in the global scope
+        window.showDetailView = showDetailView;
+        window.hideDetailView = hideDetailView;
+        window.toggleAttainmentView = toggleAttainmentView;
+        window.toggleScrapView = toggleScrapView;
+        window.toggleDowntimeView = toggleDowntimeView;
+        window.toggleCostView = toggleCostView;
     </script>
 </body>
 </html>
