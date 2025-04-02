@@ -2290,7 +2290,7 @@ function hideDetailView() {
         }
         const jsonData = await response.json();
         
-        // Store the full dataset for later filtering
+        // Extract and store the full dataset
         const fullData = jsonData.productionData;
         
         // On first load, find the latest dates with data
@@ -2306,8 +2306,8 @@ function hideDetailView() {
         const filteredData = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
         Logger.info(`Filtered to ${filteredData.length} records in date range`);
         
-        // Render KPI summary with filtered data
-        renderKPISummary(filteredData);
+        // Render KPI summary with filtered data AND full data
+        renderKPISummary(filteredData, fullData);
         
         // Render dashboard grid with filtered data
         renderDashboardGrid(filteredData);
@@ -2352,7 +2352,7 @@ function hideDetailView() {
             const filteredData = filterDataByDateRange(data, currentDateRange.start, currentDateRange.end);
             
             // Calculate KPIs
-            const kpis = calculateKPIs(filteredData);
+            const kpis = calculateKPIs(filteredData, fullData);
             
             // Render KPI cards
             container.innerHTML = `
@@ -2404,46 +2404,46 @@ function hideDetailView() {
          * @param {Array} data - Filtered data for the current date range
          * @returns {Object} Object containing calculated KPIs
          */
-        function calculateKPIs(data) {
-            if (!data || data.length === 0) {
-                return {
-                    scheduleAttainment: 0,
-                    scheduleAttainmentTrend: 0,
-                    labourCostPerUnit: 0,
-                    labourCostTrend: 0,
-                    scrapPercentage: 0,
-                    scrapTrend: 0,
-                    downtimeHours: 0,
-                    downtimeTrend: 0
-                };
-            }
-            
-            // Calculate current period KPIs
-            const currentKPIs = {
-                scheduleAttainment: calculateAverage(data, 'Schedule Attainment'),
-                labourCostPerUnit: calculateAverage(data, 'Labour Cost per Unit'),
-                scrapPercentage: calculateAverage(data, 'Scrap Cost as % of Production Value'),
-                downtimeHours: calculateAverage(data, 'Downtime Duration (min)') / 60
-            };
-            
-            // Calculate previous period KPIs for trends
-            const previousData = getPreviousPeriodData(data);
-            const previousKPIs = {
-                scheduleAttainment: calculateAverage(previousData, 'Schedule Attainment'),
-                labourCostPerUnit: calculateAverage(previousData, 'Labour Cost per Unit'),
-                scrapPercentage: calculateAverage(previousData, 'Scrap Cost as % of Production Value'),
-                downtimeHours: calculateAverage(previousData, 'Downtime Duration (min)') / 60
-            };
-            
-            // Calculate trends
-            return {
-                ...currentKPIs,
-                scheduleAttainmentTrend: calculateTrend(currentKPIs.scheduleAttainment, previousKPIs.scheduleAttainment),
-                labourCostTrend: calculateTrend(currentKPIs.labourCostPerUnit, previousKPIs.labourCostPerUnit),
-                scrapTrend: calculateTrend(currentKPIs.scrapPercentage, previousKPIs.scrapPercentage),
-                downtimeTrend: calculateTrend(currentKPIs.downtimeHours, previousKPIs.downtimeHours)
-            };
-        }
+        function calculateKPIs(data, fullData) {
+    if (!data || data.length === 0) {
+        return {
+            scheduleAttainment: 0,
+            scheduleAttainmentTrend: 0,
+            labourCostPerUnit: 0,
+            labourCostTrend: 0,
+            scrapPercentage: 0,
+            scrapTrend: 0,
+            downtimeHours: 0,
+            downtimeTrend: 0
+        };
+    }
+    
+    // Calculate current period KPIs
+    const currentKPIs = {
+        scheduleAttainment: calculateAverage(data, 'Schedule Attainment'),
+        labourCostPerUnit: calculateAverage(data, 'Labour Cost per Unit'),
+        scrapPercentage: calculateAverage(data, 'Scrap Cost as % of Production Value'),
+        downtimeHours: calculateAverage(data, 'Downtime Duration (min)') / 60
+    };
+    
+    // Calculate previous period KPIs for trends, passing fullData
+    const previousData = getPreviousPeriodData(data, fullData);
+    const previousKPIs = {
+        scheduleAttainment: calculateAverage(previousData, 'Schedule Attainment'),
+        labourCostPerUnit: calculateAverage(previousData, 'Labour Cost per Unit'),
+        scrapPercentage: calculateAverage(previousData, 'Scrap Cost as % of Production Value'),
+        downtimeHours: calculateAverage(previousData, 'Downtime Duration (min)') / 60
+    };
+    
+    // Calculate trends
+    return {
+        ...currentKPIs,
+        scheduleAttainmentTrend: calculateTrend(currentKPIs.scheduleAttainment, previousKPIs.scheduleAttainment),
+        labourCostTrend: calculateTrend(currentKPIs.labourCostPerUnit, previousKPIs.labourCostPerUnit),
+        scrapTrend: calculateTrend(currentKPIs.scrapPercentage, previousKPIs.scrapPercentage),
+        downtimeTrend: calculateTrend(currentKPIs.downtimeHours, previousKPIs.downtimeHours)
+    };
+}
 
         /**
          * Calculate average value for a field in the data
@@ -2473,7 +2473,7 @@ function hideDetailView() {
          * @param {Array} currentData - Current period data
          * @returns {Array} Previous period data
          */
-        function getPreviousPeriodData(currentData) {
+        function getPreviousPeriodData(currentData, fullData) {
     if (!currentData || currentData.length === 0) return [];
     
     const startDate = new Date(currentData[0].Date);
@@ -2486,8 +2486,8 @@ function hideDetailView() {
     const previousEndDate = new Date(startDate);
     previousEndDate.setDate(previousEndDate.getDate() - 1);
     
-    // If data is a global variable, make sure it's properly set elsewhere
-    return data.productionData.filter(record => {
+    // Use fullData parameter instead of global data
+    return fullData.filter(record => {
         const recordDate = new Date(record.Date);
         return recordDate >= previousStartDate && recordDate <= previousEndDate;
     });
