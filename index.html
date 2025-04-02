@@ -2201,84 +2201,124 @@
         
         display.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
     }
-
+    
     /**
-     * Navigates to the previous week
+     * Renders the schedule attainment chart in the detail view
+     * @param {Array} data - Filtered data for the line
+     * @param {string} view - The view to display ('percent', 'boxes', or 'devices')
      */
-    function navigateToPreviousWeek() {
-        Logger.info('Navigating to previous week');
+    function renderScheduleAttainmentChart(data, view = 'percent') {
+        const chartContainer = document.getElementById('scheduleAttainmentChart');
+        if (!chartContainer) {
+            Logger.error("Schedule attainment chart container not found");
+            return;
+        }
         
-        const start = new Date(detailViewState.dateRange.start);
-        const end = new Date(detailViewState.dateRange.end);
+        // Sort data by date
+        const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
         
-        // Move both dates back by 7 days
-        start.setDate(start.getDate() - 7);
-        end.setDate(end.getDate() - 7);
+        // Create HTML for chart
+        let html = '<div style="width: 100%; height: 100%;">';
         
-        // Update both the detail view state and the main page state
-        detailViewState.dateRange.start = start.toISOString().split('T')[0];
-        detailViewState.dateRange.end = end.toISOString().split('T')[0];
+        if (view === 'percent') {
+            // Percentage view
+            const chartData = sortedData.map(record => ({
+                date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+                value: parseFloat(record['Schedule Attainment'] || 0)
+            }));
+            
+            // Create container with Y-axis
+            html += '<div style="display: flex; height: 100%;">';
+            
+            // Y-axis with scaled labels
+            html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
+            html += '<div>100%</div>';
+            html += '<div>50%</div>';
+            html += '<div>0%</div>';
+            html += '</div>';
+            
+            // Chart area
+            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+            
+            // Chart bars
+            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
+            
+            // Create bars for each day
+            chartData.forEach(item => {
+                const height = Math.min(item.value, 100);
+                
+                html += `
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.value.toFixed(1)}%</div>
+                    <div style="width: 60%; height: ${height}%; background-color: var(--primary-blue);"></div>
+                    <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+                </div>
+                `;
+            });
+            
+            html += '</div>'; // End chart bars
+            html += '</div>'; // End chart area
+            html += '</div>'; // End container with Y-axis
+        } 
+        else {
+            // Boxes or Devices view
+            const chartData = sortedData.map(record => {
+                const field = view === 'boxes' ? 'Boxes' : 'Devices';
+                const actual = parseInt(record[`Actual ${field} Produced`] || 0);
+                const target = parseInt(record[`Theoretical Target (${field})`] || 0);
+                
+                return {
+                    date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+                    actual: actual,
+                    target: target
+                };
+            });
+            
+            // Find max target value for scaling
+            const maxTarget = Math.max(...chartData.map(item => item.target), 1);
+            
+            // Create container with Y-axis
+            html += '<div style="display: flex; height: 100%;">';
+            
+            // Y-axis with scaled labels
+            html += '<div style="width: 30px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
+            html += `<div>${maxTarget}</div>`;
+            html += `<div>${Math.round(maxTarget/2)}</div>`;
+            html += '<div>0</div>';
+            html += '</div>';
+            
+            // Chart area
+            html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+            
+            // Chart bars
+            html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
+            
+            // Create bars for each day
+            chartData.forEach(item => {
+                const heightPercentage = maxTarget > 0 ? (item.actual / maxTarget * 100) : 0;
+                const targetHeightPercentage = maxTarget > 0 ? (item.target / maxTarget * 100) : 0;
+                
+                html += `
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.actual}/${item.target}</div>
+                    <div style="width: 60%; position: relative; height: ${Math.max(targetHeightPercentage, heightPercentage)}%;">
+                        <!-- Target line -->
+                        <div style="width: 100%; height: 2px; background-color: var(--danger-color); position: absolute; top: ${100 - targetHeightPercentage}%;"></div>
+                        <!-- Actual bar -->
+                        <div style="width: 100%; height: ${heightPercentage}%; background-color: var(--primary-blue); position: absolute; bottom: 0;"></div>
+                    </div>
+                    <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+                </div>
+                `;
+            });
+            
+            html += '</div>'; // End chart bars
+            html += '</div>'; // End chart area
+            html += '</div>'; // End container with Y-axis
+        }
         
-        // Also update the main date range
-        currentDateRange.start = detailViewState.dateRange.start;
-        currentDateRange.end = detailViewState.dateRange.end;
-        
-        // Update displays and reload data
-        updateModalDateRange();
-        updateDateRangeDisplay(currentDateRange);
-    }
-
-    /**
-     * Navigates to the next week
-     */
-    function navigateToNextWeek() {
-        Logger.info('Navigating to next week');
-        
-        const start = new Date(detailViewState.dateRange.start);
-        const end = new Date(detailViewState.dateRange.end);
-        
-        // Move both dates forward by 7 days
-        start.setDate(start.getDate() + 7);
-        end.setDate(end.getDate() + 7);
-        
-        // Update both the detail view state and the main page state
-        detailViewState.dateRange.start = start.toISOString().split('T')[0];
-        detailViewState.dateRange.end = end.toISOString().split('T')[0];
-        
-        // Also update the main date range
-        currentDateRange.start = detailViewState.dateRange.start;
-        currentDateRange.end = detailViewState.dateRange.end;
-        
-        // Update displays and reload data
-        updateModalDateRange();
-        updateDateRangeDisplay(currentDateRange);
-    }
-
-    // View toggle functions
-    function toggleAttainmentView(view) {
-        document.getElementById('attainmentPercentBtn').classList.toggle('active', view === 'percent');
-        document.getElementById('attainmentBoxesBtn').classList.toggle('active', view === 'boxes');
-        document.getElementById('attainmentDevicesBtn').classList.toggle('active', view === 'devices');
-        detailViewState.attainmentView = view;
-    }
-
-    function toggleScrapView(view) {
-        document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
-        document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
-        detailViewState.scrapView = view;
-    }
-
-    function toggleDowntimeView(view) {
-        document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
-        document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
-        document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
-        detailViewState.downtimeView = view;
-    }
-
-    function toggleCostView(view) {
-        document.getElementById('labourCostBtn').classList.toggle('active', view === 'labour');
-        document.getElementById('unitCostBtn').classList.toggle('active', view === 'unit');
-        detailViewState.costView = view;
+        html += '</div>';
+        chartContainer.innerHTML = html;
     }
 
     /**
@@ -2624,10 +2664,15 @@
         }
         
         // Otherwise, render all the charts with the data we have
-        renderScheduleAttainmentChart(displayData, detailViewState.attainmentView || 'percent');
-        renderLabourCostChart(displayData, detailViewState.costView || 'labour');
-        renderScrapAnalysis(displayData, detailViewState.scrapView || 'qty');
-        renderDowntimeChart(displayData, detailViewState.downtimeView || 'reason');
+        try {
+            renderScheduleAttainmentChart(displayData, detailViewState.attainmentView || 'percent');
+            renderLabourCostChart(displayData, detailViewState.costView || 'labour');
+            renderScrapAnalysis(displayData, detailViewState.scrapView || 'qty');
+            renderDowntimeChart(displayData, detailViewState.downtimeView || 'reason');
+        } catch (error) {
+            Logger.error(`Error rendering charts: ${error.message}`, error);
+            showErrorInDetailView(`Failed to render charts: ${error.message}`);
+        }
     }
     
     /**
@@ -2745,6 +2790,374 @@
         // Set up refresh interval
         setInterval(handleRefresh, CONFIG.refreshInterval);
     });
+
+    /**
+     * Navigates to the previous week
+     */
+    function navigateToPreviousWeek() {
+        Logger.info('Navigating to previous week');
+        
+        const start = new Date(detailViewState.dateRange.start);
+        const end = new Date(detailViewState.dateRange.end);
+        
+        // Move both dates back by 7 days
+        start.setDate(start.getDate() - 7);
+        end.setDate(end.getDate() - 7);
+        
+        // Update both the detail view state and the main page state
+        detailViewState.dateRange.start = start.toISOString().split('T')[0];
+        detailViewState.dateRange.end = end.toISOString().split('T')[0];
+        
+        // Also update the main date range
+        currentDateRange.start = detailViewState.dateRange.start;
+        currentDateRange.end = detailViewState.dateRange.end;
+        
+        // Update displays and reload data
+        updateModalDateRange();
+        updateDateRangeDisplay(currentDateRange);
+        loadDetailViewData();
+    }
+
+    /**
+     * Navigates to the next week
+     */
+    function navigateToNextWeek() {
+        Logger.info('Navigating to next week');
+        
+        const start = new Date(detailViewState.dateRange.start);
+        const end = new Date(detailViewState.dateRange.end);
+        
+        // Move both dates forward by 7 days
+        start.setDate(start.getDate() + 7);
+        end.setDate(end.getDate() + 7);
+        
+        // Update both the detail view state and the main page state
+        detailViewState.dateRange.start = start.toISOString().split('T')[0];
+        detailViewState.dateRange.end = end.toISOString().split('T')[0];
+        
+        // Also update the main date range
+        currentDateRange.start = detailViewState.dateRange.start;
+        currentDateRange.end = detailViewState.dateRange.end;
+        
+        // Update displays and reload data
+        updateModalDateRange();
+        updateDateRangeDisplay(currentDateRange);
+        loadDetailViewData();
+    }
+
+    // View toggle functions
+    function toggleAttainmentView(view) {
+        document.getElementById('attainmentPercentBtn').classList.toggle('active', view === 'percent');
+        document.getElementById('attainmentBoxesBtn').classList.toggle('active', view === 'boxes');
+        document.getElementById('attainmentDevicesBtn').classList.toggle('active', view === 'devices');
+        detailViewState.attainmentView = view;
+        renderScheduleAttainmentChart(detailViewState.filteredData, view);
+    }
+
+    function toggleScrapView(view) {
+        document.getElementById('scrapQtyBtn').classList.toggle('active', view === 'qty');
+        document.getElementById('scrapCostBtn').classList.toggle('active', view === 'cost');
+        detailViewState.scrapView = view;
+        renderScrapAnalysis(detailViewState.filteredData, view);
+    }
+
+    function toggleDowntimeView(view) {
+        document.getElementById('downtimeReasonBtn').classList.toggle('active', view === 'reason');
+        document.getElementById('downtimeMachineBtn').classList.toggle('active', view === 'machine');
+        document.getElementById('downtimeDurationBtn').classList.toggle('active', view === 'duration');
+        detailViewState.downtimeView = view;
+        renderDowntimeChart(detailViewState.filteredData, view);
+    }
+
+    function toggleCostView(view) {
+        document.getElementById('labourCostBtn').classList.toggle('active', view === 'labour');
+        document.getElementById('unitCostBtn').classList.toggle('active', view === 'unit');
+        detailViewState.costView = view;
+        renderLabourCostChart(detailViewState.filteredData, view);
+    }
+    
+    /**
+     * Renders the labour cost chart in detail view
+     * @param {Array} data - Filtered data for the line
+     * @param {string} view - The view to display ('labour' or 'unit')
+     */
+    function renderLabourCostChart(data, view = 'labour') {
+        const container = document.getElementById('labourCostChart');
+        if (!container) return;
+        
+        // Sort data by date
+        const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+        
+        // Determine which values to display based on current view
+        const field = view === 'labour' ? 'Staff Cost' : 'Cost Per Unit';
+        
+        // Format data for the chart
+        const chartData = sortedData.map(record => ({
+            date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+            value: parseFloat(record[field] || 0)
+        }));
+        
+        // Find maximum value for scaling
+        const maxValue = Math.max(...chartData.map(item => item.value), 1);
+        
+        // Create HTML chart
+        let html = '<div style="width: 100%; height: 100%;">';
+        
+        // Create container with Y-axis
+        html += '<div style="display: flex; height: 100%;">';
+        
+        // Y-axis with scaled labels
+        html += '<div style="width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
+        html += `<div>R${maxValue.toFixed(0)}</div>`;
+        html += `<div>R${(maxValue/2).toFixed(0)}</div>`;
+        html += '<div>R0</div>';
+        html += '</div>';
+        
+        // Chart area
+        html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+        
+        // Chart bars
+        html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
+        
+        // Create bars for each day
+        chartData.forEach(item => {
+            const heightPercentage = maxValue > 0 ? (item.value / maxValue * 100) : 0;
+            
+            html += `
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <div style="font-size: 8px; color: var(--text-light); height: 15px;">R${item.value.toFixed(0)}</div>
+                <div style="width: 60%; height: ${heightPercentage}%; background-color: var(--primary-orange);"></div>
+                <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+            </div>
+            `;
+        });
+        
+        html += '</div>'; // End chart bars
+        html += '</div>'; // End chart area
+        html += '</div>'; // End container with Y-axis
+        html += '</div>';
+        
+        container.innerHTML = html;
+    }
+
+    /**
+     * Renders scrap analysis with trend chart and daily details
+     * @param {Array} data - Filtered data for the line
+     * @param {string} view - The view to display ('qty' or 'cost')
+     */
+    function renderScrapAnalysis(data, view = 'qty') {
+        // 1. Render the trend chart
+        const trendContainer = document.getElementById('scrapPercentageChart');
+        if (trendContainer) {
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Format data for the chart
+            const chartData = sortedData.map(record => ({
+                date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+                value: parseFloat(record['Scrap Cost as % of Production Value'] || 0)
+            }));
+            
+            // Find maximum value for scaling
+            const maxValue = Math.max(...chartData.map(item => item.value), 5); // At least 5% scale
+            
+            // Create SVG for the trend line
+            let html = `
+            <svg width="100%" height="100%" viewBox="0 0 300 50" preserveAspectRatio="none">
+                <!-- Y-axis labels -->
+                <text x="5" y="10" font-size="8" fill="#7f8c8d">${maxValue.toFixed(1)}%</text>
+                <text x="5" y="45" font-size="8" fill="#7f8c8d">0%</text>
+                
+                <!-- Grid lines -->
+                <line x1="25" y1="10" x2="295" y2="10" stroke="#eee" stroke-width="0.5" />
+                <line x1="25" y1="45" x2="295" y2="45" stroke="#eee" stroke-width="0.5" />
+                
+                <!-- Trend line -->
+                <polyline 
+                    points="${chartData.map((item, index) => {
+                        const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
+                        const y = 45 - ((item.value / maxValue) * 35);
+                        return `${x},${y}`;
+                    }).join(' ')}"
+                    fill="none"
+                    stroke="#e74c3c"
+                    stroke-width="1.5"
+                />
+                
+                <!-- Data points -->
+                ${chartData.map((item, index) => {
+                    const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
+                    const y = 45 - ((item.value / maxValue) * 35);
+                    return `<circle cx="${x}" cy="${y}" r="2" fill="#e74c3c" />`;
+                }).join('')}
+            </svg>
+            `;
+            
+            trendContainer.innerHTML = html;
+        }
+        
+        // 2. Render the daily scrap details
+        const detailsContainer = document.getElementById('dailyScrapGrid');
+        if (detailsContainer) {
+            // Sort data by date
+            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+            
+            // Field selection based on view
+            const rejectsField = view === 'qty' 
+                ? 'Top Rejects by QTY (Reason - Station - QTY - Cost)'
+                : 'Top Rejects by Cost (Reason - Station - QTY - Cost)';
+            
+            let html = '';
+            
+            // Create a card for each day
+            sortedData.forEach(record => {
+                const date = new Date(record.Date);
+                const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+                const scrapPercent = parseFloat(record['Scrap Cost as % of Production Value'] || 0).toFixed(1);
+                
+                // Extract reject reasons
+                let rejectReasons = [];
+                if (record[rejectsField] && !record[rejectsField].includes('No rejects')) {
+                    // Split by pipe for multiple reasons
+                    const entries = record[rejectsField].split('|');
+                    rejectReasons = entries.map(entry => entry.trim());
+                }
+                
+                // Create day card
+                html += `
+                <div class="daily-scrap-card">
+                    <div class="daily-scrap-header">${dateStr} (${scrapPercent}%)</div>
+                `;
+                
+                // Add top 3 reasons
+                if (rejectReasons.length > 0) {
+                    rejectReasons.slice(0, 3).forEach((reason, index) => {
+                        html += `<div class="scrap-reason" title="${reason}">${index + 1}. ${reason}</div>`;
+                    });
+                } else {
+                    html += `<div class="scrap-reason">No reject data</div>`;
+                }
+                
+                html += '</div>';
+            });
+            
+            detailsContainer.innerHTML = html;
+        }
+    }
+
+    /**
+     * Extract reject reasons from a formatted string
+     * Helper function for renderScrapAnalysis
+     * @param {string} rejectsString - Formatted string of reject reasons
+     * @param {string} view - The view being used
+     * @returns {Array} Array of extracted reasons
+     */
+    function extractRejectReasons(rejectsString, view) {
+        if (!rejectsString || rejectsString.includes('No rejects')) {
+            return [];
+        }
+        
+        // Split by pipe for multiple reasons
+        const entries = rejectsString.split('|');
+        return entries.map(entry => entry.trim());
+    }
+
+    /**
+     * Render the downtime chart
+     * @param {Array} data - Filtered data for the line
+     * @param {string} view - The view to display ('reason', 'machine', or 'duration')
+     */
+    function renderDowntimeChart(data, view = 'reason') {
+        const container = document.getElementById('downtimeChart');
+        if (!container) return;
+        
+        // Sort data by date
+        const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+        
+        // Extract downtime data
+        const downtimeData = sortedData.map(record => {
+            const date = new Date(record.Date);
+            const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+            const minutes = parseFloat(record['Downtime Duration (min)'] || 0);
+            const hours = minutes / 60;
+            
+            // Extract reason and machine
+            let reason = 'No downtime';
+            let machine = '';
+            
+            // Get from downtime field
+            const downtimeField = 'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
+            
+            if (record[downtimeField] && !record[downtimeField].includes('No downtime') && minutes > 0) {
+                const entries = record[downtimeField].split('|');
+                
+                if (entries.length > 0) {
+                    const entry = entries[0].trim();
+                    const parts = entry.split(' - ');
+                    
+                    if (parts.length >= 2) {
+                        reason = parts[0].trim().replace(/^\d+\.\s+/, '');
+                        machine = parts[1].trim();
+                    }
+                }
+            }
+            
+            return {
+                date: dateStr,
+                hours: hours,
+                reason: reason,
+                machine: machine
+            };
+        });
+        
+        // Find max for scaling
+        const maxHours = Math.max(...downtimeData.map(item => item.hours), 1); // At least 1 hour scale
+        
+        // Create the chart HTML
+        let html = '<div style="display: flex; height: 100%; align-items: flex-end;">';
+        
+        // Create a bar for each day
+        downtimeData.forEach(item => {
+            // Calculate height as percentage of max
+            const height = (item.hours / maxHours) * 80; // Max 80% of container height
+            
+            // Determine bar color based on duration
+            let barColor = 'var(--primary-blue)';
+            if (item.hours > 2) {
+                barColor = 'var(--danger-color)';
+            } else if (item.hours > 1) {
+                barColor = 'var(--warning-color)';
+            }
+            
+            // Determine label based on view
+            let label = '';
+            switch(view) {
+                case 'reason':
+                    label = item.reason;
+                    break;
+                case 'machine':
+                    label = item.machine;
+                    break;
+                case 'duration':
+                    label = `${item.hours.toFixed(1)}h`;
+                    break;
+            }
+            
+            html += `
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <div class="downtime-label" title="${label}">${label}</div>
+                <div style="width: 70%; height: ${height}px; background-color: ${barColor}; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 9px; color: white;">${item.hours.toFixed(1)}h</span>
+                </div>
+                <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+            </div>
+            `;
+        });
+        
+        html += '</div>';
+        
+        container.innerHTML = html;
+    }
     </script>
 </body>
 </html>
