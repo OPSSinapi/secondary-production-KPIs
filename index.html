@@ -24,6 +24,9 @@
         --active-bg: #eafaf1;
         --standby-bg: #fef9e7;
         --error-bg: #fdeaea;
+        --card-bg: #ffffff;
+        --text-primary: #333333;
+        --text-secondary: #666666;
     }
 
     * {
@@ -542,31 +545,37 @@
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: auto auto auto;
         gap: 15px;
-        height: calc(100% - 60px);
+        height: calc(100% - 100px);
+        min-height: 500px;
+        overflow: visible;
     }
     
     .schedule-card { 
         grid-column: 1; 
         grid-row: 1; 
-        height: 140px; 
+        height: auto;
+        min-height: 160px;
     }
     
     .labour-card { 
         grid-column: 2; 
         grid-row: 1; 
-        height: 140px; 
+        height: auto;
+        min-height: 160px;
     }
     
     .scrap-card { 
         grid-column: 1 / span 2; 
         grid-row: 2; 
-        height: 200px; 
+        height: auto;
+        min-height: 230px;
     }
     
     .downtime-card { 
         grid-column: 1 / span 2; 
         grid-row: 3; 
-        height: 110px; 
+        height: auto;
+        min-height: 130px;
     }
     
     .detail-metric-card {
@@ -577,6 +586,7 @@
         flex-direction: column;
         overflow: hidden;
         padding: 12px;
+        z-index: 1;
     }
     
     .detail-metric-header {
@@ -615,27 +625,29 @@
         min-height: 0;
         background-color: #ffffff;
         border-radius: 4px;
+        overflow: visible;
     }
     
     .schedule-card .chart-container,
     .labour-card .chart-container {
-        height: 80px !important;
-        min-height: 80px !important;
+        height: 100px !important;
+        min-height: 100px !important;
     }
     
     .downtime-card .chart-container {
-        height: 60px !important;
-        min-height: 60px !important;
+        height: 80px !important;
+        min-height: 80px !important;
     }
     
     .scrap-analysis-layout {
         display: flex;
         flex-direction: column;
-        height: calc(100% - 45px);
+        height: calc(100% - 50px);
+        min-height: 180px;
     }
     
     .scrap-trend-chart {
-        flex: 0 0 50px;
+        flex: 0 0 60px;
         margin-bottom: 10px;
         background-color: #f5f7fa;
         border-radius: 4px;
@@ -651,6 +663,7 @@
     .daily-scrap-container {
         flex: 1;
         overflow-y: auto;
+        min-height: 100px;
     }
     
     .daily-scrap-grid {
@@ -663,7 +676,7 @@
         background-color: #f5f7fa;
         border-radius: 4px;
         padding: 8px;
-        min-height: 70px;
+        min-height: 85px;
     }
     
     .daily-scrap-header {
@@ -676,7 +689,7 @@
     }
     
     .scrap-reason {
-        font-size: 8px;
+        font-size: 10px;
         line-height: 1.3;
         margin-bottom: 2px;
         white-space: nowrap;
@@ -685,7 +698,7 @@
     }
     
     .downtime-label {
-        font-size: 8px;
+        font-size: 10px;
         color: var(--text-light);
         max-width: 100%;
         overflow: hidden;
@@ -841,6 +854,141 @@
         z-index: 100;
         max-width: 200px;
         white-space: normal;
+    }
+
+    /* CSS styles for detail view */
+    .detail-view-content {
+        height: calc(100% - 80px);
+        min-height: 600px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(2, minmax(300px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .detail-metric-card {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 280px;
+        overflow: visible;
+    }
+
+    .detail-metric-header {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 10px;
+        height: 24px;
+    }
+
+    .schedule-card, .labour-card, .scrap-card, .downtime-card {
+        height: auto;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chart-container {
+        flex: 1 1 auto;
+        width: 100%;
+        height: auto;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+    }
+
+    .daily-scrap-grid {
+        flex: 1 1 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 12px;
+        height: auto;
+        min-height: 150px;
+    }
+
+    .daily-scrap-card {
+        background-color: rgba(0,0,0,0.03);
+        border-radius: 5px;
+        padding: 8px;
+        font-size: 12px;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .daily-scrap-header {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--text-primary);
+        font-size: 11px;
+        height: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .daily-scrap-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .scrap-reason {
+        color: var(--text-secondary);
+        font-size: 11px;
+        margin: 2px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .scrap-reason-more {
+        color: var(--text-light);
+        font-size: 10px;
+        font-style: italic;
+        margin-top: 2px;
+    }
+
+    .toggle-button-group {
+        display: flex;
+        justify-content: center;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .detail-toggle-button {
+        border: none;
+        background-color: transparent;
+        color: var(--text-light);
+        padding: 2px 8px;
+        font-size: 11px;
+        cursor: pointer;
+        border-radius: 12px;
+    }
+
+    .detail-toggle-button.active {
+        background-color: var(--primary-blue);
+        color: white;
+    }
+    
+    .downtime-label {
+        font-size: 9px;
+        color: var(--text-secondary);
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        height: 12px;
+        margin-bottom: 3px;
     }
     </style>
 </head>
@@ -2245,12 +2393,20 @@
             
             // Create bars for each day
             chartData.forEach(item => {
-                const height = Math.min(item.value, 100);
+                const height = Math.min(Math.max(item.value, 0), 100);
+                
+                // Determine bar color based on attainment
+                let barColor = 'var(--danger-color)';
+                if (item.value >= 95) {
+                    barColor = 'var(--success-color)';
+                } else if (item.value >= 85) {
+                    barColor = 'var(--warning-color)';
+                }
                 
                 html += `
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                    <div style="font-size: 8px; color: var(--text-light); height: 15px;">${item.value.toFixed(1)}%</div>
-                    <div style="width: 60%; height: ${height}%; background-color: var(--primary-blue);"></div>
+                    <div style="font-size: 10px; font-weight: 500; color: var(--text-primary); height: 15px; overflow: visible;">${item.value.toFixed(1)}%</div>
+                    <div style="width: 60%; height: ${height}%; background-color: ${barColor}; min-height: ${height > 0 ? '5px' : '0'}"></div>
                     <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
                 </div>
                 `;
@@ -2264,8 +2420,8 @@
             // Boxes or Devices view
             const chartData = sortedData.map(record => {
                 const field = view === 'boxes' ? 'Boxes' : 'Devices';
-                const actual = parseInt(record[`Actual ${field} Produced`] || 0);
-                const target = parseInt(record[`Theoretical Target (${field})`] || 0);
+                const actual = parseInt(record[`Actual ${field}`] || 0);
+                const target = parseInt(record[`Scheduled ${field}`] || 0);
                 
                 return {
                     date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
@@ -2297,6 +2453,17 @@
             chartData.forEach(item => {
                 const heightPercentage = maxTarget > 0 ? (item.actual / maxTarget * 100) : 0;
                 const targetHeightPercentage = maxTarget > 0 ? (item.target / maxTarget * 100) : 0;
+                
+                // Calculate attainment percentage for coloring
+                const attainmentPct = item.target > 0 ? (item.actual / item.target * 100) : 0;
+                
+                // Determine bar color based on attainment percentage
+                let barColor = 'var(--danger-color)';
+                if (attainmentPct >= 95) {
+                    barColor = 'var(--success-color)';
+                } else if (attainmentPct >= 85) {
+                    barColor = 'var(--warning-color)';
+                }
                 
                 html += `
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
@@ -2889,7 +3056,7 @@
         const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
         
         // Determine which values to display based on current view
-        const field = view === 'labour' ? 'Staff Cost' : 'Cost Per Unit';
+        const field = view === 'labour' ? 'Labour Cost per Unit' : 'Cost Per Unit';
         
         // Format data for the chart
         const chartData = sortedData.map(record => ({
@@ -2898,7 +3065,12 @@
         }));
         
         // Find maximum value for scaling
-        const maxValue = Math.max(...chartData.map(item => item.value), 1);
+        const maxValue = Math.max(...chartData.map(item => item.value), 0.1);
+        // Handle case when all values are 0
+        if (maxValue <= 0.1) {
+            container.innerHTML = '<div class="empty-state">No labour cost data available</div>';
+            return;
+        }
         
         // Create HTML chart
         let html = '<div style="width: 100%; height: 100%;">';
@@ -2908,9 +3080,9 @@
         
         // Y-axis with scaled labels
         html += '<div style="width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
-        html += `<div>R${maxValue.toFixed(0)}</div>`;
-        html += `<div>R${(maxValue/2).toFixed(0)}</div>`;
-        html += '<div>R0</div>';
+        html += `<div>R${maxValue.toFixed(2)}</div>`;
+        html += `<div>R${(maxValue/2).toFixed(2)}</div>`;
+        html += '<div>R0.00</div>';
         html += '</div>';
         
         // Chart area
@@ -2941,108 +3113,165 @@
     }
 
     /**
-     * Renders scrap analysis with trend chart and daily details
+     * Render the scrap analysis
      * @param {Array} data - Filtered data for the line
-     * @param {string} view - The view to display ('qty' or 'cost')
+     * @param {string} view - The view to display ('trend', 'daily', or 'reasons')
      */
-    function renderScrapAnalysis(data, view = 'qty') {
-        // 1. Render the trend chart
-        const trendContainer = document.getElementById('scrapPercentageChart');
-        if (trendContainer) {
-            // Sort data by date
-            const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-            
-            // Format data for the chart
-            const chartData = sortedData.map(record => ({
-                date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-                value: parseFloat(record['Scrap Cost as % of Production Value'] || 0)
-            }));
-            
-            // Find maximum value for scaling
-            const maxValue = Math.max(...chartData.map(item => item.value), 5); // At least 5% scale
-            
-            // Create SVG for the trend line
-            let html = `
-            <svg width="100%" height="100%" viewBox="0 0 300 50" preserveAspectRatio="none">
-                <!-- Y-axis labels -->
-                <text x="5" y="10" font-size="8" fill="#7f8c8d">${maxValue.toFixed(1)}%</text>
-                <text x="5" y="45" font-size="8" fill="#7f8c8d">0%</text>
-                
-                <!-- Grid lines -->
-                <line x1="25" y1="10" x2="295" y2="10" stroke="#eee" stroke-width="0.5" />
-                <line x1="25" y1="45" x2="295" y2="45" stroke="#eee" stroke-width="0.5" />
-                
-                <!-- Trend line -->
-                <polyline 
-                    points="${chartData.map((item, index) => {
-                        const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
-                        const y = 45 - ((item.value / maxValue) * 35);
-                        return `${x},${y}`;
-                    }).join(' ')}"
-                    fill="none"
-                    stroke="#e74c3c"
-                    stroke-width="1.5"
-                />
-                
-                <!-- Data points -->
-                ${chartData.map((item, index) => {
-                    const x = 25 + (index * (270 / (chartData.length - 1 || 1)));
-                    const y = 45 - ((item.value / maxValue) * 35);
-                    return `<circle cx="${x}" cy="${y}" r="2" fill="#e74c3c" />`;
-                }).join('')}
-            </svg>
-            `;
-            
-            trendContainer.innerHTML = html;
+    function renderScrapAnalysis(data, view = 'trend') {
+        if (!data || data.length === 0) {
+            if (CONFIG.debugMode) console.warn('No data available for scrap analysis');
+            document.getElementById('scrapChart').innerHTML = '<div class="empty-state">No scrap data available</div>';
+            document.getElementById('dailyScrapDetails').innerHTML = '<div class="empty-state">No daily scrap data</div>';
+            return;
         }
         
-        // 2. Render the daily scrap details
-        const detailsContainer = document.getElementById('dailyScrapGrid');
-        if (detailsContainer) {
+        try {
             // Sort data by date
             const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
             
-            // Field selection based on view
-            const rejectsField = view === 'qty' 
-                ? 'Top Rejects by QTY (Reason - Station - QTY - Cost)'
-                : 'Top Rejects by Cost (Reason - Station - QTY - Cost)';
-            
-            let html = '';
-            
-            // Create a card for each day
-            sortedData.forEach(record => {
+            // Extract scrap percentages for trend
+            const scrapData = sortedData.map(record => {
                 const date = new Date(record.Date);
                 const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
-                const scrapPercent = parseFloat(record['Scrap Cost as % of Production Value'] || 0).toFixed(1);
+                const scrapPct = parseFloat(record['Scrap %'] || 0);
                 
-                // Extract reject reasons
-                let rejectReasons = [];
-                if (record[rejectsField] && !record[rejectsField].includes('No rejects')) {
-                    // Split by pipe for multiple reasons
-                    const entries = record[rejectsField].split('|');
-                    rejectReasons = entries.map(entry => entry.trim());
-                }
+                // Extract reject reasons from the field
+                const rejectsField = 'Top 3 Rejects (Reason - Station - QTY - Cost)';
                 
-                // Create day card
-                html += `
-                <div class="daily-scrap-card">
-                    <div class="daily-scrap-header">${dateStr} (${scrapPercent}%)</div>
-                `;
+                // Get reasons using helper function
+                const reasons = record[rejectsField] ? 
+                    extractRejectReasons(record[rejectsField], view) : [];
                 
-                // Add top 3 reasons
-                if (rejectReasons.length > 0) {
-                    rejectReasons.slice(0, 3).forEach((reason, index) => {
-                        html += `<div class="scrap-reason" title="${reason}">${index + 1}. ${reason}</div>`;
-                    });
-                } else {
-                    html += `<div class="scrap-reason">No reject data</div>`;
-                }
-                
-                html += '</div>';
+                return {
+                    date: dateStr,
+                    scrapPct: scrapPct,
+                    rawDate: date,
+                    reasons: reasons,
+                    rejectsText: record[rejectsField] || 'No reject reasons available'
+                };
             });
             
-            detailsContainer.innerHTML = html;
+            if (view === 'trend' || view === 'all') {
+                renderScrapTrendChart(scrapData);
+            }
+            
+            if (view === 'daily' || view === 'all') {
+                renderDailyScrapDetails(scrapData);
+            }
+            
+            // Debug log
+            if (CONFIG.debugMode) {
+                console.log('Scrap data:', scrapData);
+            }
+            
+        } catch (error) {
+            console.error('Error rendering scrap analysis:', error);
+            document.getElementById('scrapChart').innerHTML = '<div class="error-state">Error rendering scrap chart</div>';
+            document.getElementById('dailyScrapDetails').innerHTML = '<div class="error-state">Error rendering daily scrap details</div>';
         }
+    }
+    
+    /**
+     * Render the scrap trend chart
+     * @param {Array} scrapData - Processed scrap data
+     */
+    function renderScrapTrendChart(scrapData) {
+        const container = document.getElementById('scrapChart');
+        if (!container) return;
+        
+        // Find max for scaling (at least 5% for visibility)
+        const maxScrap = Math.max(...scrapData.map(item => item.scrapPct), 5);
+        
+        // Create the chart HTML
+        let html = '<div style="display: flex; height: 100%; align-items: flex-end;">';
+        
+        // Create a bar for each day
+        scrapData.forEach(item => {
+            // Calculate height as percentage of max (max 80% of container height)
+            const height = (item.scrapPct / maxScrap) * 80;
+            
+            // Determine bar color based on scrap percentage
+            let barColor = 'var(--success-color)';
+            if (item.scrapPct > 3) {
+                barColor = 'var(--danger-color)';
+            } else if (item.scrapPct > 1.5) {
+                barColor = 'var(--warning-color)';
+            }
+            
+            html += `
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <div style="font-size: 9px; margin-bottom: 2px;">${item.scrapPct.toFixed(1)}%</div>
+                <div style="width: 70%; height: ${height}px; background-color: ${barColor};"></div>
+                <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+            </div>
+            `;
+        });
+        
+        html += '</div>';
+        
+        container.innerHTML = html;
+    }
+    
+    /**
+     * Render the daily scrap details
+     * @param {Array} scrapData - Processed scrap data
+     */
+    function renderDailyScrapDetails(scrapData) {
+        const container = document.getElementById('dailyScrapDetails');
+        if (!container) {
+            if (CONFIG.debugMode) console.warn('Daily scrap details container not found');
+            return;
+        }
+        
+        // Generate HTML for daily scrap details
+        // Take only the latest 3 days with data
+        let latestDays = [...scrapData];
+        // Sort by date descending to get latest days first
+        latestDays.sort((a, b) => b.rawDate - a.rawDate);
+        // Take only the first 3
+        latestDays = latestDays.slice(0, 3);
+        // And sort back to chronological order
+        latestDays.sort((a, b) => a.rawDate - b.rawDate);
+        
+        let html = '';
+        
+        // Create a card for each day
+        latestDays.forEach(day => {
+            // Create a container for this day's data
+            html += `
+            <div class="daily-scrap-card">
+                <div class="daily-scrap-header">${day.date} - ${day.scrapPct.toFixed(1)}%</div>
+                <div class="daily-scrap-content">
+            `;
+            
+            // Handle case where we have direct text but no parsed reasons
+            if (day.rejectsText && day.rejectsText.toLowerCase().includes('no reject')) {
+                html += `<div class="scrap-reason">No reject reasons recorded</div>`;
+            }
+            // Handle case where we have parsed reasons
+            else if (day.reasons && day.reasons.length > 0) {
+                // Only show top 3 if we have more
+                const reasonsToShow = day.reasons.slice(0, 3);
+                reasonsToShow.forEach((reason, index) => {
+                    html += `<div class="scrap-reason">${index + 1}. ${reason}</div>`;
+                });
+                
+                // If we have more than 3, add an ellipsis
+                if (day.reasons.length > 3) {
+                    html += `<div class="scrap-reason-more">+${day.reasons.length - 3} more reasons</div>`;
+                }
+            } else {
+                // For any other case, show the raw text if available
+                html += `<div class="scrap-reason">${day.rejectsText}</div>`;
+            }
+            
+            html += `
+                </div>
+            </div>
+            `;
+        });
+        
+        container.innerHTML = html;
     }
 
     /**
@@ -3053,13 +3282,30 @@
      * @returns {Array} Array of extracted reasons
      */
     function extractRejectReasons(rejectsString, view) {
-        if (!rejectsString || rejectsString.includes('No rejects')) {
+        if (!rejectsString || rejectsString.includes('No reject')) {
             return [];
         }
         
         // Split by pipe for multiple reasons
-        const entries = rejectsString.split('|');
-        return entries.map(entry => entry.trim());
+        let entries = [];
+        
+        // Handle entries separated by pipe or newline
+        if (rejectsString.includes('|')) {
+            entries = rejectsString.split('|');
+        } else {
+            entries = [rejectsString]; // Single entry
+        }
+        
+        // Process each entry to extract just the reason
+        return entries.map(entry => {
+            const trimmed = entry.trim();
+            // Extract just the reason part if it's in the format "Reason - Station - QTY - Cost"
+            const parts = trimmed.split(' - ');
+            if (parts.length > 1) {
+                return parts[0].trim(); // Return just the reason
+            }
+            return trimmed; // Return the whole entry if it can't be parsed
+        });
     }
 
     /**
@@ -3088,7 +3334,7 @@
             // Get from downtime field
             const downtimeField = 'Top Downtime by Cost (Reason - Machine - Cost - Downtime Min)';
             
-            if (record[downtimeField] && !record[downtimeField].includes('No downtime') && minutes > 0) {
+            if (record[downtimeField] && !record[downtimeField].includes('No down') && minutes > 0) {
                 const entries = record[downtimeField].split('|');
                 
                 if (entries.length > 0) {
@@ -3119,7 +3365,9 @@
         // Create a bar for each day
         downtimeData.forEach(item => {
             // Calculate height as percentage of max
-            const height = (item.hours / maxHours) * 80; // Max 80% of container height
+            // Ensure a minimum height for visibility even with tiny values
+            const height = item.hours > 0 ? 
+                Math.max((item.hours / maxHours) * 80, 10) : 0; // Min 10px height if non-zero
             
             // Determine bar color based on duration
             let barColor = 'var(--primary-blue)';
@@ -3146,7 +3394,7 @@
             html += `
             <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
                 <div class="downtime-label" title="${label}">${label}</div>
-                <div style="width: 70%; height: ${height}px; background-color: ${barColor}; display: flex; justify-content: center; align-items: center;">
+                <div style="width: 70%; height: ${height}px; background-color: ${barColor}; display: flex; justify-content: center; align-items: center; min-height: ${height}px;">
                     <span style="font-size: 9px; color: white;">${item.hours.toFixed(1)}h</span>
                 </div>
                 <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
