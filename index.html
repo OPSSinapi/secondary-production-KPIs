@@ -2569,9 +2569,30 @@
         const lineId = overrideLineId || detailViewState.lineId;
         Logger.info(`Loading detail view data for line: ${lineId}`);
         
-        // In a full implementation, this would load data for the detailed view
-        // For now, we just show "No data available" messages
-        showNoDataMessage();
+        // Get the filtered data for the line and date range
+        const filteredData = getFilteredLineData(
+            lineId, 
+            detailViewState.dateRange.start, 
+            detailViewState.dateRange.end
+        );
+        
+        // Log the filtered data for debugging
+        Logger.info(`Found ${filteredData.length} records for detail view`);
+        
+        // Store the filtered data for reuse
+        detailViewState.filteredData = filteredData;
+        
+        if (filteredData.length === 0) {
+            Logger.warn(`No data available for line ${lineId} in selected date range`);
+            showNoDataMessage();
+            return;
+        }
+        
+        // Render all sections with the data we have
+        renderScheduleAttainmentChart(filteredData, detailViewState.attainmentView);
+        renderLabourCostChart(filteredData, detailViewState.costView);
+        renderScrapAnalysis(filteredData, detailViewState.scrapView);
+        renderDowntimeChart(filteredData, detailViewState.downtimeView);
     }
     
     /**
