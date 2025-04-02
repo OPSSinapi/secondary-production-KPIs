@@ -1002,6 +1002,24 @@
         height: 12px;
         margin-bottom: 3px;
     }
+
+    .loading-text {
+        font-size: 12px;
+        color: var(--text-light);
+        margin-top: 10px;
+    }
+    
+    .debug-info {
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+        background-color: rgba(0,0,0,0.05);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        color: var(--text-light);
+        z-index: 100;
+    }
     </style>
 </head>
 
@@ -1162,8 +1180,8 @@
      */
     const CONFIG = {
         // URL to fetch operational data from
-        dataUrl: 'data/production-data.json', // Primary data source
-        fallbackDataUrls: ['OpsData.json', 'data.json'], // Fallback data sources to try if primary fails
+        dataUrl: 'OpsData.json', // Primary data source
+        fallbackDataUrls: ['data/production-data.json', 'data.json'], // Fallback data sources to try if primary fails
         
         // Refresh interval in milliseconds (5 minutes)
         refreshInterval: 5 * 60 * 1000,
@@ -2727,10 +2745,17 @@
             let dataUrl = CONFIG.dataUrl;
             let fallbacksAttempted = 0;
             let loadErrors = [];
+            let dataSource = 'primary';
 
             try {
                 // Try primary data source first
                 Logger.info(`Attempting to load data from: ${dataUrl}`);
+                document.getElementById('kpiSummary').innerHTML = `
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Loading from ${dataUrl}...</div>
+                    </div>
+                `;
                 const response = await fetch(dataUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -2748,8 +2773,15 @@
                 // Iterate through fallbacks
                 for (const fallbackUrl of fallbacks) {
                     fallbacksAttempted++;
+                    dataSource = `fallback ${fallbacksAttempted}`;
                     try {
                         Logger.info(`Attempting fallback data source ${fallbacksAttempted}: ${fallbackUrl}`);
+                        document.getElementById('kpiSummary').innerHTML = `
+                            <div class="loading-container">
+                                <div class="loading-spinner"></div>
+                                <div class="loading-text">Primary source failed. Trying ${fallbackUrl}...</div>
+                            </div>
+                        `;
                         const fallbackResponse = await fetch(fallbackUrl);
                         if (!fallbackResponse.ok) {
                             throw new Error(`HTTP error! status: ${fallbackResponse.status}`);
@@ -2777,13 +2809,32 @@
             
             // Store data globally for reuse in detail views
             window.dashboardData = fullData;
+            window.dataSource = dataUrl; // Store the successful data source
             
             // Make sure fullData exists
             if (!fullData || !Array.isArray(fullData) || fullData.length === 0) {
                 throw new Error('Invalid data format: productionData array not found or empty');
             }
             
-            Logger.info(`Loaded ${fullData.length} records from ${dataUrl}`);
+            Logger.info(`Loaded ${fullData.length} records from ${dataUrl} (${dataSource})`);
+            
+            // Show data source in debug mode
+            if (CONFIG.debugMode) {
+                const debugInfo = document.getElementById('debugInfo') || document.createElement('div');
+                debugInfo.id = 'debugInfo';
+                debugInfo.className = 'debug-info';
+                debugInfo.innerHTML = `<small>Data source: ${dataUrl} (${dataSource})</small>`;
+                
+                // Add to page if not already there
+                if (!document.getElementById('debugInfo')) {
+                    const header = document.querySelector('header');
+                    if (header) {
+                        header.appendChild(debugInfo);
+                    } else {
+                        document.body.insertBefore(debugInfo, document.body.firstChild);
+                    }
+                }
+            }
             
             // Check if we need to adjust date range based on available data
             if (currentDateRange.start && currentDateRange.end) {
