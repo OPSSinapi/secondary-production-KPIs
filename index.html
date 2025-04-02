@@ -235,8 +235,8 @@
     /* Main dashboard grid */
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr) !important;
-        grid-template-rows: auto auto;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: minmax(240px, auto);
         gap: 10px;
         padding: 0 15px;
         margin-bottom: 15px;
@@ -251,39 +251,58 @@
         width: 100%;
         height: 100%;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 240px;
+        z-index: 1; /* Ensure cards are not hidden by others */
     }
 
     .line-card-header {
-        padding: 5px 15px;
-        font-size: 16px;
-        font-weight: bold;
-        color: white;
-        height: 35px;
+        padding: 10px 15px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .line-card-content {
+        padding: 12px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
     .card-title {
+        font-size: 14px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        max-width: 80%;
     }
 
     .card-actions {
         display: flex;
-        align-items: center;
+        gap: 5px;
     }
 
     .enlarge-icon {
         cursor: pointer;
-        margin-left: 8px;
         opacity: 0.8;
         transition: opacity 0.2s;
+        padding: 5px;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
     .enlarge-icon:hover {
         opacity: 1;
+        background-color: rgba(255, 255, 255, 0.3);
     }
 
     .blue-header {
@@ -354,39 +373,38 @@
     /* Metrics grid */
     .metrics-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        gap: 10px;
-        margin-top: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto;
+        gap: 8px;
+        flex-grow: 1;
     }
 
     .metric-card {
-        background-color: #f5f7fa;
-        border-radius: 3px;
-        padding: 10px;
-        height: 60px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        padding: 8px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
     }
 
     .metric-title {
-        font-size: 12px;
-        color: var(--text-dark);
+        font-size: 11px;
+        color: var(--text-light);
+        margin-bottom: 5px;
     }
 
     .metric-value {
-        font-size: 18px;
-        font-weight: bold;
-        text-align: right;
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: flex-end;
-        gap: 5px;
+        font-weight: bold;
     }
 
     .metric-trend {
-        font-size: 12px;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        gap: 2px;
     }
 
     .value-good {
@@ -402,14 +420,15 @@
     }
 
     /* Grid positioning */
-    .grid-position-1-1 { grid-row: 1; grid-column: 1; }
-    .grid-position-1-2 { grid-row: 1; grid-column: 2; }
-    .grid-position-1-3 { grid-row: 1; grid-column: 3; }
-    .grid-position-1-4 { grid-row: 1; grid-column: 4; }
-    .grid-position-2-1 { grid-row: 2; grid-column: 1; }
-    .grid-position-2-2 { grid-row: 2; grid-column: 2; }
-    .grid-position-2-3 { grid-row: 2; grid-column: 3; }
-    .grid-position-2-4 { grid-row: 2; grid-column: 4; }
+    .grid-position-1-1 { grid-column: 1; grid-row: 1; }
+    .grid-position-1-2 { grid-column: 2; grid-row: 1; }
+    .grid-position-1-3 { grid-column: 3; grid-row: 1; }
+    .grid-position-1-4 { grid-column: 1; grid-row: 2; }
+    .grid-position-1-5 { grid-column: 2; grid-row: 2; }
+    .grid-position-1-6 { grid-column: 3; grid-row: 2; }
+    .grid-position-1-7 { grid-column: 1; grid-row: 3; }
+    .grid-position-1-8 { grid-column: 2; grid-row: 3; }
+    .grid-position-1-9 { grid-column: 3; grid-row: 3; }
     
     /* Error message */
     .error-message {
@@ -803,7 +822,8 @@
         
         /* Reset grid positioning for mobile */
         .grid-position-1-1, .grid-position-1-2, .grid-position-1-3,
-        .grid-position-1-4, .grid-position-1-5, .grid-position-1-6 {
+        .grid-position-1-4, .grid-position-1-5, .grid-position-1-6,
+        .grid-position-1-7, .grid-position-1-8, .grid-position-1-9 {
             grid-column: 1;
         }
         .grid-position-1-1 { grid-row: 1; }
@@ -812,6 +832,9 @@
         .grid-position-1-4 { grid-row: 4; }
         .grid-position-1-5 { grid-row: 5; }
         .grid-position-1-6 { grid-row: 6; }
+        .grid-position-1-7 { grid-row: 7; }
+        .grid-position-1-8 { grid-row: 8; }
+        .grid-position-1-9 { grid-row: 9; }
         
         .modal-content {
             width: 95%;
@@ -896,7 +919,8 @@
         
         /* Reset grid positioning for mobile */
         .grid-position-1-1, .grid-position-1-2, .grid-position-1-3,
-        .grid-position-1-4, .grid-position-1-5, .grid-position-1-6 {
+        .grid-position-1-4, .grid-position-1-5, .grid-position-1-6,
+        .grid-position-1-7, .grid-position-1-8, .grid-position-1-9 {
             grid-column: 1;
         }
         .grid-position-1-1 { grid-row: 1; }
@@ -905,6 +929,9 @@
         .grid-position-1-4 { grid-row: 4; }
         .grid-position-1-5 { grid-row: 5; }
         .grid-position-1-6 { grid-row: 6; }
+        .grid-position-1-7 { grid-row: 7; }
+        .grid-position-1-8 { grid-row: 8; }
+        .grid-position-1-9 { grid-row: 9; }
         
         .modal-content {
             width: 95%;
@@ -922,6 +949,19 @@
         .daily-scrap-grid {
             grid-template-columns: 1fr;
         }
+    }
+
+    /* Fix card layout */
+    .dashboard-grid .line-card {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Fix grid styling */
+    .dashboard-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        grid-auto-rows: minmax(240px, auto) !important;
     }
     </style>
 </head>
@@ -1863,6 +1903,9 @@
         // Clear container
         container.innerHTML = '';
         
+        // Keep track of all created cards to log their state
+        const createdCards = [];
+        
         // Log how many line cards we're creating
         Logger.info(`Creating cards for ${Object.keys(lineGroups).length} production lines`);
         
@@ -1910,6 +1953,13 @@
                 // Create the line card
                 const lineCard = createLineCard(compositeLineId, lineDetails, productData, previousPeriodData, positionIndex);
                 
+                // Log card creation
+                createdCards.push({
+                    id: compositeLineId,
+                    position: positionIndex,
+                    title: baseProduct
+                });
+                
                 // Add to container
                 container.appendChild(lineCard);
                 
@@ -1921,7 +1971,7 @@
                 };
                 
                 // Update position index
-                positionIndex = (positionIndex % 6) + 1;
+                positionIndex = (positionIndex % 9) + 1;
             });
             
             // Remove the original nosi-scalpel group as we've handled it specially
@@ -1954,21 +2004,38 @@
             // Create the line card
             const lineCard = createLineCard(lineId, lineDetails, lineData, previousPeriodData, positionIndex);
             
+            // Log card creation
+            createdCards.push({
+                id: lineId,
+                position: positionIndex,
+                title: lineDetails['Production Line Name'] || lineId
+            });
+            
             // Add to container
             container.appendChild(lineCard);
             
             // Update position index (cycle through grid positions)
-            positionIndex = (positionIndex % 6) + 1;
+            positionIndex = (positionIndex % 9) + 1;
         });
         
         // Verify container has content
         Logger.info(`Dashboard grid now contains ${container.childElementCount} line cards`);
         if (container.childElementCount === 0) {
             Logger.error('No line cards were created despite having data!');
+        } else {
+            // Log all created cards for debugging
+            Logger.info(`Created cards: ${JSON.stringify(createdCards)}`);
         }
         
         // Fix grid layout styling to accommodate all cards
         document.querySelector('.dashboard-grid').style.gridTemplateColumns = 'repeat(3, 1fr)';
+        
+        // Apply additional styling to ensure all cards are visible
+        container.querySelectorAll('.line-card').forEach(card => {
+            card.style.minHeight = '240px';
+            card.style.display = 'flex';
+            card.style.flexDirection = 'column';
+        });
     }
 
     /**
