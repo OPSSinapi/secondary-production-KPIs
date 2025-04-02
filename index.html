@@ -2293,6 +2293,13 @@ function hideDetailView() {
         // Extract and store the full dataset
         const fullData = jsonData.productionData;
         
+        // Make sure fullData exists
+        if (!fullData || !Array.isArray(fullData)) {
+            throw new Error('Invalid data format: productionData array not found');
+        }
+        
+        Logger.info(`Loaded ${fullData.length} records from OpsData.json`);
+        
         // On first load, find the latest dates with data
         if (!currentDateRange.start || !currentDateRange.end) {
             currentDateRange = findLatestDatesInData(fullData, 5); // Get latest 5 days
@@ -2306,10 +2313,10 @@ function hideDetailView() {
         const filteredData = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
         Logger.info(`Filtered to ${filteredData.length} records in date range`);
         
-        // Render KPI summary with filtered data AND full data
+        // Render KPI summary with both datasets
         renderKPISummary(filteredData, fullData);
         
-        // Render dashboard grid with filtered data
+        // Render dashboard grid with filtered data only
         renderDashboardGrid(filteredData);
         
     } catch (error) {
@@ -2356,16 +2363,16 @@ function hideDetailView() {
             
             // Render KPI cards
             container.innerHTML = `
-                <div class="kpi-card">
-                    <div class="kpi-title">Schedule Attainment</div>
-                    <div class="kpi-value">
-                        <div class="kpi-value-number">${kpis.scheduleAttainment.toFixed(1)}%</div>
-                        <div class="kpi-trend ${kpis.scheduleAttainmentTrend >= 0 ? 'trend-up' : 'trend-down'}">
-                            <i class="fas fa-${kpis.scheduleAttainmentTrend >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
-                            ${Math.abs(kpis.scheduleAttainmentTrend).toFixed(1)}%
-                        </div>
-                    </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Schedule Attainment</div>
+            <div class="kpi-value">
+                <div class="kpi-value-number">${kpis.scheduleAttainment.toFixed(1)}%</div>
+                <div class="kpi-trend ${kpis.scheduleAttainmentTrend >= 0 ? 'trend-up' : 'trend-down'}">
+                    <i class="fas fa-${kpis.scheduleAttainmentTrend >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+                    ${Math.abs(kpis.scheduleAttainmentTrend).toFixed(1)}%
                 </div>
+            </div>
+        </div>
                 <div class="kpi-card">
                     <div class="kpi-title">Labour Cost per Unit</div>
                     <div class="kpi-value">
