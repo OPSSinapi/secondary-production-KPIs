@@ -485,33 +485,45 @@
         background-color: rgba(0, 0, 0, 0.6);
         z-index: 9999;
         display: none;
+    }
+    
+    .modal-overlay[style*="display: block"] {
+        display: flex !important;
         justify-content: center;
         align-items: center;
-    }
-
-    .modal-overlay.show {
-        display: flex !important;
     }
 
     .modal-content {
         background-color: #f8f9fa;
         border-radius: 8px;
         box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-        width: 95%;
-        max-width: 1600px;
-        height: 90vh;
+        width: 90%;
+        max-width: 1200px;
+        max-height: 90vh;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        animation: modalFadeIn 0.2s ease-out;
     }
 
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     .modal-header {
-        padding: 15px 20px;
-        background-color: var(--primary-dark-blue);
-        color: white;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background-color: var(--primary-blue);
+        color: white;
+        padding: 15px 20px;
     }
 
     .modal-title {
@@ -1062,7 +1074,7 @@
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" id="modalTitle">Line Details</div>
+                <div class="modal-title" id="detailTitle">Line Details</div>
                 <button class="modal-close" id="modalClose">&times;</button>
             </div>
             <div class="modal-body">
@@ -1085,7 +1097,7 @@
                             <button class="toggle-btn" id="attainmentBoxesBtn">Boxes</button>
                             <button class="toggle-btn" id="attainmentDevicesBtn">Devices</button>
                         </div>
-                        <div class="chart-container" id="scheduleAttainmentChart"></div>
+                        <div class="chart-container" id="scheduleChart"></div>
                     </div>
                     
                     <!-- Labour Cost Card -->
@@ -1095,7 +1107,7 @@
                             <button class="toggle-btn active" id="labourCostBtn">Labour Cost</button>
                             <button class="toggle-btn" id="unitCostBtn">Cost Per Unit</button>
                         </div>
-                        <div class="chart-container" id="labourCostChart"></div>
+                        <div class="chart-container" id="labourChart"></div>
                     </div>
                     
                     <!-- Scrap Analysis Card -->
@@ -1109,12 +1121,12 @@
                             <!-- Trend line chart -->
                             <div class="scrap-trend-chart">
                                 <div class="chart-subtitle">Scrap % Trend</div>
-                                <div id="scrapPercentageChart"></div>
+                                <div id="scrapChart"></div>
                             </div>
                             
                             <!-- Daily scrap details grid -->
                             <div class="daily-scrap-container">
-                                <div id="dailyScrapGrid" class="daily-scrap-grid">
+                                <div id="dailyScrapDetails" class="daily-scrap-grid">
                                     <!-- Daily scrap cards will be dynamically inserted here -->
                                 </div>
                             </div>
@@ -2244,99 +2256,78 @@
         // Store the current line ID
         detailViewState.lineId = lineId;
         
-        // Check if this is a composite ID for Scalpel products (nosi-scalpel-*)
-        let actualLineId = lineId;
-        let baseProductFilter = null;
-        
-        if (lineId.startsWith('nosi-scalpel-')) {
-            actualLineId = 'nosi-scalpel'; // The actual production line ID
-            baseProductFilter = lineId.replace('nosi-scalpel-', '').replace(/-/g, ' ');
-            Logger.info(`Using composite ID: actual=${actualLineId}, baseProduct=${baseProductFilter}`);
+        // Initialize date range if not set
+        if (!detailViewState.dateRange.start || !detailViewState.dateRange.end) {
+            detailViewState.dateRange = {
+                start: currentDateRange.start,
+                end: currentDateRange.end
+            };
         }
         
-        // Use the date range from the main page
-        detailViewState.dateRange.start = currentDateRange.start;
-        detailViewState.dateRange.end = currentDateRange.end;
-        
-        // Update modal title
-        const lineElement = document.querySelector(`[data-line-id="${lineId}"]`);
-        if (lineElement) {
-            const headerElement = lineElement.querySelector('.card-title');
-            if (headerElement) {
-                document.getElementById('modalTitle').textContent = headerElement.textContent + ' Details';
-            } else {
-                Logger.warn('Could not find header element in line card');
-                document.getElementById('modalTitle').textContent = 'Production Line Details';
-            }
+        // Check for composite IDs for Scalpel products
+        if (lineId.includes('nosi-scalpel-')) {
+            // Extract base product from the composite ID
+            const baseProduct = lineId.replace('nosi-scalpel-', '').replace(/-/g, ' ');
+            document.getElementById('detailTitle').textContent = `${baseProduct} Details`;
         } else {
-            Logger.warn(`Could not find line element with ID: ${lineId}`);
-            document.getElementById('modalTitle').textContent = 'Production Line Details';
+            // Get line name from data if available
+            const lineData = window.dashboardData ? window.dashboardData.find(record => record['Production Line ID'] === lineId) : null;
+            const lineName = lineData ? (lineData['Production Line Name'] || lineId) : lineId;
+            document.getElementById('detailTitle').textContent = `${lineName} Details`;
         }
         
-        // Make sure the modal elements exist
-        const modalElements = ['modalTitle', 'modalDateRange', 'scheduleAttainmentChart', 
-                              'labourCostChart', 'scrapPercentageChart', 'dailyScrapGrid', 'downtimeChart'];
-        
-        for (const id of modalElements) {
-            if (!document.getElementById(id)) {
-                Logger.error(`Required modal element missing: #${id}`);
-            }
+        // Set up debug logging for modal elements
+        if (CONFIG.debugMode) {
+            Logger.info(`Detail view HTML elements:`);
+            ['scheduleChart', 'labourChart', 'scrapChart', 'dailyScrapDetails', 'downtimeChart'].forEach(id => {
+                const element = document.getElementById(id);
+                Logger.info(`- ${id}: ${element ? 'Found' : 'NOT FOUND'}`);
+            });
         }
         
-        // Update date range display
+        // Show the modal
+        document.getElementById('detailModal').style.display = 'block';
+        
+        // Update date range display in modal
         updateModalDateRange();
         
-        // Clear previous content to avoid stale data display
-        document.getElementById('scheduleAttainmentChart').innerHTML = '<div class="loading-spinner"></div>';
-        document.getElementById('labourCostChart').innerHTML = '<div class="loading-spinner"></div>';
-        document.getElementById('scrapPercentageChart').innerHTML = '<div class="loading-spinner"></div>';
-        document.getElementById('dailyScrapGrid').innerHTML = '<div class="loading-spinner"></div>';
-        document.getElementById('downtimeChart').innerHTML = '<div class="loading-spinner"></div>';
-        
-        // Store base product filter for scalpel products
-        detailViewState.baseProductFilter = baseProductFilter;
-        
-        // Show the modal immediately with display:flex to make it visible
-        const modal = document.getElementById('detailModal');
-        modal.classList.add('show');
-        
-        // Load and render the charts
-        try {
-            loadDetailViewData(actualLineId);
-        } catch (error) {
-            Logger.error('Error loading detail view data', error);
-            // Show error message in modal
-            showErrorInDetailView(error.message);
-        }
+        // Load data and render charts
+        loadDetailViewData();
     }
 
     /**
-     * Hide the detail view modal
+     * Hides the detail view modal
      */
     function hideDetailView() {
-        const modal = document.getElementById('detailModal');
-        modal.classList.remove('show');
+        document.getElementById('detailModal').style.display = 'none';
     }
 
     /**
-     * Show error message in all detail view charts
+     * Show error message in detail view
+     * @param {string} message - Error message to display
      */
     function showErrorInDetailView(message) {
         const errorHtml = `<div class="error-message">${message || 'Failed to load data'}</div>`;
-        document.getElementById('scheduleAttainmentChart').innerHTML = errorHtml;
-        document.getElementById('labourCostChart').innerHTML = errorHtml;
-        document.getElementById('scrapPercentageChart').innerHTML = errorHtml;
-        document.getElementById('dailyScrapGrid').innerHTML = errorHtml;
+        document.getElementById('scheduleChart').innerHTML = errorHtml;
+        document.getElementById('labourChart').innerHTML = errorHtml;
+        document.getElementById('scrapChart').innerHTML = errorHtml;
+        document.getElementById('dailyScrapDetails').innerHTML = errorHtml;
         document.getElementById('downtimeChart').innerHTML = errorHtml;
     }
 
     /**
-     * Update modal date range display
+     * Updates the date range display in the modal
      */
     function updateModalDateRange() {
-        const display = document.getElementById('modalDateRange');
-        if (!display) return;
+        const display = document.getElementById('modalDateRange') || 
+                        document.querySelector('.date-range-display');
+                        
+        if (!display) {
+            Logger.error('Modal date range display element not found');
+            return;
+        }
         
+        // Format dates for display
         const startDate = new Date(detailViewState.dateRange.start);
         const endDate = new Date(detailViewState.dateRange.end);
         
@@ -2347,7 +2338,12 @@
             });
         };
         
+        // Update display with formatted dates
         display.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+        
+        if (CONFIG.debugMode) {
+            Logger.info(`Modal date range updated: ${display.textContent}`);
+        }
     }
     
     /**
@@ -2356,10 +2352,25 @@
      * @param {string} view - The view to display ('percent', 'boxes', or 'devices')
      */
     function renderScheduleAttainmentChart(data, view = 'percent') {
-        const chartContainer = document.getElementById('scheduleAttainmentChart');
+        const chartContainer = document.getElementById('scheduleChart');
         if (!chartContainer) {
-            Logger.error("Schedule attainment chart container not found");
+            Logger.error("Schedule chart container not found (ID: scheduleChart)");
             return;
+        }
+        
+        // Safety check
+        if (!data || data.length === 0) {
+            chartContainer.innerHTML = '<div class="empty-state">No schedule data available</div>';
+            return;
+        }
+        
+        // Check for required fields in the first record
+        const firstRecord = data[0];
+        if (CONFIG.debugMode) {
+            Logger.info("First record field check for Schedule Attainment:");
+            Logger.info(`- Schedule Attainment: ${firstRecord['Schedule Attainment'] !== undefined ? 'Present' : 'Missing'}`);
+            Logger.info(`- Scheduled Boxes: ${firstRecord['Scheduled Boxes'] !== undefined ? 'Present' : 'Missing'}`);
+            Logger.info(`- Actual Boxes: ${firstRecord['Actual Boxes'] !== undefined ? 'Present' : 'Missing'}`);
         }
         
         // Sort data by date
@@ -2370,10 +2381,24 @@
         
         if (view === 'percent') {
             // Percentage view
+            // Define possible field names for schedule attainment
+            const scheduleFields = ['Schedule Attainment', 'Scheduled Attainment', 'Schedule Adherence'];
+            
             const chartData = sortedData.map(record => ({
                 date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
-                value: parseFloat(record['Schedule Attainment'] || 0)
+                value: parseFloat(
+                    scheduleFields.find(field => record[field] !== undefined) 
+                    ? record[scheduleFields.find(field => record[field] !== undefined)]
+                    : 0
+                )
             }));
+            
+            if (CONFIG.debugMode) {
+                Logger.info(`Generated chart data for Schedule Attainment: ${chartData.length} points`);
+                if (chartData.length > 0) {
+                    Logger.info(`Sample point: ${JSON.stringify(chartData[0])}`);
+                }
+            }
             
             // Create container with Y-axis
             html += '<div style="display: flex; height: 100%;">';
@@ -2418,10 +2443,32 @@
         } 
         else {
             // Boxes or Devices view
+            // Define possible field names
+            const scheduledFields = {
+                boxes: ['Scheduled Boxes', 'Target Boxes', 'Planned Boxes'],
+                devices: ['Scheduled Devices', 'Target Devices', 'Planned Devices']
+            };
+            
+            const actualFields = {
+                boxes: ['Actual Boxes', 'Produced Boxes', 'Completed Boxes'],
+                devices: ['Actual Devices', 'Produced Devices', 'Completed Devices']
+            };
+            
             const chartData = sortedData.map(record => {
                 const field = view === 'boxes' ? 'Boxes' : 'Devices';
-                const actual = parseInt(record[`Actual ${field}`] || 0);
-                const target = parseInt(record[`Scheduled ${field}`] || 0);
+                
+                // Find the first field that exists in the record
+                const actualField = view === 'boxes' 
+                    ? actualFields.boxes.find(f => record[f] !== undefined) 
+                    : actualFields.devices.find(f => record[f] !== undefined);
+                
+                const scheduledField = view === 'boxes'
+                    ? scheduledFields.boxes.find(f => record[f] !== undefined)
+                    : scheduledFields.devices.find(f => record[f] !== undefined);
+                
+                // Get values with fallbacks
+                const actual = parseInt(actualField ? record[actualField] : 0);
+                const target = parseInt(scheduledField ? record[scheduledField] : 0);
                 
                 return {
                     date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
@@ -2792,6 +2839,12 @@
             return;
         }
         
+        // Log some sample data for debugging
+        if (CONFIG.debugMode) {
+            Logger.info("Sample data before filtering:");
+            Logger.info(JSON.stringify(window.dashboardData.slice(0, 2)));
+        }
+
         const filteredData = window.dashboardData.filter(record => {
             // Match by line ID
             if (record['Production Line ID'] !== lineId) {
@@ -2809,6 +2862,28 @@
             return recordDate >= startDate && recordDate <= endDate;
         });
         
+        // Check if we found any data for this line
+        if (filteredData.length === 0) {
+            Logger.warn(`No data found for line ID: ${lineId} in date range`);
+            
+            // Check if line ID exists in data at all
+            const anyLineData = window.dashboardData.filter(record => record['Production Line ID'] === lineId);
+            if (anyLineData.length > 0) {
+                Logger.info(`Found ${anyLineData.length} records for this line in full dataset, but none in date range`);
+            } else {
+                Logger.error(`Line ID ${lineId} not found in data at all`);
+            }
+        } else {
+            // Log a sample of the fields we're looking for
+            const sampleRecord = filteredData[0];
+            Logger.info(`Sample record fields for debugging:`);
+            Logger.info(`- Schedule Attainment: ${sampleRecord['Schedule Attainment']}`);
+            Logger.info(`- Scheduled Boxes: ${sampleRecord['Scheduled Boxes']}`);
+            Logger.info(`- Actual Boxes: ${sampleRecord['Actual Boxes']}`);
+            Logger.info(`- Labour Cost per Unit: ${sampleRecord['Labour Cost per Unit']}`);
+            Logger.info(`- Scrap %: ${sampleRecord['Scrap %']}`);
+        }
+
         // Apply base product filter if needed
         let displayData = filteredData;
         if (detailViewState.baseProductFilter) {
@@ -2832,6 +2907,10 @@
         
         // Otherwise, render all the charts with the data we have
         try {
+            Logger.info("Rendering charts with filtered data");
+            if (CONFIG.debugMode) {
+                Logger.info(`Chart data count: ${displayData.length} records`);
+            }
             renderScheduleAttainmentChart(displayData, detailViewState.attainmentView || 'percent');
             renderLabourCostChart(displayData, detailViewState.costView || 'labour');
             renderScrapAnalysis(displayData, detailViewState.scrapView || 'qty');
@@ -2846,11 +2925,18 @@
      * Show "no data available" message in detail view
      */
     function showNoDataMessage() {
-        document.getElementById('scheduleAttainmentChart').innerHTML = '<div class="no-data-message">No data available.</div>';
-        document.getElementById('labourCostChart').innerHTML = '<div class="no-data-message">No data available.</div>';
-        document.getElementById('dailyScrapGrid').innerHTML = '<div class="no-data-message">No data available.</div>';
-        document.getElementById('scrapPercentageChart').innerHTML = '<div class="no-data-message">No data available.</div>';
-        document.getElementById('downtimeChart').innerHTML = '<div class="no-data-message">No data available.</div>';
+        // Get correct container IDs from detail view
+        const scheduleContainer = document.getElementById('scheduleChart') || document.getElementById('scheduleAttainmentChart');
+        const labourContainer = document.getElementById('labourChart') || document.getElementById('labourCostChart');
+        const scrapContainer = document.getElementById('scrapChart');
+        const dailyScrapContainer = document.getElementById('dailyScrapDetails') || document.getElementById('dailyScrapGrid');
+        const downtimeContainer = document.getElementById('downtimeChart');
+        
+        if (scheduleContainer) scheduleContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
+        if (labourContainer) labourContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
+        if (scrapContainer) scrapContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
+        if (dailyScrapContainer) dailyScrapContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
+        if (downtimeContainer) downtimeContainer.innerHTML = '<div class="no-data-message">No data available.</div>';
     }
 
     /**
@@ -3049,7 +3135,7 @@
      * @param {string} view - The view to display ('labour' or 'unit')
      */
     function renderLabourCostChart(data, view = 'labour') {
-        const container = document.getElementById('labourCostChart');
+        const container = document.getElementById('labourChart');
         if (!container) return;
         
         // Sort data by date
