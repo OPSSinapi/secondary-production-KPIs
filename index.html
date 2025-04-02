@@ -2201,6 +2201,398 @@ function hideDetailView() {
             }
         }
 
+        /**
+ * Render the dashboard grid with production line cards
+ * @param {Array} data - Filtered data for the current date range
+ */
+function renderDashboardGrid(data) {
+    const container = document.getElementById('dashboardGrid');
+    if (!container) return;
+    
+    // Group data by production line
+    const lineGroups = groupDataByProductionLine(data);
+    
+    // Check if we have any data
+    if (Object.keys(lineGroups).length === 0) {
+        container.innerHTML = `
+            <div class="error-message">
+                No production data available for the selected date range.
+            </div>
+        `;
+        return;
+    }
+    
+    // Clear container
+    container.innerHTML = '';
+    
+    // Create a card for each production line
+    let positionIndex = 1;
+    
+    Object.entries(lineGroups).forEach(([lineId, lineData]) => {
+        // Skip empty lines
+        if (lineData.length === 0) return;
+        
+        // Ensure we have at least one record with line details
+        const lineDetails = lineData.find(record => record['Production Line ID'] === lineId);
+        if (!lineDetails) return;
+        
+        // Get product and line name
+        const lineName = lineDetails['Production Line Name'] || 'Unknown Line';
+        const baseProduct = lineDetails['Base Product'] || 'Unknown Product';
+        
+        // Create the line card
+        const lineCard = createLineCard(lineId, lineName, baseProduct, lineData, positionIndex);
+        
+        // Add to container
+        container.appendChild(lineCard);
+        
+        // Update position index (cycle through grid positions)
+        positionIndex = (positionIndex % 4) + 1;
+    });
+}
+
+/**
+ * Group data by production line ID
+ * @param {Array} data - Filtered data
+ * @returns {Object} Grouped data with line IDs as keys
+ */
+function groupDataByProductionLine(data) {
+    const groups = {};
+    
+    data.forEach(record => {
+        const lineId = record['Production Line ID'];
+        if (!lineId) return;
+        
+        if (!groups[lineId]) {
+            groups[lineId] = [];
+        }
+        
+        groups[lineId].push(record);
+    });
+    
+    return groups;
+}
+
+/**
+ * Create a production line card element
+ * @param {string} lineId - Production line ID
+ * @param {string} lineName - Production line name
+ * @param {string} baseProduct - Base product name
+ * @param {Array} lineData - Data records for this line
+ * @param {number} positionIndex - Position in the grid (1-4)
+ * @returns {HTMLElement} Line card element
+ */
+function createLineCard(lineId, lineName, baseProduct, lineData, positionIndex) {
+    // Calculate metrics for this line
+    const metrics = calculateLineMetrics(lineData);
+    
+    // Get current variant info
+    const currentVariantData = lineData.find(record => record['Is Current Variant'] === true) || lineData[0];
+    const variantName = currentVariantData['Variant'] || 'Unknown';
+    const variantStatus = currentVariantData['Variant Status'] || 'unknown';
+    
+    // Determine card color based on line color
+    const lineColor = currentVariantData['Production Line Color'] || 'blue';
+    
+    // Create card element
+    const card = document.createElement('div');
+    card.className = `line-card grid-position-1-${positionIndex}`;
+    card.setAttribute('data-line-id', lineId);
+    
+    // Create card content
+    card.innerHTML = `
+        <div class="line-card-header" style="background-color: var(--primary-${lineColor})">
+            <span class="card-title">${baseProduct}: ${lineName}</span>
+            <div class="card-actions">
+                <span class="enlarge-icon" onclick="showDetailView('${lineId}')">
+                    <i class="fas fa-expand-alt"></i>
+                </span>
+            </div>
+        </div>
+        <div class="line-card-content">
+            <div class="variant-info">
+                <span class="variant-label">Current Variant: <span class="variant-name">${variantName}</span></span>
+                <span class="status-badge status-${variantStatus}">${capitalize(variantStatus)}</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-title">Schedule Attainment</div>
+                    <div class="metric-value ${getValueColorClass(metrics.scheduleAttainment, 'scheduleAttainment')}">
+                        ${metrics.scheduleAttainment.toFixed(1)}%
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Labour Cost</div>
+                    <div class="metric-value ${getValueColorClass(metrics.labourCost, 'labourCostPerUnit', true)}">
+                        R${metrics.labourCost.toFixed(2)}
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Units Per Hour</div>
+                    <div class="metric-value ${getValueColorClass(metrics.unitsPerHour, 'unitsPerHour')}">
+                        ${metrics.unitsPerHour.toFixed(1)}
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Scrap %</div>
+                    <div class="metric-value ${getValueColorClass(metrics.scrapPercentage, 'scrapPercentage', true)}">
+                        ${metrics.scrapPercentage.toFixed(1)}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return card;
+}
+
+/**
+ * Calculate metrics for a production line
+ * @param {Array} lineData - Data records for a production line
+ * @returns {Object} Calculated metrics
+ */
+function calculateLineMetrics(lineData) {
+    if (!lineData || lineData.length === 0) {
+        return {
+            scheduleAttainment: 0,
+            labourCost: 0,
+            unitsPerHour: 0,
+            scrapPercentage: 0
+        };
+    }
+    
+    // Calculate average metrics
+    return {
+        scheduleAttainment: calculateAverage(lineData, 'Schedule Attainment'),
+        labourCost: calculateAverage(lineData, 'Staff Cost'),
+        unitsPerHour: calculateAverage(lineData, 'Units Per Labor Hour'),
+        scrapPercentage: calculateAverage(lineData, 'Scrap Cost as % of Production Value')
+    };
+}
+
+/**
+ * Get color class based on value and thresholds
+ * @param {number} value - Value to evaluate
+ * @param {string} metric - Metric name for threshold lookup
+ * @param {boolean} invertColors - Invert the color logic (lower is better)
+ * @returns {string} CSS class name
+ */
+function getValueColorClass(value, metric, invertColors = false) {
+    // Default thresholds if not in CONFIG
+    const defaultThresholds = {
+        scheduleAttainment: { good: 85, warning: 70 },
+        labourCostPerUnit: { good: 50, warning: 100 },
+        unitsPerHour: { good: 50, warning: 20 },
+        scrapPercentage: { good: 2, warning: 5 }
+    };
+    
+    // Get thresholds from CONFIG if available, otherwise use defaults
+    const thresholds = (CONFIG.thresholds && CONFIG.thresholds[metric]) 
+        ? CONFIG.thresholds[metric] 
+        : defaultThresholds[metric] || { good: 85, warning: 70 };
+    
+    if (invertColors) {
+        // Lower is better (costs, scrap %)
+        if (value <= thresholds.good) return 'value-good';
+        if (value <= thresholds.warning) return 'value-warning';
+        return 'value-danger';
+    } else {
+        // Higher is better (schedule attainment, units per hour)
+        if (value >= thresholds.good) return 'value-good';
+        if (value >= thresholds.warning) return 'value-warning';
+        return 'value-danger';
+    }
+}
+
+/**
+ * Get filtered data for a specific line and date range
+ * @param {string} lineId - Production line ID
+ * @param {string} startDate - Start date string
+ * @param {string} endDate - End date string
+ * @returns {Array} Filtered data
+ */
+function getFilteredLineData(lineId, startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    // Temporary approach - this should be replaced with a global data reference
+    // but for now we'll refetch the data for this demo
+    const cachedData = window.dashboardData || [];
+    
+    return cachedData.filter(record => {
+        const recordDate = new Date(record.Date);
+        return record['Production Line ID'] === lineId && recordDate >= start && recordDate <= end;
+    });
+}
+
+/**
+ * Update modal date range display
+ */
+function updateModalDateRange() {
+    const display = document.getElementById('modalDateRange');
+    if (!display) return;
+    
+    const startDate = new Date(detailViewState.dateRange.start);
+    const endDate = new Date(detailViewState.dateRange.end);
+    
+    const formatDate = (date) => {
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+    };
+    
+    display.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+}
+
+/**
+ * Show "no data available" message in detail view
+ */
+function showNoDataMessage() {
+    document.getElementById('scheduleAttainmentChart').innerHTML = '<div class="no-data-message">No data available.</div>';
+    document.getElementById('labourCostChart').innerHTML = '<div class="no-data-message">No data available.</div>';
+    document.getElementById('dailyScrapGrid').innerHTML = '<div class="no-data-message">No data available.</div>';
+    document.getElementById('downtimeChart').innerHTML = '<div class="no-data-message">No data available.</div>';
+}
+
+/**
+ * Renders the labour cost chart
+ * @param {Array} data - Filtered data for the line
+ */
+function renderLabourCostChart(data) {
+    const container = document.getElementById('labourCostChart');
+    if (!container) return;
+    
+    // Sort data by date
+    const sortedData = [...data].sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    
+    // Determine which values to display based on current view
+    const view = detailViewState.costView || 'labour';
+    const field = view === 'labour' ? 'Staff Cost' : 'Cost Per Unit';
+    
+    // Format data for the chart
+    const chartData = sortedData.map(record => ({
+        date: new Date(record.Date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'}),
+        value: parseFloat(record[field] || 0)
+    }));
+    
+    // Find maximum value for scaling
+    const maxValue = Math.max(...chartData.map(item => item.value), 1);
+    
+    // Create HTML chart
+    let html = '<div style="width: 100%; height: 100%;">';
+    
+    // Create container with Y-axis
+    html += '<div style="display: flex; height: 100%;">';
+    
+    // Y-axis with scaled labels
+    html += '<div style="width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 5px; color: var(--text-light); font-size: 9px;">';
+    html += `<div>R${maxValue.toFixed(0)}</div>`;
+    html += `<div>R${(maxValue/2).toFixed(0)}</div>`;
+    html += '<div>R0</div>';
+    html += '</div>';
+    
+    // Chart area
+    html += '<div style="flex-grow: 1; height: 100%; display: flex; flex-direction: column;">';
+    
+    // Chart bars
+    html += '<div style="flex-grow: 1; display: flex; align-items: flex-end; gap: 2px; padding-top: 5px;">';
+    
+    // Create bars for each day
+    chartData.forEach(item => {
+        const heightPercentage = maxValue > 0 ? (item.value / maxValue * 100) : 0;
+        
+        html += `
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <div style="font-size: 8px; color: var(--text-light); height: 15px;">R${item.value.toFixed(0)}</div>
+            <div style="width: 60%; height: ${heightPercentage}%; background-color: var(--primary-orange);"></div>
+            <div style="font-size: 8px; color: var(--text-light); margin-top: 3px;">${item.date}</div>
+        </div>
+        `;
+    });
+    
+    html += '</div>'; // End chart bars
+    html += '</div>'; // End chart area
+    html += '</div>'; // End container with Y-axis
+    html += '</div>';
+    
+    container.innerHTML = html;
+}
+
+/**
+ * Helper function to capitalize the first letter of a string
+ * @param {string} string - Input string
+ * @returns {string} Capitalized string
+ */
+function capitalize(string) {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Modify initializeDashboard to store data for later use
+async function initializeDashboard() {
+    Logger.info('Initializing dashboard');
+    
+    try {
+        // Show loading state
+        document.getElementById('kpiSummary').innerHTML = `
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+            </div>
+        `;
+        
+        document.getElementById('dashboardGrid').innerHTML = `
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+            </div>
+        `;
+        
+        // Load data
+        const response = await fetch(CONFIG.dataUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const jsonData = await response.json();
+        
+        // Extract and store the full dataset
+        const fullData = jsonData;
+        
+        // Store data globally for reuse in detail views
+        window.dashboardData = fullData;
+        
+        // Make sure fullData exists
+        if (!fullData || !Array.isArray(fullData)) {
+            throw new Error('Invalid data format: data array not found');
+        }
+        
+        Logger.info(`Loaded ${fullData.length} records from OpsData.json`);
+        
+        // On first load, find the latest dates with data
+        if (!currentDateRange.start || !currentDateRange.end) {
+            currentDateRange = findLatestDatesInData(fullData, 5); // Get latest 5 days
+            Logger.info(`Set initial date range to: ${currentDateRange.start} - ${currentDateRange.end}`);
+        }
+        
+        // Update date range display
+        updateDateRangeDisplay(currentDateRange);
+        
+        // Filter data for current date range
+        const filteredData = filterDataByDateRange(fullData, currentDateRange.start, currentDateRange.end);
+        Logger.info(`Filtered to ${filteredData.length} records in date range`);
+        
+        // Render KPI summary with both datasets
+        renderKPISummary(filteredData, fullData);
+        
+        // Render dashboard grid with filtered data only
+        renderDashboardGrid(filteredData);
+        
+    } catch (error) {
+        Logger.error('Error initializing dashboard: ' + error.message, error);
+        console.error('Dashboard initialization failed:', error);
+        showError('Failed to load dashboard data: ' + error.message);
+    }
+}
+
         document.addEventListener('DOMContentLoaded', () => {
             // Load user preferences
             loadUserPreferences();
